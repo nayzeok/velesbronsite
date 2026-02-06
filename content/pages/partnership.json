@@ -1,0 +1,12 @@
+{
+  "title": "Сотрудничество",
+  "blocks": [
+    {
+      "discriminant": "heading",
+      "value": {
+        "text": "test",
+        "level": "2"
+      }
+    }
+  ]
+}

@@ -20,6 +20,9 @@
 # production
 /build
 
+# analytics (user activity data)
+/data
+
 # misc
 .DS_Store
 *.pem
