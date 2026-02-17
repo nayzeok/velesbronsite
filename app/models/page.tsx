@@ -161,16 +161,16 @@ export default function ModelsPage() {
   };
 
   return (
-    <main className="figma-site-page bg-[#d9d9d9] text-[#111]">
+    <main className="figma-site-page overflow-x-auto bg-[#d9d9d9] text-[#111]">
       <section
-        className="figma-site-stage mx-auto overflow-hidden bg-[#efefef]"
-        style={{ width: DESIGN_WIDTH, height: DESIGN_HEIGHT }}
+        className="figma-site-stage relative mx-auto hidden h-screen min-h-[1024px] min-w-[1670px] overflow-hidden bg-[#efefef] min-[1200px]:block"
       >
-            <div className="pointer-events-none absolute left-[439px] top-[-88px] h-[1185px] w-[886.001px]">
+            <div className="absolute left-1/2 top-0 h-full min-h-[1024px] w-[1670px] -translate-x-1/2">
+            <div className="pointer-events-none absolute bottom-[-88px] left-[439px] top-[-88px] w-[886.001px]">
               {Array.from({ length: 14 }).map((_, index) => (
                 <div
                   key={index}
-                  className="absolute top-0 h-[1185px] w-[63.286px]"
+                  className="absolute inset-y-0 w-[63.286px]"
                   style={{ left: `${index * 63.286}px` }}
                 >
                   <div
@@ -473,14 +473,15 @@ export default function ModelsPage() {
                   type="button"
                   onClick={() => handleChangeView(index)}
                   aria-label={`Показать ракурс ${index + 1}`}
-                  className="absolute h-20 w-[117px] -translate-x-1/2 -translate-y-1/2 cursor-pointer p-2 transition-all"
+                  className="absolute h-20 w-[117px] -translate-x-1/2 -translate-y-1/2 cursor-pointer appearance-none border-0 bg-transparent p-0 outline-none ring-0 transition-all focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                   style={{
                     left: item.x,
                     top: item.y,
                     zIndex: item.z,
                     transform: `translate(-50%, -50%) rotate(${item.rotate}deg)`,
-                    boxShadow: "0 18px 35px rgba(0,0,0,0.12)",
+                    boxShadow: "none",
                     opacity: index === activeIndex ? 1 : 0.85,
+                    WebkitAppearance: "none",
                   }}
                 >
                   {item.exact53 ? (
@@ -683,6 +684,77 @@ export default function ModelsPage() {
               <div className="relative h-[560px] w-[340px]">
               </div>
             </div>
+            </div>
+      </section>
+
+      <section className="min-[1200px]:hidden px-4 pb-10 pt-4">
+        <header className="mb-5 flex items-center justify-between">
+          <Link href="/" className="text-sm font-medium text-[#111]">
+            Главная
+          </Link>
+          <span className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-4 py-2 text-xs font-medium text-white">
+            Модели
+          </span>
+        </header>
+
+        <h1
+          className="text-[32px] font-bold uppercase leading-none text-[#5b6a44]"
+          style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
+        >
+          {currentView.title}
+        </h1>
+        <p className="mt-3 max-w-[700px] text-base leading-7 text-[#111]">{currentView.description}</p>
+
+        <div className="relative mx-auto mt-4 h-[320px] w-full max-w-[460px]">
+          <img
+            key={`mobile-${transitionTick}`}
+            src={currentView.image}
+            alt="Модель ботинка"
+            className="h-full w-full animate-view-rise object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.16)]"
+          />
+        </div>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <div className="min-w-[170px] rounded-[18px] bg-white p-4 shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
+            <p className="text-3xl font-bold leading-none">{currentView.metricTop.value}</p>
+            <p className="mt-1 text-sm font-medium">{currentView.metricTop.title}</p>
+          </div>
+          <div className="min-w-[140px] rounded-[18px] bg-white p-4 shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
+            <p className="text-3xl font-bold leading-none">{currentView.metricSide.value}</p>
+            <p className="mt-1 text-sm text-[#111]/70">
+              {currentView.metricSide.line1} {currentView.metricSide.line2}
+            </p>
+          </div>
+          <div className="min-w-[220px] rounded-[999px] bg-white px-4 py-2 text-sm shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
+            {currentView.glue}
+          </div>
+        </div>
+
+        <div className="mt-7 grid grid-cols-5 gap-2">
+          {views.map((view, index) => (
+            <button
+              key={view.title}
+              type="button"
+              onClick={() => handleChangeView(index)}
+              className={`rounded-[12px] border p-1 transition ${
+                index === activeIndex
+                  ? "border-[#fc6407] bg-gradient-to-b from-[#f2995d]/20 to-[#fc6407]/20"
+                  : "border-[#c8c8c8] bg-white/70"
+              }`}
+              aria-label={`Показать ракурс ${index + 1}`}
+            >
+              <img src={view.image} alt="" className="h-[62px] w-full object-contain" />
+            </button>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          className="mt-7 h-14 w-[210px] rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
+          style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
+        >
+          Купить
+        </button>
       </section>
     </main>
   );
