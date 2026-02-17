@@ -22,6 +22,7 @@ const carouselCardBoot0 = "/images/models/ui/carousel/card-boot-0.png";
 const carouselCardBootNeg36 = "/images/models/ui/carousel/card-boot-neg36.png";
 const carouselCardBootNeg54 = "/images/models/ui/carousel/card-boot-neg54.png";
 const backgroundShape = "/images/models/ui/background-shape.png";
+const metricSideImage = "/images/models/ui/metric-side-image.png";
 
 const views = [
   {
@@ -30,7 +31,14 @@ const views = [
       "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина, сформированное автоматически с помощью нейросети. Копировать текст.",
     image: mainBootSide,
     callout: { title: "О материале", text: "и носке ботинка" },
-    calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
+    calloutStyle: {
+      w: 260,
+      h: 109,
+      titleSize: 22,
+      textSize: 22,
+      textOpacity: 0.4,
+      notch: { w: 58, h: 58, x: 101, y: -29, color: "#8B8B8B" },
+    },
     metricTop: { value: "28", title: "преимущ.", line1: "в 2 строки", line2: "описание" },
     metricSide: { value: "10", line1: "цифра", line2: "в 2 строки" },
     glue: "Написать о проклейке",
@@ -171,6 +179,8 @@ export default function ModelsPage() {
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
   const currentBootPose = currentView.bootPose ?? { rotate: 0, x: 0, y: 0, scale: 1 };
   const currentBootImageFrame = "bootImageFrame" in currentView ? currentView.bootImageFrame : null;
+  const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
+  const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
   const markerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
 
   const handleChangeView = (index: number) => {
@@ -359,10 +369,21 @@ export default function ModelsPage() {
                 </div>
 
                 <div className="absolute left-[1073px] top-[593px] z-20 h-[314px] w-[172px] rounded-[25px] bg-white shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
+                  <span className="absolute -left-[13px] -top-[13px] flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+                    <span className="size-[10px] rounded-full bg-white" />
+                  </span>
                   <p className="pt-8 text-center text-[72px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
                   <p className="pt-4 text-center text-[40px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
                   <p className="-mt-1 text-center text-[24px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line1}</p>
                   <p className="text-center text-[24px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line2}</p>
+                  <div className="absolute left-[10px] top-[210px] h-[94px] w-[152px] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+                    <img
+                      src={metricSideImage}
+                      alt=""
+                      className="pointer-events-none absolute max-w-none object-cover"
+                      style={{ width: 274, height: 344, left: -108, top: -248 }}
+                    />
+                  </div>
                   <div className="absolute bottom-[10px] left-1/2 size-[9px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]" />
                 </div>
               </>
@@ -445,21 +466,37 @@ export default function ModelsPage() {
                 top: currentView.anchors.calloutCard.y,
                 width: currentView.calloutStyle.w,
                 height: currentView.calloutStyle.h,
+                ...(currentCalloutNotch
+                  ? {
+                      WebkitMask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
+                        currentCalloutNotch.x + currentCalloutNotch.w / 2
+                      }px -8px, transparent 98%, #000 100%)`,
+                      mask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
+                        currentCalloutNotch.x + currentCalloutNotch.w / 2
+                      }px -8px, transparent 98%, #000 100%)`,
+                    }
+                  : {}),
               }}
             >
               <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize }}>
                 <span className="font-bold">{currentView.callout.title}</span>
               </p>
-              <p className="leading-[1.08] tracking-[-0.02em] text-[#111]/70" style={{ fontSize: currentView.calloutStyle.textSize }}>
+              <p
+                className="leading-[1.08] tracking-[-0.02em]"
+                style={{ fontSize: currentView.calloutStyle.textSize, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+              >
                 {currentView.callout.text}
               </p>
-              <span
-                className="absolute flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
-                style={{ left: currentView.anchors.calloutDot.x, top: currentView.anchors.calloutDot.y }}
-              >
-                <span className="size-[10px] rounded-full bg-white" />
-              </span>
             </div>
+            <span
+              className="absolute z-20 flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+              style={{
+                left: currentView.anchors.calloutCard.x + currentView.anchors.calloutDot.x,
+                top: currentView.anchors.calloutCard.y + currentView.anchors.calloutDot.y,
+              }}
+            >
+              <span className="size-[10px] rounded-full bg-white" />
+            </span>
 
             {("showGlue" in currentView ? currentView.showGlue : true) !== false && (
               <>
