@@ -34,8 +34,10 @@ const views = [
     metricTop: { value: "28", title: "преимущ.", line1: "в 2 строки", line2: "описание" },
     metricSide: { value: "10", line1: "цифра", line2: "в 2 строки" },
     glue: "Написать о проклейке",
+    showGlue: false,
     glueVariant: "pill",
     bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
+    bootImageFrame: { wPct: 136.08, hPct: 115.93, leftPct: -16.66, topPct: -15.93 },
     anchors: {
       calloutCard: { x: 398, y: 730 },
       calloutDot: { x: 116, y: -14 },
@@ -53,6 +55,7 @@ const views = [
     metricTop: { value: "30", title: "защита", line1: "усиленный", line2: "каркас" },
     metricSide: { value: "12", line1: "мм", line2: "усиление" },
     glue: "Написать о проклейке",
+    showMetrics: false,
     glueVariant: "pill",
     bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
     anchors: {
@@ -149,7 +152,7 @@ const CAROUSEL_ARC_CENTER = { x: 313, y: 296 };
 const CAROUSEL_MARKER_RADIUS = 168;
 const CAROUSEL_ITEMS_X_OFFSET = 42;
 const CAROUSEL_ITEMS_Y_OFFSET = 52;
-const CAROUSEL_MARKER_ANGLE_OFFSETS = [-6, 2, 9, 18, 16];
+const CAROUSEL_MARKER_ANGLE_OFFSETS = [-6, 2, 10, 18, 16];
 const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) => {
   const rawAngle =
     (Math.atan2(item.y + CAROUSEL_ITEMS_Y_OFFSET - CAROUSEL_ARC_CENTER.y, item.x + CAROUSEL_ITEMS_X_OFFSET - CAROUSEL_ARC_CENTER.x) * 180) /
@@ -167,6 +170,7 @@ export default function ModelsPage() {
   const currentView = views[activeIndex];
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
   const currentBootPose = currentView.bootPose ?? { rotate: 0, x: 0, y: 0, scale: 1 };
+  const currentBootImageFrame = "bootImageFrame" in currentView ? currentView.bootImageFrame : null;
   const markerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
 
   const handleChangeView = (index: number) => {
@@ -209,7 +213,15 @@ export default function ModelsPage() {
               ))}
             </div>
 
-            <header className="absolute left-0 top-0 z-20 h-[96px] w-full px-[61px] pt-[18px]">
+            <header
+              className="absolute top-0 z-20 h-[96px] pt-[18px]"
+              style={{
+                left: "max(0px, calc((100vw - 1670px) / 2))",
+                width: "min(1670px, 100vw)",
+                paddingLeft: "clamp(16px, 3.6vw, 61px)",
+                paddingRight: "clamp(16px, 3.6vw, 61px)",
+              }}
+            >
               <nav className="flex items-center gap-6">
                 <Link href="/" className="text-xs font-medium text-[#111]">
                   Главная
@@ -233,7 +245,7 @@ export default function ModelsPage() {
                 />
               </div>
 
-              <div className="absolute right-[61px] top-[22px] flex items-center gap-[10px]">
+              <div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "96px" }}>
                 <button className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#7f766f] to-[#635b50] text-white">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="9" />
@@ -303,16 +315,32 @@ export default function ModelsPage() {
                     transformOrigin: "50% 50%",
                   }}
                 >
-                  <img
-                    src={currentView.image}
-                    alt="Модель ботинка"
-                    className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
-                  />
+                  {currentBootImageFrame ? (
+                    <div className="relative h-full w-full overflow-hidden">
+                      <img
+                        src={currentView.image}
+                        alt="Модель ботинка"
+                        className="absolute max-w-none drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                        style={{
+                          width: `${currentBootImageFrame.wPct}%`,
+                          height: `${currentBootImageFrame.hPct}%`,
+                          left: `${currentBootImageFrame.leftPct}%`,
+                          top: `${currentBootImageFrame.topPct}%`,
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={currentView.image}
+                      alt="Модель ботинка"
+                      className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                    />
+                  )}
                 </div>
               </div>
             </div>
 
-            <div className="absolute left-0 top-[555px] z-0 h-[1024px] w-[1536px] overflow-hidden">
+            <div className="absolute left-1/2 top-[555px] z-0 h-[1024px] w-[1536px] -translate-x-1/2 overflow-hidden">
               <img src={pedestalImage} alt="" className="h-full w-full object-cover object-center" />
             </div>
 
@@ -433,33 +461,37 @@ export default function ModelsPage() {
               </span>
             </div>
 
-            <div
-              className={`absolute z-20 bg-white text-[#111] shadow-[0_20px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ${
-                currentView.glueVariant === "card"
-                  ? "h-[152px] w-[241px] rounded-[24px] px-8 py-7 text-left"
-                  : "h-[34px] w-[180px] rounded-full px-5 py-2 text-center text-xs font-medium"
-              }`}
-              style={{ left: currentView.anchors.glueBubble.x, top: currentView.anchors.glueBubble.y }}
-            >
-              {currentView.glueVariant === "card" ? (
-                <>
-                  <p className="text-[22px] font-bold leading-[1.1]">О подошве</p>
-                  <p className="mt-2 text-[15px] leading-[1.1] text-[#111]/70">И описание фишки</p>
-                  <p className="text-[15px] leading-[1.1] text-[#111]/70">в две строки</p>
-                </>
-              ) : (
-                currentView.glue
-              )}
-            </div>
+            {("showGlue" in currentView ? currentView.showGlue : true) !== false && (
+              <>
+                <div
+                  className={`absolute z-20 bg-white text-[#111] shadow-[0_20px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ${
+                    currentView.glueVariant === "card"
+                      ? "h-[152px] w-[241px] rounded-[24px] px-8 py-7 text-left"
+                      : "h-[34px] w-[180px] rounded-full px-5 py-2 text-center text-xs font-medium"
+                  }`}
+                  style={{ left: currentView.anchors.glueBubble.x, top: currentView.anchors.glueBubble.y }}
+                >
+                  {currentView.glueVariant === "card" ? (
+                    <>
+                      <p className="text-[22px] font-bold leading-[1.1]">О подошве</p>
+                      <p className="mt-2 text-[15px] leading-[1.1] text-[#111]/70">И описание фишки</p>
+                      <p className="text-[15px] leading-[1.1] text-[#111]/70">в две строки</p>
+                    </>
+                  ) : (
+                    currentView.glue
+                  )}
+                </div>
 
-            <span
-              className="absolute z-20 size-[40px] transition-all duration-500"
-              style={{ left: currentView.anchors.glueDot.x, top: currentView.anchors.glueDot.y }}
-            >
-              <span className="absolute inset-0 rounded-full bg-white opacity-90 shadow-[0_20px_40px_rgba(0,0,0,0.12)]" />
-              <span className="absolute left-[3px] top-[3px] size-[34px] rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] opacity-95" />
-              <span className="absolute left-[12px] top-[12px] size-4 rounded-full bg-white" />
-            </span>
+                <span
+                  className="absolute z-20 size-[40px] transition-all duration-500"
+                  style={{ left: currentView.anchors.glueDot.x, top: currentView.anchors.glueDot.y }}
+                >
+                  <span className="absolute inset-0 rounded-full bg-white opacity-90 shadow-[0_20px_40px_rgba(0,0,0,0.12)]" />
+                  <span className="absolute left-[3px] top-[3px] size-[34px] rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] opacity-95" />
+                  <span className="absolute left-[12px] top-[12px] size-4 rounded-full bg-white" />
+                </span>
+              </>
+            )}
 
             <div className="absolute left-[102px] top-[897px] z-20 flex items-center gap-4">
               <div className="h-[75px] w-[76px] overflow-hidden rounded-[8px] border border-[#c8c8c8] bg-white p-2">
@@ -475,7 +507,7 @@ export default function ModelsPage() {
               </div>
             </div>
 
-            <div className="absolute left-[1414px] top-[241px] z-20">
+            <div className="absolute top-[241px] z-20" style={{ left: "min(1414px, calc(100vw - 256px))" }}>
               <div
                 className="pointer-events-none absolute left-[131px] top-[114px] h-[364px] w-[364px]"
                 style={{

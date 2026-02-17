@@ -90,7 +90,15 @@ export default function Home() {
             <div className="absolute inset-0 bg-black/20" />
           </div>
 
-          <header className="absolute left-0 top-0 z-30 h-[96px] w-full px-[61px] pt-[18px]">
+          <header
+            className="absolute top-0 z-30 h-[96px] pt-[18px]"
+            style={{
+              left: "max(0px, calc((100vw - 1670px) / 2))",
+              width: "min(1670px, 100vw)",
+              paddingLeft: "clamp(16px, 3.6vw, 61px)",
+              paddingRight: "clamp(16px, 3.6vw, 61px)",
+            }}
+          >
             <nav className="flex items-center gap-6">
               <a
                 href="#"
@@ -122,7 +130,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="absolute right-[61px] top-[22px] flex items-center gap-[10px]">
+            <div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "96px" }}>
               <button
                 type="button"
                 aria-label="Язык"
