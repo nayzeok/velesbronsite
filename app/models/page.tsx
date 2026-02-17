@@ -139,12 +139,26 @@ const views = [
 ] as const;
 
 const carouselItems = [
-  { x: 285.2, y: 80.4, rotate: 53.36, z: 5, image: { w: 99, h: 70, x: 8, y: 5, rotate: 0.5, flipY: false }, exact53: true },
-  { x: 196.2, y: 176.9, rotate: 30.46, z: 4, image: { w: 41, h: 86, x: 39, y: -3, rotate: 0.24, flipY: false }, exact30: true },
-  { x: 162.5, y: 289.5, rotate: 0, z: 3, image: { w: 70, h: 87, x: 21, y: -9, rotate: 0, flipY: false }, exact0: true },
-  { x: 203.8, y: 400.5, rotate: -36.65, z: 2, image: { w: 39, h: 107, x: 50, y: -14, rotate: 0, flipY: true }, exactNeg36: true },
-  { x: 284.7, y: 481.9, rotate: -54.79, z: 1, image: { w: 38, h: 84, x: 39, y: -2, rotate: 2.94, flipY: false }, exactNeg54: true },
+  { x: 181.24, y: 80.41, rotate: 53.36, z: 5, image: { w: 99, h: 70, x: 8, y: 5, rotate: 0.5, flipY: false }, exact53: true },
+  { x: 92.17, y: 176.92, rotate: 30.46, z: 4, image: { w: 41, h: 86, x: 39, y: -3, rotate: 0.24, flipY: false }, exact30: true },
+  { x: 58.5, y: 289.47, rotate: 0, z: 3, image: { w: 70, h: 87, x: 21, y: -9, rotate: 0, flipY: false }, exact0: true },
+  { x: 99.81, y: 400.48, rotate: -36.65, z: 2, image: { w: 39, h: 107, x: 50, y: -14, rotate: 0, flipY: true }, exactNeg36: true },
+  { x: 180.72, y: 481.93, rotate: -54.79, z: 1, image: { w: 38, h: 84, x: 39, y: -2, rotate: 2.94, flipY: false }, exactNeg54: true },
 ];
+const CAROUSEL_ARC_CENTER = { x: 313, y: 296 };
+const CAROUSEL_MARKER_RADIUS = 168;
+const CAROUSEL_ITEMS_X_OFFSET = 42;
+const CAROUSEL_ITEMS_Y_OFFSET = 52;
+const CAROUSEL_MARKER_ANGLE_OFFSETS = [-6, 2, 9, 18, 16];
+const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) => {
+  const rawAngle =
+    (Math.atan2(item.y + CAROUSEL_ITEMS_Y_OFFSET - CAROUSEL_ARC_CENTER.y, item.x + CAROUSEL_ITEMS_X_OFFSET - CAROUSEL_ARC_CENTER.x) * 180) /
+    Math.PI;
+  if (index === 0) return [rawAngle];
+  let angle = rawAngle;
+  while (angle > acc[index - 1]) angle -= 360;
+  return [...acc, angle];
+}, []);
 
 export default function ModelsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -153,6 +167,7 @@ export default function ModelsPage() {
   const currentView = views[activeIndex];
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
   const currentBootPose = currentView.bootPose ?? { rotate: 0, x: 0, y: 0, scale: 1 };
+  const markerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
 
   const handleChangeView = (index: number) => {
     if (index === activeIndex) return;
@@ -460,11 +475,15 @@ export default function ModelsPage() {
               </div>
             </div>
 
-            <div className="absolute left-[1310px] top-[241px] z-20">
+            <div className="absolute left-[1414px] top-[241px] z-20">
               <div
-                className="pointer-events-none absolute left-[235px] top-[114px] h-[364px] w-[364px] rounded-[364px]"
+                className="pointer-events-none absolute left-[131px] top-[114px] h-[364px] w-[364px]"
                 style={{
                   background: "linear-gradient(90deg, #C8C8C8 0%, rgba(255, 255, 255, 0) 33.38%)",
+                  borderRadius: "364px",
+                  WebkitMask:
+                    "radial-gradient(closest-side, transparent calc(100% - 28px), #000 calc(100% - 27px))",
+                  mask: "radial-gradient(closest-side, transparent calc(100% - 28px), #000 calc(100% - 27px))",
                 }}
               />
               {carouselItems.map((item, index) => (
@@ -475,8 +494,8 @@ export default function ModelsPage() {
                   aria-label={`Показать ракурс ${index + 1}`}
                   className="absolute h-20 w-[117px] -translate-x-1/2 -translate-y-1/2 cursor-pointer appearance-none border-0 bg-transparent p-0 outline-none ring-0 transition-all focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                   style={{
-                    left: item.x,
-                    top: item.y,
+                    left: item.x + CAROUSEL_ITEMS_X_OFFSET,
+                    top: item.y + CAROUSEL_ITEMS_Y_OFFSET,
                     zIndex: item.z,
                     transform: `translate(-50%, -50%) rotate(${item.rotate}deg)`,
                     boxShadow: "none",
@@ -674,12 +693,13 @@ export default function ModelsPage() {
               ))}
 
               <div
-                className="pointer-events-none absolute size-[14px] rounded-full bg-[#f17823] transition-all"
+                className="pointer-events-none absolute left-0 top-0 flex size-[38.678px] items-center justify-center transition-transform duration-500"
                 style={{
-                  left: carouselItems[activeIndex].x + 20,
-                  top: carouselItems[activeIndex].y + 30,
+                  transform: `translate(${CAROUSEL_ARC_CENTER.x}px, ${CAROUSEL_ARC_CENTER.y}px) translate(-50%, -50%) rotate(${markerAngle}deg) translateX(${CAROUSEL_MARKER_RADIUS}px)`,
                 }}
-              />
+              >
+                <div className="flex size-7 rotate-[-32.62deg] items-center justify-center rounded-full bg-[#F17823]" />
+              </div>
 
               <div className="relative h-[560px] w-[340px]">
               </div>
