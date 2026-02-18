@@ -5,8 +5,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const DESIGN_WIDTH = 1670;
-const DESIGN_HEIGHT = 1024;
+const DESIGN_WIDTH = 1662;
+const DESIGN_HEIGHT = 1000;
 
 const mainBootSide = "/images/models/views/boot-side.png";
 const mainBootFront = "/images/models/views/boot-front.png";
@@ -65,6 +65,7 @@ const views = [
     glue: "Написать о проклейке",
     showMetrics: false,
     glueVariant: "pill",
+    bootBox: { x: 684, y: 232, w: 273, h: 564 },
     bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
     anchors: {
       calloutCard: { x: 926, y: 737 },
@@ -85,8 +86,8 @@ const views = [
     glue: "И описание фишки в две строки",
     glueVariant: "card",
     showMetrics: false,
-    bootBox: { x: 413, y: 7, w: 859, h: 885 },
-    bootPose: { rotate: 37.25, x: 0, y: 8, scale: 0.86 },
+    bootBox: { x: 565, y: 105, w: 555.071, h: 689.873 },
+    bootPose: { rotate: 37.247, x: 0, y: 0, scale: 1 },
     anchors: {
       calloutCard: { x: 1013, y: 540 },
       calloutDot: { x: 35, y: -15 },
@@ -100,7 +101,7 @@ const views = [
       "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
     image: "/images/models/views/boot-inner-material.png",
     callout: { title: "Твердый носок", text: "Носок и его характеристика" },
-    calloutStyle: { w: 233, h: 118, titleSize: 18, textSize: 14 },
+    calloutStyle: { w: 232.811, h: 118, titleSize: 18, textSize: 14 },
     metricTop: { value: "15", title: "протектор", line1: "глубокий", line2: "зацеп" },
     metricSide: { value: "05", line1: "слоев", line2: "подошвы" },
     glue: "Написать о проклейке",
@@ -184,7 +185,37 @@ export default function ModelsPage() {
   const currentBootImageFrame = "bootImageFrame" in currentView ? currentView.bootImageFrame : null;
   const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
   const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
+  const isThermalCallout = currentView.title === "ВНУТРЕННИЙ МАТЕРИАЛ";
+  const calloutDotPosition = isThermalCallout
+    ? {
+        left: currentView.anchors.calloutCard.x + 10,
+        top: currentView.anchors.calloutCard.y + 42,
+      }
+    : {
+        left: currentView.anchors.calloutCard.x + currentView.anchors.calloutDot.x,
+        top: currentView.anchors.calloutCard.y + currentView.anchors.calloutDot.y,
+      };
+  const calloutDotOuterSize = isThermalCallout ? 34 : 30;
+  const calloutDotInnerSize = isThermalCallout ? 16 : 14;
   const markerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
+  const tempLabelStyle = {
+    width: 61,
+    height: 32,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center" as const,
+    fontFamily: "Gilroy, sans-serif",
+    fontSize: 22,
+    fontStyle: "normal" as const,
+    fontWeight: 700,
+    lineHeight: "115%",
+    letterSpacing: "-0.22px",
+    background: "linear-gradient(90deg, #111 0%, #474747 195.22%)",
+    backgroundClip: "text" as const,
+    WebkitBackgroundClip: "text" as const,
+    WebkitTextFillColor: "transparent",
+  };
 
   const handleChangeView = (index: number) => {
     if (index === activeIndex) return;
@@ -194,9 +225,7 @@ export default function ModelsPage() {
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
-      <section
-        className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-[#efefef] min-[1200px]:block"
-      >
+      <section className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-white min-[1200px]:block">
             <div
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
               style={{
@@ -205,8 +234,10 @@ export default function ModelsPage() {
               }}
             >
             <div
-              className="relative h-[1024px] w-[1670px]"
+              className="relative"
               style={{
+                width: DESIGN_WIDTH,
+                height: DESIGN_HEIGHT,
                 transform: `scale(${stageScale})`,
                 transformOrigin: "top left",
               }}
@@ -371,7 +402,7 @@ export default function ModelsPage() {
               </div>
             </div>
 
-            <div className="absolute left-1/2 top-[555px] z-0 h-[1024px] w-[1536px] -translate-x-1/2 overflow-hidden">
+            <div className="absolute left-1/2 top-[555px] z-0 w-[1536px] -translate-x-1/2 overflow-hidden" style={{ height: DESIGN_HEIGHT }}>
               <img src={pedestalImage} alt="" className="h-full w-full object-cover object-center" />
             </div>
 
@@ -413,10 +444,12 @@ export default function ModelsPage() {
             {currentView.tempWidget && (
               <>
                 <p
-                  className="absolute z-20 text-[22px] font-bold leading-[1.15] text-[#111]"
+                  className="absolute z-20"
                   style={{
+                    ...tempLabelStyle,
                     left: currentView.tempWidget.topLabelPos?.x ?? currentView.tempWidget.x + 40,
                     top: currentView.tempWidget.topLabelPos?.y ?? currentView.tempWidget.y - 40,
+                    transform: "translateX(-50%)",
                   }}
                 >
                   {currentView.tempWidget.topLabel}
@@ -463,10 +496,12 @@ export default function ModelsPage() {
                   </svg>
                 </div>
                 <p
-                  className="absolute z-20 text-[22px] font-bold leading-[1.15] text-[#111]"
+                  className="absolute z-20"
                   style={{
+                    ...tempLabelStyle,
                     left: currentView.tempWidget.bottomLabelPos?.x ?? currentView.tempWidget.x + 36,
                     top: currentView.tempWidget.bottomLabelPos?.y ?? currentView.tempWidget.y + currentView.tempWidget.h + 16,
+                    transform: "translateX(-50%)",
                   }}
                 >
                   {currentView.tempWidget.bottomLabel}
@@ -480,43 +515,77 @@ export default function ModelsPage() {
               </>
             )}
 
-            <div
-              className="absolute z-20 rounded-[22px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
-              style={{
-                left: currentView.anchors.calloutCard.x,
-                top: currentView.anchors.calloutCard.y,
-                width: currentView.calloutStyle.w,
-                height: currentView.calloutStyle.h,
-                ...(currentCalloutNotch
-                  ? {
-                      WebkitMask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
-                        currentCalloutNotch.x + currentCalloutNotch.w / 2
-                      }px -8px, transparent 98%, #000 100%)`,
-                      mask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
-                        currentCalloutNotch.x + currentCalloutNotch.w / 2
-                      }px -8px, transparent 98%, #000 100%)`,
-                    }
-                  : {}),
-              }}
-            >
-              <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize }}>
-                <span className="font-bold">{currentView.callout.title}</span>
-              </p>
-              <p
-                className="leading-[1.08] tracking-[-0.02em]"
-                style={{ fontSize: currentView.calloutStyle.textSize, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+            {isThermalCallout ? (
+              <div
+                className="absolute z-20 transition-all duration-500"
+                style={{
+                  left: currentView.anchors.calloutCard.x,
+                  top: currentView.anchors.calloutCard.y,
+                  width: currentView.calloutStyle.w,
+                  height: currentView.calloutStyle.h,
+                  filter: "drop-shadow(0 60px 100px rgba(0, 0, 0, 0.12))",
+                }}
               >
-                {currentView.callout.text}
-              </p>
-            </div>
+                <svg
+                  className="absolute left-0 top-0 h-full w-full"
+                  viewBox="0 0 232.811 118"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M197.811 0C217.141 0 232.811 15.67 232.811 35V83C232.811 102.33 217.141 118 197.811 118H60.514C41.59 118 26.176 102.982 25.536 84.215C25.535 84.203 25.526 84.194 25.514 84.194C11.423 84.194 0 72.771 0 58.6807C0 44.5901 11.423 33.168 25.514 33.168C25.539 33.168 25.561 33.1476 25.562 33.1219C26.538 14.6651 41.814 0 60.514 0H197.811Z"
+                    fill="white"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col justify-center pl-[56px] pr-[18px]">
+                  <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize }}>
+                    <span className="font-bold">{currentView.callout.title}</span>
+                  </p>
+                  <p
+                    className="leading-[1.08] tracking-[-0.02em]"
+                    style={{ fontSize: currentView.calloutStyle.textSize, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+                  >
+                    {currentView.callout.text}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div
+                className="absolute z-20 rounded-[22px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
+                style={{
+                  left: currentView.anchors.calloutCard.x,
+                  top: currentView.anchors.calloutCard.y,
+                  width: currentView.calloutStyle.w,
+                  height: currentView.calloutStyle.h,
+                  ...(currentCalloutNotch
+                    ? {
+                        WebkitMask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
+                          currentCalloutNotch.x + currentCalloutNotch.w / 2
+                        }px -8px, transparent 98%, #000 100%)`,
+                        mask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
+                          currentCalloutNotch.x + currentCalloutNotch.w / 2
+                        }px -8px, transparent 98%, #000 100%)`,
+                      }
+                    : {}),
+                }}
+              >
+                <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize }}>
+                  <span className="font-bold">{currentView.callout.title}</span>
+                </p>
+                <p
+                  className="leading-[1.08] tracking-[-0.02em]"
+                  style={{ fontSize: currentView.calloutStyle.textSize, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+                >
+                  {currentView.callout.text}
+                </p>
+              </div>
+            )}
             <span
-              className="absolute z-20 flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
-              style={{
-                left: currentView.anchors.calloutCard.x + currentView.anchors.calloutDot.x,
-                top: currentView.anchors.calloutCard.y + currentView.anchors.calloutDot.y,
-              }}
+              className="absolute z-20 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+              style={{ ...calloutDotPosition, width: calloutDotOuterSize, height: calloutDotOuterSize }}
             >
-              <span className="size-[10px] rounded-full bg-white" />
+              <span className="rounded-full bg-white" style={{ width: calloutDotInnerSize, height: calloutDotInnerSize }} />
             </span>
 
             {("showGlue" in currentView ? currentView.showGlue : true) !== false && (
