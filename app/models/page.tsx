@@ -174,6 +174,9 @@ const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) =
 export default function ModelsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [transitionTick, setTransitionTick] = useState(0);
+  const stageScale = `min(calc(100vw / ${DESIGN_WIDTH}px), calc(100dvh / ${DESIGN_HEIGHT}px))`;
+  const stageScaledWidth = `calc(${DESIGN_WIDTH}px * ${stageScale})`;
+  const stageScaledHeight = `calc(${DESIGN_HEIGHT}px * ${stageScale})`;
 
   const currentView = views[activeIndex];
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
@@ -190,11 +193,24 @@ export default function ModelsPage() {
   };
 
   return (
-    <main className="figma-site-page overflow-x-auto bg-[#d9d9d9] text-[#111]">
+    <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
       <section
-        className="figma-site-stage relative mx-auto hidden h-screen min-h-[1024px] min-w-[1670px] overflow-hidden bg-[#efefef] min-[1200px]:block"
+        className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-[#efefef] min-[1200px]:block"
       >
-            <div className="absolute left-1/2 top-0 h-full min-h-[1024px] w-[1670px] -translate-x-1/2">
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+              style={{
+                width: stageScaledWidth,
+                height: stageScaledHeight,
+              }}
+            >
+            <div
+              className="relative h-[1024px] w-[1670px]"
+              style={{
+                transform: `scale(${stageScale})`,
+                transformOrigin: "top left",
+              }}
+            >
             <div className="pointer-events-none absolute bottom-[-88px] left-[439px] top-[-88px] w-[886.001px]">
               {Array.from({ length: 14 }).map((_, index) => (
                 <div
@@ -226,10 +242,10 @@ export default function ModelsPage() {
             <header
               className="absolute top-0 z-20 h-[96px] pt-[18px]"
               style={{
-                left: "max(0px, calc((100vw - 1670px) / 2))",
-                width: "min(1670px, 100vw)",
-                paddingLeft: "clamp(16px, 3.6vw, 61px)",
-                paddingRight: "clamp(16px, 3.6vw, 61px)",
+                left: 0,
+                width: DESIGN_WIDTH,
+                paddingLeft: 61,
+                paddingRight: 61,
               }}
             >
               <nav className="flex items-center gap-6">
@@ -278,30 +294,35 @@ export default function ModelsPage() {
               </div>
             </header>
 
-            <div className="absolute left-[103px] top-[232px] z-20 w-[560px]">
-              <h1
-                className="text-[45px] font-bold uppercase leading-none text-[#5b6a44]"
-                style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
-              >
-                {currentView.title}
-              </h1>
-              <p className="mt-6 text-[41px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
-              <p className="mt-2 text-[40px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
-
-              <p className="mt-4 text-[40px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
-              <p className="mt-3 w-[532px] text-[40px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
-
-              <p className="mt-[-120px] w-[532px] text-[39px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
-
-              <p className="absolute left-0 top-[78px] w-[532px] text-[40px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
-
+            <div className="absolute left-[103px] top-[232px] z-20 h-[520px] w-[560px]">
+              <div className="relative">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="34"
+                  height="8"
+                  viewBox="0 0 34 8"
+                  fill="none"
+                  aria-hidden="true"
+                  className="absolute left-[-58px] top-1/2 -translate-y-1/2 shrink-0"
+                >
+                  <circle opacity="0.4" cx="4" cy="4" r="4" fill="#111111" />
+                  <circle opacity="0.2" cx="17" cy="4" r="4" fill="#111111" />
+                  <circle opacity="0.1" cx="30" cy="4" r="4" fill="#111111" />
+                </svg>
+                <h1
+                  className="text-[45px] font-bold uppercase leading-none text-[#5b6a44]"
+                  style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
+                >
+                  {currentView.title}
+                </h1>
+              </div>
               <p className="absolute left-0 top-[84px] w-[532px] text-[24px] font-medium leading-[1.35] tracking-normal text-[#111]">
                 {currentView.description}
               </p>
 
               <button
                 type="button"
-                className="mt-[190px] h-20 w-[248px] rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
+                className="absolute left-0 top-[332px] h-20 w-[248px] rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
                 style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
               >
                 Купить
@@ -537,14 +558,9 @@ export default function ModelsPage() {
               <div className="h-[75px] w-[74px] overflow-hidden rounded-[8px] border border-[#9a9a9a] bg-white/40 p-2 opacity-50">
                 <img src={thumbB} alt="" className="h-full w-full object-contain" />
               </div>
-              <div className="ml-2 flex gap-2">
-                <span className="size-[8px] rounded-full bg-[#a4a4a4]" />
-                <span className="size-[8px] rounded-full bg-[#d0d0d0]" />
-                <span className="size-[8px] rounded-full bg-[#d0d0d0]" />
-              </div>
             </div>
 
-            <div className="absolute top-[241px] z-20" style={{ left: "min(1414px, calc(100vw - 256px))" }}>
+            <div className="absolute top-[241px] z-20" style={{ left: 1414 }}>
               <div
                 className="pointer-events-none absolute left-[131px] top-[114px] h-[364px] w-[364px]"
                 style={{
@@ -772,6 +788,7 @@ export default function ModelsPage() {
 
               <div className="relative h-[560px] w-[340px]">
               </div>
+            </div>
             </div>
             </div>
       </section>
