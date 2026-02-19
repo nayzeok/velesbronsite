@@ -1,12 +1,49 @@
 "use client";
 
 import Image from "next/image";
+
+const figmaHeroBackground = "https://www.figma.com/api/mcp/asset/60c54a29-4bcc-4980-852b-b25d59719777";
+const figmaPreviewCardBackground = "https://www.figma.com/api/mcp/asset/0cc1de12-e6e7-4b8b-bc1b-277f10898fa0";
+const figmaPreviewCardModel = "https://www.figma.com/api/mcp/asset/657e6955-f498-415b-a0de-c7c0b1b9bb6b";
+const DESIGN_HEIGHT = 1000;
+
+const heroThumbs = [
+  {
+    key: "146:20",
+    image: "https://www.figma.com/api/mcp/asset/f6b599c0-0070-466c-88e2-937ee312b22c",
+    frame: { left: 3, top: -11, width: 58, height: 77 },
+    transform: "scaleY(-1) rotate(180deg)",
+  },
+  {
+    key: "146:22",
+    image: "https://www.figma.com/api/mcp/asset/7ddefd8e-e56f-4ef0-aaa6-705a339a8363",
+    frame: { left: 3, top: -11, width: 58, height: 77 },
+    transform: "scaleY(-1) rotate(180deg)",
+  },
+  {
+    key: "146:24",
+    image: "https://www.figma.com/api/mcp/asset/9c1f73ec-752c-49ba-8507-0f41e65fdd4c",
+    frame: { left: 0, top: -22, width: 67, height: 90 },
+  },
+  {
+    key: "146:26",
+    image: "https://www.figma.com/api/mcp/asset/5ec81acf-7868-46a4-8e09-0b6c4020723e",
+    frame: { left: 0, top: -11, width: 66, height: 88 },
+  },
+];
+
 export default function Home() {
+  const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
+
   return (
-    <main className="figma-site-page overflow-x-auto bg-[#e8e8e8] text-white">
+    <main className="figma-site-page overflow-x-hidden bg-[#e8e8e8] text-white">
       <section className="relative min-[1200px]:hidden">
         <div className="relative min-h-screen overflow-hidden">
-          <Image src="/images/pages/main-background.png" alt="" fill priority className="object-cover" />
+          <img
+            src={figmaHeroBackground}
+            alt=""
+            className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover"
+          />
           <div className="absolute inset-0 bg-black/25" />
 
           <header className="relative z-30 px-4 pt-4">
@@ -21,7 +58,7 @@ export default function Home() {
                 Модели
               </a>
             </div>
-            <div className="mx-auto h-[72px] w-[132px] rounded-[10px] bg-white p-2">
+            <div className="mx-auto h-[72px] w-[138px] rounded-[10px] bg-white p-2">
               <Image src="/images/pages/header-logo.png" alt="Velesbron" width={132} height={55} className="h-full w-full object-contain" />
             </div>
           </header>
@@ -30,7 +67,7 @@ export default function Home() {
             <h2
               className="bg-clip-text text-[34px] font-medium uppercase leading-none text-transparent"
               style={{
-                fontFamily: "Druk Cyr, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
                 backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
               }}
             >
@@ -54,8 +91,11 @@ export default function Home() {
             <h1
               className="mt-5 bg-clip-text text-[40px] font-medium uppercase leading-[0.95] text-transparent"
               style={{
-                fontFamily: "Druk Cyr, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
                 backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
               }}
             >
               ТАКТИЧЕСКАЯ ОБУВЬ
@@ -72,7 +112,7 @@ export default function Home() {
             <button
               type="button"
               className="mt-6 h-14 w-[210px] rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium"
-              style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
+              style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}
             >
               Купить
             </button>
@@ -81,25 +121,28 @@ export default function Home() {
       </section>
 
       <section
-        className="figma-site-stage relative hidden min-h-[1112px] min-w-[1670px] min-[1200px]:block"
-        style={{ ["--figma-stage-height" as string]: "1112px" }}
+        className="figma-site-stage relative hidden h-[100dvh] overflow-hidden min-[1200px]:block"
+        style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
-        <div className="absolute left-1/2 top-0 h-[1112px] w-[1670px] -translate-x-1/2">
-          <div className="absolute inset-0">
-            <Image src="/images/pages/main-background.png" alt="" fill priority className="object-cover" />
-            <div className="absolute inset-0 bg-black/20" />
-          </div>
+        <div className="absolute inset-0">
+          <img
+            src={figmaHeroBackground}
+            alt=""
+            className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
 
-          <header
-            className="absolute top-0 z-30 h-[96px] pt-[18px]"
+        <div className="relative z-10 mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          <div
+            className="absolute inset-x-0 top-0 h-[1000px] origin-top"
             style={{
-              left: "max(0px, calc((100vw - 1670px) / 2))",
-              width: "min(1670px, 100vw)",
-              paddingLeft: "clamp(16px, 3.6vw, 61px)",
-              paddingRight: "clamp(16px, 3.6vw, 61px)",
+              transform: `scale(${stageHeightFitScale})`,
             }}
           >
-            <nav className="flex items-center gap-6">
+        <div className="relative flex h-[1000px] w-full flex-col px-[clamp(24px,3.6vw,67px)] pb-0 pt-[18px]">
+          <header className="relative h-[96px]">
+            <nav className="flex items-center gap-6 pt-[9px]">
               <a
                 href="#"
                 className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-xs font-medium"
@@ -117,8 +160,8 @@ export default function Home() {
               </a>
             </nav>
 
-            <div className="absolute left-1/2 top-0 h-[86px] w-[159px] -translate-x-1/2 rounded-[10px] bg-white">
-              <div className="absolute left-[-4px] top-[13px] h-[55px] w-[167px]">
+            <div className="absolute left-1/2 top-0 h-[86px] w-[175px] -translate-x-1/2 rounded-[10px] bg-white">
+              <div className="absolute left-1/2 top-[13px] h-[55px] w-[167px] -translate-x-1/2">
                 <Image
                   src="/images/pages/header-logo.png"
                   alt="Velesbron"
@@ -130,7 +173,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "96px" }}>
+            <div className="absolute right-[clamp(16px,5.7vw,96px)] top-[22px] flex items-center gap-[10px]">
               <button
                 type="button"
                 aria-label="Язык"
@@ -165,96 +208,128 @@ export default function Home() {
             </div>
           </header>
 
-          <div className="absolute left-[64px] top-[173px] z-20">
-            <h2
-              className="bg-clip-text text-[55px] font-medium uppercase leading-none text-transparent"
-              style={{
-                fontFamily: "Druk Cyr, var(--font-oswald), sans-serif",
-                backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
-              }}
-            >
-              МОДЕЛЬ &apos;2026
-            </h2>
+          <div className="relative mt-[clamp(24px,6vh,74px)] flex flex-1">
+            <div className="relative z-20 w-[clamp(320px,28vw,420px)]">
+              <h2
+                className="bg-clip-text text-[clamp(40px,3.4vw,55px)] font-medium uppercase leading-none text-transparent"
+                style={{
+                  fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
+                  backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
+                }}
+              >
+                МОДЕЛЬ &apos;2026
+              </h2>
 
-            <div className="mt-1 flex items-center rounded-full bg-[#f4f4f2] p-[3px]">
-              {[1, 2, 3, 4].map((item) => (
-                <div key={item} className="-ml-[8px] first:ml-0">
-                  <div className="size-[66px] overflow-hidden rounded-full bg-[#f4f4f2]">
-                    <Image
-                      src="/images/pages/main-model-for-hero.png"
-                      alt=""
-                      width={66}
-                      height={66}
-                      className="h-full w-full object-cover object-left-top"
-                    />
+              <div className="mt-1 flex items-center">
+                {heroThumbs.map((item) => (
+                  <div key={item.key} className="-ml-[8px] first:ml-0">
+                    <div className="relative size-[66px] overflow-hidden rounded-full bg-transparent">
+                      <img
+                        src={item.image}
+                        alt=""
+                        className="pointer-events-none absolute max-w-none object-cover"
+                        style={{
+                          left: item.frame.left,
+                          top: item.frame.top,
+                          width: item.frame.width,
+                          height: item.frame.height,
+                          transform: item.transform,
+                          transformOrigin: "center center",
+                          mixBlendMode: "multiply",
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              <p className="mt-4 w-[305px] text-[18px] leading-[26px] text-white">
+                Разработано для силовых структур и спортивного образа жизни
+              </p>
             </div>
 
-            <p className="mt-4 w-[305px] text-[18px] leading-[26px] text-white">
-              Разработано для силовых структур и спортивного образа жизни
-            </p>
+            <div className="relative flex-1">
+              <div className="absolute right-[clamp(0px,2vw,40px)] top-[clamp(10px,5vh,90px)] z-30 w-[clamp(460px,40vw,658px)] overflow-visible">
+                <h1
+                  className="flex flex-col items-end uppercase"
+                  style={{
+                    fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
+                    textAlign: "right",
+                    fontSize: "clamp(84px,6vw,115px)",
+                    fontStyle: "normal",
+                    fontWeight: 500,
+                    lineHeight: "0.94",
+                    letterSpacing: "-0.02em",
+                    backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  <span className="whitespace-nowrap">ТАКТИЧЕСКАЯ ОБУВЬ</span>
+                  <span className="whitespace-nowrap">ИЗ НАТУРАЛЬНЫХ</span>
+                  <span className="whitespace-nowrap">МАТЕРИАЛОВ</span>
+                </h1>
+              </div>
+
+              <p className="absolute bottom-[clamp(35px,2.4vh,34px)] right-[clamp(104px,13vw,226px)] z-20 text-[18px] leading-[26px] text-white">
+                | 01/04 |
+              </p>
+
+              <div className="absolute bottom-[clamp(2px,0.8vh,10px)] right-[clamp(16px,4vw,55px)] z-20 flex items-center gap-[7px]">
+                <span className="size-[9px] rounded-full bg-white" />
+                <span className="size-[9px] rounded-full bg-white/45" />
+                <span className="size-[9px] rounded-full bg-white/45" />
+                <span className="size-[9px] rounded-full bg-white/45" />
+              </div>
+            </div>
           </div>
 
-          <div className="absolute left-[826px] top-[215px] z-10 h-[421px] w-[658px]">
-            <h1
-              className="bg-clip-text text-right text-[115px] font-medium uppercase leading-[108px] text-transparent"
+          <div className="pointer-events-none absolute left-[320px] top-[194px] z-20 h-[690px] w-[844px]">
+            <div
+              role="img"
+              aria-label="Тактическая обувь"
+              className="h-full w-full"
               style={{
-                fontFamily: "Druk Cyr, var(--font-oswald), sans-serif",
-                backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
+                backgroundImage: "url(/images/pages/main-model-for-hero.png)",
+                backgroundPosition: "-319.627px -115px",
+                backgroundSize: "164.984% 134.677%",
+                backgroundRepeat: "no-repeat",
               }}
-            >
-              ТАКТИЧЕСКАЯ ОБУВЬ
-              <br />
-              ИЗ НАТУРАЛЬНЫХ
-              <br />
-              МАТЕРИАЛОВ
-            </h1>
-          </div>
-
-          <div className="absolute left-[320px] top-[194px] z-20 h-[690px] w-[844px]">
-            <Image
-              src="/images/pages/main-model-for-hero.png"
-              alt="Тактическая обувь"
-              width={844}
-              height={690}
-              className="h-full w-full object-contain"
-              priority
             />
           </div>
 
-          <div className="absolute left-[52px] top-[759px] z-20 w-[398px] text-[24px] font-medium leading-[33px] text-[#c6c6c6]">
-            <span className="text-white">Одна универсальная пара обуви,</span> которая не подведет ни в походе, ни на службе, ни в городе
-          </div>
-
-          <button
-            type="button"
-            className="absolute left-[52px] top-[889px] z-20 h-20 w-[248px] rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium"
-            style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
-          >
-            Купить
-          </button>
-
-          <div className="absolute left-[1256px] top-[676px] z-20 h-[293px] w-[230px] overflow-hidden rounded-[19px] bg-white">
+          <div className="absolute right-[clamp(0px,2vw,40px)] top-[676px] z-20 h-[293px] w-[230px] overflow-hidden rounded-[19px] bg-white">
             <div className="relative h-full w-full">
-              <Image src="/images/pages/main-background.png" alt="" fill className="object-cover opacity-85" />
-              <Image
-                src="/images/pages/main-model-for-hero.png"
+              <img
+                src={figmaPreviewCardBackground}
+                alt=""
+                className="pointer-events-none absolute max-w-none object-cover opacity-85"
+                style={{ left: -92, top: -30, width: 498, height: 332 }}
+              />
+              <img
+                src={figmaPreviewCardModel}
                 alt="Превью модели"
-                fill
-                className="object-cover object-bottom"
+                className="pointer-events-none absolute max-w-none object-cover"
+                style={{ left: 0, top: -17, width: 230, height: 306 }}
               />
             </div>
           </div>
 
-          <p className="absolute left-[1171px] top-[939px] z-20 text-[18px] leading-[26px] text-white">| 01/04 |</p>
+          <div className="absolute bottom-[clamp(8px,1.1vh,16px)] left-[clamp(24px,3.1vw,52px)] z-20">
+            <p className="w-[clamp(320px,24vw,398px)] text-[24px] font-medium leading-[33px] text-[#c6c6c6]">
+              <span className="text-white">Одна универсальная пара обуви,</span> которая не подведет ни в походе, ни на службе, ни в городе
+            </p>
 
-          <div className="absolute left-[1342px] top-[978px] z-20 flex items-center gap-[7px]">
-            <span className="size-[9px] rounded-full bg-white" />
-            <span className="size-[9px] rounded-full bg-white/45" />
-            <span className="size-[9px] rounded-full bg-white/45" />
-            <span className="size-[9px] rounded-full bg-white/45" />
+            <button
+              type="button"
+              className="mt-6 h-20 w-[248px] rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium"
+              style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}
+            >
+              Купить
+            </button>
+          </div>
+        </div>
           </div>
         </div>
       </section>

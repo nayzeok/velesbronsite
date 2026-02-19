@@ -5,14 +5,13 @@
 import Link from "next/link";
 import { useState } from "react";
 
-const DESIGN_WIDTH = 1662;
 const DESIGN_HEIGHT = 1000;
 
-const mainBootSide = "/images/models/views/boot-side.png";
-const mainBootFront = "/images/models/views/boot-front.png";
-const mainBootTop = "/images/models/views/boot-top.png";
-const mainBootTilt = "/images/models/views/boot-tilt.png";
-const mainBootBack = "/images/models/views/boot-back.png";
+const mainBootSide = "/images/models/views/models/black/1.png";
+const mainBootFront = "/images/models/views/models/black/2.png";
+const mainBootTop = "/images/models/views/models/black/3.png";
+const mainBootTilt = "/images/models/views/models/black/4.png";
+const mainBootBack = "/images/models/views/models/black/5.png";
 const pedestalImage = "/images/models/ui/pedestal-bg.png";
 const thumbA = "/images/models/ui/thumb-dark.png";
 const thumbB = "/images/models/ui/thumb-light.png";
@@ -44,8 +43,8 @@ const views = [
     glue: "Написать о проклейке",
     showGlue: false,
     glueVariant: "pill",
+    bootBox: { x: 460, y: 351, w: 722, h: 565 },
     bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
-    bootImageFrame: { wPct: 136.08, hPct: 115.93, leftPct: -16.66, topPct: -15.93 },
     anchors: {
       calloutCard: { x: 398, y: 730 },
       calloutDot: { x: 116, y: -14 },
@@ -78,7 +77,7 @@ const views = [
     title: "ПОДОШВА БОТИНКА",
     description:
       "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
-    image: "/images/models/views/boot-sole-angle.png",
+    image: mainBootTop,
     callout: { title: "О подошве", text: "И описание фишки в две строки" },
     calloutStyle: { w: 303, h: 128, titleSize: 36, textSize: 18 },
     metricTop: { value: "24", title: "петли", line1: "равномерная", line2: "утяжка" },
@@ -99,7 +98,7 @@ const views = [
     title: "ВНУТРЕННИЙ МАТЕРИАЛ",
     description:
       "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
-    image: "/images/models/views/boot-inner-material.png",
+    image: mainBootTilt,
     callout: { title: "Твердый носок", text: "Носок и его характеристика" },
     calloutStyle: { w: 232.811, h: 118, titleSize: 18, textSize: 14 },
     metricTop: { value: "15", title: "протектор", line1: "глубокий", line2: "зацеп" },
@@ -131,7 +130,7 @@ const views = [
     title: "ЗАДНЯЯ ЧАСТЬ",
     description:
       "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
-    image: "/images/models/views/boot-rear.png",
+    image: mainBootBack,
     callout: { title: "О заднике", text: "И описание фишки в две строки" },
     calloutStyle: { w: 241, h: 152, titleSize: 22, textSize: 15 },
     metricTop: { value: "18", title: "стабил.", line1: "жесткая", line2: "пятка" },
@@ -175,14 +174,15 @@ const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) =
 export default function ModelsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [transitionTick, setTransitionTick] = useState(0);
-  const stageScale = `min(calc(100vw / ${DESIGN_WIDTH}px), calc(100dvh / ${DESIGN_HEIGHT}px))`;
-  const stageScaledWidth = `calc(${DESIGN_WIDTH}px * ${stageScale})`;
-  const stageScaledHeight = `calc(${DESIGN_HEIGHT}px * ${stageScale})`;
+  const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
 
   const currentView = views[activeIndex];
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
   const currentBootPose = currentView.bootPose ?? { rotate: 0, x: 0, y: 0, scale: 1 };
-  const currentBootImageFrame = "bootImageFrame" in currentView ? currentView.bootImageFrame : null;
+  const currentBootImageFrame =
+    "bootImageFrame" in currentView
+      ? (currentView.bootImageFrame as { wPct: number; hPct: number; leftPct: number; topPct: number })
+      : null;
   const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
   const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
   const isThermalCallout = currentView.title === "ВНУТРЕННИЙ МАТЕРИАЛ";
@@ -225,23 +225,17 @@ export default function ModelsPage() {
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
-      <section className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-white min-[1200px]:block">
-            <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-              style={{
-                width: stageScaledWidth,
-                height: stageScaledHeight,
-              }}
-            >
-            <div
-              className="relative"
-              style={{
-                width: DESIGN_WIDTH,
-                height: DESIGN_HEIGHT,
-                transform: `scale(${stageScale})`,
-                transformOrigin: "top left",
-              }}
-            >
+      <section
+        className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-white min-[1200px]:block"
+        style={{ ["--figma-stage-height" as string]: "100dvh" }}
+      >
+        <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          <div
+            className="absolute inset-x-0 top-0 h-[1000px] origin-top"
+            style={{
+              transform: `scale(${stageHeightFitScale})`,
+            }}
+          >
             <div className="pointer-events-none absolute bottom-[-88px] left-[439px] top-[-88px] w-[886.001px]">
               {Array.from({ length: 14 }).map((_, index) => (
                 <div
@@ -274,9 +268,9 @@ export default function ModelsPage() {
               className="absolute top-0 z-20 h-[96px] pt-[18px]"
               style={{
                 left: 0,
-                width: DESIGN_WIDTH,
-                paddingLeft: 61,
-                paddingRight: 61,
+                width: "100%",
+                paddingLeft: "clamp(24px, 3.6vw, 61px)",
+                paddingRight: "clamp(24px, 3.6vw, 61px)",
               }}
             >
               <nav className="flex items-center gap-6">
@@ -294,15 +288,15 @@ export default function ModelsPage() {
                 </a>
               </nav>
 
-              <div className="absolute left-1/2 top-0 h-[86px] w-[159px] -translate-x-1/2 rounded-[10px] bg-white">
+              <div className="absolute left-1/2 top-0 h-[86px] w-[175px] -translate-x-1/2 rounded-[10px] bg-white">
                 <img
                   src="/images/pages/header-logo.png"
                   alt="Velesbron"
-                  className="absolute left-[-4px] top-[13px] h-[55px] w-[167px] object-contain"
+                  className="absolute left-1/2 top-[13px] h-[55px] w-[167px] -translate-x-1/2 object-contain"
                 />
               </div>
 
-              <div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "96px" }}>
+              <div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "clamp(24px, 5.7vw, 96px)" }}>
                 <button className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#7f766f] to-[#635b50] text-white">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="9" />
@@ -325,7 +319,7 @@ export default function ModelsPage() {
               </div>
             </header>
 
-            <div className="absolute left-[103px] top-[232px] z-20 h-[520px] w-[560px]">
+            <div className="absolute z-20 h-[520px] w-[560px]" style={{ left: "clamp(40px, 6.2vw, 103px)", top: "clamp(164px, 22.7vh, 232px)" }}>
               <div className="relative">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -341,8 +335,15 @@ export default function ModelsPage() {
                   <circle opacity="0.1" cx="30" cy="4" r="4" fill="#111111" />
                 </svg>
                 <h1
-                  className="text-[45px] font-bold uppercase leading-none text-[#5b6a44]"
-                  style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
+                  className="uppercase text-[#5b6a44]"
+                  style={{
+                    color: "#5B6A44",
+                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontSize: 45,
+                    fontStyle: "normal",
+                    fontWeight: 700,
+                    lineHeight: "normal",
+                  }}
                 >
                   {currentView.title}
                 </h1>
@@ -620,7 +621,7 @@ export default function ModelsPage() {
               </>
             )}
 
-            <div className="absolute left-[102px] top-[897px] z-20 flex items-center gap-4">
+            <div className="absolute z-20 flex items-center gap-4" style={{ left: "clamp(40px, 6.1vw, 102px)", top: "clamp(780px, 87.6vh, 897px)" }}>
               <div className="h-[75px] w-[76px] overflow-hidden rounded-[8px] border border-[#c8c8c8] bg-white p-2">
                 <img src={thumbA} alt="" className="h-full w-full object-contain" />
               </div>
@@ -629,7 +630,7 @@ export default function ModelsPage() {
               </div>
             </div>
 
-            <div className="absolute top-[241px] z-20" style={{ left: 1414 }}>
+            <div className="absolute z-20" style={{ left: "clamp(1000px, 84.7vw, 1414px)", top: "clamp(170px, 23.5vh, 241px)" }}>
               <div
                 className="pointer-events-none absolute left-[131px] top-[114px] h-[364px] w-[364px]"
                 style={{
@@ -854,27 +855,37 @@ export default function ModelsPage() {
               >
                 <div className="flex size-7 rotate-[-32.62deg] items-center justify-center rounded-full bg-[#F17823]" />
               </div>
-
-              <div className="relative h-[560px] w-[340px]">
-              </div>
-            </div>
-            </div>
-            </div>
+          </div>
+          </div>
+        </div>
       </section>
 
       <section className="min-[1200px]:hidden px-4 pb-10 pt-4">
-        <header className="mb-5 flex items-center justify-between">
-          <Link href="/" className="text-sm font-medium text-[#111]">
-            Главная
-          </Link>
-          <span className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-4 py-2 text-xs font-medium text-white">
-            Модели
-          </span>
+        <header className="mb-5">
+          <div className="mb-4 flex items-center justify-between">
+            <Link href="/" className="text-xs font-medium text-[#111]">
+              Главная
+            </Link>
+            <span className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-4 py-2 text-xs font-medium text-white">
+              Модели
+            </span>
+          </div>
+
+          <div className="mx-auto h-[72px] w-[138px] rounded-[10px] bg-white p-2">
+            <img src="/images/pages/header-logo.png" alt="Velesbron" className="h-full w-full object-contain" />
+          </div>
         </header>
 
         <h1
-          className="text-[32px] font-bold uppercase leading-none text-[#5b6a44]"
-          style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
+          className="uppercase text-[#5b6a44]"
+          style={{
+            color: "#5B6A44",
+            fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+            fontSize: 45,
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "normal",
+          }}
         >
           {currentView.title}
         </h1>
