@@ -311,9 +311,9 @@ export default function ModelsPage() {
                 <Link href="/" className="text-xs font-medium text-[#111]">
                   Главная
                 </Link>
-                <a href="#" className="text-xs font-medium text-[#111]">
+                <Link href="/buy" className="text-xs font-medium text-[#111]">
                   Купить
-                </a>
+                </Link>
                 <span className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-xs font-medium text-white">
                   Модели
                 </span>
@@ -386,13 +386,13 @@ export default function ModelsPage() {
                 {currentView.description}
               </p>
 
-              <button
-                type="button"
-                className="absolute left-0 top-[332px] h-20 w-[248px] rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
+              <Link
+                href="/buy"
+                className="absolute left-0 top-[332px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
                 style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
               >
                 Купить
-              </button>
+              </Link>
             </div>
 
             <div
@@ -437,6 +437,23 @@ export default function ModelsPage() {
                 </div>
               </div>
             </div>
+
+            <p
+              className="pointer-events-none absolute inset-x-0 z-0 select-none text-right"
+              style={{
+                bottom: 130,
+                color: "#AEAEAE",
+                fontFamily: "Druk Cyr, var(--font-oswald), sans-serif",
+                fontSize: 600,
+                fontWeight: 500,
+                lineHeight: "108px",
+                opacity: 0.06,
+                transform: "scaleY(0.67)",
+                transformOrigin: "bottom right",
+              }}
+            >
+              VELESBRON
+            </p>
 
             <div className="absolute left-1/2 top-[555px] z-0 w-[1536px] -translate-x-1/2 overflow-hidden" style={{ height: DESIGN_HEIGHT }}>
               <img src={pedestalImage} alt="" className="h-full w-full object-cover object-center" />
@@ -983,13 +1000,13 @@ export default function ModelsPage() {
           ))}
         </div>
 
-        <button
-          type="button"
-          className="mt-7 h-14 w-[210px] rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
+        <Link
+          href="/buy"
+          className="mt-7 flex h-14 w-[210px] items-center justify-center rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
           style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
         >
           Купить
-        </button>
+        </Link>
       </section>
     </main>
   );

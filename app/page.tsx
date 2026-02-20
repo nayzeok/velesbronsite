@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const figmaHeroBackground = "https://www.figma.com/api/mcp/asset/60c54a29-4bcc-4980-852b-b25d59719777";
 const figmaPreviewCardBackground = "https://www.figma.com/api/mcp/asset/0cc1de12-e6e7-4b8b-bc1b-277f10898fa0";
@@ -109,13 +110,13 @@ export default function Home() {
               <span className="text-white">Одна универсальная пара обуви,</span> которая не подведет ни в походе, ни на службе, ни в городе
             </p>
 
-            <button
-              type="button"
-              className="mt-6 h-14 w-[210px] rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium"
+            <Link
+              href="/buy"
+              className="mt-6 flex h-14 w-[210px] items-center justify-center rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
               style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}
             >
               Купить
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -149,7 +150,7 @@ export default function Home() {
               >
                 Главная
               </a>
-              <a href="#" className="text-xs font-medium text-white/95">
+              <a href="/buy" className="text-xs font-medium text-white/95">
                 Купить
               </a>
               <a href="/models" className="text-xs font-medium text-white/95">
@@ -317,13 +318,13 @@ export default function Home() {
               <span className="text-white">Одна универсальная пара обуви,</span> которая не подведет ни в походе, ни на службе, ни в городе
             </p>
 
-            <button
-              type="button"
-              className="mt-6 h-20 w-[248px] rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium"
+            <Link
+              href="/buy"
+              className="mt-6 flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
               style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}
             >
               Купить
-            </button>
+            </Link>
           </div>
         </div>
           </div>
