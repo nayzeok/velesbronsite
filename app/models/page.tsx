@@ -23,6 +23,25 @@ const carouselCardBootNeg54 = "/images/models/ui/carousel/card-boot-neg54.png";
 const backgroundShape = "/images/models/ui/background-shape.png";
 const metricSideImage = "/images/models/ui/metric-side-image.png";
 
+const colorViewImages = {
+  black: [
+    "/images/models/views/models/black/1.png",
+    "/images/models/views/models/black/2.png",
+    "/images/models/views/models/black/3.png",
+    "/images/models/views/models/black/4.png",
+    "/images/models/views/models/black/5.png",
+  ],
+  oliva: [
+    "/images/models/views/models/oliva/1.png",
+    "/images/models/views/models/oliva/2.png",
+    "/images/models/views/models/oliva/3.png",
+    "/images/models/views/models/oliva/4.png",
+    "/images/models/views/models/oliva/5.png",
+  ],
+} as const;
+
+type ColorVariant = keyof typeof colorViewImages;
+
 const views = [
   {
     title: "ВНЕШНИЙ МАТЕРИАЛ",
@@ -44,7 +63,8 @@ const views = [
     showGlue: false,
     glueVariant: "pill",
     bootBox: { x: 460, y: 351, w: 722, h: 565 },
-    bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
+    bootPose: { rotate: 0, x: 0, y: -20, scale: 1.60 },
+    olivaPose: { rotate: 0, x: 0, y: -20, scale: 1.60 },
     anchors: {
       calloutCard: { x: 398, y: 730 },
       calloutDot: { x: 116, y: -14 },
@@ -65,7 +85,8 @@ const views = [
     showMetrics: false,
     glueVariant: "pill",
     bootBox: { x: 684, y: 232, w: 273, h: 564 },
-    bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
+    bootPose: { rotate: 0, x: 10, y: 40, scale: 1.75 },
+    olivaPose: { rotate: 0, x: 25, y: 70, scale: 1.85 },
     anchors: {
       calloutCard: { x: 926, y: 737 },
       calloutDot: { x: -20, y: 34 },
@@ -86,7 +107,8 @@ const views = [
     glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 565, y: 105, w: 555.071, h: 689.873 },
-    bootPose: { rotate: 37.247, x: 0, y: 0, scale: 1 },
+    bootPose: { rotate: -10, x: 60, y: 20, scale: 1.55 },
+    olivaPose: { rotate: -5, x: 60, y: -10, scale: 1.55 },
     anchors: {
       calloutCard: { x: 1013, y: 540 },
       calloutDot: { x: 35, y: -15 },
@@ -107,17 +129,18 @@ const views = [
     glueVariant: "pill",
     showMetrics: false,
     bootBox: { x: 708, y: 116, w: 247, h: 692 },
-    bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
+    bootPose: { rotate: 0, x: 0, y: 10, scale: 2.55 },
+    olivaPose: { rotate: 0, x: 30, y: -10, scale: 2.55 },
     tempWidget: {
-      x: 961,
-      y: 188,
+      x: 951,
+      y: 170,
       w: 128,
       h: 227,
       topLabel: "50°C",
       bottomLabel: "-20°C",
-      topLabelPos: { x: 1025, y: 149 },
-      bottomLabelPos: { x: 1025, y: 427 },
-      dot: { x: 929, y: 388 },
+      topLabelPos: { x: 1009, y: 131 },
+      bottomLabelPos: { x: 1009, y: 409 },
+      dot: { x: 913, y: 370 },
     },
     anchors: {
       calloutCard: { x: 904, y: 589 },
@@ -139,7 +162,8 @@ const views = [
     glueVariant: "pill",
     showMetrics: false,
     bootBox: { x: 677, y: 138, w: 311, h: 675 },
-    bootPose: { rotate: 0, x: 0, y: 0, scale: 1 },
+    bootPose: { rotate: 0, x: 0, y: 30, scale: 1.7 },
+    olivaPose: { rotate: 0, x: 0, y: 30, scale: 1.65 },
     anchors: {
       calloutCard: { x: 536, y: 460 },
       calloutDot: { x: 175, y: 4 },
@@ -174,11 +198,16 @@ const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) =
 export default function ModelsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [transitionTick, setTransitionTick] = useState(0);
+  const [colorVariant, setColorVariant] = useState<ColorVariant>("black");
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
 
   const currentView = views[activeIndex];
+  const currentViewImage = colorViewImages[colorVariant][activeIndex] ?? currentView.image;
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
-  const currentBootPose = currentView.bootPose ?? { rotate: 0, x: 0, y: 0, scale: 1 };
+  const currentBootPose =
+    colorVariant === "oliva" && "olivaPose" in currentView
+      ? (currentView.olivaPose as { rotate: number; x: number; y: number; scale: number })
+      : currentView.bootPose ?? { rotate: 0, x: 0, y: 0, scale: 1 };
   const currentBootImageFrame =
     "bootImageFrame" in currentView
       ? (currentView.bootImageFrame as { wPct: number; hPct: number; leftPct: number; topPct: number })
@@ -225,6 +254,11 @@ export default function ModelsPage() {
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
+      <div className="sr-only" aria-hidden="true">
+        {Object.values(colorViewImages).flat().map((src) => (
+          <img key={src} src={src} alt="" />
+        ))}
+      </div>
       <section
         className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-white min-[1200px]:block"
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
@@ -362,6 +396,7 @@ export default function ModelsPage() {
             </div>
 
             <div
+              key={`${transitionTick}-${colorVariant}`}
               className="absolute z-10 overflow-visible"
               style={{
                 left: currentBootBox.x,
@@ -370,7 +405,7 @@ export default function ModelsPage() {
                 height: currentBootBox.h,
               }}
             >
-              <div key={transitionTick} className="h-full w-full animate-view-rise">
+              <div className="h-full w-full animate-view-rise">
                 <div
                   className="h-full w-full"
                   style={{
@@ -381,7 +416,7 @@ export default function ModelsPage() {
                   {currentBootImageFrame ? (
                     <div className="relative h-full w-full overflow-hidden">
                       <img
-                        src={currentView.image}
+                        src={currentViewImage}
                         alt="Модель ботинка"
                         className="absolute max-w-none drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
                         style={{
@@ -394,7 +429,7 @@ export default function ModelsPage() {
                     </div>
                   ) : (
                     <img
-                      src={currentView.image}
+                      src={currentViewImage}
                       alt="Модель ботинка"
                       className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
                     />
@@ -409,7 +444,7 @@ export default function ModelsPage() {
 
             {currentView.showMetrics !== false && (
               <>
-                <div className="absolute left-[918px] top-[236px] z-20 h-[128px] w-[303px] rounded-[25px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
+                <div className="absolute left-[852px] top-[252px] z-20 h-[128px] w-[303px] rounded-[25px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
                   <p className="text-[72px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentView.metricTop.value}</p>
                   <div className="absolute left-[142px] top-[18px] text-[24px] leading-[1.1] tracking-[-0.02em]">
                     <p className="font-bold text-[#111]">{currentView.metricTop.title}</p>
@@ -622,12 +657,26 @@ export default function ModelsPage() {
             )}
 
             <div className="absolute z-20 flex items-center gap-4" style={{ left: "clamp(40px, 6.1vw, 102px)", top: "clamp(780px, 87.6vh, 897px)" }}>
-              <div className="h-[75px] w-[76px] overflow-hidden rounded-[8px] border border-[#c8c8c8] bg-white p-2">
+              <button
+                type="button"
+                onClick={() => setColorVariant("black")}
+                aria-label="Показать черную модель"
+                className={`h-[75px] w-[76px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
+                  colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-50"
+                }`}
+              >
                 <img src={thumbA} alt="" className="h-full w-full object-contain" />
-              </div>
-              <div className="h-[75px] w-[74px] overflow-hidden rounded-[8px] border border-[#9a9a9a] bg-white/40 p-2 opacity-50">
+              </button>
+              <button
+                type="button"
+                onClick={() => setColorVariant("oliva")}
+                aria-label="Показать оливковую модель"
+                className={`h-[75px] w-[74px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
+                  colorVariant === "oliva" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-50"
+                }`}
+              >
                 <img src={thumbB} alt="" className="h-full w-full object-contain" />
-              </div>
+              </button>
             </div>
 
             <div className="absolute z-20" style={{ left: "clamp(1000px, 84.7vw, 1414px)", top: "clamp(170px, 23.5vh, 241px)" }}>
@@ -830,7 +879,7 @@ export default function ModelsPage() {
                         </defs>
                       </svg>
                       <img
-                        src={views[index].image}
+                        src={colorViewImages[colorVariant][index] ?? views[index].image}
                         alt=""
                         className="pointer-events-none absolute z-10 object-contain"
                         style={{
@@ -894,7 +943,7 @@ export default function ModelsPage() {
         <div className="relative mx-auto mt-4 h-[320px] w-full max-w-[460px]">
           <img
             key={`mobile-${transitionTick}`}
-            src={currentView.image}
+            src={currentViewImage}
             alt="Модель ботинка"
             className="h-full w-full animate-view-rise object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.16)]"
           />
@@ -929,7 +978,7 @@ export default function ModelsPage() {
               }`}
               aria-label={`Показать ракурс ${index + 1}`}
             >
-              <img src={view.image} alt="" className="h-[62px] w-full object-contain" />
+              <img src={colorViewImages[colorVariant][index] ?? view.image} alt="" className="h-[62px] w-full object-contain" />
             </button>
           ))}
         </div>

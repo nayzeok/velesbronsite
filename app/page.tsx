@@ -285,17 +285,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="pointer-events-none absolute left-[320px] top-[194px] z-20 h-[690px] w-[844px]">
-            <div
-              role="img"
-              aria-label="Тактическая обувь"
-              className="h-full w-full"
-              style={{
-                backgroundImage: "url(/images/pages/main-model-for-hero.png)",
-                backgroundPosition: "-319.627px -115px",
-                backgroundSize: "164.984% 134.677%",
-                backgroundRepeat: "no-repeat",
-              }}
+          <div className="pointer-events-none absolute left-[320px] top-[194px] z-20 h-[690px] w-[844px] overflow-visible">
+            {/* left/top — сдвиг в пикселях, width — размер */}
+            <img
+              src="/images/pages/main-model-for-hero.png"
+              alt="Тактическая обувь"
+              className="pointer-events-none absolute max-w-none drop-shadow-[0_40px_80px_rgba(0,0,0,0.28)]"
+              style={{ left: 60, top: -200, width: 750 }}
             />
           </div>
 
