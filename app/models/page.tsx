@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DESIGN_HEIGHT = 1000;
 
@@ -194,15 +194,189 @@ const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) =
   while (angle > acc[index - 1]) angle -= 360;
   return [...acc, angle];
 }, []);
+const mobileCarouselCards = [
+  { x: 431, y: 217, rotate: 53.36 },
+  { x: 393, y: 259, rotate: 30.46 },
+  { x: 379, y: 313, rotate: 0 },
+  { x: 394, y: 370, rotate: -30.65 },
+  { x: 431, y: 415, rotate: -54.79 },
+] as const;
+const MOBILE_PEDESTAL = {
+  left: -350,
+  top: 590,
+  width: 1158,
+  height: 772,
+  opacity: 0.95,
+} as const;
+const MOBILE_BOOT = {
+  left: -74,
+  top: 292,
+  width: 630,
+  height: 520,
+  objectPosition: "50% 50%",
+} as const;
+const MOBILE_BOOT_BY_VIEW_BY_COLOR = {
+  black: [
+    { left: -16, top: 372, width: 469, height: 566, objectPosition: "50% 50%" }, // 0: ВНЕШНИЙ МАТЕРИАЛ
+    { left: -4, top: 415, width: 470, height: 420, objectPosition: "52% 56%" }, // 1: НОСОК БОТИНКА
+    { left: -12, top: 334, width: 512, height: 560, objectPosition: "50% 52%" }, // 2: ПОДОШВА БОТИНКА
+    { left: -8, top: 308, width: 476, height: 584, objectPosition: "50% 52%" }, // 3: ВНУТРЕННИЙ МАТЕРИАЛ
+    { left: -6, top: 382, width: 472, height: 450, objectPosition: "50% 53%" }, // 4: ЗАДНЯЯ ЧАСТЬ
+  ],
+  // Подгоняй oliva отдельно от black — те же ракурсы 0..4.
+  oliva: [
+    { left: -16, top: 382, width: 469, height: 566, objectPosition: "50% 50%" }, // 0
+    { left: 9, top: 410, width: 470, height: 460, objectPosition: "52% 56%" }, // 1
+    { left: -12, top: 324, width: 512, height: 560, objectPosition: "50% 52%" }, // 2
+    { left: 9, top: 308, width: 476, height: 584, objectPosition: "50% 52%" }, // 3
+    { left: -2, top: 382, width: 472, height: 450, objectPosition: "50% 53%" }, // 4
+  ],
+} as const;
+const MOBILE_PLATES = {
+  topMetric: { left: 62, top: 442, width: 182, height: 78 },
+  topMetricDot: { x: 170, y: 63 },
+  callout: { left: 22, top: 760, width: 156, height: 66 },
+  calloutDot: { x: 66, y: -10 },
+  sideMetric: { left: 348, top: 724, width: 103, height: 188 },
+  gluePill: { left: 38, top: 700, width: 179, height: 34 },
+  glueDot: { x: 172, y: 3 },
+} as const;
+const MOBILE_PLATES_BY_VIEW = [
+  {
+    showTopMetric: true,
+    showSideMetric: true,
+    showCallout: true,
+    showGluePill: false,
+    showSecondaryCallout: false,
+    topMetric: MOBILE_PLATES.topMetric,
+    topMetricDot: MOBILE_PLATES.topMetricDot,
+    callout: MOBILE_PLATES.callout,
+    calloutDot: MOBILE_PLATES.calloutDot,
+    secondaryCallout: MOBILE_PLATES.callout,
+    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
+    sideMetric: MOBILE_PLATES.sideMetric,
+    gluePill: MOBILE_PLATES.gluePill,
+    glueDot: MOBILE_PLATES.glueDot,
+  },
+  {
+    showTopMetric: false,
+    showSideMetric: false,
+    showCallout: true,
+    showGluePill: true,
+    showSecondaryCallout: false,
+    topMetric: MOBILE_PLATES.topMetric,
+    topMetricDot: MOBILE_PLATES.topMetricDot,
+    callout: { left: 310, top: 706, width: 156, height: 66 },
+    calloutDot: { x: -12, y: 10 },
+    secondaryCallout: MOBILE_PLATES.callout,
+    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
+    sideMetric: MOBILE_PLATES.sideMetric,
+    gluePill: { left: -10, top: 706, width: 179, height: 34 },
+    glueDot: { x: 172, y: 3 },
+  },
+  {
+    showTopMetric: false,
+    showSideMetric: false,
+    showCallout: true,
+    showGluePill: false,
+    showSecondaryCallout: true,
+    topMetric: MOBILE_PLATES.topMetric,
+    topMetricDot: MOBILE_PLATES.topMetricDot,
+    callout: { left: 304, top: 664, width: 156, height: 66 },
+    calloutDot: { x: -12, y: 12 },
+    secondaryCallout: { left: 38, top: 774, width: 156, height: 66 },
+    secondaryCalloutDot: { x: 110, y: -12 },
+    sideMetric: MOBILE_PLATES.sideMetric,
+    gluePill: MOBILE_PLATES.gluePill,
+    glueDot: MOBILE_PLATES.glueDot,
+  },
+  {
+    showTopMetric: false,
+    showSideMetric: false,
+    showCallout: true,
+    showGluePill: true,
+    showSecondaryCallout: false,
+    topMetric: MOBILE_PLATES.topMetric,
+    topMetricDot: MOBILE_PLATES.topMetricDot,
+    callout: { left: 300, top: 482, width: 156, height: 66 },
+    calloutDot: { x: -12, y: 10 },
+    secondaryCallout: MOBILE_PLATES.callout,
+    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
+    sideMetric: MOBILE_PLATES.sideMetric,
+    gluePill: { left: 54, top: 776, width: 179, height: 34 },
+    glueDot: { x: 172, y: 3 },
+  },
+  {
+    showTopMetric: false,
+    showSideMetric: false,
+    showCallout: true,
+    showGluePill: true,
+    showSecondaryCallout: false,
+    topMetric: MOBILE_PLATES.topMetric,
+    topMetricDot: MOBILE_PLATES.topMetricDot,
+    callout: { left: 48, top: 650, width: 156, height: 66 },
+    calloutDot: { x: 112, y: -12 },
+    secondaryCallout: MOBILE_PLATES.callout,
+    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
+    sideMetric: MOBILE_PLATES.sideMetric,
+    gluePill: { left: 286, top: 740, width: 146, height: 30 },
+    glueDot: { x: -8, y: -3 },
+  },
+] as const;
+const MOBILE_CAROUSEL_LAYOUT_SCALE = 0.615;
+const MOBILE_CAROUSEL_IMAGE_BOOST = 1.24;
+const MOBILE_CAROUSEL_IMAGE_TUNE = [
+  { boost: 1, x: 0, y: 0 },
+  { boost: 1, x: 0, y: 0 },
+  { boost: 1, x: 0, y: 0 },
+  { boost: 1, x: 0, y: 0 },
+  { boost: 1, x: 0, y: 0 },
+] as const;
+const MOBILE_CAROUSEL_ELLIPSE = {
+  left: 386,
+  top: 202,
+  size: 182,
+  thickness: 22,
+} as const;
+const MOBILE_CAROUSEL_MARKER = {
+  centerX: MOBILE_CAROUSEL_ELLIPSE.left + MOBILE_CAROUSEL_ELLIPSE.size / 2,
+  centerY: MOBILE_CAROUSEL_ELLIPSE.top + MOBILE_CAROUSEL_ELLIPSE.size / 2,
+  radius: 82,
+  size: 16,
+} as const;
+const MOBILE_CAROUSEL_MARKER_ANGLE_OFFSETS = [-10, 0, 13, 20, 20];
+const mobileCarouselMarkerAngles = mobileCarouselCards.reduce<number[]>((acc, item, index) => {
+  const rawAngle = (Math.atan2(item.y - MOBILE_CAROUSEL_MARKER.centerY, item.x - MOBILE_CAROUSEL_MARKER.centerX) * 180) / Math.PI;
+  if (index === 0) return [rawAngle];
+  let angle = rawAngle;
+  while (angle > acc[index - 1]) angle -= 360;
+  return [...acc, angle];
+}, []);
 
 export default function ModelsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [transitionTick, setTransitionTick] = useState(0);
   const [colorVariant, setColorVariant] = useState<ColorVariant>("black");
+  const [displayColorVariant, setDisplayColorVariant] = useState<ColorVariant>("black");
+  const [bootColorOpacity, setBootColorOpacity] = useState(1);
+  const [mobileBootShiftX, setMobileBootShiftX] = useState(0);
+  const [mobileBootShiftTransition, setMobileBootShiftTransition] = useState(false);
+  const [mobileBootShiftDurationMs, setMobileBootShiftDurationMs] = useState(320);
+  const [isMobileBootAnimating, setIsMobileBootAnimating] = useState(false);
+  const mobileSceneRef = useRef<HTMLDivElement | null>(null);
+  const mobileSwipeStartXRef = useRef<number | null>(null);
+  const mobileSwipeStartYRef = useRef<number | null>(null);
+  const mobileBootPhaseTimerRef = useRef<number | null>(null);
+  const mobileBootFinishTimerRef = useRef<number | null>(null);
+  const [mobileScale, setMobileScale] = useState(1);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
 
   const currentView = views[activeIndex];
   const currentViewImage = colorViewImages[colorVariant][activeIndex] ?? currentView.image;
+  const displayViewImage = colorViewImages[displayColorVariant][activeIndex] ?? currentView.image;
+  const mobileBootByColor = MOBILE_BOOT_BY_VIEW_BY_COLOR[displayColorVariant] ?? MOBILE_BOOT_BY_VIEW_BY_COLOR.black;
+  const currentMobileBoot = mobileBootByColor[activeIndex] ?? MOBILE_BOOT;
+  const currentMobilePlates = MOBILE_PLATES_BY_VIEW[activeIndex] ?? MOBILE_PLATES_BY_VIEW[0];
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
   const currentBootPose =
     colorVariant === "oliva" && "olivaPose" in currentView
@@ -226,7 +400,8 @@ export default function ModelsPage() {
       };
   const calloutDotOuterSize = isThermalCallout ? 34 : 30;
   const calloutDotInnerSize = isThermalCallout ? 16 : 14;
-  const markerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
+  const desktopMarkerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
+  const mobileMarkerAngle = mobileCarouselMarkerAngles[activeIndex] + MOBILE_CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
   const tempLabelStyle = {
     width: 61,
     height: 32,
@@ -246,11 +421,131 @@ export default function ModelsPage() {
     WebkitTextFillColor: "transparent",
   };
 
-  const handleChangeView = (index: number) => {
-    if (index === activeIndex) return;
+  useEffect(() => {
+    if (displayColorVariant === colorVariant) return;
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBootColorOpacity(0.50);
+    const swapTimer = window.setTimeout(() => {
+      setDisplayColorVariant(colorVariant);
+      setBootColorOpacity(1);
+    }, 240);
+
+    return () => window.clearTimeout(swapTimer);
+  }, [colorVariant, displayColorVariant]);
+
+  useEffect(() => {
+    return () => {
+      if (mobileBootPhaseTimerRef.current !== null) {
+        window.clearTimeout(mobileBootPhaseTimerRef.current);
+      }
+      if (mobileBootFinishTimerRef.current !== null) {
+        window.clearTimeout(mobileBootFinishTimerRef.current);
+      }
+    };
+  }, []);
+
+  const resolveMobileDirection = (targetIndex: number): -1 | 1 => {
+    if (activeIndex === targetIndex) return 1;
+    if (activeIndex === views.length - 1 && targetIndex === 0) return -1;
+    if (activeIndex === 0 && targetIndex === views.length - 1) return 1;
+    return targetIndex > activeIndex ? -1 : 1;
+  };
+
+  const handleChangeView = (index: number, mobileSwipeDirection?: -1 | 1) => {
+    if (index === activeIndex || isMobileBootAnimating) return;
+
+    const resolvedDirection = mobileSwipeDirection ?? resolveMobileDirection(index);
+    const MOBILE_EXIT_DISTANCE = 560;
+    const MOBILE_EXIT_MS = 420;
+    const MOBILE_ENTER_MS = 420;
+
+    if (mobileBootPhaseTimerRef.current !== null) {
+      window.clearTimeout(mobileBootPhaseTimerRef.current);
+    }
+    if (mobileBootFinishTimerRef.current !== null) {
+      window.clearTimeout(mobileBootFinishTimerRef.current);
+    }
+    setIsMobileBootAnimating(true);
+
+    if (resolvedDirection) {
+      // resolvedDirection: 1 => swipe left, -1 => swipe right
+      // current boot exits in swipe direction, new boot enters from opposite side
+      const exitTarget = -resolvedDirection * MOBILE_EXIT_DISTANCE;
+      const enterStart = resolvedDirection * MOBILE_EXIT_DISTANCE;
+
+      setMobileBootShiftDurationMs(MOBILE_EXIT_MS);
+      setMobileBootShiftTransition(true);
+      setMobileBootShiftX(exitTarget);
+
+      mobileBootPhaseTimerRef.current = window.setTimeout(() => {
+        setActiveIndex(index);
+        setTransitionTick((prev) => prev + 1);
+        setMobileBootShiftTransition(false);
+        setMobileBootShiftX(enterStart);
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setMobileBootShiftDurationMs(MOBILE_ENTER_MS);
+            setMobileBootShiftTransition(true);
+            setMobileBootShiftX(0);
+          });
+        });
+      }, MOBILE_EXIT_MS);
+
+      mobileBootFinishTimerRef.current = window.setTimeout(() => {
+        setIsMobileBootAnimating(false);
+      }, MOBILE_EXIT_MS + MOBILE_ENTER_MS);
+      return;
+    }
+
     setActiveIndex(index);
     setTransitionTick((prev) => prev + 1);
+    setIsMobileBootAnimating(false);
   };
+  const handleMobileBootTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event.changedTouches[0];
+    mobileSwipeStartXRef.current = touch.clientX;
+    mobileSwipeStartYRef.current = touch.clientY;
+  };
+  const handleMobileBootTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (mobileSwipeStartXRef.current === null || mobileSwipeStartYRef.current === null) return;
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - mobileSwipeStartXRef.current;
+    const deltaY = touch.clientY - mobileSwipeStartYRef.current;
+
+    mobileSwipeStartXRef.current = null;
+    mobileSwipeStartYRef.current = null;
+
+    // Ignore mostly vertical gestures to keep page scroll natural.
+    if (Math.abs(deltaY) > Math.abs(deltaX)) return;
+    if (Math.abs(deltaX) < 24) return;
+
+    if (deltaX < 0) {
+      // Swipe left -> animate boot movement to the left.
+      handleChangeView((activeIndex + 1) % views.length, 1);
+      return;
+    }
+    // Swipe right -> animate boot movement to the right.
+    handleChangeView((activeIndex - 1 + views.length) % views.length, -1);
+  };
+
+  useEffect(() => {
+    const node = mobileSceneRef.current;
+    if (!node) return;
+
+    const updateScale = () => {
+      const width = node.clientWidth || 460;
+      setMobileScale(width / 460);
+    };
+
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
@@ -416,7 +711,7 @@ export default function ModelsPage() {
                   {currentBootImageFrame ? (
                     <div className="relative h-full w-full overflow-hidden">
                       <img
-                        src={currentViewImage}
+                        src={displayViewImage}
                         alt="Модель ботинка"
                         className="absolute max-w-none drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
                         style={{
@@ -424,14 +719,20 @@ export default function ModelsPage() {
                           height: `${currentBootImageFrame.hPct}%`,
                           left: `${currentBootImageFrame.leftPct}%`,
                           top: `${currentBootImageFrame.topPct}%`,
+                          opacity: bootColorOpacity,
+                          transition: "opacity 280ms ease",
                         }}
                       />
                     </div>
                   ) : (
                     <img
-                      src={currentViewImage}
+                      src={displayViewImage}
                       alt="Модель ботинка"
                       className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                      style={{
+                        opacity: bootColorOpacity,
+                        transition: "opacity 280ms ease",
+                      }}
                     />
                   )}
                 </div>
@@ -678,7 +979,7 @@ export default function ModelsPage() {
                 type="button"
                 onClick={() => setColorVariant("black")}
                 aria-label="Показать черную модель"
-                className={`h-[75px] w-[76px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
+                className={`h-[80px] w-[81px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
                   colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-50"
                 }`}
               >
@@ -688,7 +989,7 @@ export default function ModelsPage() {
                 type="button"
                 onClick={() => setColorVariant("oliva")}
                 aria-label="Показать оливковую модель"
-                className={`h-[75px] w-[74px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
+                className={`h-[80px] w-[79px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
                   colorVariant === "oliva" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-50"
                 }`}
               >
@@ -916,7 +1217,7 @@ export default function ModelsPage() {
               <div
                 className="pointer-events-none absolute left-0 top-0 flex size-[38.678px] items-center justify-center transition-transform duration-500"
                 style={{
-                  transform: `translate(${CAROUSEL_ARC_CENTER.x}px, ${CAROUSEL_ARC_CENTER.y}px) translate(-50%, -50%) rotate(${markerAngle}deg) translateX(${CAROUSEL_MARKER_RADIUS}px)`,
+                  transform: `translate(${CAROUSEL_ARC_CENTER.x}px, ${CAROUSEL_ARC_CENTER.y}px) translate(-50%, -50%) rotate(${desktopMarkerAngle}deg) translateX(${CAROUSEL_MARKER_RADIUS}px)`,
                 }}
               >
                 <div className="flex size-7 rotate-[-32.62deg] items-center justify-center rounded-full bg-[#F17823]" />
@@ -926,87 +1227,345 @@ export default function ModelsPage() {
         </div>
       </section>
 
-      <section className="min-[1200px]:hidden px-4 pb-10 pt-4">
-        <header className="mb-5">
-          <div className="mb-4 flex items-center justify-between">
-            <Link href="/" className="text-xs font-medium text-[#111]">
-              Главная
-            </Link>
-            <span className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-4 py-2 text-xs font-medium text-white">
-              Модели
-            </span>
+      <section className="min-[1200px]:hidden">
+        <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `${1024 * mobileScale}px` }}>
+          <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left bg-[#f4f4f4]" style={{ transform: `scale(${mobileScale})` }}>
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-full">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className="absolute inset-y-0 w-[58px]"
+                style={{
+                  left: `${index * 58 - 20}px`,
+                  background:
+                    "linear-gradient(-90deg, rgba(255,255,255,0.16) 20%, rgba(40,40,40,0.09) 75.758%, rgba(255,255,255,0.16) 123.64%)",
+                  opacity: 0.7,
+                }}
+              />
+            ))}
           </div>
 
-          <div className="mx-auto h-[72px] w-[138px] rounded-[10px] bg-white p-2">
-            <img src="/images/pages/header-logo.png" alt="Velesbron" className="h-full w-full object-contain" />
-          </div>
-        </header>
-
-        <h1
-          className="uppercase text-[#5b6a44]"
-          style={{
-            color: "#5B6A44",
-            fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-            fontSize: 45,
-            fontStyle: "normal",
-            fontWeight: 700,
-            lineHeight: "normal",
-          }}
-        >
-          {currentView.title}
-        </h1>
-        <p className="mt-3 max-w-[700px] text-base leading-7 text-[#111]">{currentView.description}</p>
-
-        <div className="relative mx-auto mt-4 h-[320px] w-full max-w-[460px]">
-          <img
-            key={`mobile-${transitionTick}`}
-            src={currentViewImage}
-            alt="Модель ботинка"
-            className="h-full w-full animate-view-rise object-contain drop-shadow-[0_40px_70px_rgba(0,0,0,0.16)]"
-          />
-        </div>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          <div className="min-w-[170px] rounded-[18px] bg-white p-4 shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
-            <p className="text-3xl font-bold leading-none">{currentView.metricTop.value}</p>
-            <p className="mt-1 text-sm font-medium">{currentView.metricTop.title}</p>
-          </div>
-          <div className="min-w-[140px] rounded-[18px] bg-white p-4 shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
-            <p className="text-3xl font-bold leading-none">{currentView.metricSide.value}</p>
-            <p className="mt-1 text-sm text-[#111]/70">
-              {currentView.metricSide.line1} {currentView.metricSide.line2}
-            </p>
-          </div>
-          <div className="min-w-[220px] rounded-[999px] bg-white px-4 py-2 text-sm shadow-[0_20px_35px_rgba(0,0,0,0.08)]">
-            {currentView.glue}
-          </div>
-        </div>
-
-        <div className="mt-7 grid grid-cols-5 gap-2">
-          {views.map((view, index) => (
+          <div className="absolute right-[10px] top-[30px] z-20 flex gap-2">
             <button
-              key={view.title}
               type="button"
-              onClick={() => handleChangeView(index)}
-              className={`rounded-[12px] border p-1 transition ${
-                index === activeIndex
-                  ? "border-[#fc6407] bg-gradient-to-b from-[#f2995d]/20 to-[#fc6407]/20"
-                  : "border-[#c8c8c8] bg-white/70"
+              onClick={() => setColorVariant("black")}
+              aria-label="Показать черную модель"
+              className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${
+                colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-45"
               }`}
-              aria-label={`Показать ракурс ${index + 1}`}
             >
-              <img src={colorViewImages[colorVariant][index] ?? view.image} alt="" className="h-[62px] w-full object-contain" />
+              <img src={thumbA} alt="" className="h-full w-full object-contain" />
             </button>
-          ))}
-        </div>
+            <button
+              type="button"
+              onClick={() => setColorVariant("oliva")}
+              aria-label="Показать оливковую модель"
+              className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${
+                colorVariant === "oliva" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-35"
+              }`}
+            >
+              <img src={thumbB} alt="" className="h-full w-full object-contain" />
+            </button>
+          </div>
 
-        <Link
-          href="/buy"
-          className="mt-7 flex h-14 w-[210px] items-center justify-center rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
-          style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
-        >
-          Купить
-        </Link>
+          <div className="absolute left-[12px] top-[46px] z-20 w-[312px]">
+            <div className="flex items-center gap-[10px]">
+              <div className="flex h-2 w-[34px] items-center justify-between">
+                <span className="size-2 rounded-full bg-[#111]/40" />
+                <span className="size-2 rounded-full bg-[#111]/20" />
+                <span className="size-2 rounded-full bg-[#111]/10" />
+              </div>
+              <h1
+                className="uppercase text-[#5b6a44]"
+                style={{
+                  color: "#5B6A44",
+                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontSize: 28,
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "100%",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {currentView.title}
+              </h1>
+            </div>
+            <p className="ml-[44px] mt-4 max-w-[236px] text-[14px] leading-[1.15] text-[#111]" style={{ fontFamily: "var(--font-gilroy), var(--font-oswald), sans-serif" }}>
+              {currentView.description}
+            </p>
+            <Link
+              href="/buy"
+              className="ml-[44px] mt-5 flex h-12 w-[150px] items-center justify-center rounded-[12px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[14px] text-white"
+              style={{ fontFamily: "Gilroy, var(--font-oswald), sans-serif", fontWeight: 500 }}
+            >
+              Купить
+            </Link>
+          </div>
+
+          <div className="absolute left-0 top-0 z-40">
+            <div
+              className="pointer-events-none absolute"
+              style={{
+                left: MOBILE_CAROUSEL_ELLIPSE.left,
+                top: MOBILE_CAROUSEL_ELLIPSE.top,
+                width: MOBILE_CAROUSEL_ELLIPSE.size,
+                height: MOBILE_CAROUSEL_ELLIPSE.size,
+                background: "linear-gradient(90deg, #C8C8C8 0%, rgba(255, 255, 255, 0) 33.38%)",
+                borderRadius: "50%",
+                WebkitMask: `radial-gradient(closest-side, transparent calc(100% - ${MOBILE_CAROUSEL_ELLIPSE.thickness}px), #000 calc(100% - ${
+                  MOBILE_CAROUSEL_ELLIPSE.thickness - 1
+                }px))`,
+                mask: `radial-gradient(closest-side, transparent calc(100% - ${MOBILE_CAROUSEL_ELLIPSE.thickness}px), #000 calc(100% - ${
+                  MOBILE_CAROUSEL_ELLIPSE.thickness - 1
+                }px))`,
+              }}
+            />
+            {views.map((view, index) => (
+              <button
+                key={view.title}
+                type="button"
+                onClick={() => handleChangeView(index)}
+                aria-label={`Показать ракурс ${index + 1}`}
+                className="absolute h-[47px] w-[69px] -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  left: mobileCarouselCards[index].x,
+                  top: mobileCarouselCards[index].y,
+                  transform: `translate(-50%, -50%) rotate(${mobileCarouselCards[index].rotate}deg)`,
+                  zIndex: carouselItems[index].z,
+                  opacity: index === activeIndex ? 1 : 0.9,
+                }}
+              >
+                <svg className="absolute inset-0 h-full w-full" viewBox="0 0 117 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path
+                    d="M0 13.0015C0 5.2534 6.73485 -0.774587 14.4356 0.0810526L105.436 10.1922C112.019 10.9237 117 16.4885 117 23.1127V56.9899C117 63.7616 111.802 69.3992 105.052 69.9472L14.0521 77.3361C6.48245 77.9507 0 71.9733 0 64.3788V13.0015Z"
+                    fill="url(#paint0_mobile)"
+                  />
+                  <defs>
+                    <linearGradient id="paint0_mobile" x1="58.5" y1="-1.5229" x2="58.5" y2="78.4771" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#E7813F" />
+                      <stop offset="1" stopColor="#FC6407" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <img
+                  src={colorViewImages[colorVariant][index] ?? view.image}
+                  alt=""
+                  className="pointer-events-none absolute object-contain"
+                  style={{
+                    width:
+                      carouselItems[index].image.w *
+                      MOBILE_CAROUSEL_LAYOUT_SCALE *
+                      MOBILE_CAROUSEL_IMAGE_BOOST *
+                      MOBILE_CAROUSEL_IMAGE_TUNE[index].boost,
+                    height:
+                      carouselItems[index].image.h *
+                      MOBILE_CAROUSEL_LAYOUT_SCALE *
+                      MOBILE_CAROUSEL_IMAGE_BOOST *
+                      MOBILE_CAROUSEL_IMAGE_TUNE[index].boost,
+                    left:
+                      carouselItems[index].image.x * MOBILE_CAROUSEL_LAYOUT_SCALE -
+                      (carouselItems[index].image.w *
+                        MOBILE_CAROUSEL_LAYOUT_SCALE *
+                        (MOBILE_CAROUSEL_IMAGE_BOOST * MOBILE_CAROUSEL_IMAGE_TUNE[index].boost - 1)) /
+                        2 +
+                      MOBILE_CAROUSEL_IMAGE_TUNE[index].x,
+                    top:
+                      carouselItems[index].image.y * MOBILE_CAROUSEL_LAYOUT_SCALE -
+                      (carouselItems[index].image.h *
+                        MOBILE_CAROUSEL_LAYOUT_SCALE *
+                        (MOBILE_CAROUSEL_IMAGE_BOOST * MOBILE_CAROUSEL_IMAGE_TUNE[index].boost - 1)) /
+                        2 +
+                      MOBILE_CAROUSEL_IMAGE_TUNE[index].y,
+                    transform: `${carouselItems[index].image.flipY ? "scaleY(-1) rotate(180deg)" : ""} rotate(${carouselItems[index].image.rotate}deg)`,
+                    transformOrigin: "50% 50%",
+                  }}
+                />
+              </button>
+            ))}
+            <div
+              className="pointer-events-none absolute flex items-center justify-center rounded-full bg-[#F17823] transition-all duration-500"
+              style={{
+                width: MOBILE_CAROUSEL_MARKER.size,
+                height: MOBILE_CAROUSEL_MARKER.size,
+                transform: `translate(${MOBILE_CAROUSEL_MARKER.centerX}px, ${MOBILE_CAROUSEL_MARKER.centerY}px) translate(-50%, -50%) rotate(${mobileMarkerAngle}deg) translateX(${MOBILE_CAROUSEL_MARKER.radius}px)`,
+              }}
+            />
+          </div>
+
+          <div
+            className="pointer-events-none absolute z-10"
+            style={{
+              left: MOBILE_PEDESTAL.left,
+              top: MOBILE_PEDESTAL.top,
+              width: MOBILE_PEDESTAL.width,
+              height: MOBILE_PEDESTAL.height,
+            }}
+          >
+            <img src={pedestalImage} alt="" className="h-full w-full object-cover object-top" style={{ opacity: MOBILE_PEDESTAL.opacity }} />
+          </div>
+
+          <div
+            className="absolute z-20"
+            style={{
+              left: currentMobileBoot.left,
+              top: currentMobileBoot.top,
+              width: currentMobileBoot.width,
+              height: currentMobileBoot.height,
+              touchAction: "pan-x",
+              transform: `translateX(${mobileBootShiftX}px)`,
+              transition: mobileBootShiftTransition ? `transform ${mobileBootShiftDurationMs}ms ease-out` : "none",
+            }}
+            onTouchStart={handleMobileBootTouchStart}
+            onTouchEnd={handleMobileBootTouchEnd}
+          >
+            <img
+              key={`mobile-${transitionTick}-${colorVariant}`}
+              src={displayViewImage}
+              alt="Модель ботинка"
+              className="h-full w-full drop-shadow-[0_30px_70px_rgba(0,0,0,0.2)]"
+              style={{
+                objectFit: "contain",
+                objectPosition: currentMobileBoot.objectPosition,
+                opacity: bootColorOpacity,
+                transition: "opacity 280ms ease",
+              }}
+            />
+          </div>
+
+          {currentMobilePlates.showTopMetric && (
+            <>
+              <div
+                className="absolute z-30 rounded-[14px] bg-white px-4 py-3 shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.topMetric.left,
+                  top: currentMobilePlates.topMetric.top,
+                  width: currentMobilePlates.topMetric.width,
+                  height: currentMobilePlates.topMetric.height,
+                }}
+              >
+                <p className="text-[43px] font-bold leading-none tracking-[-0.04em]">{currentView.metricTop.value}</p>
+                <div className="absolute right-[14px] top-[12px] text-[14px] leading-[1.03]">
+                  <p className="font-bold text-[#111]">{currentView.metricTop.title}</p>
+                  <p className="text-[#111]/35">{currentView.metricTop.line1}</p>
+                  <p className="text-[#111]/35">{currentView.metricTop.line2}</p>
+                </div>
+              </div>
+              <span
+                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.topMetric.left + currentMobilePlates.topMetricDot.x,
+                  top: currentMobilePlates.topMetric.top + currentMobilePlates.topMetricDot.y,
+                }}
+              >
+                <span className="size-[6px] rounded-full bg-white" />
+              </span>
+            </>
+          )}
+
+          {currentMobilePlates.showGluePill && (
+            <>
+              <div
+                className="absolute z-30 rounded-[135px] bg-white shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.gluePill.left,
+                  top: currentMobilePlates.gluePill.top,
+                  width: currentMobilePlates.gluePill.width,
+                  height: currentMobilePlates.gluePill.height,
+                }}
+              >
+                <p className="pt-[10px] text-center text-[12px] leading-none tracking-[-0.01em] text-[#111]">{currentView.glue}</p>
+              </div>
+              <span
+                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.gluePill.left + currentMobilePlates.glueDot.x,
+                  top: currentMobilePlates.gluePill.top + currentMobilePlates.glueDot.y,
+                }}
+              >
+                <span className="size-[6px] rounded-full bg-white" />
+              </span>
+            </>
+          )}
+
+          {currentMobilePlates.showCallout && (
+            <>
+              <div
+                className="absolute z-30 rounded-[14px] bg-white px-4 py-3 shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.callout.left,
+                  top: currentMobilePlates.callout.top,
+                  width: currentMobilePlates.callout.width,
+                  height: currentMobilePlates.callout.height,
+                }}
+              >
+                <p className="text-[13px] leading-[1.05]">
+                  <span className="font-bold">{currentView.callout.title}</span>
+                </p>
+                <p className="text-[13px] leading-[1.05] text-[#111]/40">{currentView.callout.text}</p>
+              </div>
+              <span
+                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.callout.left + currentMobilePlates.calloutDot.x,
+                  top: currentMobilePlates.callout.top + currentMobilePlates.calloutDot.y,
+                }}
+              >
+                <span className="size-[6px] rounded-full bg-white" />
+              </span>
+            </>
+          )}
+
+          {currentMobilePlates.showSecondaryCallout && (
+            <>
+              <div
+                className="absolute z-30 rounded-[14px] bg-white px-4 py-3 shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.secondaryCallout.left,
+                  top: currentMobilePlates.secondaryCallout.top,
+                  width: currentMobilePlates.secondaryCallout.width,
+                  height: currentMobilePlates.secondaryCallout.height,
+                }}
+              >
+                <p className="text-[13px] leading-[1.05]">
+                  <span className="font-bold">{currentView.callout.title}</span>
+                </p>
+                <p className="text-[13px] leading-[1.05] text-[#111]/40">{currentView.callout.text}</p>
+              </div>
+              <span
+                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                style={{
+                  left: currentMobilePlates.secondaryCallout.left + currentMobilePlates.secondaryCalloutDot.x,
+                  top: currentMobilePlates.secondaryCallout.top + currentMobilePlates.secondaryCalloutDot.y,
+                }}
+              >
+                <span className="size-[6px] rounded-full bg-white" />
+              </span>
+            </>
+          )}
+
+          {currentMobilePlates.showSideMetric && (
+            <div
+              className="absolute z-30 rounded-[16px] bg-white shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+              style={{
+                left: currentMobilePlates.sideMetric.left,
+                top: currentMobilePlates.sideMetric.top,
+                width: currentMobilePlates.sideMetric.width,
+                height: currentMobilePlates.sideMetric.height,
+              }}
+            >
+              <span className="absolute -left-[8px] top-[18px] flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+                <span className="size-[6px] rounded-full bg-white" />
+              </span>
+              <p className="pt-4 text-center text-[43px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
+              <p className="pt-2 text-center text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line1}</p>
+              <p className="text-center text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line2}</p>
+              <div className="absolute bottom-[6px] left-1/2 h-[56px] w-[91px] -translate-x-1/2 overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+                <img src={metricSideImage} alt="" className="absolute max-w-none object-cover" style={{ width: 164, height: 118, left: -42, top: -64 }} />
+              </div>
+            </div>
+          )}
+        </div>
+        </div>
       </section>
     </main>
   );
