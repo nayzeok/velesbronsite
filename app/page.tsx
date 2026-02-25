@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import SiteHeader from "@/components/layout/SiteHeader";
 
 const figmaHeroBackground = "https://www.figma.com/api/mcp/asset/60c54a29-4bcc-4980-852b-b25d59719777";
 const figmaPreviewCardBackground = "https://www.figma.com/api/mcp/asset/0cc1de12-e6e7-4b8b-bc1b-277f10898fa0";
@@ -77,9 +77,12 @@ const heroThumbs = [
 ];
 const MAIN_MENU_ITEMS = [
   { label: "Главная", href: "/" },
-  { label: "Купить", href: "/buy" },
-  { label: "Модели", href: "/models" },
-  { label: "О нас", href: "#" },
+  { label: "О бренде", href: "/brand" },
+  { label: "Преимущества", href: "/advantages" },
+  { label: "Модельный ряд", href: "/models" },
+  { label: "Где купить", href: "/where-to-buy" },
+  { label: "Медиа", href: "/#media" },
+  { label: "Контакты", href: "/#contacts" },
 ] as const;
 
 export default function Home() {
@@ -178,7 +181,7 @@ export default function Home() {
                   className={`mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 text-[22px] transition-all duration-300 ${
                     isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"
                   } ${
-                    index === 0 ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]" : "text-white/92 hover:bg-white/10"
+                    item.href === "/" ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]" : "text-white/92 hover:bg-white/10"
                   }`}
                   style={{
                     fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif",
@@ -188,10 +191,10 @@ export default function Home() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <span className="flex items-center gap-2.5">
-                    <span className={`size-2 rounded-full ${index === 0 ? "bg-white/90" : "bg-white/35"}`} />
+                    <span className={`size-2 rounded-full ${item.href === "/" ? "bg-white/90" : "bg-white/35"}`} />
                     {item.label}
                   </span>
-                  <span className={`text-base ${index === 0 ? "text-white/95" : "text-white/45"}`}>›</span>
+                  <span className={`text-base ${item.href === "/" ? "text-white/95" : "text-white/45"}`}>›</span>
                 </a>
               ))}
             </nav>
@@ -337,7 +340,7 @@ export default function Home() {
               <span className="block">ни в городе</span>
             </p>
             <Link
-              href="/buy"
+              href="/where-to-buy"
               className="mt-5 flex h-[64px] w-[190px] items-center justify-center rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[22px] font-medium text-white"
               style={{ fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif", fontWeight: 500 }}
             >
@@ -391,67 +394,12 @@ export default function Home() {
             }}
           >
         <div className="relative flex h-[1000px] w-full flex-col px-[clamp(24px,3.6vw,67px)] pb-0 pt-[18px]">
-          <header className="relative h-[96px]">
-            <nav className="flex items-center gap-6 pt-[9px]">
-              {MAIN_MENU_ITEMS.map((item, index) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className={index === 0 ? "rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-xs font-medium" : "text-xs font-medium text-white/95"}
-                  style={{ fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif", fontWeight: 500 }}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </nav>
-
-            <div className="absolute left-1/2 top-0 h-[86px] w-[175px] -translate-x-1/2 rounded-[10px] bg-white">
-              <div className="absolute left-1/2 top-[13px] h-[55px] w-[167px] -translate-x-1/2">
-                <Image
-                  src="/images/pages/header-logo.png"
-                  alt="Velesbron"
-                  width={167}
-                  height={55}
-                  className="h-full w-full object-contain"
-                  priority
-                />
-              </div>
-            </div>
-
-            <div className="absolute right-[clamp(16px,5.7vw,96px)] top-[22px] flex items-center gap-[10px]">
-              <button
-                type="button"
-                aria-label="Язык"
-                className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#7f766f] to-[#635b50]"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                aria-label="Корзина"
-                className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#7f766f] to-[#635b50]"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
-                  <path d="M4 6h2l1.2 8.5a2 2 0 0 0 2 1.5h7.8a2 2 0 0 0 2-1.6L20 8H8" />
-                  <circle cx="10" cy="19" r="1.5" />
-                  <circle cx="17" cy="19" r="1.5" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                aria-label="Профиль"
-                className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]"
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <circle cx="12" cy="8.2" r="3.2" />
-                  <path d="M5.5 19a6.5 6.5 0 0 1 13 0" />
-                </svg>
-              </button>
-            </div>
-          </header>
+          <SiteHeader
+            activeItem="home"
+            tone="light"
+            className="relative h-[96px]"
+            style={{ left: 0, width: "100%" }}
+          />
 
           <div className="relative mt-[clamp(24px,6vh,74px)] flex flex-1">
             <div className="relative z-20 w-[clamp(320px,28vw,420px)]">
@@ -563,7 +511,7 @@ export default function Home() {
             </p>
 
             <Link
-              href="/buy"
+              href="/where-to-buy"
               className="mt-6 flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
               style={{ fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif", fontWeight: 500 }}
             >

@@ -1,0 +1,349 @@
+import SiteHeader from "@/components/layout/SiteHeader";
+
+export const metadata = {
+  title: "О бренде — VelesBron",
+  description: "О бренде VelesBron: история, производство и гарантия",
+};
+
+const backgroundShape = "/images/models/ui/background-shape.png";
+
+const BRAND_BLOCKS = [
+  {
+    title: "История",
+    text: "VELESBRON появился как прагматичный ответ на разрыв между массовой обувью и дорогим импортом. Мы адаптировали европейскую конструкцию под российские условия, климат и особенности стопы.",
+  },
+  {
+    title: "Производство",
+    text: "Гибридная подошва EVA + резина, кевлар K-29, композитный подносок, Cordura 1000D и усиленные узлы сборки. Конструкция рассчитана на реальную нагрузку и долгий ресурс.",
+  },
+  {
+    title: "Гарантия",
+    text: "Расширенная пожизненная гарантия действует при активации сертификата в течение 14 дней. Мы не обещаем лишнего: при подтверждении дефекта выполняется ремонт или замена.",
+  },
+] as const;
+
+const BRAND_TIMELINE = [
+  { year: "Этап 1", text: "Изучены лучшие европейские и американские образцы треккингово-тактической обуви." },
+  { year: "Этап 2", text: "Европейская конструкция переосмыслена инженерами-технологами под российские сценарии." },
+  { year: "Этап 3", text: "Сделан акцент на ресурсе, защите, анатомической посадке и сервисной ответственности." },
+] as const;
+
+const CORE_ADVANTAGES = [
+  "Повышенная износостойкость за счет гибридной подошвы и материалов верха.",
+  "Усиленная конструкция с тройными швами и армированными лавсановыми нитями.",
+  "Антипрокольная защита: кевлар K-29 и сопротивление точечной нагрузке более 1265 Н.",
+  "Всесезонный комфорт: мембрана VELTEX в диапазоне от -15°C до +20°C.",
+  "Анатомическая посадка под полноту 8 и размерный ряд, адаптированный под российскую стопу.",
+] as const;
+
+const BRAND_VALUES = [
+  {
+    title: "Прагматизм",
+    text: "Мы появились не из моды, а из реального запроса: убрать разрыв между «одноразовым» сегментом и дорогим неадаптированным импортом.",
+  },
+  {
+    title: "Адаптация",
+    text: "Российская стопа шире, климат жестче, покрытия агрессивнее. Конструкция, колодка и материалы рассчитаны именно на эти условия.",
+  },
+  {
+    title: "Технологичность",
+    text: "Кевлар K-29, композитный подносок, Cordura 1000D, гибридная подошва и усиленная сборка — не ради маркетинга, а ради функциональности.",
+  },
+  {
+    title: "Ответственность",
+    text: "Вместо стоимости скидок мы закладываем стоимость ресурса и сервиса. Гарантия — это контракт ответственности бренда.",
+  },
+  {
+    title: "Честность",
+    text: "Мы не обещаем легкий путь. Мы обещаем, что пара рассчитана на нагрузку и что по сервису мы действительно разбираемся в ситуации.",
+  },
+] as const;
+
+const PRODUCT_ARCHITECTURE = [
+  {
+    title: "Гибридная подошва и защита",
+    text: "Основа EVA с амортизацией и устойчивостью к холоду, подметка из износостойкой резиновой смеси, антипрокольная вставка из кевлара K-29.",
+  },
+  {
+    title: "Верх ботинка",
+    text: "Натуральный нубук с гидрофобной обработкой, вставки Cordura 1000D и композитный подносок для защиты без лишнего веса.",
+  },
+  {
+    title: "Мембрана VELTEX",
+    text: "«Чулочная» конструкция с герметизацией швов: защита от влаги при типовых сценариях и комфортная терморегуляция.",
+  },
+  {
+    title: "Сборка и контроль",
+    text: "Тройные швы, армированные нити, проклейка ключевых узлов и многоуровневый контроль качества на этапах производства.",
+  },
+] as const;
+
+const GUARANTEE_STEPS = [
+  "Обращение клиента через Telegram/сайт с описанием, фото/видео и данными сертификата.",
+  "Предварительный анализ и инструкция по отправке пары.",
+  "Отправка обуви клиентом в чистом виде с оригиналом сертификата.",
+  "Диагностика и экспертиза, финальное решение по случаю.",
+  "При подтверждении дефекта — ремонт или комплиментарная замена.",
+  "Обратная отправка за счет бренда. Срок процесса — до 45 дней.",
+] as const;
+
+const GUARANTEE_LIMITS = [
+  "Расширенная пожизненная гарантия действует только при активации сертификата в течение 14 дней.",
+  "Возврат денежных средств по расширенной гарантии не предусмотрен.",
+  "Гарантия предоставляется один раз на одну пару.",
+  "При отсутствии активации действует стандартная гарантия по законодательству РФ.",
+] as const;
+
+const VOICE_RULES = [
+  "Спокойно, точно, по делу: факты вместо пафоса.",
+  "Сила без агрессии и уважение к человеку в формулировках.",
+  "Без обещаний сверх регламента и условий сертификата.",
+  "Если есть проблема — разбираемся и предлагаем решение.",
+] as const;
+
+export default function BrandPage() {
+  return (
+    <main className="figma-site-page min-h-screen overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111]">
+      <section className="figma-site-stage relative mx-auto min-h-[100dvh] w-full overflow-hidden bg-white">
+        <div className="relative mx-auto h-full min-h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          <div className="pointer-events-none absolute bottom-[-88px] left-[388px] top-[-88px] w-[886px]">
+            {Array.from({ length: 14 }).map((_, i) => (
+              <div key={i} className="absolute inset-y-0 w-[63.286px]" style={{ left: `${i * 63.286}px` }}>
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                  }}
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${backgroundShape})`,
+                    backgroundSize: "832px 832px",
+                    backgroundPosition: "top left",
+                    filter: "blur(90px)",
+                    opacity: 0.03,
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+
+          <SiteHeader />
+
+          <div className="relative mx-auto w-[min(1120px,92vw)] pt-[168px] pb-24">
+            <section className="rounded-[28px] bg-white/90 p-8 shadow-[0_30px_70px_rgba(0,0,0,0.1)] backdrop-blur-sm min-[980px]:p-10">
+              <h1
+                className="uppercase text-[#111]"
+                style={{
+                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontSize: "clamp(52px,5vw,88px)",
+                  lineHeight: 1,
+                }}
+              >
+                О бренде
+              </h1>
+              <p className="mt-3 text-[20px] leading-[1.3] text-[#111]/80">
+                «Ты идёшь — мы держим землю под ногами.»
+              </p>
+              <p className="mt-5 max-w-[760px] text-[19px] leading-[1.38] text-[#111]/72">
+                VELESBRON закрепляется в нише треккингово-тактической обуви повышенной надежности отечественной разработки: выше
+                массового сегмента по ресурсу и защите, близко к профессиональному по конструкции и контролю качества, с акцентом на
+                сервисную ответственность.
+              </p>
+            </section>
+
+            <section className="mt-8 grid gap-5 min-[980px]:grid-cols-3">
+              {BRAND_BLOCKS.map((block) => (
+                <article
+                  key={block.title}
+                  className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] transition-transform duration-300 hover:-translate-y-1"
+                >
+                  <h2
+                    className="uppercase text-[#111]"
+                    style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 40, lineHeight: 1 }}
+                  >
+                    {block.title}
+                  </h2>
+                  <p className="mt-4 text-[17px] leading-[1.35] text-[#111]/72">{block.text}</p>
+                </article>
+              ))}
+            </section>
+
+            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+              <h2
+                className="uppercase text-[#111]"
+                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+              >
+                Хронология бренда
+              </h2>
+              <div className="mt-7 grid gap-4 min-[980px]:grid-cols-3">
+                {BRAND_TIMELINE.map((item) => (
+                  <div key={item.year} className="rounded-[18px] border border-[#111]/10 bg-[#f6f6f6] p-5">
+                    <p className="text-[34px] leading-none text-[#f07426]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
+                      {item.year}
+                    </p>
+                    <p className="mt-3 text-[16px] leading-[1.35] text-[#111]/74">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+              <h2
+                className="uppercase text-[#111]"
+                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+              >
+                Миссия и ценности
+              </h2>
+              <p className="mt-4 max-w-[850px] text-[17px] leading-[1.35] text-[#111]/72">
+                Создавать надежную обувь для тех, кто идет своим маршрутом — в городе, на объекте, в лесу, в горах или при выполнении
+                тактических задач. Мы не обещаем легкий путь. Мы гарантируем защиту и поддержку на нём.
+              </p>
+              <div className="mt-7 grid gap-4 min-[980px]:grid-cols-2">
+                {BRAND_VALUES.map((item) => (
+                  <article key={item.title} className="rounded-[18px] border border-[#111]/10 bg-[#f6f6f6] p-5">
+                    <h3 className="text-[30px] leading-none text-[#111]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/72">{item.text}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+              <h2
+                className="uppercase text-[#111]"
+                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+              >
+                Ключевые преимущества
+              </h2>
+              <ul className="mt-6 grid gap-3 min-[980px]:grid-cols-2">
+                {CORE_ADVANTAGES.map((item) => (
+                  <li key={item} className="rounded-[14px] bg-[#f3f3f3] px-4 py-3 text-[15px] leading-[1.35] text-[#111]/78">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+              <h2
+                className="uppercase text-[#111]"
+                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+              >
+                Архитектура продукта
+              </h2>
+              <div className="mt-7 grid gap-4 min-[980px]:grid-cols-2">
+                {PRODUCT_ARCHITECTURE.map((item) => (
+                  <article key={item.title} className="rounded-[18px] border border-[#111]/10 bg-[#fafafa] p-5">
+                    <h3 className="text-[27px] leading-none text-[#111]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/72">{item.text}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <h2
+                  className="uppercase text-[#111]"
+                  style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+                >
+                  Фото и видео
+                </h2>
+                <span className="rounded-[12px] bg-[#111] px-4 py-2 text-[13px] font-medium uppercase tracking-wide text-white/90">
+                  Контентный блок
+                </span>
+              </div>
+              <p className="mt-4 max-w-[760px] text-[16px] leading-[1.35] text-[#111]/66">
+                Здесь можно размещать репортажи с производства, полевые испытания, интервью, материал о технологиях и инструкции по
+                уходу за обувью.
+              </p>
+              <div className="mt-7 grid gap-5 min-[700px]:grid-cols-2">
+                {[
+                  { title: "Полевые испытания", type: "Фото" },
+                  { title: "Производство и сборка", type: "Видео" },
+                  { title: "Материалы и узлы", type: "Фото" },
+                  { title: "Сервис и гарантия", type: "Видео" },
+                ].map((item) => (
+                  <article key={item.title} className="overflow-hidden rounded-[20px] border border-[#111]/8 bg-[#f2f2f2]">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-[linear-gradient(140deg,#D8D8D8_0%,#BCBCBC_100%)]">
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.55),rgba(255,255,255,0)_55%)]" />
+                      <span className="absolute left-4 top-4 rounded-[10px] bg-white/90 px-3 py-1 text-[12px] font-semibold uppercase text-[#111]">
+                        {item.type}
+                      </span>
+                      {item.type === "Видео" ? (
+                        <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#111]/80 text-white">
+                          ▶
+                        </span>
+                      ) : null}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="text-[24px] leading-none text-[#111]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
+                        {item.title}
+                      </h3>
+                      <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/68">Здесь можно поставить ссылку на медиа-материал или открыть модальное окно.</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-8 rounded-[28px] bg-[linear-gradient(180deg,#E7813F_0%,#FC6407_100%)] p-7 text-white shadow-[0_30px_70px_rgba(252,100,7,0.28)] min-[980px]:p-10">
+              <h2
+                className="uppercase"
+                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+              >
+                Гарантия и сервис
+              </h2>
+              <p className="mt-4 max-w-[850px] text-[18px] leading-[1.35] text-white/92">
+                Гарантия VELESBRON — это элемент позиционирования, инструмент доверия и управляемый сервисный процесс. Это не «подарок»,
+                а контракт ответственности.
+              </p>
+              <ol className="mt-6 grid gap-3 text-[15px] leading-[1.35] text-white/95 min-[980px]:grid-cols-2">
+                {GUARANTEE_STEPS.map((item, i) => (
+                  <li key={item} className="rounded-[14px] bg-white/14 px-4 py-3">
+                    <span className="mr-2 font-semibold">{i + 1}.</span>
+                    {item}
+                  </li>
+                ))}
+              </ol>
+              <ul className="mt-5 grid gap-3 text-[14px] leading-[1.35] text-white/95 min-[980px]:grid-cols-2">
+                {GUARANTEE_LIMITS.map((item) => (
+                  <li key={item} className="rounded-[14px] bg-[#111]/16 px-4 py-3">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+              <h2
+                className="uppercase text-[#111]"
+                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+              >
+                Коммуникация бренда
+              </h2>
+              <p className="mt-4 max-w-[860px] text-[17px] leading-[1.35] text-[#111]/72">
+                Речевой код VELESBRON: спокойно, точно, по делу. Мы не спорим с пользователем и не обесцениваем проблему — мы разбираемся
+                и даем последовательные шаги решения.
+              </p>
+              <ul className="mt-6 grid gap-3 min-[980px]:grid-cols-2">
+                {VOICE_RULES.map((item) => (
+                  <li key={item} className="rounded-[14px] border border-[#111]/12 bg-[#f6f6f6] px-4 py-3 text-[15px] leading-[1.35] text-[#111]/76">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
