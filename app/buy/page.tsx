@@ -47,11 +47,6 @@ const MODEL_IMAGES: Record<ModelKey, { black: string[]; oliva?: string[] }> = {
   },
 };
 
-const thumbImages = {
-  black: "/images/models/ui/thumb-dark.png",
-  oliva: "/images/models/ui/thumb-light.png",
-};
-
 const SIZE_GRID_ROWS = [
   { size: "39", insole: "26,0", foot: "24,5 - 25,0" },
   { size: "40", insole: "26,5", foot: "25,1 - 25,6" },
@@ -69,11 +64,14 @@ export default function BuyPage() {
   const [activeModelKey, setActiveModelKey] = useState<ModelKey>("high");
   const [activeViewIndex, setActiveViewIndex] = useState(0);
   const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
+  const [isSizeGridVisible, setIsSizeGridVisible] = useState(false);
   const [mobileScale, setMobileScale] = useState(1);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
+  const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
   const mobileSceneRef = useRef<HTMLDivElement | null>(null);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
   const mobileRailRef = useRef<HTMLDivElement | null>(null);
+  const sizeGridCloseTimerRef = useRef<number | null>(null);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
   const selectedModel = MODEL_OPTIONS.find((item) => item.key === activeModelKey) ?? MODEL_OPTIONS[0];
   const modelImagesByColor = MODEL_IMAGES[activeModelKey];
@@ -110,6 +108,31 @@ export default function BuyPage() {
       document.body.style.overflow = previousOverflow;
     };
   }, [isSizeGridOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (sizeGridCloseTimerRef.current) {
+        window.clearTimeout(sizeGridCloseTimerRef.current);
+      }
+    };
+  }, []);
+
+  const openSizeGrid = () => {
+    if (sizeGridCloseTimerRef.current) {
+      window.clearTimeout(sizeGridCloseTimerRef.current);
+      sizeGridCloseTimerRef.current = null;
+    }
+    setIsSizeGridOpen(true);
+    requestAnimationFrame(() => setIsSizeGridVisible(true));
+  };
+
+  const closeSizeGrid = () => {
+    setIsSizeGridVisible(false);
+    sizeGridCloseTimerRef.current = window.setTimeout(() => {
+      setIsSizeGridOpen(false);
+      sizeGridCloseTimerRef.current = null;
+    }, 220);
+  };
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
@@ -244,188 +267,177 @@ export default function BuyPage() {
               />
             </div>
 
-            {/* Right — РАЗМЕР */}
-            <p
-              className="absolute uppercase"
-              style={{
-                left: 1444,
-                top: 82,
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 48,
-                fontWeight: 700,
-                color: "#111",
-              }}
-            >
-              РАЗМЕР
-            </p>
+            <div className="absolute inset-0" style={{ transform: "translateY(-90px)" }}>
+              {/* Size grid link */}
+              <button
+                type="button"
+                onClick={openSizeGrid}
+                className="absolute rounded-[14px] px-5 py-2.5 text-white shadow-[0_8px_24px_rgba(240,116,38,0.35)] transition hover:brightness-105"
+                style={{
+                  left: 1465,
+                  top: 624,
+                  transform: "translateX(-50%)",
+                  background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
+                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontSize: 26,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                Таблица размеров
+              </button>
 
-            {/* Size grid link */}
-            <button
-              type="button"
-              onClick={() => setIsSizeGridOpen(true)}
-              className="absolute text-[#f07426] underline decoration-[#f07426]"
-              style={{
-                left: 1336,
-                top: 176,
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 30,
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Размерная сетка
-            </button>
+              {/* Right — МОДЕЛЬ */}
+              <p
+                className="absolute uppercase"
+                style={{
+                  left: 1465,
+                  top: 210,
+                  transform: "translateX(-50%)",
+                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontSize: 48,
+                  fontWeight: 700,
+                  color: "#111",
+                }}
+              >
+                МОДЕЛЬ
+              </p>
+              <div className="absolute flex -translate-x-1/2" style={{ left: 1465, top: 288, gap: 46 }}>
+                {MODEL_OPTIONS.map((model) => (
+                  <button
+                    key={`desktop-model-${model.key}`}
+                    type="button"
+                    onClick={() => setActiveModelKey(model.key)}
+                    className="overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
+                    style={{
+                      width: model.key === "high" ? 76 : 74,
+                      height: 75,
+                      border: activeModelKey === model.key ? "2px solid #f07426" : "2px solid #e0e0e0",
+                    }}
+                  >
+                    <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
+                  </button>
+                ))}
+              </div>
+              <div className="absolute flex -translate-x-1/2 gap-[44px]" style={{ left: 1465, top: 372 }}>
+                {MODEL_OPTIONS.map((model) => (
+                  <p
+                    key={`desktop-model-label-${model.key}`}
+                    className="text-center uppercase whitespace-nowrap"
+                    style={{
+                      width: model.key === "high" ? 76 : 74,
+                      fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
+                      textDecoration: activeModelKey === model.key ? "underline" : "none",
+                    }}
+                  >
+                    {model.label}
+                  </p>
+                ))}
+              </div>
 
-            {/* Right — МОДЕЛЬ */}
-            <p
-              className="absolute uppercase"
-              style={{
-                left: 1458,
-                top: 240,
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 40,
-                fontWeight: 700,
-                color: "#111",
-              }}
-            >
-              МОДЕЛЬ
-            </p>
-            <div className="absolute flex gap-4" style={{ left: 1366, top: 286 }}>
-              {MODEL_OPTIONS.map((model) => (
+              {/* Right — ЦВЕТ */}
+              <p
+                className="absolute uppercase"
+                style={{
+                  left: 1465,
+                  top: 398,
+                  transform: "translateX(-50%)",
+                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontSize: 48,
+                  fontWeight: 700,
+                  color: "#111",
+                }}
+              >
+                ЦВЕТ
+              </p>
+
+              {/* Color swatches */}
+              <div className="absolute flex -translate-x-1/2" style={{ left: 1465, top: 476, gap: 46 }}>
                 <button
-                  key={`desktop-model-${model.key}`}
                   type="button"
-                  onClick={() => setActiveModelKey(model.key)}
-                  className="overflow-hidden rounded-[8px] bg-white transition-all"
+                  onClick={() => setColorVariant("black")}
+                  className="rounded-[8px] transition-all"
                   style={{
-                    width: 58,
-                    height: 58,
-                    border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #d1d1d1",
+                    width: 76,
+                    height: 75,
+                    backgroundColor: "#191919",
+                    border: colorVariant === "black" ? "2px solid #f07426" : "2px solid #e0e0e0",
                   }}
-                >
-                  <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
-                </button>
-              ))}
-            </div>
-            <div className="absolute flex gap-[20px]" style={{ left: 1364, top: 350 }}>
-              {MODEL_OPTIONS.map((model) => (
+                />
+                <button
+                  type="button"
+                  onClick={() => setColorVariant("oliva")}
+                  className="rounded-[8px] transition-all"
+                  style={{
+                    width: 74,
+                    height: 75,
+                    backgroundColor: "#686248",
+                    border: colorVariant === "oliva" ? "2px solid #f07426" : "2px solid #e0e0e0",
+                  }}
+                />
+              </div>
+
+              {/* Color labels */}
+              <div className="absolute flex -translate-x-1/2 gap-[44px]" style={{ left: 1465, top: 560 }}>
                 <p
-                  key={`desktop-model-label-${model.key}`}
-                  className="text-center uppercase"
+                  className="w-[76px] text-center uppercase"
                   style={{
-                    width: 66,
                     fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: 700,
-                    color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
-                    textDecoration: activeModelKey === model.key ? "underline" : "none",
+                    color: "#999",
                   }}
                 >
-                  {model.label}
+                  ЧЕРНЫЙ
                 </p>
-              ))}
-            </div>
+                <p
+                  className="w-[74px] text-center uppercase"
+                  style={{
+                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: "#999",
+                  }}
+                >
+                  ОЛИВА
+                </p>
+              </div>
 
-            {/* Right — ЦВЕТ */}
-            <p
-              className="absolute uppercase"
-              style={{
-                left: 1494,
-                top: 390,
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 48,
-                fontWeight: 700,
-                color: "#111",
-              }}
-            >
-              ЦВЕТ
-            </p>
-
-            {/* Color swatches */}
-            <div className="absolute flex" style={{ left: 1382, top: 468, gap: 46 }}>
+              {/* Buy button */}
               <button
                 type="button"
-                onClick={() => setColorVariant("black")}
-                className="overflow-hidden rounded-[8px] bg-white p-[6px] transition-all"
+                className="absolute"
                 style={{
-                  width: 76,
-                  height: 75,
-                  border: colorVariant === "black" ? "2px solid #f07426" : "2px solid #e0e0e0",
+                  left: 1465,
+                  top: 692,
+                  transform: "translateX(-50%)",
+                  width: 224,
+                  height: 72,
+                  background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
+                  borderRadius: 16,
+                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontSize: 24,
+                  fontWeight: 700,
+                  color: "#fff",
                 }}
               >
-                <img src={thumbImages.black} alt="Черный" className="h-full w-full object-contain" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setColorVariant("oliva")}
-                className="overflow-hidden rounded-[8px] bg-white p-[6px] transition-all"
-                style={{
-                  width: 74,
-                  height: 75,
-                  border: colorVariant === "oliva" ? "2px solid #f07426" : "2px solid #e0e0e0",
-                }}
-              >
-                <img src={thumbImages.oliva} alt="Оливковый" className="h-full w-full object-contain" />
+                Где Купить
               </button>
             </div>
-
-            {/* Color labels */}
-            <p
-              className="absolute uppercase"
-              style={{
-                left: 1382,
-                top: 552,
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 20,
-                fontWeight: 700,
-                color: "#999",
-              }}
-            >
-              ЧЕРНЫЙ
-            </p>
-            <p
-              className="absolute uppercase"
-              style={{
-                left: 1498,
-                top: 552,
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 20,
-                fontWeight: 700,
-                color: "#999",
-              }}
-            >
-              ОЛИВА
-            </p>
-
-            {/* Buy button */}
-            <button
-              type="button"
-              className="absolute"
-              style={{
-                left: 1341,
-                top: 592,
-                width: 248,
-                height: 72,
-                background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                borderRadius: 16,
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 24,
-                fontWeight: 700,
-                color: "#fff",
-              }}
-            >
-              Купить
-            </button>
 
             {/* Bottom photo cards */}
             <div
               className="absolute"
               style={{
                 left: 331,
-                top: 629,
+                top: 590,
                 width: 1018,
                 cursor: desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
               }}
+              onMouseEnter={() => setIsDesktopRailHover(true)}
               onMouseMove={(event) => {
                 const rect = event.currentTarget.getBoundingClientRect();
                 const x = event.clientX - rect.left;
@@ -439,8 +451,27 @@ export default function BuyPage() {
                 }
                 setDesktopRailCursor("grab");
               }}
-              onMouseLeave={() => setDesktopRailCursor("grab")}
+              onMouseLeave={() => {
+                setDesktopRailCursor("grab");
+                setIsDesktopRailHover(false);
+              }}
             >
+              <div
+                className="pointer-events-none absolute left-0 top-0 z-[9] h-[395px] w-[140px] rounded-l-[16px] transition-opacity duration-200"
+                style={{
+                  opacity: isDesktopRailHover && desktopRailCursor === "left" ? 1 : 0,
+                  background:
+                    "linear-gradient(90deg, rgba(240,116,38,0.26) 0%, rgba(240,116,38,0.12) 48%, rgba(240,116,38,0) 100%)",
+                }}
+              />
+              <div
+                className="pointer-events-none absolute right-0 top-0 z-[9] h-[395px] w-[140px] rounded-r-[16px] transition-opacity duration-200"
+                style={{
+                  opacity: isDesktopRailHover && desktopRailCursor === "right" ? 1 : 0,
+                  background:
+                    "linear-gradient(270deg, rgba(240,116,38,0.26) 0%, rgba(240,116,38,0.12) 48%, rgba(240,116,38,0) 100%)",
+                }}
+              />
               <div
                 ref={desktopRailRef}
                 className="flex gap-3 overflow-x-auto pb-2 pr-2"
@@ -554,32 +585,22 @@ export default function BuyPage() {
               Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина, сформированное автоматически с помощью нейросети. Копировать текст.
             </p>
 
-            <p
-              className="absolute left-[74px] top-[337px] uppercase"
-              style={{
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 48,
-                fontWeight: 700,
-              }}
-            >
-              РАЗМЕР
-            </p>
-
             <button
               type="button"
-              onClick={() => setIsSizeGridOpen(true)}
-              className="absolute left-[69px] top-[407px] text-[#f07426] underline decoration-[#f07426]"
+              onClick={openSizeGrid}
+              className="absolute left-[70px] top-[724px] rounded-[14px] px-5 py-2.5 text-white shadow-[0_8px_20px_rgba(240,116,38,0.35)]"
               style={{
+                background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 30,
+                fontSize: 24,
                 fontWeight: 700,
               }}
             >
-              Размерная сетка
+              Таблица размеров
             </button>
 
             <p
-              className="absolute left-[70px] top-[495px] uppercase"
+              className="absolute left-[70px] top-[509px] uppercase"
               style={{
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
                 fontSize: 48,
@@ -589,26 +610,25 @@ export default function BuyPage() {
               ЦВЕТ
             </p>
 
-            <div className="absolute left-[70px] top-[565px] flex items-start gap-[46px]">
+            <div className="absolute left-[70px] top-[579px] flex items-start gap-[46px]">
               {(["black", "oliva"] as ColorVariant[]).map((v) => (
                 <button
                   key={v}
                   type="button"
                   onClick={() => setColorVariant(v)}
-                  className="overflow-hidden rounded-[8px] bg-white p-[6px] transition-all"
+                  className="rounded-[8px] transition-all"
                   style={{
                     width: v === "black" ? 76 : 74,
                     height: 75,
+                    backgroundColor: v === "black" ? "#191919" : "#686248",
                     border: colorVariant === v ? "2px solid #f07426" : "1px solid #9a9a9a",
                   }}
-                >
-                  <img src={thumbImages[v]} alt={v} className="h-full w-full object-contain" />
-                </button>
+                />
               ))}
             </div>
 
             <p
-              className="absolute left-[108px] top-[649px] -translate-x-1/2 underline"
+              className="absolute left-[108px] top-[663px] -translate-x-1/2 underline"
               style={{
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
                 fontSize: 20,
@@ -619,7 +639,7 @@ export default function BuyPage() {
               ЧЕРНЫЙ
             </p>
             <p
-              className="absolute left-[229px] top-[649px] -translate-x-1/2"
+              className="absolute left-[229px] top-[663px] -translate-x-1/2"
               style={{
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
                 fontSize: 20,
@@ -631,17 +651,17 @@ export default function BuyPage() {
             </p>
 
             <p
-              className="absolute left-[70px] top-[690px] uppercase"
+              className="absolute left-[70px] top-[666px] uppercase"
               style={{
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                fontSize: 40,
+                fontSize: 48,
                 fontWeight: 700,
                 color: "#111",
               }}
             >
               МОДЕЛЬ
             </p>
-            <div className="absolute left-[70px] top-[745px] flex items-start gap-[18px]">
+            <div className="absolute left-[70px] top-[736px] flex items-start gap-[46px]">
               {MODEL_OPTIONS.map((model) => (
                 <button
                   key={`mobile-model-${model.key}`}
@@ -649,8 +669,8 @@ export default function BuyPage() {
                   onClick={() => setActiveModelKey(model.key)}
                   className="overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
                   style={{
-                    width: 66,
-                    height: 66,
+                    width: model.key === "high" ? 76 : 74,
+                    height: 75,
                     border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #9a9a9a",
                   }}
                 >
@@ -658,14 +678,15 @@ export default function BuyPage() {
                 </button>
               ))}
             </div>
-            <div className="absolute left-[74px] top-[818px] flex gap-[20px]">
+            <div className="absolute left-[70px] top-[820px] flex gap-[44px]">
               {MODEL_OPTIONS.map((model) => (
                 <p
                   key={`mobile-model-label-${model.key}`}
-                  className="w-[72px] text-center uppercase"
+                  className="text-center uppercase whitespace-nowrap"
                   style={{
+                    width: model.key === "high" ? 76 : 74,
                     fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: 700,
                     color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
                     textDecoration: activeModelKey === model.key ? "underline" : "none",
@@ -740,8 +761,15 @@ export default function BuyPage() {
 
       {isSizeGridOpen && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/55" onClick={() => setIsSizeGridOpen(false)} />
-          <div className="relative z-[91] max-h-[84dvh] w-full max-w-[920px] overflow-hidden rounded-[18px] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.25)]">
+          <div
+            className={`absolute inset-0 bg-black/55 transition-opacity duration-200 ${isSizeGridVisible ? "opacity-100" : "opacity-0"}`}
+            onClick={closeSizeGrid}
+          />
+          <div
+            className={`relative z-[91] max-h-[84dvh] w-auto max-w-[min(94vw,760px)] overflow-hidden rounded-[18px] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.25)] transition-all duration-200 ${
+              isSizeGridVisible ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
+            }`}
+          >
             <div className="flex items-center justify-between border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
               <h3
                 className="uppercase text-[#111]"
@@ -752,7 +780,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Закрыть таблицу размеров"
-                onClick={() => setIsSizeGridOpen(false)}
+                onClick={closeSizeGrid}
                 className="flex size-9 items-center justify-center rounded-[10px] bg-[#f4f4f4] text-[#111]"
               >
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -761,29 +789,32 @@ export default function BuyPage() {
               </button>
             </div>
             <div className="max-h-[calc(84dvh-78px)] overflow-auto">
-              <table className="w-full table-fixed border-collapse text-left">
-                <colgroup>
-                  <col className="w-[18%]" />
-                  <col className="w-[30%]" />
-                  <col className="w-[52%]" />
-                </colgroup>
+              <table className="w-auto min-w-[640px] border-collapse text-left">
                 <thead className="sticky top-0 bg-[#f7f7f7]">
                   <tr>
-                    <th className="border-b border-[#ececec] px-5 py-3.5 text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">Размер</th>
-                    <th className="border-b border-[#ececec] px-5 py-3.5 text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">
+                    <th className="border-b border-[#ececec] px-5 py-3.5 text-center text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">Размер</th>
+                    <th className="border-b border-[#ececec] px-5 py-3.5 text-center text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">
                       Длина стельки, см
                     </th>
-                    <th className="border-b border-[#ececec] px-5 py-3.5 text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">
+                    <th className="border-b border-[#ececec] px-5 py-3.5 text-center text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">
                       Рекомендуемая длина стопы, см
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {SIZE_GRID_ROWS.map((row) => (
-                    <tr key={row.size} className="odd:bg-white even:bg-[#fcfcfc]">
-                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.size}</td>
-                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.insole}</td>
-                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.foot}</td>
+                  {SIZE_GRID_ROWS.map((row, index) => (
+                    <tr
+                      key={row.size}
+                      className="odd:bg-white even:bg-[#fcfcfc] transition-all duration-300"
+                      style={{
+                        opacity: isSizeGridVisible ? 1 : 0,
+                        transform: isSizeGridVisible ? "translateY(0)" : "translateY(8px)",
+                        transitionDelay: `${index * 65}ms`,
+                      }}
+                    >
+                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-center text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.size}</td>
+                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-center text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.insole}</td>
+                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-center text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.foot}</td>
                     </tr>
                   ))}
                 </tbody>
