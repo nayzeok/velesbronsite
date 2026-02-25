@@ -36,6 +36,14 @@ const pobeda = localFont({
   display: "swap",
 });
 
+const gilroyLight = localFont({
+  src: "../public/fonts/Gilroy-Light.otf",
+  variable: "--font-gilroy-light",
+  weight: "300",
+  style: "normal",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "VelesBron - Тактическая обувь из натуральных материалов",
   description: "Универсальная тактическая обувь для службы, походов и города. Натуральные материалы, усиленный протектор, надёжная конструкция.",
@@ -49,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${drukCyr.variable} ${pobeda.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${drukCyr.variable} ${pobeda.variable} ${gilroyLight.variable} antialiased`}
       >
         {children}
         <AnalyticsTracker />

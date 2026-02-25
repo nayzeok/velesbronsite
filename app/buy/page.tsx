@@ -3,15 +3,48 @@
 /* eslint-disable @next/next/no-img-element */
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const DESIGN_HEIGHT = 1000;
+const MOBILE_DESIGN_WIDTH = 741;
+const MOBILE_DESIGN_HEIGHT = 1716;
+const MOBILE_SCROLL_EXTRA = 48;
 
 const backgroundShape = "/images/models/ui/background-shape.png";
 
-const bootImages = {
-  black: "/images/models/views/models/black/1.png",
-  oliva: "/images/models/views/models/oliva/1.png",
+type ColorVariant = "black" | "oliva";
+type ModelKey = "high" | "low";
+
+const MODEL_OPTIONS: { key: ModelKey; label: string }[] = [
+  { key: "high", label: "Высокая" },
+  { key: "low", label: "Низкая" },
+];
+
+const MODEL_IMAGES: Record<ModelKey, { black: string[]; oliva?: string[] }> = {
+  high: {
+    black: [
+      "/images/models/views/models/2sk/black/1.png",
+      "/images/models/views/models/2sk/black/2.png",
+      "/images/models/views/models/2sk/black/3.png",
+      "/images/models/views/models/2sk/black/4.png",
+      "/images/models/views/models/2sk/black/5.png",
+    ],
+    oliva: [
+      "/images/models/views/models/2sk/oliva/1.png",
+      "/images/models/views/models/2sk/oliva/2.png",
+      "/images/models/views/models/2sk/oliva/3.png",
+      "/images/models/views/models/2sk/oliva/4.png",
+      "/images/models/views/models/2sk/oliva/5.png",
+    ],
+  },
+  low: {
+    black: [
+      "/images/models/views/models/2n/black/1.png",
+      "/images/models/views/models/2n/black/2.png",
+      "/images/models/views/models/2n/black/3.png",
+      "/images/models/views/models/2n/black/4.png",
+    ],
+  },
 };
 
 const thumbImages = {
@@ -19,29 +52,64 @@ const thumbImages = {
   oliva: "/images/models/ui/thumb-light.png",
 };
 
-const cardImages = [
-  {
-    black: "/images/models/views/models/black/1.png",
-    oliva: "/images/models/views/models/oliva/1.png",
-  },
-  {
-    black: "/images/models/views/models/black/2.png",
-    oliva: "/images/models/views/models/oliva/2.png",
-  },
-  {
-    black: "/images/models/views/models/black/3.png",
-    oliva: "/images/models/views/models/oliva/3.png",
-  },
-];
-
-const sizes = [41, 42, 43, 44, 45];
-
-type ColorVariant = "black" | "oliva";
+const SIZE_GRID_ROWS = [
+  { size: "39", insole: "26,0", foot: "24,5 - 25,0" },
+  { size: "40", insole: "26,5", foot: "25,1 - 25,6" },
+  { size: "41", insole: "27,2", foot: "25,7 - 26,2" },
+  { size: "42", insole: "27,8", foot: "26,3 - 26,9" },
+  { size: "43", insole: "28,5", foot: "27,0 - 27,6" },
+  { size: "44", insole: "29,2", foot: "27,7 - 28,2" },
+  { size: "45", insole: "29,6", foot: "28,1 - 28,6" },
+  { size: "46", insole: "30,2", foot: "28,7 - 29,2" },
+  { size: "47", insole: "30,8", foot: "29,3 - 29,8" },
+] as const;
 
 export default function BuyPage() {
-  const [selectedSize, setSelectedSize] = useState(42);
   const [colorVariant, setColorVariant] = useState<ColorVariant>("black");
+  const [activeModelKey, setActiveModelKey] = useState<ModelKey>("high");
+  const [activeViewIndex, setActiveViewIndex] = useState(0);
+  const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
+  const [mobileScale, setMobileScale] = useState(1);
+  const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
+  const mobileSceneRef = useRef<HTMLDivElement | null>(null);
+  const desktopRailRef = useRef<HTMLDivElement | null>(null);
+  const mobileRailRef = useRef<HTMLDivElement | null>(null);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
+  const selectedModel = MODEL_OPTIONS.find((item) => item.key === activeModelKey) ?? MODEL_OPTIONS[0];
+  const modelImagesByColor = MODEL_IMAGES[activeModelKey];
+  const activeViewImages = (modelImagesByColor[colorVariant] && modelImagesByColor[colorVariant]!.length > 0)
+    ? modelImagesByColor[colorVariant]!
+    : modelImagesByColor.black;
+  const currentViewImage = activeViewImages[activeViewIndex] ?? activeViewImages[0];
+
+  useEffect(() => {
+    setActiveViewIndex(0);
+  }, [activeModelKey, colorVariant]);
+
+  useEffect(() => {
+    const node = mobileSceneRef.current;
+    if (!node) return;
+
+    const updateScale = () => {
+      const width = node.clientWidth || MOBILE_DESIGN_WIDTH;
+      setMobileScale(width / MOBILE_DESIGN_WIDTH);
+    };
+
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isSizeGridOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isSizeGridOpen]);
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
@@ -144,7 +212,7 @@ export default function BuyPage() {
                   color: "#111",
                 }}
               >
-                МОДЕЛЬ 1
+                {`МОДЕЛЬ ${selectedModel.label.toUpperCase()}`}
               </h1>
               <p
                 className="absolute"
@@ -169,8 +237,8 @@ export default function BuyPage() {
               style={{ left: 479, top: 76, width: 746, height: 609 }}
             >
               <img
-                key={colorVariant}
-                src={bootImages[colorVariant]}
+                key={`${activeModelKey}-${colorVariant}-${activeViewIndex}`}
+                src={currentViewImage}
                 alt="Тактическая обувь"
                 className="h-full w-full animate-view-rise object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
               />
@@ -191,57 +259,79 @@ export default function BuyPage() {
               РАЗМЕР
             </p>
 
-            {/* Size circles */}
-            <div className="absolute flex gap-[9px]" style={{ left: 1316, top: 159 }}>
-              {sizes.map((size) => (
-                <button
-                  key={size}
-                  type="button"
-                  onClick={() => setSelectedSize(size)}
-                  className="flex items-center justify-center rounded-full transition-all"
-                  style={{
-                    width: 44,
-                    height: 44,
-                    background:
-                      selectedSize === size
-                        ? "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)"
-                        : "#d9d9d9",
-                    fontFamily: "Gilroy, sans-serif",
-                    fontSize: 15,
-                    fontWeight: 700,
-                    color: selectedSize === size ? "#fff" : "#7a7a7a",
-                  }}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-
             {/* Size grid link */}
             <button
               type="button"
-              className="absolute"
+              onClick={() => setIsSizeGridOpen(true)}
+              className="absolute text-[#f07426] underline decoration-[#f07426]"
               style={{
-                left: 1399,
-                top: 233,
+                left: 1336,
+                top: 176,
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
                 fontSize: 30,
                 fontWeight: 700,
-                color: "#999",
-                background: "none",
-                border: "none",
                 cursor: "pointer",
               }}
             >
               Размерная сетка
             </button>
 
+            {/* Right — МОДЕЛЬ */}
+            <p
+              className="absolute uppercase"
+              style={{
+                left: 1458,
+                top: 240,
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 40,
+                fontWeight: 700,
+                color: "#111",
+              }}
+            >
+              МОДЕЛЬ
+            </p>
+            <div className="absolute flex gap-4" style={{ left: 1366, top: 286 }}>
+              {MODEL_OPTIONS.map((model) => (
+                <button
+                  key={`desktop-model-${model.key}`}
+                  type="button"
+                  onClick={() => setActiveModelKey(model.key)}
+                  className="overflow-hidden rounded-[8px] bg-white transition-all"
+                  style={{
+                    width: 58,
+                    height: 58,
+                    border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #d1d1d1",
+                  }}
+                >
+                  <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
+                </button>
+              ))}
+            </div>
+            <div className="absolute flex gap-[20px]" style={{ left: 1364, top: 350 }}>
+              {MODEL_OPTIONS.map((model) => (
+                <p
+                  key={`desktop-model-label-${model.key}`}
+                  className="text-center uppercase"
+                  style={{
+                    width: 66,
+                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
+                    textDecoration: activeModelKey === model.key ? "underline" : "none",
+                  }}
+                >
+                  {model.label}
+                </p>
+              ))}
+            </div>
+
             {/* Right — ЦВЕТ */}
             <p
               className="absolute uppercase"
               style={{
                 left: 1494,
-                top: 305,
+                top: 390,
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
                 fontSize: 48,
                 fontWeight: 700,
@@ -252,7 +342,7 @@ export default function BuyPage() {
             </p>
 
             {/* Color swatches */}
-            <div className="absolute flex" style={{ left: 1382, top: 372, gap: 46 }}>
+            <div className="absolute flex" style={{ left: 1382, top: 468, gap: 46 }}>
               <button
                 type="button"
                 onClick={() => setColorVariant("black")}
@@ -284,7 +374,7 @@ export default function BuyPage() {
               className="absolute uppercase"
               style={{
                 left: 1382,
-                top: 456,
+                top: 552,
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
                 fontSize: 20,
                 fontWeight: 700,
@@ -297,7 +387,7 @@ export default function BuyPage() {
               className="absolute uppercase"
               style={{
                 left: 1498,
-                top: 456,
+                top: 552,
                 fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
                 fontSize: 20,
                 fontWeight: 700,
@@ -313,7 +403,7 @@ export default function BuyPage() {
               className="absolute"
               style={{
                 left: 1341,
-                top: 518,
+                top: 592,
                 width: 248,
                 height: 72,
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
@@ -328,195 +418,380 @@ export default function BuyPage() {
             </button>
 
             {/* Bottom photo cards */}
-            {cardImages.map((card, i) => (
+            <div
+              className="absolute"
+              style={{
+                left: 331,
+                top: 629,
+                width: 1018,
+                cursor: desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
+              }}
+              onMouseMove={(event) => {
+                const rect = event.currentTarget.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                if (x < 120) {
+                  setDesktopRailCursor("left");
+                  return;
+                }
+                if (x > rect.width - 120) {
+                  setDesktopRailCursor("right");
+                  return;
+                }
+                setDesktopRailCursor("grab");
+              }}
+              onMouseLeave={() => setDesktopRailCursor("grab")}
+            >
               <div
-                key={i}
-                className="absolute overflow-hidden rounded-[16px]"
-                style={{
-                  left: 331 + i * (332 + 12),
-                  top: 629,
-                  width: 332,
-                  height: 395,
-                  background: "#eceef0",
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "center",
-                }}
+                ref={desktopRailRef}
+                className="flex gap-3 overflow-x-auto pb-2 pr-2"
+                style={{ scrollBehavior: "smooth" }}
               >
-                <img
-                  src={card[colorVariant]}
-                  alt=""
-                  className="object-contain"
-                  style={{ height: 329 }}
-                />
+                {activeViewImages.map((image, i) => (
+                  <button
+                    key={`desktop-view-${i}`}
+                    type="button"
+                    onClick={() => setActiveViewIndex(i)}
+                    className="shrink-0 overflow-hidden rounded-[16px] transition-all"
+                    style={{
+                      width: 332,
+                      height: 395,
+                      background: "#eceef0",
+                      border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <img src={image} alt="" className="h-full w-full object-contain" />
+                  </button>
+                ))}
               </div>
-            ))}
+              <button
+                type="button"
+                aria-label="Прокрутить фото влево"
+                onClick={() => desktopRailRef.current?.scrollBy({ left: -344, behavior: "smooth" })}
+                className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
+                style={{ cursor: "w-resize" }}
+              >
+                <span className="text-[24px] leading-none">‹</span>
+              </button>
+              <button
+                type="button"
+                aria-label="Прокрутить фото вправо"
+                onClick={() => desktopRailRef.current?.scrollBy({ left: 344, behavior: "smooth" })}
+                className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
+                style={{ cursor: "e-resize" }}
+              >
+                <span className="text-[24px] leading-none">›</span>
+              </button>
+            </div>
 
           </div>
         </div>
       </section>
 
       {/* ── MOBILE ── */}
-      <section className="min-[1200px]:hidden px-4 pb-10 pt-4">
-        <header className="mb-5">
-          <div className="mb-4 flex items-center justify-between">
-            <Link href="/" className="text-xs font-medium text-[#111]">Главная</Link>
-            <span className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-4 py-2 text-xs font-medium text-white">
-              Купить
-            </span>
-          </div>
-          <div className="mx-auto h-[72px] w-[138px] rounded-[10px] bg-white p-2">
-            <img src="/images/pages/header-logo.png" alt="Velesbron" className="h-full w-full object-contain" />
-          </div>
-        </header>
-
-        <h1
-          className="uppercase"
-          style={{
-            fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-            fontSize: 40,
-            fontWeight: 700,
-            lineHeight: "normal",
-            color: "#111",
-          }}
+      <section className="min-[1200px]:hidden">
+        <div
+          ref={mobileSceneRef}
+          className="relative mx-auto w-full max-w-[741px] overflow-hidden"
+          style={{ height: `${MOBILE_DESIGN_HEIGHT * mobileScale + MOBILE_SCROLL_EXTRA}px` }}
         >
-          МОДЕЛЬ 1
-        </h1>
-
-        <div className="relative mx-auto mt-4 h-[280px] w-full max-w-[420px]">
-          <img
-            key={colorVariant}
-            src={bootImages[colorVariant]}
-            alt="Тактическая обувь"
-            className="h-full w-full animate-view-rise object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.16)]"
-          />
-        </div>
-
-        <p className="mt-3 max-w-[600px] text-base leading-7 text-[#111]">
-          Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина.
-        </p>
-
-        {/* Size */}
-        <div className="mt-6">
-          <p
-            className="mb-3 uppercase"
-            style={{
-              fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-              fontSize: 28,
-              fontWeight: 700,
-            }}
+          <div
+            className="absolute left-0 top-0 h-[1716px] w-[741px] origin-top-left bg-[#f4f4f4]"
+            style={{ transform: `scale(${mobileScale})` }}
           >
-            РАЗМЕР
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {sizes.map((size) => (
-              <button
-                key={size}
-                type="button"
-                onClick={() => setSelectedSize(size)}
-                className="flex items-center justify-center rounded-full transition-all"
-                style={{
-                  width: 44,
-                  height: 44,
-                  background:
-                    selectedSize === size
-                      ? "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)"
-                      : "#d9d9d9",
-                  fontFamily: "Gilroy, sans-serif",
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: selectedSize === size ? "#fff" : "#7a7a7a",
-                }}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="mt-2"
-            style={{
-              fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-              fontSize: 18,
-              fontWeight: 700,
-              color: "#999",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            Размерная сетка
-          </button>
-        </div>
+            <div className="pointer-events-none absolute left-[69px] top-0 h-[1716px] w-[649px]">
+              {Array.from({ length: 14 }).map((_, i) => (
+                <div key={i} className="absolute inset-y-0 w-[46.357px]" style={{ left: `${i * 46.357}px` }}>
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundImage: `url(${backgroundShape})`,
+                      backgroundSize: "832px 832px",
+                      backgroundPosition: "top left",
+                      filter: "blur(90px)",
+                      opacity: 0.03,
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
 
-        {/* Color */}
-        <div className="mt-6">
-          <p
-            className="mb-3 uppercase"
-            style={{
-              fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-              fontSize: 28,
-              fontWeight: 700,
-            }}
-          >
-            ЦВЕТ
-          </p>
-          <div className="flex gap-4">
-            {(["black", "oliva"] as ColorVariant[]).map((v) => (
-              <div key={v} className="flex flex-col items-center gap-1">
+            <div className="absolute left-[21px] top-[90px] flex h-[8px] w-[34px] items-center justify-between">
+              <span className="size-[8px] rounded-full bg-[#111]/35" />
+              <span className="size-[8px] rounded-full bg-[#111]/20" />
+              <span className="size-[8px] rounded-full bg-[#111]/12" />
+            </div>
+
+            <h1
+              className="absolute left-[74px] top-[59px] uppercase"
+              style={{
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 75,
+                fontWeight: 700,
+                color: "#111",
+              }}
+            >
+              {`МОДЕЛЬ ${selectedModel.label.toUpperCase()}`}
+            </h1>
+
+            <p
+              className="absolute left-[74px] top-[147px] w-[408px]"
+              style={{
+                fontFamily: "Gilroy, sans-serif",
+                fontSize: 20,
+                fontWeight: 500,
+                lineHeight: 1.28,
+                color: "#111",
+              }}
+            >
+              Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина, сформированное автоматически с помощью нейросети. Копировать текст.
+            </p>
+
+            <p
+              className="absolute left-[74px] top-[337px] uppercase"
+              style={{
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 48,
+                fontWeight: 700,
+              }}
+            >
+              РАЗМЕР
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setIsSizeGridOpen(true)}
+              className="absolute left-[69px] top-[407px] text-[#f07426] underline decoration-[#f07426]"
+              style={{
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 30,
+                fontWeight: 700,
+              }}
+            >
+              Размерная сетка
+            </button>
+
+            <p
+              className="absolute left-[70px] top-[495px] uppercase"
+              style={{
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 48,
+                fontWeight: 700,
+              }}
+            >
+              ЦВЕТ
+            </p>
+
+            <div className="absolute left-[70px] top-[565px] flex items-start gap-[46px]">
+              {(["black", "oliva"] as ColorVariant[]).map((v) => (
                 <button
+                  key={v}
                   type="button"
                   onClick={() => setColorVariant(v)}
-                  className="overflow-hidden rounded-[8px] bg-white p-[5px] transition-all"
+                  className="overflow-hidden rounded-[8px] bg-white p-[6px] transition-all"
                   style={{
-                    width: 64,
-                    height: 64,
-                    border: colorVariant === v ? "2px solid #f07426" : "2px solid #e0e0e0",
+                    width: v === "black" ? 76 : 74,
+                    height: 75,
+                    border: colorVariant === v ? "2px solid #f07426" : "1px solid #9a9a9a",
                   }}
                 >
                   <img src={thumbImages[v]} alt={v} className="h-full w-full object-contain" />
                 </button>
-                <p
-                  className="uppercase"
+              ))}
+            </div>
+
+            <p
+              className="absolute left-[108px] top-[649px] -translate-x-1/2 underline"
+              style={{
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 20,
+                fontWeight: 700,
+                color: "#9a9a9a",
+              }}
+            >
+              ЧЕРНЫЙ
+            </p>
+            <p
+              className="absolute left-[229px] top-[649px] -translate-x-1/2"
+              style={{
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 20,
+                fontWeight: 700,
+                color: "#9a9a9a",
+              }}
+            >
+              КОРИЧНЕВЫЙ
+            </p>
+
+            <p
+              className="absolute left-[70px] top-[690px] uppercase"
+              style={{
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontSize: 40,
+                fontWeight: 700,
+                color: "#111",
+              }}
+            >
+              МОДЕЛЬ
+            </p>
+            <div className="absolute left-[70px] top-[745px] flex items-start gap-[18px]">
+              {MODEL_OPTIONS.map((model) => (
+                <button
+                  key={`mobile-model-${model.key}`}
+                  type="button"
+                  onClick={() => setActiveModelKey(model.key)}
+                  className="overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
                   style={{
-                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: "#999",
+                    width: 66,
+                    height: 66,
+                    border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #9a9a9a",
                   }}
                 >
-                  {v === "black" ? "ЧЕРНЫЙ" : "ОЛИВА"}
+                  <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
+                </button>
+              ))}
+            </div>
+            <div className="absolute left-[74px] top-[818px] flex gap-[20px]">
+              {MODEL_OPTIONS.map((model) => (
+                <p
+                  key={`mobile-model-label-${model.key}`}
+                  className="w-[72px] text-center uppercase"
+                  style={{
+                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontSize: 16,
+                    fontWeight: 700,
+                    color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
+                    textDecoration: activeModelKey === model.key ? "underline" : "none",
+                  }}
+                >
+                  {model.label}
                 </p>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="absolute left-[72px] top-[865px] h-[72px] w-[248px] rounded-[52px] text-[24px] text-white"
+              style={{
+                background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
+                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontWeight: 700,
+              }}
+            >
+              Купить
+            </button>
+
+            <div className="pointer-events-none absolute left-[-35px] top-[838px] h-[668px] w-[810px]">
+              <img
+                key={`mobile-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
+                src={currentViewImage}
+                alt="Тактическая обувь"
+                className="h-full w-full animate-view-rise object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,0.18)]"
+              />
+            </div>
+
+            <div className="absolute left-[20px] top-[1285px] w-[688px]">
+              <div
+                ref={mobileRailRef}
+                className="flex gap-[10px] overflow-x-auto pb-3 pr-3"
+                style={{ scrollBehavior: "smooth" }}
+              >
+                {activeViewImages.map((image, i) => (
+                  <button
+                    key={`mobile-view-${i}`}
+                    type="button"
+                    onClick={() => setActiveViewIndex(i)}
+                    className="h-[305px] w-[230px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
+                    style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
+                  >
+                    <img src={image} alt="" className="h-full w-full object-contain" />
+                  </button>
+                ))}
               </div>
-            ))}
+              <button
+                type="button"
+                aria-label="Прокрутить фото влево"
+                onClick={() => mobileRailRef.current?.scrollBy({ left: -240, behavior: "smooth" })}
+                className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
+                style={{ cursor: "w-resize" }}
+              >
+                <span className="text-[22px] leading-none">‹</span>
+              </button>
+              <button
+                type="button"
+                aria-label="Прокрутить фото вправо"
+                onClick={() => mobileRailRef.current?.scrollBy({ left: 240, behavior: "smooth" })}
+                className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
+                style={{ cursor: "e-resize" }}
+              >
+                <span className="text-[22px] leading-none">›</span>
+              </button>
+            </div>
           </div>
         </div>
-
-        <button
-          type="button"
-          className="mt-7 h-14 w-[210px] rounded-[16px] text-[22px] font-bold text-white"
-          style={{
-            background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-            fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-          }}
-        >
-          Купить
-        </button>
-
-        {/* Bottom cards */}
-        <div className="mt-8 grid grid-cols-3 gap-2">
-          {cardImages.map((card, i) => (
-            <div
-              key={i}
-              className="overflow-hidden rounded-[12px]"
-              style={{ background: "#eceef0", aspectRatio: "332/395" }}
-            >
-              <img src={card[colorVariant]} alt="" className="h-full w-full object-contain" />
-            </div>
-          ))}
-        </div>
       </section>
+
+      {isSizeGridOpen && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/55" onClick={() => setIsSizeGridOpen(false)} />
+          <div className="relative z-[91] max-h-[84dvh] w-full max-w-[920px] overflow-hidden rounded-[18px] bg-white shadow-[0_30px_80px_rgba(0,0,0,0.25)]">
+            <div className="flex items-center justify-between border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
+              <h3
+                className="uppercase text-[#111]"
+                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 32, fontWeight: 700 }}
+              >
+                Размерная сетка
+              </h3>
+              <button
+                type="button"
+                aria-label="Закрыть таблицу размеров"
+                onClick={() => setIsSizeGridOpen(false)}
+                className="flex size-9 items-center justify-center rounded-[10px] bg-[#f4f4f4] text-[#111]"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+            <div className="max-h-[calc(84dvh-78px)] overflow-auto">
+              <table className="w-full table-fixed border-collapse text-left">
+                <colgroup>
+                  <col className="w-[18%]" />
+                  <col className="w-[30%]" />
+                  <col className="w-[52%]" />
+                </colgroup>
+                <thead className="sticky top-0 bg-[#f7f7f7]">
+                  <tr>
+                    <th className="border-b border-[#ececec] px-5 py-3.5 text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">Размер</th>
+                    <th className="border-b border-[#ececec] px-5 py-3.5 text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">
+                      Длина стельки, см
+                    </th>
+                    <th className="border-b border-[#ececec] px-5 py-3.5 text-[13px] font-semibold leading-[1.2] text-[#666] min-[1200px]:px-6">
+                      Рекомендуемая длина стопы, см
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SIZE_GRID_ROWS.map((row) => (
+                    <tr key={row.size} className="odd:bg-white even:bg-[#fcfcfc]">
+                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.size}</td>
+                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.insole}</td>
+                      <td className="border-b border-[#f0f0f0] px-5 py-3.5 text-[15px] leading-[1.2] text-[#111] min-[1200px]:px-6">{row.foot}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

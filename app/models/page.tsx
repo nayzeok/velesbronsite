@@ -7,11 +7,11 @@ import { useEffect, useRef, useState } from "react";
 
 const DESIGN_HEIGHT = 1000;
 
-const mainBootSide = "/images/models/views/models/black/1.png";
-const mainBootFront = "/images/models/views/models/black/2.png";
-const mainBootTop = "/images/models/views/models/black/3.png";
-const mainBootTilt = "/images/models/views/models/black/4.png";
-const mainBootBack = "/images/models/views/models/black/5.png";
+const mainBootSide = "/images/models/views/models/2sk/black/1.png";
+const mainBootFront = "/images/models/views/models/2sk/black/2.png";
+const mainBootTop = "/images/models/views/models/2sk/black/3.png";
+const mainBootTilt = "/images/models/views/models/2sk/black/4.png";
+const mainBootBack = "/images/models/views/models/2sk/black/5.png";
 const pedestalImage = "/images/models/ui/pedestal-bg.png";
 const thumbA = "/images/models/ui/thumb-dark.png";
 const thumbB = "/images/models/ui/thumb-light.png";
@@ -25,18 +25,18 @@ const metricSideImage = "/images/models/ui/metric-side-image.png";
 
 const colorViewImages = {
   black: [
-    "/images/models/views/models/black/1.png",
-    "/images/models/views/models/black/2.png",
-    "/images/models/views/models/black/3.png",
-    "/images/models/views/models/black/4.png",
-    "/images/models/views/models/black/5.png",
+    "/images/models/views/models/2sk/black/1.png",
+    "/images/models/views/models/2sk/black/2.png",
+    "/images/models/views/models/2sk/black/3.png",
+    "/images/models/views/models/2sk/black/4.png",
+    "/images/models/views/models/2sk/black/5.png",
   ],
   oliva: [
-    "/images/models/views/models/oliva/1.png",
-    "/images/models/views/models/oliva/2.png",
-    "/images/models/views/models/oliva/3.png",
-    "/images/models/views/models/oliva/4.png",
-    "/images/models/views/models/oliva/5.png",
+    "/images/models/views/models/2sk/oliva/1.png",
+    "/images/models/views/models/2sk/oliva/2.png",
+    "/images/models/views/models/2sk/oliva/3.png",
+    "/images/models/views/models/2sk/oliva/4.png",
+    "/images/models/views/models/2sk/oliva/5.png",
   ],
 } as const;
 
