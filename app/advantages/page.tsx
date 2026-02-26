@@ -16,11 +16,11 @@ const mainBootBack = "/images/models/views/models/2sk/black/5.png";
 const pedestalImage = "/images/models/ui/pedestal-bg.png";
 const thumbA = "/images/models/ui/thumb-dark.png";
 const thumbB = "/images/models/ui/thumb-light.png";
-const carouselCardBoot53 = "/images/models/ui/carousel/card-boot-53.png";
-const carouselCardBoot30 = "/images/models/ui/carousel/card-boot-30.png";
-const carouselCardBoot0 = "/images/models/ui/carousel/card-boot-0.png";
-const carouselCardBootNeg36 = "/images/models/ui/carousel/card-boot-neg36.png";
-const carouselCardBootNeg54 = "/images/models/ui/carousel/card-boot-neg54.png";
+const carouselCardBoot53 = "/images/models/views/models/2sk/oliva/1.png";
+const carouselCardBoot30 = "/images/models/views/models/2sk/oliva/6.png";
+const carouselCardBoot0 = "/images/models/views/models/2sk/oliva/3.png";
+const carouselCardBootNeg36 = "/images/models/views/models/2sk/oliva/4.png";
+const carouselCardBootNeg54 = "/images/models/views/models/2sk/oliva/2.png";
 const backgroundShape = "/images/models/ui/background-shape.png";
 const metricSideImage = "/images/models/ui/metric-side-image.png";
 
@@ -34,10 +34,10 @@ const colorViewImages = {
   ],
   oliva: [
     "/images/models/views/models/2sk/oliva/1.png",
-    "/images/models/views/models/2sk/oliva/2.png",
+    "/images/models/views/models/2sk/oliva/6.png",
     "/images/models/views/models/2sk/oliva/3.png",
     "/images/models/views/models/2sk/oliva/4.png",
-    "/images/models/views/models/2sk/oliva/5.png",
+    "/images/models/views/models/2sk/oliva/2.png",
   ],
 } as const;
 
@@ -47,9 +47,9 @@ const views = [
   {
     title: "ВНЕШНИЙ МАТЕРИАЛ",
     description:
-      "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина, сформированное автоматически с помощью нейросети. Копировать текст.",
+      "Верх выполнен из натурального нубука с гидрофобным покрытием в сочетании с износостойкими текстильными вставками Cordura 1000D. Такая комбинация повышает ресурс пары, снижает вес и сохраняет стабильный комфорт в ежедневной эксплуатации.",
     image: mainBootSide,
-    callout: { title: "О материале", text: "и носке ботинка" },
+    callout: { title: "О материале", text: "Нубук + Cordura 1000D" },
     calloutStyle: {
       w: 260,
       h: 109,
@@ -58,9 +58,10 @@ const views = [
       textOpacity: 0.4,
       notch: { w: 58, h: 58, x: 101, y: -29, color: "#8B8B8B" },
     },
-    metricTop: { value: "28", title: "преимущ.", line1: "в 2 строки", line2: "описание" },
-    metricSide: { value: "10", line1: "цифра", line2: "в 2 строки" },
+    metricTop: { value: "12", title: "кН", line1: "НАГРУЗКА", line2: "НА ПРОКОЛ" },
+    metricSide: { value: "10", line1: "СЛОЁВ", line2: "ЗАЩИТЫ" },
     glue: "Написать о проклейке",
+    glueStyle: { w: 180, h: 34, textSize: 12 },
     showGlue: false,
     glueVariant: "pill",
     bootBox: { x: 460, y: 351, w: 722, h: 565 },
@@ -76,18 +77,17 @@ const views = [
   {
     title: "НОСОК БОТИНКА",
     description:
-      "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
+      "Носовая часть усилена композитным подноском, который снижает риск травмы пальцев без утяжеления пары. Конструкция рассчитана на рабочие и полевые нагрузки, сохраняя баланс защиты и комфорта.",
     image: mainBootFront,
-    callout: { title: "Твердый носок", text: "Носок и его характеристика" },
+    callout: { title: "Композитный носок", text: "Защита без лишнего веса" },
     calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
-    metricTop: { value: "30", title: "защита", line1: "усиленный", line2: "каркас" },
-    metricSide: { value: "12", line1: "мм", line2: "усиление" },
-    glue: "Написать о проклейке",
+    glue: "Тройные швы и армированные нити усиливают ключевые зоны сгиба.",
+    glueStyle: { w: 250, h: 46, textSize: 14 },
     showMetrics: false,
     glueVariant: "pill",
     bootBox: { x: 684, y: 232, w: 273, h: 564 },
     bootPose: { rotate: 0, x: 10, y: 40, scale: 1.75 },
-    olivaPose: { rotate: 0, x: 25, y: 70, scale: 1.85 },
+    olivaPose: { rotate: 0, x: 25, y: 10, scale: 2 },
     anchors: {
       calloutCard: { x: 926, y: 737 },
       calloutDot: { x: -20, y: 34 },
@@ -98,35 +98,35 @@ const views = [
   {
     title: "ПОДОШВА БОТИНКА",
     description:
-      "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
+      "Гибридная подошва EVA с износостойкой резиновой накладкой обеспечивает амортизацию, сцепление и лёгкость. Антипрокольная вставка из кевлара K-29 выдерживает нагрузку свыше 1265Н и защищает от проколов.",
     image: mainBootTop,
-    callout: { title: "О подошве", text: "И описание фишки в две строки" },
-    calloutStyle: { w: 303, h: 128, titleSize: 36, textSize: 18 },
-    metricTop: { value: "24", title: "петли", line1: "равномерная", line2: "утяжка" },
-    metricSide: { value: "08", line1: "точек", line2: "фиксации" },
-    glue: "И описание фишки в две строки",
+    callout: { title: "Гибридная подошва", text: "" },
+    calloutStyle: { w: 210, h: 120, titleSize: 30, textSize: 18 },
+    glueStyle: { w: 300, h: 108, textSize: 30 },
+    glue: "Антипрокольная вставка.",
     glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 565, y: 105, w: 555.071, h: 689.873 },
     bootPose: { rotate: -10, x: 60, y: 20, scale: 1.55 },
     olivaPose: { rotate: -5, x: 60, y: -10, scale: 1.55 },
     anchors: {
-      calloutCard: { x: 1013, y: 540 },
+      calloutCard: { x: 983, y: 500 },
       calloutDot: { x: 35, y: -15 },
-      glueBubble: { x: 486, y: 708 },
-      glueDot: { x: 661, y: 712 },
+      glueBubble: { x: 400, y: 735 },
+      glueDot: { x: 681, y: 722 },
     },
   },
   {
     title: "ВНУТРЕННИЙ МАТЕРИАЛ",
     description:
-      "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
+      "Внутри используется мембранный чулок VELTEX с герметизацией швов. Он снижает риск попадания влаги и помогает отводить избыточное тепло, сохраняя комфорт при активной эксплуатации.",
     image: mainBootTilt,
-    callout: { title: "Твердый носок", text: "Носок и его характеристика" },
+    callout: { title: "Мембрана VELTEX", text: "Герметизация швов" },
     calloutStyle: { w: 232.811, h: 118, titleSize: 18, textSize: 14 },
-    metricTop: { value: "15", title: "протектор", line1: "глубокий", line2: "зацеп" },
-    metricSide: { value: "05", line1: "слоев", line2: "подошвы" },
-    glue: "Написать о проклейке",
+    metricTop: { value: "35", title: "°C", line1: "РАБОЧИЙ", line2: "ДИАПАЗОН" },
+    metricSide: { value: "15", line1: "ОТ -15°C", line2: "СТАРТ" },
+    glue: "Швы мембраны проклеены для стабильной защиты в типовых сценариях.",
+    glueStyle: { w: 260, h: 46, textSize: 14 },
     glueVariant: "pill",
     showMetrics: false,
     bootBox: { x: 708, y: 116, w: 247, h: 692 },
@@ -137,8 +137,8 @@ const views = [
       y: 170,
       w: 128,
       h: 227,
-      topLabel: "50°C",
-      bottomLabel: "-20°C",
+      topLabel: "+20°C",
+      bottomLabel: "-15°C",
       topLabelPos: { x: 1009, y: 131 },
       bottomLabelPos: { x: 1009, y: 409 },
       dot: { x: 913, y: 370 },
@@ -153,18 +153,19 @@ const views = [
   {
     title: "ЗАДНЯЯ ЧАСТЬ",
     description:
-      "Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина",
+      "Задняя зона отвечает за фиксацию пятки и стабильность шага на неровном покрытии. Усиленный каркас и анатомическая колодка под полноту 8 помогают снизить утомляемость при длительной ходьбе.",
     image: mainBootBack,
-    callout: { title: "О заднике", text: "И описание фишки в две строки" },
+    callout: { title: "Фиксация пятки", text: "Ключевые узлы усилены тройными швами и армированными нитями." },
     calloutStyle: { w: 241, h: 152, titleSize: 22, textSize: 15 },
-    metricTop: { value: "18", title: "стабил.", line1: "жесткая", line2: "пятка" },
-    metricSide: { value: "06", line1: "зон", line2: "поддержки" },
-    glue: "Написать о проклейке",
+    metricTop: { value: "14", title: "ДН", line1: "СРОК", line2: "АКТИВАЦИИ" },
+    metricSide: { value: "08", line1: "FIT", line2: "ПОЛНОТА" },
+    glue: "Стабильный шаг",
+    glueStyle: { w: 180, h: 34, textSize: 14 },
     glueVariant: "pill",
     showMetrics: false,
     bootBox: { x: 677, y: 138, w: 311, h: 675 },
     bootPose: { rotate: 0, x: 0, y: 30, scale: 1.7 },
-    olivaPose: { rotate: 0, x: 0, y: 30, scale: 1.65 },
+    olivaPose: { rotate: 0, x: 0, y: 90, scale: 1.65 },
     anchors: {
       calloutCard: { x: 536, y: 460 },
       calloutDot: { x: 175, y: 4 },
@@ -272,7 +273,7 @@ const MOBILE_PLATES_BY_VIEW = [
     secondaryCallout: MOBILE_PLATES.callout,
     secondaryCalloutDot: MOBILE_PLATES.calloutDot,
     sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { left: -10, top: 706, width: 179, height: 34 },
+    gluePill: { left: -28, top: 694, width: 232, height: 44 },
     glueDot: { x: 172, y: 3 },
   },
   {
@@ -357,8 +358,8 @@ const mobileCarouselMarkerAngles = mobileCarouselCards.reduce<number[]>((acc, it
 export default function ModelsPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [transitionTick, setTransitionTick] = useState(0);
-  const [colorVariant, setColorVariant] = useState<ColorVariant>("black");
-  const [displayColorVariant, setDisplayColorVariant] = useState<ColorVariant>("black");
+  const [colorVariant, setColorVariant] = useState<ColorVariant>("oliva");
+  const [displayColorVariant, setDisplayColorVariant] = useState<ColorVariant>("oliva");
   const [bootColorOpacity, setBootColorOpacity] = useState(1);
   const [mobileBootShiftX, setMobileBootShiftX] = useState(0);
   const [mobileBootShiftTransition, setMobileBootShiftTransition] = useState(false);
@@ -389,6 +390,14 @@ export default function ModelsPage() {
       : null;
   const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
   const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
+  const currentGlueStyle =
+    "glueStyle" in currentView
+      ? currentView.glueStyle
+      : {
+          w: currentView.glueVariant === "card" ? currentView.calloutStyle.w : 180,
+          h: currentView.glueVariant === "card" ? currentView.calloutStyle.h : 34,
+          textSize: currentView.glueVariant === "card" ? currentView.calloutStyle.titleSize : 12,
+        };
   const isThermalCallout = currentView.title === "ВНУТРЕННИЙ МАТЕРИАЛ";
   const calloutDotPosition = isThermalCallout
     ? {
@@ -630,11 +639,11 @@ export default function ModelsPage() {
               </p>
 
               <Link
-                href="/where-to-buy"
+                href="/models"
                 className="absolute left-0 top-[332px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
                 style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
               >
-                Купить
+                Подробнее
               </Link>
             </div>
 
@@ -727,7 +736,6 @@ export default function ModelsPage() {
                     <span className="size-[10px] rounded-full bg-white" />
                   </span>
                   <p className="pt-8 text-center text-[72px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
-                  <p className="pt-4 text-center text-[40px] leading-[1] tracking-[0.08em] text-[#111]/20">...</p>
                   <p className="-mt-1 text-center text-[24px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line1}</p>
                   <p className="text-center text-[24px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line2}</p>
                   <div className="absolute left-[10px] top-[210px] h-[94px] w-[152px] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
@@ -895,17 +903,24 @@ export default function ModelsPage() {
                 <div
                   className={`absolute z-20 bg-white text-[#111] shadow-[0_20px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ${
                     currentView.glueVariant === "card"
-                      ? "h-[152px] w-[241px] rounded-[24px] px-8 py-7 text-left"
-                      : "h-[34px] w-[180px] rounded-full px-5 py-2 text-center text-xs font-medium"
+                      ? "rounded-[22px] p-6"
+                      : "flex items-center justify-center rounded-full px-6 py-3 text-center font-medium leading-[1.1]"
                   }`}
-                  style={{ left: currentView.anchors.glueBubble.x, top: currentView.anchors.glueBubble.y }}
+                  style={{
+                    left: currentView.anchors.glueBubble.x,
+                    top: currentView.anchors.glueBubble.y,
+                    width: currentGlueStyle.w,
+                    height: currentGlueStyle.h,
+                    fontSize: currentGlueStyle.textSize,
+                  }}
                 >
                   {currentView.glueVariant === "card" ? (
-                    <>
-                      <p className="text-[22px] font-bold leading-[1.1]">О подошве</p>
-                      <p className="mt-2 text-[15px] leading-[1.1] text-[#111]/70">И описание фишки</p>
-                      <p className="text-[15px] leading-[1.1] text-[#111]/70">в две строки</p>
-                    </>
+                    <p
+                      className="leading-[1.08] tracking-[-0.02em] font-bold text-[#111]"
+                      style={{ fontSize: currentGlueStyle.textSize }}
+                    >
+                      {currentView.glue}
+                    </p>
                   ) : (
                     currentView.glue
                   )}
@@ -922,17 +937,20 @@ export default function ModelsPage() {
               </>
             )}
 
-            <div className="absolute z-20 flex items-center gap-4" style={{ left: "clamp(40px, 6.1vw, 102px)", top: "clamp(780px, 87.6vh, 897px)" }}>
-              <button
-                type="button"
-                onClick={() => setColorVariant("black")}
-                aria-label="Показать черную модель"
-                className={`h-[80px] w-[81px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
-                  colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-50"
-                }`}
-              >
-                <img src={thumbA} alt="" className="h-full w-full object-contain" />
-              </button>
+            {/*<div className="absolute z-20 flex items-center gap-4" style={{ left: "clamp(40px, 6.1vw, 102px)", top: "clamp(780px, 87.6vh, 897px)" }}>
+               Временно отключили переключение на черный. Блок оставлен для быстрого возврата.
+              {false && (
+                <button
+                  type="button"
+                  onClick={() => setColorVariant("black")}
+                  aria-label="Показать черную модель"
+                  className={`h-[80px] w-[81px] overflow-hidden rounded-[8px] border bg-white p-2 transition ${
+                    colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-50"
+                  }`}
+                >
+                  <img src={thumbA} alt="" className="h-full w-full object-contain" />
+                </button>
+              )}
               <button
                 type="button"
                 onClick={() => setColorVariant("oliva")}
@@ -943,7 +961,7 @@ export default function ModelsPage() {
               >
                 <img src={thumbB} alt="" className="h-full w-full object-contain" />
               </button>
-            </div>
+            </div>*/}
 
             <div className="absolute z-20" style={{ left: "clamp(1000px, 84.7vw, 1414px)", top: "clamp(170px, 23.5vh, 241px)" }}>
               <div
@@ -1194,16 +1212,19 @@ export default function ModelsPage() {
           </div>
 
           <div className="absolute right-[10px] top-[30px] z-20 flex gap-2">
-            <button
-              type="button"
-              onClick={() => setColorVariant("black")}
-              aria-label="Показать черную модель"
-              className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${
-                colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-45"
-              }`}
-            >
-              <img src={thumbA} alt="" className="h-full w-full object-contain" />
-            </button>
+            {/* Временно отключили переключение на черный. Блок оставлен для быстрого возврата. */}
+            {false && (
+              <button
+                type="button"
+                onClick={() => setColorVariant("black")}
+                aria-label="Показать черную модель"
+                className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${
+                  colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-45"
+                }`}
+              >
+                <img src={thumbA} alt="" className="h-full w-full object-contain" />
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setColorVariant("oliva")}
@@ -1421,7 +1442,7 @@ export default function ModelsPage() {
                   height: currentMobilePlates.gluePill.height,
                 }}
               >
-                <p className="pt-[10px] text-center text-[12px] leading-none tracking-[-0.01em] text-[#111]">{currentView.glue}</p>
+                <p className="pt-[12px] text-center text-[13px] leading-[1.05] tracking-[-0.01em] text-[#111]">{currentView.glue}</p>
               </div>
               <span
                 className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"

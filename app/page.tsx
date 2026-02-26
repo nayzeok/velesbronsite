@@ -82,7 +82,7 @@ const MAIN_MENU_ITEMS = [
   { label: "Модельный ряд", href: "/models" },
   { label: "Где купить", href: "/where-to-buy" },
   { label: "Медиа", href: "/#media" },
-  { label: "Контакты", href: "/#contacts" },
+  { label: "Контакты", href: "/contacts" },
 ] as const;
 
 export default function Home() {

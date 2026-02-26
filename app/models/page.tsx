@@ -16,9 +16,19 @@ const backgroundShape = "/images/models/ui/background-shape.png";
 type ColorVariant = "black" | "oliva";
 type ModelKey = "high" | "low";
 
-const MODEL_OPTIONS: { key: ModelKey; label: string }[] = [
-  { key: "high", label: "Высокая" },
-  { key: "low", label: "Низкая" },
+const MODEL_OPTIONS: { key: ModelKey; label: string; description: string }[] = [
+  {
+    key: "high",
+    label: "Высокая",
+    description:
+      "Высокая модель обеспечивает усиленную фиксацию голеностопа и стабильность шага на смешанных покрытиях. Подходит для активной эксплуатации в городе, на объекте и в полевых условиях.",
+  },
+  {
+    key: "low",
+    label: "Низкая",
+    description:
+      "Низкая модель легче по ощущениям и дает больше свободы движения при длительной носке. Оптимальный выбор для городского ритма, маршрутов с высокой подвижностью и повседневной нагрузки.",
+  },
 ];
 
 const MODEL_IMAGES: Record<ModelKey, { black: string[]; oliva?: string[] }> = {
@@ -67,7 +77,7 @@ const MAIN_MENU_ITEMS = [
   { label: "Модельный ряд", href: "/models" },
   { label: "Где купить", href: "/where-to-buy" },
   { label: "Медиа", href: "/#media" },
-  { label: "Контакты", href: "/#contacts" },
+  { label: "Контакты", href: "/contacts" },
 ] as const;
 
 export default function BuyPage() {
@@ -77,10 +87,8 @@ export default function BuyPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
   const [isSizeGridVisible, setIsSizeGridVisible] = useState(false);
-  const [mobileScale, setMobileScale] = useState(1);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
   const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
-  const mobileSceneRef = useRef<HTMLDivElement | null>(null);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
   const mobileRailRef = useRef<HTMLDivElement | null>(null);
   const sizeGridCloseTimerRef = useRef<number | null>(null);
@@ -96,21 +104,6 @@ export default function BuyPage() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveViewIndex(0);
   }, [activeModelKey, colorVariant]);
-
-  useEffect(() => {
-    const node = mobileSceneRef.current;
-    if (!node) return;
-
-    const updateScale = () => {
-      const width = node.clientWidth || MOBILE_DESIGN_WIDTH;
-      setMobileScale(width / MOBILE_DESIGN_WIDTH);
-    };
-
-    updateScale();
-    const observer = new ResizeObserver(updateScale);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (!isSizeGridOpen && !isMobileMenuOpen) return;
@@ -215,7 +208,7 @@ export default function BuyPage() {
                   color: "#111",
                 }}
               >
-                Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина, сформированное автоматически с помощью нейросети.
+                {selectedModel.description}
               </p>
             </div>
 
@@ -487,17 +480,21 @@ export default function BuyPage() {
       {/* ── MOBILE ── */}
       <section className="min-[1200px]:hidden">
         <div
-          ref={mobileSceneRef}
-          className="relative mx-auto w-full max-w-[741px] overflow-hidden"
-          style={{ height: `${MOBILE_DESIGN_HEIGHT * mobileScale + MOBILE_SCROLL_EXTRA}px` }}
+          className="relative w-full overflow-hidden bg-white"
+          style={{
+            ["--mobile-scale" as string]: `min(1, calc(100vw / ${MOBILE_DESIGN_WIDTH}px))`,
+            height: `calc(${MOBILE_DESIGN_HEIGHT}px * var(--mobile-scale) + ${MOBILE_SCROLL_EXTRA}px)`,
+          }}
         >
           <div
-            className="absolute left-0 top-0 h-[1716px] w-[741px] origin-top-left bg-[#f4f4f4]"
-            style={{ transform: `scale(${mobileScale})` }}
+            className="absolute left-0 top-0 h-[1716px] w-[741px] origin-top-left bg-white"
+            style={{ transform: "scale(var(--mobile-scale))" }}
           >
-            <div className="pointer-events-none absolute left-0 top-0 h-[1716px] w-[741px]">
-              {Array.from({ length: 14 }).map((_, i) => (
-                <div key={i} className="absolute inset-y-0 w-[46.357px]" style={{ left: `${i * 46.357}px` }}>
+            <div className="pointer-events-none absolute left-[-1px] top-0 h-[1716px] w-[743px]">
+              {Array.from({ length: 10 }).map((_, offset) => {
+                const i = offset + 2;
+                return (
+                <div key={i} className="absolute inset-y-0" style={{ left: `${(i * 100) / 14}%`, width: `${100 / 14}%` }}>
                   <div
                     className="absolute inset-0"
                     style={{
@@ -516,77 +513,10 @@ export default function BuyPage() {
                     }}
                   />
                 </div>
-              ))}
+                );
+              })}
             </div>
-
-            <div className="absolute right-[16px] top-[16px] z-30">
-              <button
-                type="button"
-                aria-label="Меню"
-                aria-expanded={isMobileMenuOpen}
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="flex size-[64px] items-center justify-center rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-white shadow-[0_12px_30px_rgba(252,100,7,0.34)]"
-              >
-                <svg className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M4 7h16M4 12h16M4 17h16" />
-                </svg>
-              </button>
-            </div>
-            <div
-              className={`absolute inset-0 z-40 bg-black/55 backdrop-blur-[1px] transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
-              onClick={() => setIsMobileMenuOpen(false)}
-            />
-            <aside
-              className={`absolute right-0 top-0 z-50 h-full w-[304px] border-l border-white/15 bg-[linear-gradient(180deg,rgba(30,30,30,0.98)_0%,rgba(18,18,18,0.96)_100%)] shadow-[-20px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-transform duration-300 ease-out ${
-                isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-              }`}
-              aria-hidden={!isMobileMenuOpen}
-            >
-              <div className="flex items-center justify-between px-5 pb-4 pt-5">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-white/45">Меню</p>
-                  <p className="mt-0.5 text-[21px] text-white" style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}>
-                    VELESBRON
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  aria-label="Закрыть меню"
-                  className="flex size-9 items-center justify-center rounded-[10px] bg-white/10 text-white transition-colors hover:bg-white/20"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                    <path d="M6 6l12 12M18 6L6 18" />
-                  </svg>
-                </button>
-              </div>
-              <div className="mx-5 h-px bg-white/10" />
-              <nav className="px-4 py-3">
-                {MAIN_MENU_ITEMS.map((item, index) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className={`mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 text-[22px] transition-all duration-300 ${
-                      isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"
-                    } ${
-                      item.href === "/models" ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]" : "text-white/92 hover:bg-white/10"
-                    }`}
-                    style={{
-                      fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif",
-                      fontWeight: 500,
-                      transitionDelay: isMobileMenuOpen ? `${100 + index * 55}ms` : "0ms",
-                    }}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <span className="flex items-center gap-2.5">
-                      <span className={`size-2 rounded-full ${item.href === "/models" ? "bg-white/90" : "bg-white/35"}`} />
-                      {item.label}
-                    </span>
-                    <span className={`text-base ${item.href === "/models" ? "text-white/95" : "text-white/45"}`}>›</span>
-                  </a>
-                ))}
-              </nav>
-            </aside>
+            <div className="pointer-events-none absolute right-0 top-0 h-[1716px] w-[10px] bg-white" />
 
             <div className="absolute left-[21px] top-[90px] flex h-[8px] w-[34px] items-center justify-between">
               <span className="size-[8px] rounded-full bg-[#111]/35" />
@@ -616,7 +546,7 @@ export default function BuyPage() {
                 color: "#111",
               }}
             >
-              Подробное описание товара с инструкциями и о том как его можно использовать. Это рыба-текст для портала или интернет-магазина, сформированное автоматически с помощью нейросети. Копировать текст.
+              {selectedModel.description}
             </p>
 
             <button
@@ -794,6 +724,75 @@ export default function BuyPage() {
               </button>
             </div>
           </div>
+
+          <div className="fixed right-4 top-4 z-[70]">
+            <button
+              type="button"
+              aria-label="Меню"
+              aria-expanded={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="flex size-10 items-center justify-center rounded-[10px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-white"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              </svg>
+            </button>
+          </div>
+          <div
+            className={`fixed inset-0 z-[80] bg-black/55 backdrop-blur-[1px] transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <aside
+            className={`fixed right-0 top-0 z-[90] h-dvh w-[304px] border-l border-white/15 bg-[linear-gradient(180deg,rgba(30,30,30,0.98)_0%,rgba(18,18,18,0.96)_100%)] shadow-[-20px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-transform duration-300 ease-out ${
+              isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+            aria-hidden={!isMobileMenuOpen}
+          >
+            <div className="flex items-center justify-between px-5 pb-4 pt-5">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-white/45">Меню</p>
+                <p className="mt-0.5 text-[21px] text-white" style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}>
+                  VELESBRON
+                </p>
+              </div>
+              <button
+                type="button"
+                aria-label="Закрыть меню"
+                className="flex size-9 items-center justify-center rounded-[10px] bg-white/10 text-white transition-colors hover:bg-white/20"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+            <div className="mx-5 h-px bg-white/10" />
+            <nav className="px-4 py-3">
+              {MAIN_MENU_ITEMS.map((item, index) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={`mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 text-[22px] transition-all duration-300 ${
+                    isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"
+                  } ${
+                    item.href === "/models" ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]" : "text-white/92 hover:bg-white/10"
+                  }`}
+                  style={{
+                    fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif",
+                    fontWeight: 500,
+                    transitionDelay: isMobileMenuOpen ? `${100 + index * 55}ms` : "0ms",
+                  }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <span className="flex items-center gap-2.5">
+                    <span className={`size-2 rounded-full ${item.href === "/models" ? "bg-white/90" : "bg-white/35"}`} />
+                    {item.label}
+                  </span>
+                  <span className={`text-base ${item.href === "/models" ? "text-white/95" : "text-white/45"}`}>›</span>
+                </a>
+              ))}
+            </nav>
+          </aside>
         </div>
       </section>
 

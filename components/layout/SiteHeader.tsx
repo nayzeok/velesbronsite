@@ -21,7 +21,7 @@ const HEADER_MENU_ITEMS: { key: MenuKey; label: string; href: string }[] = [
   { key: "models", label: "Модельный ряд", href: "/models" },
   { key: "whereToBuy", label: "Где купить", href: "/where-to-buy" },
   { key: "media", label: "Медиа", href: "/#media" },
-  { key: "contacts", label: "Контакты", href: "/#contacts" },
+  { key: "contacts", label: "Контакты", href: "/contacts" },
 ];
 
 export default function SiteHeader({ activeItem, tone = "dark", className, style }: SiteHeaderProps) {
@@ -47,7 +47,8 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
             (item.key === "brand" && pathname?.startsWith("/brand")) ||
             (item.key === "advantages" && pathname?.startsWith("/advantages")) ||
             (item.key === "models" && pathname?.startsWith("/models")) ||
-            (item.key === "whereToBuy" && pathname?.startsWith("/where-to-buy"));
+            (item.key === "whereToBuy" && pathname?.startsWith("/where-to-buy")) ||
+            (item.key === "contacts" && pathname?.startsWith("/contacts"));
           const isActive = item.key === activeItem || isActiveByPath;
           if (isActive) {
             return (
