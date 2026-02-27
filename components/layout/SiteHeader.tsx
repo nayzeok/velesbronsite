@@ -30,7 +30,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
 
   return (
     <header
-      className={className ?? "absolute top-0 z-20 h-[96px] pt-[18px]"}
+      className={`hidden min-[1200px]:block ${className ?? "absolute top-0 z-20 h-[96px] pt-[18px]"}`}
       style={
         style ?? {
           left: 0,
@@ -55,7 +55,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               <span
                 key={item.key}
                 className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-xs font-medium text-white"
-                style={{ fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif" }}
+                style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
               >
                 {item.label}
               </span>
@@ -67,7 +67,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               key={item.key}
               href={item.href}
               className={`text-xs font-medium ${inactiveTextClass}`}
-              style={{ fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif" }}
+              style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
             >
               {item.label}
             </Link>
@@ -75,15 +75,15 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
         })}
       </nav>
 
-      <div className="absolute left-1/2 top-0 h-[86px] w-[175px] -translate-x-1/2 rounded-[10px] bg-white">
+      <div className="absolute left-1/2 top-0 h-[166px] w-[345px] -translate-x-1/2 rounded-[10px]">
         <img
-          src="/images/pages/header-logo.png"
+          src="/images/pages/velesbron_logo_countr.png"
           alt="Velesbron"
-          className="absolute left-1/2 top-[13px] h-[55px] w-[167px] -translate-x-1/2 object-contain"
+          className="absolute left-1/2 top-[13px] h-[105px] w-[327px] -translate-x-1/2 object-contain"
         />
       </div>
 
-      <div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "clamp(24px, 5.7vw, 96px)" }}>
+      {/*<div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "clamp(24px, 5.7vw, 96px)" }}>
         <button className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#7f766f] to-[#635b50] text-white">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="9" />
@@ -103,7 +103,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
             <path d="M5.5 19a6.5 6.5 0 0 1 13 0" />
           </svg>
         </button>
-      </div>
+      </div>*/}
     </header>
   );
 }

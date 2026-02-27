@@ -33,7 +33,7 @@ const colorViewImages = {
     "/images/models/views/models/2sk/black/5.png",
   ],
   oliva: [
-    "/images/models/views/models/2sk/oliva/1.png",
+    "/images/models/views/models/2sk/oliva/7.png",
     "/images/models/views/models/2sk/oliva/6.png",
     "/images/models/views/models/2sk/oliva/3.png",
     "/images/models/views/models/2sk/oliva/4.png",
@@ -47,52 +47,53 @@ const views = [
   {
     title: "ВНЕШНИЙ МАТЕРИАЛ",
     description:
-      "Верх выполнен из натурального нубука с гидрофобным покрытием в сочетании с износостойкими текстильными вставками Cordura 1000D. Такая комбинация повышает ресурс пары, снижает вес и сохраняет стабильный комфорт в ежедневной эксплуатации.",
+      "Натуральный нубук и износостойкие вставки из Cordura 1000D выдерживают повышенную нагрузку. Гидрофобное покрытие снижает впитывание влаги и упрощает уход.",
     image: mainBootSide,
-    callout: { title: "О материале", text: "Нубук + Cordura 1000D" },
+    callout: { title: "Натуральный нубук", text: "" },
     calloutStyle: {
       w: 260,
-      h: 109,
+      h: 80,
       titleSize: 22,
       textSize: 22,
       textOpacity: 0.4,
-      notch: { w: 58, h: 58, x: 101, y: -29, color: "#8B8B8B" },
+      notch: { w: 58, h: 58, x: 220, y: -29, color: "#8B8B8B" },
     },
     metricTop: { value: "12", title: "кН", line1: "НАГРУЗКА", line2: "НА ПРОКОЛ" },
     metricSide: { value: "10", line1: "СЛОЁВ", line2: "ЗАЩИТЫ" },
-    glue: "Написать о проклейке",
-    glueStyle: { w: 180, h: 34, textSize: 12 },
-    showGlue: false,
-    glueVariant: "pill",
+    glue: "Гидрофобное покрытие",
+    glueStyle: { w: 334, h: 80, textSize: 24 },
+    showGlue: true,
+    showMetrics: false,
+    glueVariant: "card",
     bootBox: { x: 460, y: 351, w: 722, h: 565 },
-    bootPose: { rotate: 0, x: 0, y: -20, scale: 1.60 },
-    olivaPose: { rotate: 0, x: 0, y: -20, scale: 1.60 },
+    bootPose: { rotate: 0, x: 0, y: 0, scale: 1.60 },
+    olivaPose: { rotate: 0, x: 0, y: -75, scale: 1.50 },
     anchors: {
-      calloutCard: { x: 398, y: 730 },
-      calloutDot: { x: 116, y: -14 },
-      glueBubble: { x: 516, y: 740 },
-      glueDot: { x: 688, y: 740 },
+      calloutCard: { x: 348, y: 600 },
+      calloutDot: { x: 230, y: -20 },
+      glueBubble: { x: 970, y: 570 },
+      glueDot: { x: -14, y: 50 },
     },
   },
   {
-    title: "НОСОК БОТИНКА",
+    title: "Защита и фиксация стопы",
     description:
-      "Носовая часть усилена композитным подноском, который снижает риск травмы пальцев без утяжеления пары. Конструкция рассчитана на рабочие и полевые нагрузки, сохраняя баланс защиты и комфорта.",
+      "Защита и фиксация стопы: носовая часть усилена композитным подноском, а система шнуровки Quick-Lock помогает быстро и точно зафиксировать посадку под нагрузку.",
     image: mainBootFront,
-    callout: { title: "Композитный носок", text: "Защита без лишнего веса" },
+    callout: { title: "Композитный подносок", text: "" },
     calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
-    glue: "Тройные швы и армированные нити усиливают ключевые зоны сгиба.",
-    glueStyle: { w: 250, h: 46, textSize: 14 },
+    glue: "Система Quick-Lock",
+    glueStyle: { w: 260, h: 80, textSize: 22 },
     showMetrics: false,
-    glueVariant: "pill",
+    glueVariant: "card",
     bootBox: { x: 684, y: 232, w: 273, h: 564 },
     bootPose: { rotate: 0, x: 10, y: 40, scale: 1.75 },
     olivaPose: { rotate: 0, x: 25, y: 10, scale: 2 },
     anchors: {
-      calloutCard: { x: 926, y: 737 },
+      calloutCard: { x: 1066, y: 717 },
       calloutDot: { x: -20, y: 34 },
-      glueBubble: { x: 516, y: 740 },
-      glueDot: { x: 688, y: 740 },
+      glueBubble: { x: 856, y: 340 },
+      glueDot: { x: -20, y: 50 },
     },
   },
   {
@@ -101,33 +102,33 @@ const views = [
       "Гибридная подошва EVA с износостойкой резиновой накладкой обеспечивает амортизацию, сцепление и лёгкость. Антипрокольная вставка из кевлара K-29 выдерживает нагрузку свыше 1265Н и защищает от проколов.",
     image: mainBootTop,
     callout: { title: "Гибридная подошва", text: "" },
-    calloutStyle: { w: 210, h: 120, titleSize: 30, textSize: 18 },
-    glueStyle: { w: 300, h: 108, textSize: 30 },
+    calloutStyle: { w: 210, h: 120, titleSize: 22, textSize: 22 },
+    glueStyle: { w: 300, h: 108, textSize: 22 },
     glue: "Антипрокольная вставка.",
     glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 565, y: 105, w: 555.071, h: 689.873 },
     bootPose: { rotate: -10, x: 60, y: 20, scale: 1.55 },
-    olivaPose: { rotate: -5, x: 60, y: -10, scale: 1.55 },
+    olivaPose: { rotate: -5, x: 60, y: -10, scale: 1.35 },
     anchors: {
       calloutCard: { x: 983, y: 500 },
       calloutDot: { x: 35, y: -15 },
-      glueBubble: { x: 400, y: 735 },
-      glueDot: { x: 681, y: 722 },
+      glueBubble: { x: 420, y: 735 },
+      glueDot: { x: 281, y: -13 },
     },
   },
   {
-    title: "ВНУТРЕННИЙ МАТЕРИАЛ",
+    title: "Комфорт и внутренняя архитектура",
     description:
-      "Внутри используется мембранный чулок VELTEX с герметизацией швов. Он снижает риск попадания влаги и помогает отводить избыточное тепло, сохраняя комфорт при активной эксплуатации.",
+      "Мембрана VELTEX™ выполнена \"чулком\", проклеена по швам, защищает от влаги и сохраняет оптимальный микроклимат. Анатомическая стелька поддерживает стопу и снижает усталость.",
     image: mainBootTilt,
-    callout: { title: "Мембрана VELTEX", text: "Герметизация швов" },
-    calloutStyle: { w: 232.811, h: 118, titleSize: 18, textSize: 14 },
+    callout: { title: "Мембрана VELTEX™", text: "" },
+    calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
     metricTop: { value: "35", title: "°C", line1: "РАБОЧИЙ", line2: "ДИАПАЗОН" },
     metricSide: { value: "15", line1: "ОТ -15°C", line2: "СТАРТ" },
-    glue: "Швы мембраны проклеены для стабильной защиты в типовых сценариях.",
-    glueStyle: { w: 260, h: 46, textSize: 14 },
-    glueVariant: "pill",
+    glue: "Анатомическая стелька",
+    glueStyle: { w: 260, h: 109, textSize: 22 },
+    glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 708, y: 116, w: 247, h: 692 },
     bootPose: { rotate: 0, x: 0, y: 10, scale: 2.55 },
@@ -147,21 +148,21 @@ const views = [
       calloutCard: { x: 904, y: 589 },
       calloutDot: { x: -20, y: 38 },
       glueBubble: { x: 569, y: 698 },
-      glueDot: { x: 741, y: 695 },
+      glueDot: { x: 172, y: -3 },
     },
   },
   {
-    title: "ЗАДНЯЯ ЧАСТЬ",
+    title: "Сборка и прочность конструкции",
     description:
-      "Задняя зона отвечает за фиксацию пятки и стабильность шага на неровном покрытии. Усиленный каркас и анатомическая колодка под полноту 8 помогают снизить утомляемость при длительной ходьбе.",
+      "Узлы усилены тройными швами и армированными лавсановыми нитями. Конструкция рассчитана на многократные сгибы и повышенную нагрузку без расхождения швов.",
     image: mainBootBack,
-    callout: { title: "Фиксация пятки", text: "Ключевые узлы усилены тройными швами и армированными нитями." },
-    calloutStyle: { w: 241, h: 152, titleSize: 22, textSize: 15 },
+    callout: { title: "Тройные швы", text: "" },
+    calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
     metricTop: { value: "14", title: "ДН", line1: "СРОК", line2: "АКТИВАЦИИ" },
     metricSide: { value: "08", line1: "FIT", line2: "ПОЛНОТА" },
-    glue: "Стабильный шаг",
-    glueStyle: { w: 180, h: 34, textSize: 14 },
-    glueVariant: "pill",
+    glue: "Армированные нити",
+    glueStyle: { w: 260, h: 109, textSize: 22 },
+    glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 677, y: 138, w: 311, h: 675 },
     bootPose: { rotate: 0, x: 0, y: 30, scale: 1.7 },
@@ -170,7 +171,7 @@ const views = [
       calloutCard: { x: 536, y: 460 },
       calloutDot: { x: 175, y: 4 },
       glueBubble: { x: 923, y: 726 },
-      glueDot: { x: 898, y: 723 },
+      glueDot: { x: -25, y: -3 },
     },
   },
 ] as const;
@@ -245,10 +246,10 @@ const MOBILE_PLATES = {
 } as const;
 const MOBILE_PLATES_BY_VIEW = [
   {
-    showTopMetric: true,
-    showSideMetric: true,
+    showTopMetric: false,
+    showSideMetric: false,
     showCallout: true,
-    showGluePill: false,
+    showGluePill: true,
     showSecondaryCallout: false,
     topMetric: MOBILE_PLATES.topMetric,
     topMetricDot: MOBILE_PLATES.topMetricDot,
@@ -257,8 +258,8 @@ const MOBILE_PLATES_BY_VIEW = [
     secondaryCallout: MOBILE_PLATES.callout,
     secondaryCalloutDot: MOBILE_PLATES.calloutDot,
     sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: MOBILE_PLATES.gluePill,
-    glueDot: MOBILE_PLATES.glueDot,
+    gluePill: { left: 18, top: 700, width: 224, height: 82 },
+    glueDot: { x: 206, y: 10 },
   },
   {
     showTopMetric: false,
@@ -419,7 +420,7 @@ export default function ModelsPage() {
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center" as const,
-    fontFamily: "Gilroy, sans-serif",
+    fontFamily: "var(--font-roboto-flex), sans-serif",
     fontSize: 22,
     fontStyle: "normal" as const,
     fontWeight: 700,
@@ -624,7 +625,7 @@ export default function ModelsPage() {
                   className="uppercase text-[#5b6a44]"
                   style={{
                     color: "#5B6A44",
-                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                     fontSize: 45,
                     fontStyle: "normal",
                     fontWeight: 700,
@@ -641,7 +642,7 @@ export default function ModelsPage() {
               <Link
                 href="/models"
                 className="absolute left-0 top-[332px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
-                style={{ fontFamily: "Druk Cyr, var(--font-oswald), sans-serif" }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}
               >
                 Подробнее
               </Link>
@@ -701,7 +702,7 @@ export default function ModelsPage() {
               style={{
                 bottom: 130,
                 color: "#AEAEAE",
-                fontFamily: "Druk Cyr, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 600,
                 fontWeight: 500,
                 lineHeight: "108px",
@@ -903,7 +904,7 @@ export default function ModelsPage() {
                 <div
                   className={`absolute z-20 bg-white text-[#111] shadow-[0_20px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ${
                     currentView.glueVariant === "card"
-                      ? "rounded-[22px] p-6"
+                      ? "rounded-[22px] p-6 text-left"
                       : "flex items-center justify-center rounded-full px-6 py-3 text-center font-medium leading-[1.1]"
                   }`}
                   style={{
@@ -915,12 +916,25 @@ export default function ModelsPage() {
                   }}
                 >
                   {currentView.glueVariant === "card" ? (
-                    <p
-                      className="leading-[1.08] tracking-[-0.02em] font-bold text-[#111]"
-                      style={{ fontSize: currentGlueStyle.textSize }}
-                    >
-                      {currentView.glue}
-                    </p>
+                    <>
+                      {(() => {
+                        const glueLines = currentView.glue.split("\n");
+                        const glueTitle = glueLines[0] ?? "";
+                        const glueItems = glueLines.slice(1);
+                        return (
+                          <>
+                            <p className="leading-[1.08] tracking-[-0.02em] font-bold text-[#111]" style={{ fontSize: currentGlueStyle.textSize }}>
+                              {glueTitle}
+                            </p>
+                            {glueItems.map((line) => (
+                              <p key={line} className="mt-1 leading-[1.08] tracking-[-0.02em] text-[#111]/75" style={{ fontSize: Math.max(currentGlueStyle.textSize - 7, 14) }}>
+                                {line}
+                              </p>
+                            ))}
+                          </>
+                        );
+                      })()}
+                    </>
                   ) : (
                     currentView.glue
                   )}
@@ -928,7 +942,10 @@ export default function ModelsPage() {
 
                 <span
                   className="absolute z-20 size-[40px] transition-all duration-500"
-                  style={{ left: currentView.anchors.glueDot.x, top: currentView.anchors.glueDot.y }}
+                  style={{
+                    left: currentView.anchors.glueBubble.x + currentView.anchors.glueDot.x,
+                    top: currentView.anchors.glueBubble.y + currentView.anchors.glueDot.y,
+                  }}
                 >
                   <span className="absolute inset-0 rounded-full bg-white opacity-90 shadow-[0_20px_40px_rgba(0,0,0,0.12)]" />
                   <span className="absolute left-[3px] top-[3px] size-[34px] rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] opacity-95" />
@@ -1193,7 +1210,7 @@ export default function ModelsPage() {
         </div>
       </section>
 
-      <section className="min-[1200px]:hidden">
+      <section className="min-[1200px]:hidden mobile-header-offset">
         <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `${1024 * mobileScale}px` }}>
           <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left bg-[#f4f4f4]" style={{ transform: `scale(${mobileScale})` }}>
           <div className="pointer-events-none absolute inset-y-0 left-0 w-full">
@@ -1248,7 +1265,7 @@ export default function ModelsPage() {
                 className="uppercase text-[#5b6a44]"
                 style={{
                   color: "#5B6A44",
-                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 28,
                   fontStyle: "normal",
                   fontWeight: 700,
@@ -1259,13 +1276,13 @@ export default function ModelsPage() {
                 {currentView.title}
               </h1>
             </div>
-            <p className="ml-[44px] mt-4 max-w-[236px] text-[14px] leading-[1.15] text-[#111]" style={{ fontFamily: "var(--font-gilroy), var(--font-oswald), sans-serif" }}>
+            <p className="ml-[44px] mt-4 max-w-[236px] text-[14px] leading-[1.15] text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}>
               {currentView.description}
             </p>
             <Link
               href="/where-to-buy"
               className="ml-[44px] mt-5 flex h-12 w-[150px] items-center justify-center rounded-[12px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[14px] text-white"
-              style={{ fontFamily: "Gilroy, var(--font-oswald), sans-serif", fontWeight: 500 }}
+              style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 500 }}
             >
               Купить
             </Link>
@@ -1442,7 +1459,21 @@ export default function ModelsPage() {
                   height: currentMobilePlates.gluePill.height,
                 }}
               >
-                <p className="pt-[12px] text-center text-[13px] leading-[1.05] tracking-[-0.01em] text-[#111]">{currentView.glue}</p>
+                {(() => {
+                  const glueLines = currentView.glue.split("\n");
+                  const glueTitle = glueLines[0] ?? "";
+                  const glueItems = glueLines.slice(1);
+                  return (
+                    <div className="px-3 pt-[10px] text-left">
+                      <p className="text-[13px] leading-[1.05] tracking-[-0.01em] font-bold text-[#111]">{glueTitle}</p>
+                      {glueItems.map((line) => (
+                        <p key={line} className="mt-0.5 text-[11px] leading-[1.05] text-[#111]/75">
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  );
+                })()}
               </div>
               <span
                 className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"

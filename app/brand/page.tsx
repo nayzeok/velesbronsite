@@ -78,22 +78,6 @@ const PRODUCT_ARCHITECTURE = [
   },
 ] as const;
 
-const GUARANTEE_STEPS = [
-  "Обращение клиента через Telegram/сайт с описанием, фото/видео и данными сертификата.",
-  "Предварительный анализ и инструкция по отправке пары.",
-  "Отправка обуви клиентом в чистом виде с оригиналом сертификата.",
-  "Диагностика и экспертиза, финальное решение по случаю.",
-  "При подтверждении дефекта — ремонт или комплиментарная замена.",
-  "Обратная отправка за счет бренда. Срок процесса — до 45 дней.",
-] as const;
-
-const GUARANTEE_LIMITS = [
-  "Расширенная пожизненная гарантия действует только при активации сертификата в течение 14 дней.",
-  "Возврат денежных средств по расширенной гарантии не предусмотрен.",
-  "Гарантия предоставляется один раз на одну пару.",
-  "При отсутствии активации действует стандартная гарантия по законодательству РФ.",
-] as const;
-
 const VOICE_RULES = [
   "Спокойно, точно, по делу: факты вместо пафоса.",
   "Сила без агрессии и уважение к человеку в формулировках.",
@@ -132,68 +116,48 @@ export default function BrandPage() {
 
           <SiteHeader />
 
-          <div className="relative mx-auto w-[min(1120px,92vw)] pt-[168px] pb-24">
+          <div className="relative mx-auto w-[min(1120px,92vw)] pb-24 mobile-header-offset min-[1200px]:pt-[168px]">
             <section className="rounded-[28px] bg-white/90 p-8 shadow-[0_30px_70px_rgba(0,0,0,0.1)] backdrop-blur-sm min-[980px]:p-10">
               <h1
                 className="uppercase text-[#111]"
                 style={{
-                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
-                  fontSize: "clamp(52px,5vw,88px)",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: "clamp(42px,5vw,88px)",
                   lineHeight: 1,
                 }}
               >
-                О бренде
+                О VELESBRON
               </h1>
               <p className="mt-3 text-[20px] leading-[1.3] text-[#111]/80">
-                «Ты идёшь — мы держим землю под ногами.»
               </p>
-              <p className="mt-5 max-w-[760px] text-[19px] leading-[1.38] text-[#111]/72">
-                VELESBRON закрепляется в нише треккингово-тактической обуви повышенной надежности отечественной разработки: выше
-                массового сегмента по ресурсу и защите, близко к профессиональному по конструкции и контролю качества, с акцентом на
-                сервисную ответственность.
-              </p>
-            </section>
+              <p className="mt-5 max-w-[1060px] text-[19px] leading-[1.38] text-[#111]/72">
+                VELESBRON — это обувь повышенной надёжности, разработанная в России для реальных условий эксплуатации.
 
-            <section className="mt-8 grid gap-5 min-[980px]:grid-cols-3">
-              {BRAND_BLOCKS.map((block) => (
-                <article
-                  key={block.title}
-                  className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] transition-transform duration-300 hover:-translate-y-1"
-                >
-                  <h2
-                    className="uppercase text-[#111]"
-                    style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 40, lineHeight: 1 }}
-                  >
-                    {block.title}
-                  </h2>
-                  <p className="mt-4 text-[17px] leading-[1.35] text-[#111]/72">{block.text}</p>
-                </article>
-              ))}
+                Бренд появился как ответ на разрыв между массовыми моделями «для вида» и дорогими импортными решениями, не всегда адаптированными под климат, покрытия и особенности стопы.
+
+                Мы изучили лучшие зарубежные конструкции, переосмыслили их и доработали с учётом российских условий. Усилили зоны нагрузки. Скорректировали посадку. Подобрали материалы, которые работают в широком диапазоне температур и сохраняют свойства при активной эксплуатации.
+
+                Каждая пара VELESBRON — это продуманная система защиты и поддержки: износостойкие материалы верха, усиленная сборка, устойчивая подошва, внутренняя мембранная конструкция и элементы дополнительной безопасности. Ничего лишнего. Только то, что действительно работает.
+
+                Мы не обещаем лёгкий путь.
+                Мы создаём обувь, рассчитанную на нагрузку.
+
+                Отдельная часть философии бренда — гарантийные обязательства.
+                Мы изначально закладываем в продукт ресурс и ответственность. Гарантия для нас — не инструмент продаж и не формальность в документах. Это подтверждение уверенности в конструкции и готовности отвечать за результат.
+
+                Если пара требует внимания — мы разбираемся и принимаем решение. Спокойно, по делу, без перекладывания ответственности и без громких заявлений.
+
+                VELESBRON стоит выше массового сегмента по ресурсу и контролю качества, сохраняя главный принцип — устойчивость, защиту и опору в каждом шаге.
+
+                VELESBRON — броня для ваших ног.
+                Ты идёшь — мы держим землю под ногами.
+              </p>
             </section>
 
             <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
               <h2
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
-              >
-                Хронология бренда
-              </h2>
-              <div className="mt-7 grid gap-4 min-[980px]:grid-cols-3">
-                {BRAND_TIMELINE.map((item) => (
-                  <div key={item.year} className="rounded-[18px] border border-[#111]/10 bg-[#f6f6f6] p-5">
-                    <p className="text-[34px] leading-none text-[#f07426]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
-                      {item.year}
-                    </p>
-                    <p className="mt-3 text-[16px] leading-[1.35] text-[#111]/74">{item.text}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
-              <h2
-                className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
               >
                 Миссия и ценности
               </h2>
@@ -204,7 +168,7 @@ export default function BrandPage() {
               <div className="mt-7 grid gap-4 min-[980px]:grid-cols-2">
                 {BRAND_VALUES.map((item) => (
                   <article key={item.title} className="rounded-[18px] border border-[#111]/10 bg-[#f6f6f6] p-5">
-                    <h3 className="text-[30px] leading-none text-[#111]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
+                    <h3 className="text-[30px] leading-none text-[#111]" style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}>
                       {item.title}
                     </h3>
                     <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/72">{item.text}</p>
@@ -216,7 +180,7 @@ export default function BrandPage() {
             <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
               <h2
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
               >
                 Ключевые преимущества
               </h2>
@@ -232,14 +196,14 @@ export default function BrandPage() {
             <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
               <h2
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
               >
                 Архитектура продукта
               </h2>
               <div className="mt-7 grid gap-4 min-[980px]:grid-cols-2">
                 {PRODUCT_ARCHITECTURE.map((item) => (
                   <article key={item.title} className="rounded-[18px] border border-[#111]/10 bg-[#fafafa] p-5">
-                    <h3 className="text-[27px] leading-none text-[#111]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
+                    <h3 className="text-[27px] leading-none text-[#111]" style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}>
                       {item.title}
                     </h3>
                     <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/72">{item.text}</p>
@@ -252,7 +216,7 @@ export default function BrandPage() {
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <h2
                   className="uppercase text-[#111]"
-                  style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
                 >
                   Фото и видео
                 </h2>
@@ -284,7 +248,7 @@ export default function BrandPage() {
                       ) : null}
                     </div>
                     <div className="p-5">
-                      <h3 className="text-[24px] leading-none text-[#111]" style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif" }}>
+                      <h3 className="text-[24px] leading-none text-[#111]" style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}>
                         {item.title}
                       </h3>
                       <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/68">Здесь можно поставить ссылку на медиа-материал или открыть модальное окно.</p>
@@ -294,53 +258,6 @@ export default function BrandPage() {
               </div>
             </section>
 
-            <section className="mt-8 rounded-[28px] bg-[linear-gradient(180deg,#E7813F_0%,#FC6407_100%)] p-7 text-white shadow-[0_30px_70px_rgba(252,100,7,0.28)] min-[980px]:p-10">
-              <h2
-                className="uppercase"
-                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
-              >
-                Гарантия и сервис
-              </h2>
-              <p className="mt-4 max-w-[850px] text-[18px] leading-[1.35] text-white/92">
-                Гарантия VELESBRON — это элемент позиционирования, инструмент доверия и управляемый сервисный процесс. Это не «подарок»,
-                а контракт ответственности.
-              </p>
-              <ol className="mt-6 grid gap-3 text-[15px] leading-[1.35] text-white/95 min-[980px]:grid-cols-2">
-                {GUARANTEE_STEPS.map((item, i) => (
-                  <li key={item} className="rounded-[14px] bg-white/14 px-4 py-3">
-                    <span className="mr-2 font-semibold">{i + 1}.</span>
-                    {item}
-                  </li>
-                ))}
-              </ol>
-              <ul className="mt-5 grid gap-3 text-[14px] leading-[1.35] text-white/95 min-[980px]:grid-cols-2">
-                {GUARANTEE_LIMITS.map((item) => (
-                  <li key={item} className="rounded-[14px] bg-[#111]/16 px-4 py-3">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
-              <h2
-                className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
-              >
-                Коммуникация бренда
-              </h2>
-              <p className="mt-4 max-w-[860px] text-[17px] leading-[1.35] text-[#111]/72">
-                Речевой код VELESBRON: спокойно, точно, по делу. Мы не спорим с пользователем и не обесцениваем проблему — мы разбираемся
-                и даем последовательные шаги решения.
-              </p>
-              <ul className="mt-6 grid gap-3 min-[980px]:grid-cols-2">
-                {VOICE_RULES.map((item) => (
-                  <li key={item} className="rounded-[14px] border border-[#111]/12 bg-[#f6f6f6] px-4 py-3 text-[15px] leading-[1.35] text-[#111]/76">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </section>
           </div>
         </div>
       </section>

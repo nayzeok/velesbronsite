@@ -38,11 +38,11 @@ export default function ContactsPage() {
 
           <SiteHeader />
 
-          <div className="relative mx-auto w-[min(1120px,92vw)] pt-[168px] pb-20">
+          <div className="relative mx-auto w-[min(1120px,92vw)] pb-20 mobile-header-offset min-[1200px]:pt-[168px]">
             <h1
               className="uppercase text-[#111]"
               style={{
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: "clamp(52px,5vw,88px)",
                 lineHeight: 1,
               }}
@@ -57,7 +57,7 @@ export default function ContactsPage() {
               <article className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)]">
                 <h2
                   className="uppercase text-[#111]"
-                  style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 38, lineHeight: 1 }}
+                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 38, lineHeight: 1 }}
                 >
                   Юридическая информация
                 </h2>
@@ -73,7 +73,7 @@ export default function ContactsPage() {
               <article className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)]">
                 <h2
                   className="uppercase text-[#111]"
-                  style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 38, lineHeight: 1 }}
+                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 38, lineHeight: 1 }}
                 >
                   Сервисная служба
                 </h2>
@@ -91,7 +91,7 @@ export default function ContactsPage() {
               <article className="rounded-[24px] bg-[linear-gradient(180deg,#E7813F_0%,#FC6407_100%)] p-7 text-white shadow-[0_30px_70px_rgba(252,100,7,0.28)]">
                 <h2
                   className="uppercase"
-                  style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 38, lineHeight: 1 }}
+                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 38, lineHeight: 1 }}
                 >
                   Менеджер B2B
                 </h2>
@@ -109,7 +109,7 @@ export default function ContactsPage() {
               <article className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)]">
                 <h2
                   className="uppercase text-[#111]"
-                  style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 38, lineHeight: 1 }}
+                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 38, lineHeight: 1 }}
                 >
                   Поддержка
                 </h2>

@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Oswald } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import MobileHeader from "@/components/layout/MobileHeader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,9 +45,32 @@ const gilroyLight = localFont({
   display: "swap",
 });
 
+const russoOne = localFont({
+  src: "../public/fonts/RussoOne-Regular.ttf",
+  variable: "--font-russo-one",
+  weight: "400",
+  style: "normal",
+  display: "swap",
+});
+
+const robotoFlex = localFont({
+  src: "../public/fonts/robotoflex_regular.ttf",
+  variable: "--font-roboto-flex",
+  weight: "400",
+  style: "normal",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "VelesBron - Тактическая обувь из натуральных материалов",
   description: "Универсальная тактическая обувь для службы, походов и города. Натуральные материалы, усиленный протектор, надёжная конструкция.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -57,9 +81,12 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${drukCyr.variable} ${pobeda.variable} ${gilroyLight.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${drukCyr.variable} ${pobeda.variable} ${gilroyLight.variable} ${russoOne.variable} ${robotoFlex.variable} antialiased`}
       >
-        {children}
+        <MobileHeader />
+        <div>
+          {children}
+        </div>
         <AnalyticsTracker />
       </body>
     </html>

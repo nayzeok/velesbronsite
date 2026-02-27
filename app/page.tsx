@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import SiteHeader from "@/components/layout/SiteHeader";
 
 const figmaHeroBackground = "https://www.figma.com/api/mcp/asset/60c54a29-4bcc-4980-852b-b25d59719777";
@@ -32,22 +31,11 @@ const MOBILE_MODEL_LABEL = {
   designWidth: 741,
 } as const;
 const MOBILE_BOTTOM_TEXT = {
-  left: 32,
+  left: 56,
   bottom: 10,
   width: 232,
   fontSize: 18,
   lineHeight: 22,
-} as const;
-const MOBILE_LOGO_BLOCK = {
-  panelWidth: 199,
-  panelHeight: 108,
-  panelTop: -25,
-  panelOffsetX: -5,
-  panelRadius: 10,
-  logoWidth: 209,
-  logoHeight: 69,
-  logoTop: 30,
-  designWidth: 741,
 } as const;
 const DESIGN_HEIGHT = 1000;
 
@@ -75,156 +63,29 @@ const heroThumbs = [
     frame: { left: 0, top: -11, width: 66, height: 88 },
   },
 ];
-const MAIN_MENU_ITEMS = [
-  { label: "Главная", href: "/" },
-  { label: "О бренде", href: "/brand" },
-  { label: "Преимущества", href: "/advantages" },
-  { label: "Модельный ряд", href: "/models" },
-  { label: "Где купить", href: "/where-to-buy" },
-  { label: "Медиа", href: "/#media" },
-  { label: "Контакты", href: "/contacts" },
-] as const;
-
 export default function Home() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
-
-  useEffect(() => {
-    if (!isMobileMenuOpen) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isMobileMenuOpen]);
 
   return (
     <main className="figma-site-page overflow-x-hidden bg-[#e8e8e8] text-white">
       <section className="relative min-[1200px]:hidden">
-        <div className="relative h-[100dvh] min-h-[860px] overflow-hidden">
-          <img src={figmaHeroBackground} alt="" className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover" />
-          <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)]" />
-
-          <div className="absolute left-4 top-4 z-30 flex items-center gap-2.5">
-            <button
-              type="button"
-              aria-label="Язык"
-              className="flex size-10 items-center justify-center rounded-[10px] bg-gradient-to-b from-[#7f766f] to-[#635b50]"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="9" />
-                <path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              aria-label="Корзина"
-              className="flex size-10 items-center justify-center rounded-[10px] bg-gradient-to-b from-[#7f766f] to-[#635b50]"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
-                <path d="M4 6h2l1.2 8.5a2 2 0 0 0 2 1.5h7.8a2 2 0 0 0 2-1.6L20 8H8" />
-                <circle cx="10" cy="19" r="1.5" />
-                <circle cx="17" cy="19" r="1.5" />
-              </svg>
-            </button>
-          </div>
-
-          <div className="absolute right-4 top-4 z-30">
-            <button
-              type="button"
-              aria-label="Меню"
-              aria-expanded={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="flex size-10 items-center justify-center rounded-[10px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                <path d="M4 7h16M4 12h16M4 17h16" />
-              </svg>
-            </button>
-          </div>
-
+        <div
+          className="relative overflow-hidden"
+          style={{
+            minHeight: "max(100dvh, 640px)",
+            paddingTop: "calc(5.5rem + env(safe-area-inset-top, 0px))",
+            paddingLeft: "env(safe-area-inset-left, 0px)",
+            paddingRight: "env(safe-area-inset-right, 0px)",
+            paddingBottom: "env(safe-area-inset-bottom, 0px)",
+          }}
+        >
+          {/* Фон на всю высоту, в т.ч. под хедером; отступ только у контента */}
           <div
-            className={`absolute inset-0 z-40 bg-black/55 backdrop-blur-[1px] transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <aside
-            className={`absolute right-0 top-0 z-50 h-full w-[304px] border-l border-white/15 bg-[linear-gradient(180deg,rgba(30,30,30,0.98)_0%,rgba(18,18,18,0.96)_100%)] shadow-[-20px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-transform duration-300 ease-out ${
-              isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-            }`}
-            aria-hidden={!isMobileMenuOpen}
+            className="absolute left-0 right-0 bottom-0 z-0"
+            style={{ top: "calc(-5.5rem - env(safe-area-inset-top, 0px))" }}
           >
-            <div className="flex items-center justify-between px-5 pb-4 pt-5">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.2em] text-white/45">Меню</p>
-                <p className="mt-0.5 text-[21px] text-white" style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}>
-                  VELESBRON
-                </p>
-              </div>
-              <button
-                type="button"
-                aria-label="Закрыть меню"
-                className="flex size-9 items-center justify-center rounded-[10px] bg-white/10 text-white transition-colors hover:bg-white/20"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <path d="M6 6l12 12M18 6L6 18" />
-                </svg>
-              </button>
-            </div>
-            <div className="mx-5 h-px bg-white/10" />
-            <nav className="px-4 py-3">
-              {MAIN_MENU_ITEMS.map((item, index) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className={`mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 text-[22px] transition-all duration-300 ${
-                    isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"
-                  } ${
-                    item.href === "/" ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]" : "text-white/92 hover:bg-white/10"
-                  }`}
-                  style={{
-                    fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif",
-                    fontWeight: 500,
-                    transitionDelay: isMobileMenuOpen ? `${100 + index * 55}ms` : "0ms",
-                  }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-2.5">
-                    <span className={`size-2 rounded-full ${item.href === "/" ? "bg-white/90" : "bg-white/35"}`} />
-                    {item.label}
-                  </span>
-                  <span className={`text-base ${item.href === "/" ? "text-white/95" : "text-white/45"}`}>›</span>
-                </a>
-              ))}
-            </nav>
-            <div className="absolute bottom-6 left-4 right-4 rounded-[12px] border border-white/10 bg-white/[0.04] px-4 py-3 text-[12px] leading-[1.35] text-white/60">
-              Тактическая обувь из натуральных материалов
-            </div>
-          </aside>
-
-          <div
-            className="absolute left-1/2 z-30 bg-white"
-            style={{
-              top: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.panelTop})`,
-              marginLeft: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.panelOffsetX})`,
-              width: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.panelWidth})`,
-              height: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.panelHeight})`,
-              borderRadius: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.panelRadius})`,
-              transform: "translateX(-50%)",
-            }}
-          >
-            <img
-              src={figmaMobileHeaderLogo}
-              alt="Velesbron"
-              className="pointer-events-none absolute left-1/2 max-w-none object-cover"
-              style={{
-                top: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.logoTop})`,
-                width: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.logoWidth})`,
-                height: `calc((100vw / ${MOBILE_LOGO_BLOCK.designWidth}) * ${MOBILE_LOGO_BLOCK.logoHeight})`,
-                transform: "translateX(-50%)",
-              }}
-            />
+            <img src={figmaHeroBackground} alt="" className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover" />
+            <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)]" />
           </div>
 
           <h1
@@ -235,7 +96,7 @@ export default function Home() {
               width: `calc((100vw / ${MOBILE_HERO_HEADLINE.designWidth}) * ${MOBILE_HERO_HEADLINE.width})`,
               transform: "translateX(-100%)",
               textAlign: "right",
-              fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
+              fontFamily: "var(--font-russo-one), Russo One, sans-serif",
               fontSize: `calc((100vw / ${MOBILE_HERO_HEADLINE.designWidth}) * ${MOBILE_HERO_HEADLINE.fontSize})`,
               fontStyle: "normal",
               fontWeight: 500,
@@ -251,21 +112,19 @@ export default function Home() {
           </h1>
 
           <div
-            className="absolute z-20"
+            className="absolute z-20 max-w-[calc(100vw-32px)]"
             style={{
               left: `calc((100vw / ${MOBILE_MODEL_LABEL.designWidth}) * ${MOBILE_MODEL_LABEL.left})`,
               top: `calc((100vw / ${MOBILE_MODEL_LABEL.designWidth}) * ${MOBILE_MODEL_LABEL.top})`,
-              width: `calc((100vw / ${MOBILE_MODEL_LABEL.designWidth}) * ${MOBILE_MODEL_LABEL.width})`,
+              width: `min(calc((100vw / ${MOBILE_MODEL_LABEL.designWidth}) * ${MOBILE_MODEL_LABEL.width}), calc(100vw - 32px))`,
             }}
           >
             <h2
-              className="bg-clip-text uppercase text-transparent"
+              className="bg-clip-text text-[clamp(32px,12vw,46px)] uppercase leading-none text-transparent"
               style={{
-                fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
-                fontSize: 46,
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontStyle: "normal",
                 fontWeight: 700,
-                lineHeight: "normal",
                 backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
               }}
             >
@@ -295,10 +154,10 @@ export default function Home() {
             </div>
 
             <p
-              className="mt-2 w-[305px] text-white"
+              className="mt-2 max-w-[305px] text-white"
               style={{
-                fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif",
-                fontSize: 15,
+                fontFamily: "var(--font-roboto-flex), sans-serif",
+                fontSize: "clamp(13px,3.8vw,15px)",
                 fontStyle: "normal",
                 fontWeight: 400,
                 lineHeight: "22px",
@@ -321,16 +180,23 @@ export default function Home() {
             <img src="/images/pages/main-model-for-hero.png" alt="Тактическая обувь" className="h-full w-full object-cover" />
           </div>
 
-          <div className="absolute z-20" style={{ left: MOBILE_BOTTOM_TEXT.left, bottom: MOBILE_BOTTOM_TEXT.bottom }}>
+          <div
+            className="absolute z-20 max-w-[calc(100vw-24px)]"
+            style={{
+              left: MOBILE_BOTTOM_TEXT.left,
+              right: 16,
+              bottom: "max(10px, env(safe-area-inset-bottom, 0px))",
+            }}
+          >
             <p
               className="text-[#c6c6c6]"
               style={{
-                width: MOBILE_BOTTOM_TEXT.width,
-                fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif",
-                fontSize: MOBILE_BOTTOM_TEXT.fontSize,
+                maxWidth: MOBILE_BOTTOM_TEXT.width,
+                fontFamily: "var(--font-roboto-flex), sans-serif",
+                fontSize: "clamp(15px,4.2vw,18px)",
                 fontStyle: "normal",
                 fontWeight: 500,
-                lineHeight: `${MOBILE_BOTTOM_TEXT.lineHeight}px`,
+                lineHeight: "22px",
               }}
             >
               <span className="block">
@@ -342,13 +208,20 @@ export default function Home() {
             <Link
               href="/where-to-buy"
               className="mt-5 flex h-[64px] w-[190px] items-center justify-center rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[22px] font-medium text-white"
-              style={{ fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif", fontWeight: 500 }}
+              style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 500 }}
             >
               Купить
             </Link>
           </div>
 
-          <div className="absolute bottom-2.5 right-4 z-20 h-[170px] w-[133px] overflow-hidden rounded-[11px] bg-white">
+          <div
+            className="absolute right-4 z-20 overflow-hidden rounded-[11px] bg-white"
+            style={{
+              width: "min(133px, 36vw)",
+              height: "min(170px, 45vw)",
+              bottom: "max(0.625rem, env(safe-area-inset-bottom, 0px))",
+            }}
+          >
             <img
               src={figmaPreviewCardBackground}
               alt=""
@@ -363,6 +236,7 @@ export default function Home() {
             />
           </div>
 
+          {/* | 01/04 | и точки-индикаторы
           <p className="absolute bottom-3 right-[164px] z-20 text-[18px] leading-[1.1] text-white">| 01/04 |</p>
           <div className="absolute bottom-[175px] right-[90px] z-20 flex items-center gap-[6px]">
             <span className="size-[8px] rounded-full bg-white" />
@@ -370,6 +244,7 @@ export default function Home() {
             <span className="size-[8px] rounded-full bg-white/45" />
             <span className="size-[8px] rounded-full bg-white/45" />
           </div>
+          */}
         </div>
       </section>
 
@@ -402,11 +277,11 @@ export default function Home() {
           />
 
           <div className="relative mt-[clamp(24px,6vh,74px)] flex flex-1">
-            <div className="relative z-20 w-[clamp(320px,28vw,420px)]">
+            <div className="relative z-20 w-[clamp(320px,28vw,420px)] shrink-0">
               <h2
                 className="bg-clip-text text-[clamp(40px,3.4vw,55px)] font-medium uppercase leading-none text-transparent"
                 style={{
-                  fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
                 }}
               >
@@ -442,13 +317,13 @@ export default function Home() {
             </div>
 
             <div className="relative flex-1">
-              <div className="absolute right-[clamp(0px,2vw,40px)] top-[clamp(10px,5vh,90px)] z-30 w-[clamp(460px,40vw,658px)] overflow-visible">
+              <div className="absolute right-[clamp(0px,2vw,40px)] top-0 z-30 w-[clamp(320px,40vw,658px)] overflow-visible">
                 <h1
                   className="flex flex-col items-end uppercase"
                   style={{
-                    fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif",
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                     textAlign: "right",
-                    fontSize: "clamp(84px,6vw,115px)",
+                    fontSize: "clamp(50px,6vw,58px)",
                     fontStyle: "normal",
                     fontWeight: 500,
                     lineHeight: "0.94",
@@ -465,6 +340,7 @@ export default function Home() {
                 </h1>
               </div>
 
+              {/* | 01/04 | и точки-индикаторы
               <p className="absolute bottom-[clamp(35px,2.4vh,34px)] right-[clamp(104px,13vw,226px)] z-20 text-[18px] leading-[26px] text-white">
                 | 01/04 |
               </p>
@@ -475,6 +351,7 @@ export default function Home() {
                 <span className="size-[9px] rounded-full bg-white/45" />
                 <span className="size-[9px] rounded-full bg-white/45" />
               </div>
+              */}
             </div>
           </div>
 
@@ -488,6 +365,7 @@ export default function Home() {
             />
           </div>
 
+          {/* Превью-карточка модели — убрана с главной
           <div className="absolute right-[clamp(0px,2vw,40px)] top-[676px] z-20 h-[293px] w-[230px] overflow-hidden rounded-[19px] bg-white">
             <div className="relative h-full w-full">
               <img
@@ -504,16 +382,17 @@ export default function Home() {
               />
             </div>
           </div>
+          */}
 
-          <div className="absolute bottom-[clamp(8px,1.1vh,16px)] left-[clamp(24px,3.1vw,52px)] z-20">
-            <p className="w-[clamp(320px,24vw,398px)] text-[24px] font-medium leading-[33px] text-[#c6c6c6]">
+          <div className="absolute bottom-[clamp(80px,1.1vh,16px)] right-[clamp(24px,3.6vw,67px)] z-20 flex flex-col items-end">
+            <p className="w-[clamp(320px,24vw,398px)] max-w-full text-right text-[24px] font-medium leading-[33px] text-[#c6c6c6]">
               <span className="text-white">Одна универсальная пара обуви,</span> которая не подведет ни в походе, ни на службе, ни в городе
             </p>
 
             <Link
               href="/where-to-buy"
-              className="mt-6 flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
-              style={{ fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif", fontWeight: 500 }}
+              className="mt-6 flex h-20 w-[248px] shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
+              style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 500 }}
             >
               Купить
             </Link>

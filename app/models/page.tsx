@@ -70,21 +70,10 @@ const SIZE_GRID_ROWS = [
   { size: "47", insole: "30,8", foot: "29,3 - 29,8" },
 ] as const;
 
-const MAIN_MENU_ITEMS = [
-  { label: "Главная", href: "/" },
-  { label: "О бренде", href: "/brand" },
-  { label: "Преимущества", href: "/advantages" },
-  { label: "Модельный ряд", href: "/models" },
-  { label: "Где купить", href: "/where-to-buy" },
-  { label: "Медиа", href: "/#media" },
-  { label: "Контакты", href: "/contacts" },
-] as const;
-
 export default function BuyPage() {
   const [colorVariant, setColorVariant] = useState<ColorVariant>("black");
   const [activeModelKey, setActiveModelKey] = useState<ModelKey>("high");
   const [activeViewIndex, setActiveViewIndex] = useState(0);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
   const [isSizeGridVisible, setIsSizeGridVisible] = useState(false);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
@@ -106,14 +95,14 @@ export default function BuyPage() {
   }, [activeModelKey, colorVariant]);
 
   useEffect(() => {
-    if (!isSizeGridOpen && !isMobileMenuOpen) return;
+    if (!isSizeGridOpen) return;
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [isSizeGridOpen, isMobileMenuOpen]);
+  }, [isSizeGridOpen]);
 
   useEffect(() => {
     return () => {
@@ -186,7 +175,7 @@ export default function BuyPage() {
               <h1
                 className="uppercase"
                 style={{
-                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 75,
                   fontWeight: 700,
                   lineHeight: "normal",
@@ -201,7 +190,7 @@ export default function BuyPage() {
                   top: 88,
                   left: 0,
                   width: 408,
-                  fontFamily: "Gilroy, sans-serif",
+                  fontFamily: "var(--font-roboto-flex), sans-serif",
                   fontSize: 20,
                   fontWeight: 500,
                   lineHeight: 1.45,
@@ -236,7 +225,7 @@ export default function BuyPage() {
                   top: 624,
                   transform: "translateX(-50%)",
                   background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 26,
                   fontWeight: 700,
                   cursor: "pointer",
@@ -252,7 +241,7 @@ export default function BuyPage() {
                   left: 1465,
                   top: 210,
                   transform: "translateX(-50%)",
-                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 48,
                   fontWeight: 700,
                   color: "#111",
@@ -284,7 +273,7 @@ export default function BuyPage() {
                     className="text-center uppercase whitespace-nowrap"
                     style={{
                       width: model.key === "high" ? 76 : 74,
-                      fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                       fontSize: 20,
                       fontWeight: 700,
                       color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
@@ -303,7 +292,7 @@ export default function BuyPage() {
                   left: 1465,
                   top: 398,
                   transform: "translateX(-50%)",
-                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 48,
                   fontWeight: 700,
                   color: "#111",
@@ -343,7 +332,7 @@ export default function BuyPage() {
                 <p
                   className="w-[76px] text-center uppercase"
                   style={{
-                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                     fontSize: 20,
                     fontWeight: 700,
                     color: "#999",
@@ -354,7 +343,7 @@ export default function BuyPage() {
                 <p
                   className="w-[74px] text-center uppercase"
                   style={{
-                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                     fontSize: 20,
                     fontWeight: 700,
                     color: "#999",
@@ -376,7 +365,7 @@ export default function BuyPage() {
                   height: 72,
                   background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                   borderRadius: 16,
-                  fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 24,
                   fontWeight: 700,
                   color: "#fff",
@@ -478,7 +467,7 @@ export default function BuyPage() {
       </section>
 
       {/* ── MOBILE ── */}
-      <section className="min-[1200px]:hidden">
+      <section className="min-[1200px]:hidden mobile-header-offset">
         <div
           className="relative w-full overflow-hidden bg-white"
           style={{
@@ -527,7 +516,7 @@ export default function BuyPage() {
             <h1
               className="absolute left-[74px] top-[59px] uppercase"
               style={{
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 75,
                 fontWeight: 700,
                 color: "#111",
@@ -539,7 +528,7 @@ export default function BuyPage() {
             <p
               className="absolute left-[74px] top-[147px] w-[408px]"
               style={{
-                fontFamily: "Gilroy, sans-serif",
+                fontFamily: "var(--font-roboto-flex), sans-serif",
                 fontSize: 20,
                 fontWeight: 500,
                 lineHeight: 1.28,
@@ -555,7 +544,7 @@ export default function BuyPage() {
               className="absolute left-[70px] top-[764px] flex h-[72px] w-[286px] items-center justify-center rounded-[16px] text-white shadow-[0_8px_20px_rgba(240,116,38,0.35)]"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 26,
                 fontWeight: 700,
               }}
@@ -566,7 +555,7 @@ export default function BuyPage() {
             <p
               className="absolute left-[70px] top-[452px] uppercase"
               style={{
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 54,
                 fontWeight: 700,
                 color: "#111",
@@ -600,7 +589,7 @@ export default function BuyPage() {
                   className="text-center uppercase whitespace-nowrap"
                   style={{
                     width: model.key === "high" ? 96 : 94,
-                    fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                     fontSize: 22,
                     fontWeight: 700,
                     color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
@@ -615,7 +604,7 @@ export default function BuyPage() {
             <p
               className="absolute left-[398px] top-[452px] uppercase"
               style={{
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 54,
                 fontWeight: 700,
                 color: "#111",
@@ -643,7 +632,7 @@ export default function BuyPage() {
             <p
               className="absolute left-[446px] top-[638px] -translate-x-1/2"
               style={{
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 22,
                 fontWeight: 700,
                 color: colorVariant === "black" ? "#f07426" : "#9a9a9a",
@@ -655,7 +644,7 @@ export default function BuyPage() {
             <p
               className="absolute left-[574px] top-[638px] -translate-x-1/2"
               style={{
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 22,
                 fontWeight: 700,
                 color: colorVariant === "oliva" ? "#f07426" : "#9a9a9a",
@@ -670,7 +659,7 @@ export default function BuyPage() {
               className="absolute left-[398px] top-[764px] h-[72px] w-[248px] rounded-[16px] text-[26px] text-white"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontWeight: 700,
               }}
             >
@@ -725,74 +714,6 @@ export default function BuyPage() {
             </div>
           </div>
 
-          <div className="fixed right-4 top-4 z-[70]">
-            <button
-              type="button"
-              aria-label="Меню"
-              aria-expanded={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="flex size-10 items-center justify-center rounded-[10px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-white"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                <path d="M4 7h16M4 12h16M4 17h16" />
-              </svg>
-            </button>
-          </div>
-          <div
-            className={`fixed inset-0 z-[80] bg-black/55 backdrop-blur-[1px] transition-opacity duration-300 ${isMobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <aside
-            className={`fixed right-0 top-0 z-[90] h-dvh w-[304px] border-l border-white/15 bg-[linear-gradient(180deg,rgba(30,30,30,0.98)_0%,rgba(18,18,18,0.96)_100%)] shadow-[-20px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-transform duration-300 ease-out ${
-              isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-            }`}
-            aria-hidden={!isMobileMenuOpen}
-          >
-            <div className="flex items-center justify-between px-5 pb-4 pt-5">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.2em] text-white/45">Меню</p>
-                <p className="mt-0.5 text-[21px] text-white" style={{ fontFamily: "var(--font-druk-cyr), var(--font-oswald), sans-serif" }}>
-                  VELESBRON
-                </p>
-              </div>
-              <button
-                type="button"
-                aria-label="Закрыть меню"
-                className="flex size-9 items-center justify-center rounded-[10px] bg-white/10 text-white transition-colors hover:bg-white/20"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <path d="M6 6l12 12M18 6L6 18" />
-                </svg>
-              </button>
-            </div>
-            <div className="mx-5 h-px bg-white/10" />
-            <nav className="px-4 py-3">
-              {MAIN_MENU_ITEMS.map((item, index) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className={`mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 text-[22px] transition-all duration-300 ${
-                    isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-6 opacity-0"
-                  } ${
-                    item.href === "/models" ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]" : "text-white/92 hover:bg-white/10"
-                  }`}
-                  style={{
-                    fontFamily: "Gilroy, var(--font-gilroy-light), var(--font-oswald), sans-serif",
-                    fontWeight: 500,
-                    transitionDelay: isMobileMenuOpen ? `${100 + index * 55}ms` : "0ms",
-                  }}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-2.5">
-                    <span className={`size-2 rounded-full ${item.href === "/models" ? "bg-white/90" : "bg-white/35"}`} />
-                    {item.label}
-                  </span>
-                  <span className={`text-base ${item.href === "/models" ? "text-white/95" : "text-white/45"}`}>›</span>
-                </a>
-              ))}
-            </nav>
-          </aside>
         </div>
       </section>
 
@@ -810,7 +731,7 @@ export default function BuyPage() {
             <div className="flex items-center justify-between border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
               <h3
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-pobeda), Pobeda, var(--font-oswald), sans-serif", fontSize: 32, fontWeight: 700 }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 32, fontWeight: 700 }}
               >
                 Размерная сетка
               </h3>
