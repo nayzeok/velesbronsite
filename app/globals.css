@@ -44,6 +44,10 @@ body {
   font-family: var(--font-roboto-flex), system-ui, sans-serif;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   min-height: 100%;

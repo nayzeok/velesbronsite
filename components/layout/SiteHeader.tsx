@@ -43,9 +43,9 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
   /** Общие отступы у всех пунктов — чтобы плашка активного не сдвигала сетку; компактнее для 13" */
   const itemPadding = "px-3 py-2.5 rounded-[10px]";
   const activePlaqueClass =
-    "text-[24px] font-medium whitespace-nowrap text-white bg-gradient-to-r from-[#8b7a71] to-[#756257] " + itemPadding;
+    "text-[22px] font-medium whitespace-nowrap text-white bg-gradient-to-r from-[#8b7a71] to-[#756257] " + itemPadding;
   const activePlaqueClassLight =
-    "text-[24px] font-medium whitespace-nowrap text-white bg-white/20 " + itemPadding;
+    "text-[22px] font-medium whitespace-nowrap text-white bg-white/20 " + itemPadding;
 
   return (
     <header
@@ -83,7 +83,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               <Link
                 key={item.key}
                 href={item.href}
-                className={`text-[24px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
+                className={`text-[22px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
                 style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
               >
                 {item.label}
@@ -97,19 +97,19 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
         <div className="relative flex justify-center">
           {/* Белая плашка за лого: верх уходит за край экрана */}
           <div
-            className="logo-plaque absolute left-1/2 z-[5] h-[180px] w-full max-w-[340px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
-            style={{ top: "-70px" }}
+            className="logo-plaque absolute left-1/2 z-[5] h-[162px] w-full max-w-[306px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
+            style={{ top: "-63px" }}
             aria-hidden="true"
           />
           <Link
             href="/"
-            className="relative z-10 flex h-[105px] w-full max-w-[280px] items-center justify-center rounded-[10px]"
+            className="relative z-10 flex h-[95px] w-full max-w-[252px] items-center justify-center rounded-[10px]"
             aria-label="Velesbron — на главную"
           >
             <img
               src="/images/pages/velesbron_logo.png"
               alt=""
-              className="h-[105px] w-full max-w-[280px] object-contain"
+              className="h-[95px] w-full max-w-[252px] object-contain"
             />
           </Link>
         </div>
@@ -138,7 +138,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               <Link
                 key={item.key}
                 href={item.href}
-                className={`text-[24px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
+                className={`text-[22px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
                 style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
               >
                 {item.label}

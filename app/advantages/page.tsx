@@ -105,7 +105,7 @@ const views = [
     callout: { title: "Гибридная подошва", text: "" },
     calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
     glueStyle: { w: 300, h: 109, textSize: 22 },
-    glue: "Антипрокольная вставка.",
+    glue: "Антипрокольная вставка",
     glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 565, y: 105, w: 555.071, h: 689.873 },
@@ -148,8 +148,8 @@ const views = [
     anchors: {
       calloutCard: { x: 904, y: 589 },
       calloutDot: { x: -20, y: 38 },
-      glueBubble: { x: 469, y: 698 },
-      glueDot: { x: 262, y: -13 },
+      glueBubble: { x: 490, y: 685 },
+      glueDot: { x: 280, y: -13 },
     },
   },
   {
@@ -157,7 +157,7 @@ const views = [
     description:
       "Узлы усилены тройными швами и армированными лавсановыми нитями. Конструкция рассчитана на многократные сгибы и повышенную нагрузку без расхождения швов.",
     image: mainBootBack,
-    callout: { title: "Тройные швы", text: "" },
+    callout: { title: "Усиленные швы", text: "" },
     calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
     metricTop: { value: "14", title: "ДН", line1: "СРОК", line2: "АКТИВАЦИИ" },
     metricSide: { value: "08", line1: "FIT", line2: "ПОЛНОТА" },
@@ -169,10 +169,10 @@ const views = [
     bootPose: { rotate: 0, x: 0, y: 30, scale: 1.7 },
     olivaPose: { rotate: 0, x: 60, y: 0, scale: 3.5 },
     anchors: {
-      calloutCard: { x: 536, y: 460 },
-      calloutDot: { x: 235, y: -18 },
-      glueBubble: { x: 923, y: 726 },
-      glueDot: { x: -25, y: -3 },
+      calloutCard: { x: 406, y: 610 },
+      calloutDot: { x: 245, y: 60 },
+      glueBubble: { x: 1053, y: 726 },
+      glueDot: { x: -25, y: -15 },
     },
   },
 ] as const;
@@ -613,7 +613,14 @@ export default function ModelsPage() {
 
             <div className="h-[96px] shrink-0" aria-hidden="true" />
 
-            <div className="absolute z-20 h-[520px] w-[560px]" style={{ left: "clamp(20px, 3.5vw, 72px)", top: "clamp(164px, 22.7vh, 232px)" }}>
+            <div
+              className="absolute z-20 h-[520px]"
+              style={{
+                left: "clamp(20px, 3.5vw, 72px)",
+                top: "clamp(164px, 22.7vh, 232px)",
+                width: (currentView.title as string) === "Комфорт и внутренняя архитектура" ? 680 : 560,
+              }}
+            >
               <div className="relative flex flex-col gap-5">
                 <div className="flex items-start gap-4">
                   <svg
@@ -630,15 +637,16 @@ export default function ModelsPage() {
                     <circle opacity="0.1" cx="30" cy="4" r="4" fill="#111111" />
                   </svg>
                   <h1
-                    className="uppercase leading-tight text-[#5b6a44]"
+                    className="uppercase leading-tight"
                     style={{
-                      color: "#5B6A44",
+                      color: "#111",
                       fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-fontSize: 34,
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                  }}
-                >
+                      fontSize: 34,
+                      fontStyle: "normal",
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                    }}
+                  >
                   {currentView.title}
                   </h1>
                 </div>
@@ -652,7 +660,7 @@ fontSize: 34,
               <Link
                 href="/models"
                 className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", letterSpacing: "0.08em" }}
               >
                 Подробнее
               </Link>
@@ -763,7 +771,8 @@ fontSize: 34,
               </>
             )}
 
-            {currentView.tempWidget && (
+            {/* Градусник на 4-м ракурсе — временно отключен */}
+            {false && currentView.tempWidget && (
               <>
                 <p
                   className="absolute z-20"
@@ -1280,7 +1289,10 @@ fontSize: 34,
           {/*  </button>*/}
           {/*</div>*/}
 
-          <div className="absolute left-[8px] top-[46px] z-20 w-[312px]">
+          <div
+            className="absolute left-[8px] top-[46px] z-20"
+            style={{ width: (currentView.title as string) === "Комфорт и внутренняя архитектура" ? 380 : 312 }}
+          >
             <div className="flex flex-col gap-3">
               <div className="flex items-start gap-[10px]">
                 <div className="mt-3.5 flex h-2 w-[34px] shrink-0 items-center justify-between">
@@ -1289,16 +1301,16 @@ fontSize: 34,
                   <span className="size-2 rounded-full bg-[#111]/10" />
                 </div>
                 <h1
-                  className="uppercase leading-tight text-[#5b6a44]"
+                  className="uppercase leading-tight"
                   style={{
-                    color: "#5B6A44",
+                    color: "#111",
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-fontSize: 21,
-                  fontStyle: "normal",
-                  fontWeight: 700,
-                  letterSpacing: "0.02em",
-                }}
-              >
+                    fontSize: 21,
+                    fontStyle: "normal",
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                  }}
+                >
                 {currentView.title}
               </h1>
             </div>

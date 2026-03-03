@@ -90,6 +90,7 @@ export default function BuyPage() {
   const [activeViewIndex, setActiveViewIndex] = useState(0);
   const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
   const [isSizeGridVisible, setIsSizeGridVisible] = useState(false);
+  const [showLowComingSoon, setShowLowComingSoon] = useState(false);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
   const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
@@ -145,6 +146,14 @@ export default function BuyPage() {
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
+      {showLowComingSoon && (
+        <div
+          className="fixed left-1/2 top-[20%] z-[100] -translate-x-1/2 rounded-[12px] bg-[#111] px-6 py-3 text-center text-white shadow-lg"
+          style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 16 }}
+        >
+          Ожидается поступление
+        </div>
+      )}
 
       {/* ── DESKTOP ── */}
       <section
@@ -191,10 +200,11 @@ export default function BuyPage() {
                 className="uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 75,
+                  fontSize: 34,
                   fontWeight: 700,
                   lineHeight: "normal",
                   color: "#111",
+                  letterSpacing: "0.08em",
                 }}
               >
                 {`МОДЕЛЬ ${selectedModel.label.toUpperCase()}`}
@@ -244,6 +254,7 @@ export default function BuyPage() {
                   fontSize: 26,
                   fontWeight: 700,
                   cursor: "pointer",
+                  letterSpacing: "0.08em",
                 }}
               >
                 Таблица размеров
@@ -266,6 +277,7 @@ export default function BuyPage() {
                     fontSize: 36,
                     fontWeight: 700,
                     color: "#111",
+                    letterSpacing: "0.08em",
                   }}
                 >
                   МОДЕЛЬ
@@ -273,16 +285,26 @@ export default function BuyPage() {
                 <div className="flex gap-[46px]">
                 {MODEL_OPTIONS.map((model) => {
                   const colW = model.key === "high" ? 76 : 74;
+                  const isLow = model.key === "low";
                   return (
                     <div key={`desktop-model-col-${model.key}`} className="flex flex-col items-center gap-4" style={{ width: colW, minWidth: colW }}>
                       <button
                         type="button"
-                        onClick={() => setActiveModelKey(model.key)}
+                        onClick={() => {
+                          if (isLow) {
+                            setShowLowComingSoon(true);
+                            window.setTimeout(() => setShowLowComingSoon(false), 2500);
+                          } else {
+                            setActiveModelKey(model.key);
+                          }
+                        }}
                         className="shrink-0 overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
                         style={{
                           width: colW,
                           height: 75,
                           border: activeModelKey === model.key ? "2px solid #f07426" : "2px solid #e0e0e0",
+                          cursor: isLow ? "default" : "pointer",
+                          opacity: isLow ? 0.85 : 1,
                         }}
                       >
                         <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
@@ -295,7 +317,7 @@ export default function BuyPage() {
                           fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                           fontSize: 17,
                           fontWeight: 700,
-                          color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
+                          color: activeModelKey === model.key ? "#f07426" : isLow ? "#9a9a9a" : "#9a9a9a",
                           textDecoration: activeModelKey === model.key ? "underline" : "none",
                         }}
                       >
@@ -324,6 +346,7 @@ export default function BuyPage() {
                     fontSize: 36,
                     fontWeight: 700,
                     color: "#111",
+                    letterSpacing: "0.08em",
                   }}
                 >
                   ЦВЕТ
@@ -402,19 +425,19 @@ export default function BuyPage() {
                   fontSize: 24,
                   fontWeight: 700,
                   color: "#fff",
+                  letterSpacing: "0.08em",
                 }}
               >
                 Где Купить
               </button>
             </div>
 
-            {/* Bottom photo cards */}
+            {/* Bottom photo cards — 3 карточки в видимой области, у низа экрана, по центру */}
             <div
-              className="absolute"
+              className="absolute left-1/2 -translate-x-1/2"
               style={{
-                left: 331,
-                top: 590,
-                width: 1018,
+                top: 664,
+                width: 822,
                 cursor: desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
               }}
               onMouseEnter={() => setIsDesktopRailHover(true)}
@@ -437,7 +460,7 @@ export default function BuyPage() {
               }}
             >
               <div
-                className="pointer-events-none absolute left-0 top-0 z-[9] h-[395px] w-[140px] rounded-l-[16px] transition-opacity duration-200"
+                className="pointer-events-none absolute left-0 top-0 z-[9] h-[316px] w-[112px] rounded-l-[16px] transition-opacity duration-200"
                 style={{
                   opacity: isDesktopRailHover && desktopRailCursor === "left" ? 1 : 0,
                   background:
@@ -445,7 +468,7 @@ export default function BuyPage() {
                 }}
               />
               <div
-                className="pointer-events-none absolute right-0 top-0 z-[9] h-[395px] w-[140px] rounded-r-[16px] transition-opacity duration-200"
+                className="pointer-events-none absolute right-0 top-0 z-[9] h-[316px] w-[112px] rounded-r-[16px] transition-opacity duration-200"
                 style={{
                   opacity: isDesktopRailHover && desktopRailCursor === "right" ? 1 : 0,
                   background:
@@ -464,8 +487,8 @@ export default function BuyPage() {
                     onClick={() => setActiveViewIndex(i)}
                     className="shrink-0 overflow-hidden rounded-[16px] transition-all"
                     style={{
-                      width: 332,
-                      height: 395,
+                      width: 266,
+                      height: 316,
                       background: "#eceef0",
                       border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)",
                       cursor: "pointer",
@@ -478,7 +501,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото влево"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: -344, behavior: "smooth" })}
+                onClick={() => desktopRailRef.current?.scrollBy({ left: -275, behavior: "smooth" })}
                 className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
                 style={{ cursor: "w-resize" }}
               >
@@ -487,7 +510,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото вправо"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: 344, behavior: "smooth" })}
+                onClick={() => desktopRailRef.current?.scrollBy({ left: 275, behavior: "smooth" })}
                 className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
                 style={{ cursor: "e-resize" }}
               >
@@ -550,9 +573,10 @@ export default function BuyPage() {
               className="absolute left-[74px] top-[59px] uppercase"
               style={{
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 75,
+                fontSize: 21,
                 fontWeight: 700,
                 color: "#111",
+                letterSpacing: "0.08em",
               }}
             >
               {`МОДЕЛЬ ${selectedModel.label.toUpperCase()}`}
@@ -580,6 +604,7 @@ export default function BuyPage() {
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 26,
                 fontWeight: 700,
+                letterSpacing: "0.08em",
               }}
             >
               Таблица размеров
@@ -596,6 +621,7 @@ export default function BuyPage() {
                   fontSize: 40,
                   fontWeight: 700,
                   color: "#111",
+                  letterSpacing: "0.08em",
                 }}
               >
                 МОДЕЛЬ
@@ -603,16 +629,26 @@ export default function BuyPage() {
               <div className="flex gap-[24px]">
               {MODEL_OPTIONS.map((model) => {
                 const colW = model.key === "high" ? 96 : 94;
+                const isLow = model.key === "low";
                 return (
                   <div key={`mobile-model-col-${model.key}`} className="flex flex-col items-center gap-3" style={{ width: colW, minWidth: colW }}>
                     <button
                       type="button"
-                      onClick={() => setActiveModelKey(model.key)}
+                      onClick={() => {
+                        if (isLow) {
+                          setShowLowComingSoon(true);
+                          window.setTimeout(() => setShowLowComingSoon(false), 2500);
+                        } else {
+                          setActiveModelKey(model.key);
+                        }
+                      }}
                       className="shrink-0 overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
                       style={{
                         width: colW,
                         height: 95,
                         border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #9a9a9a",
+                        cursor: isLow ? "default" : "pointer",
+                        opacity: isLow ? 0.85 : 1,
                       }}
                     >
                       <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
@@ -695,6 +731,7 @@ export default function BuyPage() {
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontWeight: 700,
+                letterSpacing: "0.08em",
               }}
             >
               Купить
@@ -709,7 +746,7 @@ export default function BuyPage() {
               />
             </div>
 
-            <div className="absolute left-[20px] top-[1285px] w-[688px]">
+            <div className="absolute left-1/2 top-[1448px] w-[572px] -translate-x-1/2">
               <div
                 ref={mobileRailRef}
                 className="flex gap-[10px] overflow-x-auto pb-3 pr-3"
@@ -720,7 +757,7 @@ export default function BuyPage() {
                     key={`mobile-view-${i}`}
                     type="button"
                     onClick={() => setActiveViewIndex(i)}
-                    className="h-[305px] w-[230px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
+                    className="h-[244px] w-[184px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
                     style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
                   >
                     <img src={image} alt="" className="h-full w-full object-contain" />
@@ -730,7 +767,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото влево"
-                onClick={() => mobileRailRef.current?.scrollBy({ left: -240, behavior: "smooth" })}
+                onClick={() => mobileRailRef.current?.scrollBy({ left: -192, behavior: "smooth" })}
                 className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
                 style={{ cursor: "w-resize" }}
               >
@@ -739,7 +776,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото вправо"
-                onClick={() => mobileRailRef.current?.scrollBy({ left: 240, behavior: "smooth" })}
+                onClick={() => mobileRailRef.current?.scrollBy({ left: 192, behavior: "smooth" })}
                 className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
                 style={{ cursor: "e-resize" }}
               >
@@ -765,7 +802,7 @@ export default function BuyPage() {
             <div className="flex items-center justify-between border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
               <h3
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 24, fontWeight: 700 }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 24, fontWeight: 700, letterSpacing: "0.08em" }}
               >
                 Размерная сетка
               </h3>
