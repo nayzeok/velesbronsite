@@ -40,7 +40,7 @@ export default function MobileHeader() {
           <div className="absolute left-1/2 top-0 flex h-16 w-[220px] -translate-x-1/2 items-center justify-center">
             {/* Белая плашка за лого: верх уходит за край экрана */}
             <div
-              className="absolute left-1/2 top-0 z-[5] h-[88px] w-[220px] -translate-x-1/2 rounded-b-[10px] bg-white shadow-[0_6px_20px_rgba(0,0,0,0.08)]"
+              className="logo-plaque absolute left-1/2 top-0 z-[5] h-[88px] w-[220px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
               style={{ top: "-28px" }}
               aria-hidden="true"
             />

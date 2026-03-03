@@ -99,7 +99,8 @@ const views = [
   {
     title: "ПОДОШВА БОТИНКА",
     description:
-      "Гибридная подошва EVA с износостойкой резиновой накладкой обеспечивает амортизацию, сцепление и лёгкость. Антипрокольная вставка из кевлара K-29 выдерживает нагрузку свыше 1265Н и защищает от проколов.",
+      "Гибридная литьевая подошва с износостойкой резиновой накладкой обеспечивает амортизацию, сцепление и лёгкость.\n" +
+        "Антипрокольная вставка из кевлара K-29 выдерживает нагрузку свыше 1265Н и защищает от проколов.",
     image: mainBootTop,
     callout: { title: "Гибридная подошва", text: "" },
     calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
@@ -397,14 +398,11 @@ export default function ModelsPage() {
   const currentGlueStyle =
     "glueStyle" in currentView
       ? currentView.glueStyle
-      : {
-          w: currentView.glueVariant === "card" ? currentView.calloutStyle.w : 180,
-          h: currentView.glueVariant === "card" ? currentView.calloutStyle.h : 34,
-          textSize: currentView.glueVariant === "card" ? currentView.calloutStyle.titleSize : 12,
-        };
+      : { w: 180, h: 34, textSize: 12 };
+  const glueVariant = "glueVariant" in currentView ? currentView.glueVariant : "bubble";
   const glueCardHeight =
-    currentView.glueVariant === "card" ? (isGlueSingleLine ? 80 : currentGlueStyle.h) : currentGlueStyle.h;
-  const isThermalCallout = currentView.title === "ВНУТРЕННИЙ МАТЕРИАЛ";
+    glueVariant === "card" ? (isGlueSingleLine ? 80 : currentGlueStyle.h) : currentGlueStyle.h;
+  const isThermalCallout = (currentView.title as string) === "ВНУТРЕННИЙ МАТЕРИАЛ";
   const calloutDotPosition = isThermalCallout
     ? {
         left: currentView.anchors.calloutCard.x + 10,
@@ -416,6 +414,7 @@ export default function ModelsPage() {
       };
   const calloutDotOuterSize = isThermalCallout ? 34 : 30;
   const calloutDotInnerSize = isThermalCallout ? 16 : 14;
+  const bootCenterOffsetX = 1536 / 2 - currentBootBox.w / 2 - currentBootBox.x;
   const desktopMarkerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
   const mobileMarkerAngle = mobileCarouselMarkerAngles[activeIndex] + MOBILE_CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
   const tempLabelStyle = {
@@ -582,32 +581,34 @@ export default function ModelsPage() {
               transform: `scale(${stageHeightFitScale})`,
             }}
           >
-            <div className="pointer-events-none absolute bottom-[-88px] left-[439px] top-[-88px] w-[886.001px]">
-              {Array.from({ length: 14 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="absolute inset-y-0 w-[63.286px]"
-                  style={{ left: `${index * 63.286}px` }}
-                >
+            <div className="pointer-events-none absolute left-1/2 top-0 h-full w-[886px] -translate-x-1/2">
+              <div className="pointer-events-none absolute inset-0">
+                {Array.from({ length: 14 }).map((_, index) => (
                   <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(-90deg, rgba(255, 255, 255, 0.008) 20%, rgba(40, 40, 40, 0.093) 75.758%, rgba(255, 255, 255, 0.008) 123.64%)",
-                    }}
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage: `url(${backgroundShape})`,
-                      backgroundSize: "832px 832px",
-                      backgroundPosition: "top left",
-                      filter: "blur(90px)",
-                      opacity: 0.03,
-                    }}
-                  />
-                </div>
-              ))}
+                    key={index}
+                    className="absolute inset-y-0"
+                    style={{ left: `${(index * 100) / 14}%`, width: `${100 / 14}%` }}
+                  >
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage: `url(${backgroundShape})`,
+                        backgroundSize: "832px 832px",
+                        backgroundPosition: "top left",
+                        filter: "blur(90px)",
+                        opacity: 0.03,
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="h-[96px] shrink-0" aria-hidden="true" />
@@ -657,77 +658,78 @@ fontSize: 34,
               </Link>
             </div>
 
-            <div
-              key={`${transitionTick}-${colorVariant}`}
-              className="absolute z-10 overflow-visible"
-              style={{
-                left: currentBootBox.x,
-                top: currentBootBox.y,
-                width: currentBootBox.w,
-                height: currentBootBox.h,
-              }}
-            >
-              <div className="h-full w-full animate-view-rise">
-                <div
-                  className="h-full w-full"
-                  style={{
-                    transform: `translate(${currentBootPose.x}px, ${currentBootPose.y}px) rotate(${currentBootPose.rotate}deg) scale(${currentBootPose.scale})`,
-                    transformOrigin: "50% 50%",
-                  }}
-                >
-                  {currentBootImageFrame ? (
-                    <div className="relative h-full w-full overflow-hidden">
+            <div className="absolute left-1/2 top-0 h-[1000px] w-[1536px] -translate-x-1/2">
+              <div
+                key={`${transitionTick}-${colorVariant}`}
+                className="absolute z-10 overflow-visible"
+                style={{
+                  left: 1536 / 2 - currentBootBox.w / 2,
+                  top: currentBootBox.y,
+                  width: currentBootBox.w,
+                  height: currentBootBox.h,
+                }}
+              >
+                <div className="h-full w-full animate-view-rise">
+                  <div
+                    className="h-full w-full"
+                    style={{
+                      transform: `translate(${currentBootPose.x}px, ${currentBootPose.y}px) rotate(${currentBootPose.rotate}deg) scale(${currentBootPose.scale})`,
+                      transformOrigin: "50% 50%",
+                    }}
+                  >
+                    {currentBootImageFrame ? (
+                      <div className="relative h-full w-full overflow-hidden">
+                        <img
+                          src={displayViewImage}
+                          alt="Модель ботинка"
+                          className="absolute max-w-none drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                          style={{
+                            width: `${currentBootImageFrame.wPct}%`,
+                            height: `${currentBootImageFrame.hPct}%`,
+                            left: `${currentBootImageFrame.leftPct}%`,
+                            top: `${currentBootImageFrame.topPct}%`,
+                            opacity: bootColorOpacity,
+                            transition: "opacity 280ms ease",
+                          }}
+                        />
+                      </div>
+                    ) : (
                       <img
                         src={displayViewImage}
                         alt="Модель ботинка"
-                        className="absolute max-w-none drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                        className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
                         style={{
-                          width: `${currentBootImageFrame.wPct}%`,
-                          height: `${currentBootImageFrame.hPct}%`,
-                          left: `${currentBootImageFrame.leftPct}%`,
-                          top: `${currentBootImageFrame.topPct}%`,
                           opacity: bootColorOpacity,
                           transition: "opacity 280ms ease",
                         }}
                       />
-                    </div>
-                  ) : (
-                    <img
-                      src={displayViewImage}
-                      alt="Модель ботинка"
-                      className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
-                      style={{
-                        opacity: bootColorOpacity,
-                        transition: "opacity 280ms ease",
-                      }}
-                    />
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <p
-              className="pointer-events-none absolute inset-x-0 z-0 select-none text-right"
-              style={{
-                bottom: 130,
-                color: "#AEAEAE",
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 600,
-                fontWeight: 500,
-                lineHeight: "108px",
-                opacity: 0.06,
-                transform: "scaleY(0.67)",
-                transformOrigin: "bottom right",
-              }}
-            >
-              VELESBRON
-            </p>
+              <p
+                className="pointer-events-none absolute inset-x-0 z-0 select-none text-right"
+                style={{
+                  bottom: 130,
+                  color: "#AEAEAE",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 600,
+                  fontWeight: 500,
+                  lineHeight: "108px",
+                  opacity: 0.06,
+                  transform: "scaleY(0.67)",
+                  transformOrigin: "bottom right",
+                }}
+              >
+                VELESBRON
+              </p>
 
-            <div className="absolute left-1/2 top-[555px] z-0 w-[1536px] -translate-x-1/2 overflow-hidden" style={{ height: DESIGN_HEIGHT }}>
-              <img src={pedestalImage} alt="" className="h-full w-full object-cover object-center" />
-            </div>
+              <div className="absolute left-0 top-[555px] z-0 w-[1536px] overflow-hidden" style={{ height: DESIGN_HEIGHT }}>
+                <img src={pedestalImage} alt="" className="h-full w-full object-cover object-center" />
+              </div>
 
-            {currentView.showMetrics !== false && (
+            {currentView.showMetrics !== false && "metricTop" in currentView && "metricSide" in currentView && (
               <>
                 <div className="absolute left-[852px] top-[252px] z-20 h-[128px] w-[303px] rounded-[25px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
                   <p className="text-[72px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentView.metricTop.value}</p>
@@ -839,7 +841,7 @@ fontSize: 34,
               <div
                 className="absolute z-20 transition-all duration-500"
                 style={{
-                  left: currentView.anchors.calloutCard.x,
+                  left: currentView.anchors.calloutCard.x + bootCenterOffsetX,
                   top: currentView.anchors.calloutCard.y,
                   width: currentView.calloutStyle.w,
                   height: calloutCardHeight,
@@ -874,7 +876,7 @@ fontSize: 34,
               <div
                 className="absolute z-20 flex flex-col items-center justify-center rounded-[22px] bg-white p-6 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
-                  left: currentView.anchors.calloutCard.x,
+                  left: currentView.anchors.calloutCard.x + bootCenterOffsetX,
                   top: currentView.anchors.calloutCard.y,
                   width: currentView.calloutStyle.w,
                   height: calloutCardHeight,
@@ -903,7 +905,7 @@ fontSize: 34,
             )}
             <span
               className="absolute z-20 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
-              style={{ ...calloutDotPosition, width: calloutDotOuterSize, height: calloutDotOuterSize }}
+              style={{ ...calloutDotPosition, left: calloutDotPosition.left + bootCenterOffsetX, width: calloutDotOuterSize, height: calloutDotOuterSize }}
             >
               <span className="rounded-full bg-white" style={{ width: calloutDotInnerSize, height: calloutDotInnerSize }} />
             </span>
@@ -912,19 +914,19 @@ fontSize: 34,
               <>
                 <div
                   className={`absolute z-20 bg-white text-[#111] shadow-[0_20px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ${
-                    currentView.glueVariant === "card"
+                    glueVariant === "card"
                       ? "flex flex-col items-center justify-center rounded-[22px] p-6 text-center"
                       : "flex items-center justify-center rounded-full px-6 py-3 text-center font-medium leading-[1.1]"
                   }`}
                   style={{
-                    left: currentView.anchors.glueBubble.x,
+                    left: currentView.anchors.glueBubble.x + bootCenterOffsetX,
                     top: currentView.anchors.glueBubble.y,
                     width: currentGlueStyle.w,
                     height: glueCardHeight,
                     fontSize: currentGlueStyle.textSize,
                   }}
                 >
-                  {currentView.glueVariant === "card" ? (
+                  {glueVariant === "card" ? (
                     <>
                       {(() => {
                         const glueLines = currentView.glue.split("\n");
@@ -952,7 +954,7 @@ fontSize: 34,
                 <span
                   className="absolute z-20 size-[40px] transition-all duration-500"
                   style={{
-                    left: currentView.anchors.glueBubble.x + currentView.anchors.glueDot.x,
+                    left: currentView.anchors.glueBubble.x + currentView.anchors.glueDot.x + bootCenterOffsetX,
                     top: currentView.anchors.glueBubble.y + currentView.anchors.glueDot.y,
                   }}
                 >
@@ -962,6 +964,8 @@ fontSize: 34,
                 </span>
               </>
             )}
+
+            </div>
 
             {/*<div className="absolute z-20 flex items-center gap-4" style={{ left: "clamp(40px, 6.1vw, 102px)", top: "clamp(780px, 87.6vh, 897px)" }}>
                Временно отключили переключение на черный. Блок оставлен для быстрого возврата.
@@ -1222,18 +1226,31 @@ fontSize: 34,
       <section className="min-[1200px]:hidden">
         <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `${1024 * mobileScale}px` }}>
           <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left bg-[#f4f4f4]" style={{ transform: `scale(${mobileScale})` }}>
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-full">
-            {Array.from({ length: 8 }).map((_, index) => (
+          <div className="pointer-events-none absolute inset-0">
+            {Array.from({ length: 14 }).map((_, index) => (
               <div
                 key={index}
-                className="absolute inset-y-0 w-[58px]"
-                style={{
-                  left: `${index * 58 - 20}px`,
-                  background:
-                    "linear-gradient(-90deg, rgba(255,255,255,0.16) 20%, rgba(40,40,40,0.09) 75.758%, rgba(255,255,255,0.16) 123.64%)",
-                  opacity: 0.7,
-                }}
-              />
+                className="absolute inset-y-0"
+                style={{ left: `${(index * 100) / 14}%`, width: `${100 / 14}%` }}
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                  }}
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${backgroundShape})`,
+                    backgroundSize: "832px 832px",
+                    backgroundPosition: "top left",
+                    filter: "blur(90px)",
+                    opacity: 0.03,
+                  }}
+                />
+              </div>
             ))}
           </div>
 

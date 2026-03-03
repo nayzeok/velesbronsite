@@ -19,9 +19,9 @@ export default function MediaPage() {
     <main className="figma-site-page min-h-screen overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111]">
       <section className="figma-site-stage relative mx-auto min-h-[100dvh] w-full overflow-hidden bg-white">
         <div className="relative mx-auto h-full min-h-[100dvh] w-full max-w-[1670px] overflow-hidden">
-          <div className="pointer-events-none absolute bottom-[-88px] left-[388px] top-[-88px] w-[886px]">
+          <div className="pointer-events-none absolute inset-0">
             {Array.from({ length: 14 }).map((_, i) => (
-              <div key={i} className="absolute inset-y-0 w-[63.286px]" style={{ left: `${i * 63.286}px` }}>
+              <div key={i} className="absolute inset-y-0" style={{ left: `${(i * 100) / 14}%`, width: `${100 / 14}%` }}>
                 <div
                   className="absolute inset-0"
                   style={{

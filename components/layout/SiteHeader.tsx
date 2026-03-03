@@ -4,12 +4,11 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 
-/** Отступ от левого края экрана: min (px), vw, max (px) */
-const HEADER_EDGE_PADDING_LEFT = "clamp(138px, 9.5vw, 136px)";
-/** Отступ от правого края экрана: min (px), vw, max (px) */
-const HEADER_EDGE_PADDING_RIGHT = "clamp(108px, 9.5vw, 106px)";
-/** Отступ от лого до пунктов меню (слева и справа), px */
-const LOGO_GAP = 100;
+/** Отступ от краёв — на 13" меньше, чтобы меню не заходило под лого */
+const HEADER_EDGE_PADDING_LEFT = "clamp(16px, 2.2vw, 136px)";
+const HEADER_EDGE_PADDING_RIGHT = "clamp(16px, 2.2vw, 106px)";
+/** Зазор между колонкой лого и пунктами меню — на узких экранах меньше */
+const LOGO_GAP = 48;
 
 type MenuKey = "brand" | "advantages" | "models" | "whereToBuy" | "media" | "contacts";
 type HeaderTone = "dark" | "light";
@@ -34,7 +33,19 @@ const RIGHT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
 
 export default function SiteHeader({ activeItem, tone = "dark", className, style }: SiteHeaderProps) {
   const pathname = usePathname();
-  const inactiveTextClass = tone === "light" ? "text-white/95" : "text-[#111]";
+  const isLight = tone === "light";
+  /** Выделение при наведении — полоска выезжает снизу под пунктом */
+  const hoverUnderlineClass =
+    "relative after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-current after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:ease-out";
+  const inactiveClass = isLight
+    ? "text-white/90 hover:text-white transition-colors rounded-[10px] " + hoverUnderlineClass
+    : "text-[#333] hover:text-[#111] transition-colors rounded-[10px] " + hoverUnderlineClass;
+  /** Общие отступы у всех пунктов — чтобы плашка активного не сдвигала сетку; компактнее для 13" */
+  const itemPadding = "px-3 py-2.5 rounded-[10px]";
+  const activePlaqueClass =
+    "text-[24px] font-medium whitespace-nowrap text-white bg-gradient-to-r from-[#8b7a71] to-[#756257] " + itemPadding;
+  const activePlaqueClassLight =
+    "text-[24px] font-medium whitespace-nowrap text-white bg-white/20 " + itemPadding;
 
   return (
     <header
@@ -46,7 +57,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
         style={{
           paddingLeft: HEADER_EDGE_PADDING_LEFT,
           paddingRight: HEADER_EDGE_PADDING_RIGHT,
-          gridTemplateColumns: `1fr ${LOGO_GAP}px 280px ${LOGO_GAP}px 1fr`,
+          gridTemplateColumns: `1fr ${LOGO_GAP}px min(340px, 26vw) ${LOGO_GAP}px 1fr`,
           gap: "0",
         }}
       >
@@ -61,7 +72,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               return (
                 <span
                   key={item.key}
-                  className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-[24px] font-medium text-white whitespace-nowrap"
+                  className={isLight ? activePlaqueClassLight : activePlaqueClass}
                   style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
                 >
                   {item.label}
@@ -72,7 +83,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               <Link
                 key={item.key}
                 href={item.href}
-                className={`text-[24px] font-medium whitespace-nowrap ${inactiveTextClass}`}
+                className={`text-[24px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
                 style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
               >
                 {item.label}
@@ -86,19 +97,19 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
         <div className="relative flex justify-center">
           {/* Белая плашка за лого: верх уходит за край экрана */}
           <div
-            className="absolute left-1/2 z-[5] h-[180px] w-[320px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+            className="logo-plaque absolute left-1/2 z-[5] h-[180px] w-full max-w-[340px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
             style={{ top: "-70px" }}
             aria-hidden="true"
           />
           <Link
             href="/"
-            className="relative z-10 flex h-[105px] w-[280px] items-center justify-center rounded-[10px]"
+            className="relative z-10 flex h-[105px] w-full max-w-[280px] items-center justify-center rounded-[10px]"
             aria-label="Velesbron — на главную"
           >
             <img
               src="/images/pages/velesbron_logo.png"
               alt=""
-              className="h-[105px] w-[280px] object-contain"
+              className="h-[105px] w-full max-w-[280px] object-contain"
             />
           </Link>
         </div>
@@ -116,7 +127,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               return (
                 <span
                   key={item.key}
-                  className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-[24px] font-medium text-white whitespace-nowrap"
+                  className={isLight ? activePlaqueClassLight : activePlaqueClass}
                   style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
                 >
                   {item.label}
@@ -127,7 +138,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               <Link
                 key={item.key}
                 href={item.href}
-                className={`text-[24px] font-medium whitespace-nowrap ${inactiveTextClass}`}
+                className={`text-[24px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
                 style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
               >
                 {item.label}

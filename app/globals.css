@@ -135,6 +135,13 @@ body {
   min-height: var(--figma-stage-height, 1024px);
 }
 
+/** Единый вид белой плашки за лого (десктоп и мобильный хедер) */
+.logo-plaque {
+  background: #fff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
 /* Отступ контента под фиксированный мобильный хедер: 4rem = высота хедера h-16 (только на мобильных) */
 @media (max-width: 1199px) {
   .mobile-header-offset {

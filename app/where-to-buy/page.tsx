@@ -61,8 +61,9 @@ export default function WhereToBuyPage() {
       {/* Фоновая подложка на всю страницу */}
       <div className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[1670px]">
         <div className="absolute left-1/2 top-0 h-[200vmin] w-[886px] -translate-x-1/2" style={{ marginTop: "-88px" }}>
+          <div className="pointer-events-none absolute inset-0">
           {Array.from({ length: 14 }).map((_, i) => (
-            <div key={i} className="absolute inset-y-0 w-[63.286px]" style={{ left: `${i * 63.286}px` }}>
+            <div key={i} className="absolute inset-y-0" style={{ left: `${(i * 100) / 14}%`, width: `${100 / 14}%` }}>
               <div
                 className="absolute inset-0"
                 style={{
@@ -82,6 +83,7 @@ export default function WhereToBuyPage() {
               />
             </div>
           ))}
+          </div>
         </div>
       </div>
 
