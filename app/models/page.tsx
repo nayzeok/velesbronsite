@@ -11,6 +11,20 @@ const MOBILE_DESIGN_WIDTH = 741;
 const MOBILE_DESIGN_HEIGHT = 1716;
 const MOBILE_SCROLL_EXTRA = 48;
 
+/** Отступ между заголовком «МОДЕЛЬ» и квадратами выбора (px). */
+const DESKTOP_MODEL_HEADING_GAP = 5;
+/** Отступ между блоком МОДЕЛЬ и блоком ЦВЕТ: top заголовка «ЦВЕТ» (px). Увеличить — больше промежуток. */
+const DESKTOP_COLOR_TOP = 398;
+/** Отступ между заголовком «ЦВЕТ» и квадратами цветов (px). */
+const DESKTOP_COLOR_HEADING_GAP = 5;
+
+/** Отступ между заголовком «МОДЕЛЬ» и квадратами на мобиле (px). */
+const MOBILE_MODEL_HEADING_GAP = 16;
+/** Блок ЦВЕТ на мобиле: top заголовка (px). Чем больше — тем больше отступ от блока МОДЕЛЬ. */
+const MOBILE_COLOR_TOP = 452;
+/** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px). */
+const MOBILE_COLOR_HEADING_GAP = 40;
+
 const backgroundShape = "/images/models/ui/background-shape.png";
 
 type ColorVariant = "black" | "oliva";
@@ -138,6 +152,7 @@ export default function BuyPage() {
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          <SiteHeader className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />
           <div
             className="absolute inset-x-0 top-0 h-[1000px] origin-top"
             style={{ transform: `scale(${stageHeightFitScale})` }}
@@ -168,7 +183,7 @@ export default function BuyPage() {
               ))}
             </div>
 
-            <SiteHeader />
+            <div className="h-[96px] shrink-0" aria-hidden="true" />
 
             {/* Left — model name + description */}
             <div className="absolute" style={{ left: 71, top: 186 }}>
@@ -234,123 +249,141 @@ export default function BuyPage() {
                 Таблица размеров
               </button>
 
-              {/* Right — МОДЕЛЬ */}
-              <p
-                className="absolute uppercase"
+              {/* Right — МОДЕЛЬ (заголовок и квадраты в одном блоке) */}
+              <div
+                className="absolute flex flex-col items-center"
                 style={{
                   left: 1465,
                   top: 210,
                   transform: "translateX(-50%)",
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 48,
-                  fontWeight: 700,
-                  color: "#111",
+                  gap: DESKTOP_MODEL_HEADING_GAP,
                 }}
               >
-                МОДЕЛЬ
-              </p>
-              <div className="absolute flex -translate-x-1/2" style={{ left: 1465, top: 288, gap: 46 }}>
-                {MODEL_OPTIONS.map((model) => (
-                  <button
-                    key={`desktop-model-${model.key}`}
-                    type="button"
-                    onClick={() => setActiveModelKey(model.key)}
-                    className="overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
-                    style={{
-                      width: model.key === "high" ? 76 : 74,
-                      height: 75,
-                      border: activeModelKey === model.key ? "2px solid #f07426" : "2px solid #e0e0e0",
-                    }}
-                  >
-                    <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
-                  </button>
-                ))}
-              </div>
-              <div className="absolute flex -translate-x-1/2 gap-[44px]" style={{ left: 1465, top: 372 }}>
-                {MODEL_OPTIONS.map((model) => (
-                  <p
-                    key={`desktop-model-label-${model.key}`}
-                    className="text-center uppercase whitespace-nowrap"
-                    style={{
-                      width: model.key === "high" ? 76 : 74,
-                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                      fontSize: 20,
-                      fontWeight: 700,
-                      color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
-                      textDecoration: activeModelKey === model.key ? "underline" : "none",
-                    }}
-                  >
-                    {model.label}
-                  </p>
-                ))}
+                <p
+                  className="uppercase"
+                  style={{
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                    fontSize: 36,
+                    fontWeight: 700,
+                    color: "#111",
+                  }}
+                >
+                  МОДЕЛЬ
+                </p>
+                <div className="flex gap-[46px]">
+                {MODEL_OPTIONS.map((model) => {
+                  const colW = model.key === "high" ? 76 : 74;
+                  return (
+                    <div key={`desktop-model-col-${model.key}`} className="flex flex-col items-center gap-4" style={{ width: colW, minWidth: colW }}>
+                      <button
+                        type="button"
+                        onClick={() => setActiveModelKey(model.key)}
+                        className="shrink-0 overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
+                        style={{
+                          width: colW,
+                          height: 75,
+                          border: activeModelKey === model.key ? "2px solid #f07426" : "2px solid #e0e0e0",
+                        }}
+                      >
+                        <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
+                      </button>
+                      <p
+                        className="flex min-w-0 w-full justify-center uppercase"
+                        style={{
+                          margin: 0,
+                          padding: 0,
+                          fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                          fontSize: 17,
+                          fontWeight: 700,
+                          color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
+                          textDecoration: activeModelKey === model.key ? "underline" : "none",
+                        }}
+                      >
+                        {model.label}
+                      </p>
+                    </div>
+                  );
+                })}
+                </div>
               </div>
 
-              {/* Right — ЦВЕТ */}
-              <p
-                className="absolute uppercase"
+              {/* Right — ЦВЕТ (заголовок и квадраты в одном блоке) */}
+              <div
+                className="absolute flex flex-col items-center"
                 style={{
                   left: 1465,
-                  top: 398,
+                  top: DESKTOP_COLOR_TOP,
                   transform: "translateX(-50%)",
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 48,
-                  fontWeight: 700,
-                  color: "#111",
+                  gap: DESKTOP_COLOR_HEADING_GAP,
                 }}
               >
-                ЦВЕТ
-              </p>
-
-              {/* Color swatches */}
-              <div className="absolute flex -translate-x-1/2" style={{ left: 1465, top: 476, gap: 46 }}>
-                <button
-                  type="button"
-                  onClick={() => setColorVariant("black")}
-                  className="rounded-[8px] transition-all"
-                  style={{
-                    width: 76,
-                    height: 75,
-                    backgroundColor: "#191919",
-                    border: colorVariant === "black" ? "2px solid #f07426" : "2px solid #e0e0e0",
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setColorVariant("oliva")}
-                  className="rounded-[8px] transition-all"
-                  style={{
-                    width: 74,
-                    height: 75,
-                    backgroundColor: "#686248",
-                    border: colorVariant === "oliva" ? "2px solid #f07426" : "2px solid #e0e0e0",
-                  }}
-                />
-              </div>
-
-              {/* Color labels */}
-              <div className="absolute flex -translate-x-1/2 gap-[44px]" style={{ left: 1465, top: 560 }}>
                 <p
-                  className="w-[76px] text-center uppercase"
+                  className="uppercase"
                   style={{
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 20,
+                    fontSize: 36,
                     fontWeight: 700,
-                    color: "#999",
+                    color: "#111",
                   }}
                 >
-                  ЧЕРНЫЙ
+                  ЦВЕТ
                 </p>
-                <p
-                  className="w-[74px] text-center uppercase"
-                  style={{
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 20,
-                    fontWeight: 700,
-                    color: "#999",
-                  }}
-                >
-                  ОЛИВА
-                </p>
+                <div className="flex gap-[46px]">
+                <div className="flex flex-col items-center gap-4" style={{ width: 76, minWidth: 76 }}>
+                  <button
+                    type="button"
+                    onClick={() => setColorVariant("black")}
+                    className="shrink-0 rounded-[8px] transition-all"
+                    style={{
+                      width: 76,
+                      height: 75,
+                      backgroundColor: "#191919",
+                      border: colorVariant === "black" ? "2px solid #f07426" : "2px solid #e0e0e0",
+                    }}
+                  />
+                  <p
+                    className="flex min-w-0 w-full justify-center uppercase"
+                    style={{
+                      margin: 0,
+                      padding: 0,
+                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                      fontSize: 17,
+                      fontWeight: 700,
+                      color: colorVariant === "black" ? "#f07426" : "#9a9a9a",
+                      textDecoration: colorVariant === "black" ? "underline" : "none",
+                    }}
+                  >
+                    ЧЕРНЫЙ
+                  </p>
+                </div>
+                <div className="flex flex-col items-center gap-4" style={{ width: 74, minWidth: 74 }}>
+                  <button
+                    type="button"
+                    onClick={() => setColorVariant("oliva")}
+                    className="shrink-0 rounded-[8px] transition-all"
+                    style={{
+                      width: 74,
+                      height: 75,
+                      backgroundColor: "#686248",
+                      border: colorVariant === "oliva" ? "2px solid #f07426" : "2px solid #e0e0e0",
+                    }}
+                  />
+                  <p
+                    className="flex min-w-0 w-full justify-center uppercase"
+                    style={{
+                      margin: 0,
+                      padding: 0,
+                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                      fontSize: 17,
+                      fontWeight: 700,
+                      color: colorVariant === "oliva" ? "#f07426" : "#9a9a9a",
+                      textDecoration: colorVariant === "oliva" ? "underline" : "none",
+                    }}
+                  >
+                    ОЛИВА
+                  </p>
+                </div>
+                </div>
               </div>
 
               {/* Buy button */}
@@ -359,7 +392,7 @@ export default function BuyPage() {
                 className="absolute"
                 style={{
                   left: 1465,
-                  top: 692,
+                  top: 752,
                   transform: "translateX(-50%)",
                   width: 224,
                   height: 72,
@@ -467,7 +500,7 @@ export default function BuyPage() {
       </section>
 
       {/* ── MOBILE ── */}
-      <section className="min-[1200px]:hidden mobile-header-offset">
+      <section className="min-[1200px]:hidden">
         <div
           className="relative w-full overflow-hidden bg-white"
           style={{
@@ -552,111 +585,112 @@ export default function BuyPage() {
               Таблица размеров
             </button>
 
-            <p
-              className="absolute left-[70px] top-[452px] uppercase"
-              style={{
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 54,
-                fontWeight: 700,
-                color: "#111",
-              }}
+            <div
+              className="absolute left-[70px] top-[452px] flex flex-col"
+              style={{ gap: MOBILE_MODEL_HEADING_GAP }}
             >
-              МОДЕЛЬ
-            </p>
-
-            <div className="absolute left-[70px] top-[532px] flex items-start gap-[24px]">
-              {MODEL_OPTIONS.map((model) => (
-                <button
-                  key={`mobile-model-${model.key}`}
-                  type="button"
-                  onClick={() => setActiveModelKey(model.key)}
-                  className="overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
-                  style={{
-                    width: model.key === "high" ? 96 : 94,
-                    height: 95,
-                    border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #9a9a9a",
-                  }}
-                >
-                  <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
-                </button>
-              ))}
+              <p
+                className="uppercase"
+                style={{
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 40,
+                  fontWeight: 700,
+                  color: "#111",
+                }}
+              >
+                МОДЕЛЬ
+              </p>
+              <div className="flex gap-[24px]">
+              {MODEL_OPTIONS.map((model) => {
+                const colW = model.key === "high" ? 96 : 94;
+                return (
+                  <div key={`mobile-model-col-${model.key}`} className="flex flex-col items-center gap-3" style={{ width: colW, minWidth: colW }}>
+                    <button
+                      type="button"
+                      onClick={() => setActiveModelKey(model.key)}
+                      className="shrink-0 overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
+                      style={{
+                        width: colW,
+                        height: 95,
+                        border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #9a9a9a",
+                      }}
+                    >
+                      <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
+                    </button>
+                    <p
+                      className="flex min-w-0 w-full justify-center uppercase"
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                        fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                        fontSize: 19,
+                        fontWeight: 700,
+                        color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
+                        textDecoration: activeModelKey === model.key ? "underline" : "none",
+                      }}
+                    >
+                      {model.label}
+                    </p>
+                  </div>
+                );
+              })}
+              </div>
             </div>
 
-            <div className="absolute left-[70px] top-[638px] flex gap-[20px]">
-              {MODEL_OPTIONS.map((model) => (
-                <p
-                  key={`mobile-model-label-${model.key}`}
-                  className="text-center uppercase whitespace-nowrap"
-                  style={{
-                    width: model.key === "high" ? 96 : 94,
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 22,
-                    fontWeight: 700,
-                    color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
-                    textDecoration: activeModelKey === model.key ? "underline" : "none",
-                  }}
-                >
-                  {model.label}
-                </p>
-              ))}
+            <div
+              className="absolute left-[398px] flex flex-col"
+              style={{ top: MOBILE_COLOR_TOP, gap: MOBILE_COLOR_HEADING_GAP }}
+            >
+              <p
+                className="uppercase"
+                style={{
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 40,
+                  fontWeight: 700,
+                  color: "#111",
+                }}
+              >
+                ЦВЕТ
+              </p>
+              <div className="flex gap-[20px]">
+              {(["black", "oliva"] as ColorVariant[]).map((v) => {
+                const colW = v === "black" ? 96 : 94;
+                return (
+                  <div key={v} className="flex flex-col items-center gap-3" style={{ width: colW, minWidth: colW }}>
+                    <button
+                      type="button"
+                      onClick={() => setColorVariant(v)}
+                      className="shrink-0 rounded-[8px] transition-all"
+                      style={{
+                        width: colW,
+                        height: 95,
+                        backgroundColor: v === "black" ? "#191919" : "#686248",
+                        border: colorVariant === v ? "2px solid #f07426" : "1px solid #9a9a9a",
+                      }}
+                    />
+                    <p
+                      className="flex min-w-0 w-full justify-center uppercase"
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                        fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                        fontSize: 19,
+                        fontWeight: 700,
+                        color: colorVariant === v ? "#f07426" : "#9a9a9a",
+                        textDecoration: colorVariant === v ? "underline" : "none",
+                      }}
+                    >
+                      {v === "black" ? "ЧЕРНЫЙ" : "ОЛИВА"}
+                    </p>
+                  </div>
+                );
+              })}
+              </div>
             </div>
-
-            <p
-              className="absolute left-[398px] top-[452px] uppercase"
-              style={{
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 54,
-                fontWeight: 700,
-                color: "#111",
-              }}
-            >
-              ЦВЕТ
-            </p>
-            <div className="absolute left-[398px] top-[532px] flex items-start gap-[20px]">
-              {(["black", "oliva"] as ColorVariant[]).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setColorVariant(v)}
-                  className="rounded-[8px] transition-all"
-                  style={{
-                    width: v === "black" ? 96 : 94,
-                    height: 95,
-                    backgroundColor: v === "black" ? "#191919" : "#686248",
-                    border: colorVariant === v ? "2px solid #f07426" : "1px solid #9a9a9a",
-                  }}
-                />
-              ))}
-            </div>
-
-            <p
-              className="absolute left-[446px] top-[638px] -translate-x-1/2"
-              style={{
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 22,
-                fontWeight: 700,
-                color: colorVariant === "black" ? "#f07426" : "#9a9a9a",
-                textDecoration: colorVariant === "black" ? "underline" : "none",
-              }}
-            >
-              ЧЕРНЫЙ
-            </p>
-            <p
-              className="absolute left-[574px] top-[638px] -translate-x-1/2"
-              style={{
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 22,
-                fontWeight: 700,
-                color: colorVariant === "oliva" ? "#f07426" : "#9a9a9a",
-                textDecoration: colorVariant === "oliva" ? "underline" : "none",
-              }}
-            >
-              ОЛИВА
-            </p>
 
             <button
               type="button"
-              className="absolute left-[398px] top-[764px] h-[72px] w-[248px] rounded-[16px] text-[26px] text-white"
+              className="absolute left-[398px] top-[852px] h-[72px] w-[248px] rounded-[16px] text-[26px] text-white"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
@@ -731,7 +765,7 @@ export default function BuyPage() {
             <div className="flex items-center justify-between border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
               <h3
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 32, fontWeight: 700 }}
+                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 24, fontWeight: 700 }}
               >
                 Размерная сетка
               </h3>

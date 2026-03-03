@@ -135,9 +135,9 @@ body {
   min-height: var(--figma-stage-height, 1024px);
 }
 
-/* Отступ контента под фиксированный мобильный хедер (только на мобильных; на десктопе не трогаем) */
+/* Отступ контента под фиксированный мобильный хедер: 4rem = высота хедера h-16 (только на мобильных) */
 @media (max-width: 1199px) {
   .mobile-header-offset {
-    padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+    padding-top: calc(4rem + env(safe-area-inset-top, 0px));
   }
 }

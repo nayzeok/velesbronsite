@@ -31,13 +31,6 @@ const GUARANTEE_STEPS = [
   "Обратная отправка за счет бренда. Срок процесса — до 45 дней.",
 ] as const;
 
-const GUARANTEE_LIMITS = [
-  "Расширенная пожизненная гарантия действует только при активации сертификата в течение 14 дней.",
-  "Возврат денежных средств по расширенной гарантии не предусмотрен.",
-  "Гарантия предоставляется один раз на одну пару.",
-  "При отсутствии активации действует стандартная гарантия по законодательству РФ.",
-] as const;
-
 function MarketplaceIcon({ type }: { type: "wildberries" | "ozon" }) {
   if (type === "wildberries") {
     return (
@@ -92,7 +85,7 @@ export default function WhereToBuyPage() {
         </div>
       </div>
 
-      <section className="figma-site-stage relative z-10 mx-auto h-[100dvh] w-full overflow-hidden mobile-header-offset">
+      <section className="figma-site-stage relative z-10 mx-auto h-[100dvh] w-full overflow-hidden">
         <div className="relative mx-auto h-full w-full max-w-[1670px] overflow-hidden">
           <SiteHeader />
 
@@ -101,7 +94,7 @@ export default function WhereToBuyPage() {
               className="uppercase text-[#111]"
               style={{
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: "clamp(48px,4.8vw,65px)",
+                fontSize: "clamp(36px,3.6vw,49px)",
                 lineHeight: 1,
               }}
             >
@@ -162,34 +155,28 @@ export default function WhereToBuyPage() {
         </div>
       </section>
 
-      <section className="relative z-10 py-16">
-        <div className="mx-auto w-[min(1100px,92vw)]">
-          <div className="rounded-[28px] bg-[linear-gradient(180deg,#E7813F_0%,#FC6407_100%)] p-7 text-white shadow-[0_30px_70px_rgba(252,100,7,0.28)] min-[980px]:p-10">
-            <h2
-              className="uppercase"
-              style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
-            >
-              Гарантия и сервис
-            </h2>
-            <p className="mt-4 max-w-[850px] text-[18px] leading-[1.35] text-white/92">
-              Гарантия VELESBRON — это элемент позиционирования, инструмент доверия и управляемый сервисный процесс. Это не «подарок»,
-              а контракт ответственности.
-            </p>
-            <ol className="mt-6 grid gap-3 text-[15px] leading-[1.35] text-white/95 min-[980px]:grid-cols-2">
-              {GUARANTEE_STEPS.map((item, i) => (
-                <li key={item} className="rounded-[14px] bg-white/14 px-4 py-3">
-                  <span className="mr-2 font-semibold">{i + 1}.</span>
-                  {item}
-                </li>
-              ))}
-            </ol>
-            <ul className="mt-5 grid gap-3 text-[14px] leading-[1.35] text-white/95 min-[980px]:grid-cols-2">
-              {GUARANTEE_LIMITS.map((item) => (
-                <li key={item} className="rounded-[14px] bg-[#111]/16 px-4 py-3">
-                  {item}
-                </li>
-              ))}
-            </ul>
+      {/* Гарантия и сервис — отдельный полноэкранный блок, 6 шагов (фон как сверху) */}
+      <section className="relative z-10 flex min-h-[100dvh] flex-col justify-center py-16">
+        <div className="mx-auto w-[min(1100px,92vw)] px-4">
+          <h2
+            className="uppercase text-[#111]"
+            style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+          >
+            Гарантия и сервис
+          </h2>
+          <p className="mt-4 max-w-[720px] text-[18px] leading-[1.35] text-[#111]/72">
+            Гарантия VELESBRON — это контракт ответственности. Управляемый процесс от обращения до решения.
+          </p>
+          <div className="mt-12 grid gap-6 min-[640px]:grid-cols-2 min-[980px]:grid-cols-3">
+            {GUARANTEE_STEPS.map((item, i) => (
+              <div
+                key={item}
+                className="rounded-[24px] bg-[#E67A38] px-6 py-6 text-[17px] leading-[1.4] text-white shadow-[0_30px_70px_rgba(230,122,56,0.35)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_40px_80px_rgba(230,122,56,0.45)] min-[980px]:px-8 min-[980px]:py-7 min-[980px]:text-[18px]"
+              >
+                <span className="mr-2 font-bold">{i + 1}.</span>
+                {item}
+              </div>
+            ))}
           </div>
         </div>
       </section>

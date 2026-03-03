@@ -4,7 +4,14 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 
-type MenuKey = "home" | "brand" | "advantages" | "models" | "whereToBuy" | "media" | "contacts";
+/** Отступ от левого края экрана: min (px), vw, max (px) */
+const HEADER_EDGE_PADDING_LEFT = "clamp(138px, 9.5vw, 136px)";
+/** Отступ от правого края экрана: min (px), vw, max (px) */
+const HEADER_EDGE_PADDING_RIGHT = "clamp(108px, 9.5vw, 106px)";
+/** Отступ от лого до пунктов меню (слева и справа), px */
+const LOGO_GAP = 100;
+
+type MenuKey = "brand" | "advantages" | "models" | "whereToBuy" | "media" | "contacts";
 type HeaderTone = "dark" | "light";
 
 type SiteHeaderProps = {
@@ -14,13 +21,14 @@ type SiteHeaderProps = {
   style?: CSSProperties;
 };
 
-const HEADER_MENU_ITEMS: { key: MenuKey; label: string; href: string }[] = [
-  { key: "home", label: "Главная", href: "/" },
+const LEFT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
   { key: "brand", label: "О бренде", href: "/brand" },
   { key: "advantages", label: "Преимущества", href: "/advantages" },
   { key: "models", label: "Модельный ряд", href: "/models" },
+];
+const RIGHT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
   { key: "whereToBuy", label: "Где купить", href: "/where-to-buy" },
-  { key: "media", label: "Медиа", href: "/#media" },
+  { key: "media", label: "Медиа", href: "/media" },
   { key: "contacts", label: "Контакты", href: "/contacts" },
 ];
 
@@ -30,57 +38,103 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
 
   return (
     <header
-      className={`hidden min-[1200px]:block ${className ?? "absolute top-0 z-20 h-[96px] pt-[18px]"}`}
-      style={
-        style ?? {
-          left: 0,
-          width: "100%",
-          paddingLeft: "clamp(24px, 3.6vw, 61px)",
-          paddingRight: "clamp(24px, 3.6vw, 61px)",
-        }
-      }
+      className={`hidden min-[1200px]:block ${className ?? "absolute top-0 z-20 h-[96px]"}`}
+      style={style ?? { left: 0, width: "100%" }}
     >
-      <nav className="flex items-center gap-5">
-        {HEADER_MENU_ITEMS.map((item) => {
-          const isActiveByPath =
-            (item.key === "home" && pathname === "/") ||
-            (item.key === "brand" && pathname?.startsWith("/brand")) ||
-            (item.key === "advantages" && pathname?.startsWith("/advantages")) ||
-            (item.key === "models" && pathname?.startsWith("/models")) ||
-            (item.key === "whereToBuy" && pathname?.startsWith("/where-to-buy")) ||
-            (item.key === "contacts" && pathname?.startsWith("/contacts"));
-          const isActive = item.key === activeItem || isActiveByPath;
-          if (isActive) {
+      <div
+        className="relative grid w-full items-center"
+        style={{
+          paddingLeft: HEADER_EDGE_PADDING_LEFT,
+          paddingRight: HEADER_EDGE_PADDING_RIGHT,
+          gridTemplateColumns: `1fr ${LOGO_GAP}px 280px ${LOGO_GAP}px 1fr`,
+          gap: "0",
+        }}
+      >
+        <nav className="flex justify-between items-center min-w-0" aria-label="Меню слева">
+          {LEFT_ITEMS.map((item) => {
+            const isActiveByPath =
+              (item.key === "brand" && pathname?.startsWith("/brand")) ||
+              (item.key === "advantages" && pathname?.startsWith("/advantages")) ||
+              (item.key === "models" && pathname?.startsWith("/models"));
+            const isActive = item.key === activeItem || isActiveByPath;
+            if (isActive) {
+              return (
+                <span
+                  key={item.key}
+                  className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-[24px] font-medium text-white whitespace-nowrap"
+                  style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
+                >
+                  {item.label}
+                </span>
+              );
+            }
             return (
-              <span
+              <Link
                 key={item.key}
-                className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-xs font-medium text-white"
+                href={item.href}
+                className={`text-[24px] font-medium whitespace-nowrap ${inactiveTextClass}`}
                 style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
               >
                 {item.label}
-              </span>
+              </Link>
             );
-          }
+          })}
+        </nav>
 
-          return (
-            <Link
-              key={item.key}
-              href={item.href}
-              className={`text-xs font-medium ${inactiveTextClass}`}
-              style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
-            >
-              {item.label}
-            </Link>
-          );
-        })}
-      </nav>
+        <div aria-hidden="true" />
 
-      <div className="absolute left-1/2 top-0 h-[166px] w-[345px] -translate-x-1/2 rounded-[10px]">
-        <img
-          src="/images/pages/velesbron_logo_countr.png"
-          alt="Velesbron"
-          className="absolute left-1/2 top-[13px] h-[105px] w-[327px] -translate-x-1/2 object-contain"
-        />
+        <div className="relative flex justify-center">
+          {/* Белая плашка за лого: верх уходит за край экрана */}
+          <div
+            className="absolute left-1/2 z-[5] h-[180px] w-[320px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_8px_24px_rgba(0,0,0,0.08)]"
+            style={{ top: "-70px" }}
+            aria-hidden="true"
+          />
+          <Link
+            href="/"
+            className="relative z-10 flex h-[105px] w-[280px] items-center justify-center rounded-[10px]"
+            aria-label="Velesbron — на главную"
+          >
+            <img
+              src="/images/pages/velesbron_logo.png"
+              alt=""
+              className="h-[105px] w-[280px] object-contain"
+            />
+          </Link>
+        </div>
+
+        <div aria-hidden="true" />
+
+        <nav className="flex justify-between items-center min-w-0" aria-label="Меню справа">
+          {RIGHT_ITEMS.map((item) => {
+            const isActiveByPath =
+              (item.key === "whereToBuy" && pathname?.startsWith("/where-to-buy")) ||
+              (item.key === "media" && pathname?.startsWith("/media")) ||
+              (item.key === "contacts" && pathname?.startsWith("/contacts"));
+            const isActive = item.key === activeItem || isActiveByPath;
+            if (isActive) {
+              return (
+                <span
+                  key={item.key}
+                  className="rounded-[10px] bg-gradient-to-r from-[#8b7a71] to-[#756257] px-5 py-3 text-[24px] font-medium text-white whitespace-nowrap"
+                  style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
+                >
+                  {item.label}
+                </span>
+              );
+            }
+            return (
+              <Link
+                key={item.key}
+                href={item.href}
+                className={`text-[24px] font-medium whitespace-nowrap ${inactiveTextClass}`}
+                style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
 
       {/*<div className="absolute top-[22px] flex items-center gap-[10px]" style={{ right: "clamp(24px, 5.7vw, 96px)" }}>

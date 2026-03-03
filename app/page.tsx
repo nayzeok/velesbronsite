@@ -3,10 +3,7 @@
 import Link from "next/link";
 import SiteHeader from "@/components/layout/SiteHeader";
 
-const figmaHeroBackground = "https://www.figma.com/api/mcp/asset/60c54a29-4bcc-4980-852b-b25d59719777";
-const figmaPreviewCardBackground = "https://www.figma.com/api/mcp/asset/0cc1de12-e6e7-4b8b-bc1b-277f10898fa0";
-const figmaPreviewCardModel = "https://www.figma.com/api/mcp/asset/657e6955-f498-415b-a0de-c7c0b1b9bb6b";
-const figmaMobilePreviewCardModel = "https://www.figma.com/api/mcp/asset/3b809981-9952-42d2-919c-602578ecc9bd";
+const heroBackground = "/images/pages/hero-background.png";
 const figmaMobileHeaderLogo = "https://www.figma.com/api/mcp/asset/dd45ea25-f504-4c35-a74a-80ccec60b9e0";
 const MOBILE_HERO_BOOT = {
   width: 660,
@@ -20,13 +17,13 @@ const MOBILE_HERO_HEADLINE = {
   left: 726,
   top: 169,
   width: 658,
-  fontSize: 96,
-  lineHeight: 90,
+  fontSize: 72,
+  lineHeight: 68,
   designWidth: 741,
 } as const;
 const MOBILE_MODEL_LABEL = {
   left: 26,
-  top: 440,
+  top: 468,
   width: 380,
   designWidth: 741,
 } as const;
@@ -41,25 +38,25 @@ const DESIGN_HEIGHT = 1000;
 
 const heroThumbs = [
   {
-    key: "146:20",
-    image: "https://www.figma.com/api/mcp/asset/f6b599c0-0070-466c-88e2-937ee312b22c",
+    key: "1",
+    image: "/images/pages/hero_mini_photo_1.png",
     frame: { left: 3, top: -11, width: 58, height: 77 },
     transform: "scaleY(-1) rotate(180deg)",
   },
   {
-    key: "146:22",
-    image: "https://www.figma.com/api/mcp/asset/7ddefd8e-e56f-4ef0-aaa6-705a339a8363",
+    key: "2",
+    image: "/images/pages/hero_mini_photo_2.png",
     frame: { left: 3, top: -11, width: 58, height: 77 },
     transform: "scaleY(-1) rotate(180deg)",
   },
   {
-    key: "146:24",
-    image: "https://www.figma.com/api/mcp/asset/9c1f73ec-752c-49ba-8507-0f41e65fdd4c",
+    key: "3",
+    image: "/images/pages/hero_mini_photo_3.png",
     frame: { left: 0, top: -22, width: 67, height: 90 },
   },
   {
-    key: "146:26",
-    image: "https://www.figma.com/api/mcp/asset/5ec81acf-7868-46a4-8e09-0b6c4020723e",
+    key: "4",
+    image: "/images/pages/hero_mini_photo_4.png",
     frame: { left: 0, top: -11, width: 66, height: 88 },
   },
 ];
@@ -73,7 +70,7 @@ export default function Home() {
           className="relative overflow-hidden"
           style={{
             minHeight: "max(100dvh, 640px)",
-            paddingTop: "calc(5.5rem + env(safe-area-inset-top, 0px))",
+            paddingTop: "calc(4rem + env(safe-area-inset-top, 0px))",
             paddingLeft: "env(safe-area-inset-left, 0px)",
             paddingRight: "env(safe-area-inset-right, 0px)",
             paddingBottom: "env(safe-area-inset-bottom, 0px)",
@@ -82,9 +79,9 @@ export default function Home() {
           {/* Фон на всю высоту, в т.ч. под хедером; отступ только у контента */}
           <div
             className="absolute left-0 right-0 bottom-0 z-0"
-            style={{ top: "calc(-5.5rem - env(safe-area-inset-top, 0px))" }}
+            style={{ top: "calc(-4rem - env(safe-area-inset-top, 0px))" }}
           >
-            <img src={figmaHeroBackground} alt="" className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover" />
+            <img src={heroBackground} alt="" className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover" />
             <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)]" />
           </div>
 
@@ -97,10 +94,10 @@ export default function Home() {
               transform: "translateX(-100%)",
               textAlign: "right",
               fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-              fontSize: `calc((100vw / ${MOBILE_HERO_HEADLINE.designWidth}) * ${MOBILE_HERO_HEADLINE.fontSize})`,
+              fontSize: "clamp(21px, 7.1vw, 33px)",
               fontStyle: "normal",
               fontWeight: 500,
-              lineHeight: `calc((100vw / ${MOBILE_HERO_HEADLINE.designWidth}) * ${MOBILE_HERO_HEADLINE.lineHeight})`,
+              lineHeight: 1,
               letterSpacing: "0.01em",
               backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
               backgroundClip: "text",
@@ -112,7 +109,7 @@ export default function Home() {
           </h1>
 
           <div
-            className="absolute z-20 max-w-[calc(100vw-32px)]"
+            className="absolute z-30 max-w-[calc(100vw-32px)] overflow-visible"
             style={{
               left: `calc((100vw / ${MOBILE_MODEL_LABEL.designWidth}) * ${MOBILE_MODEL_LABEL.left})`,
               top: `calc((100vw / ${MOBILE_MODEL_LABEL.designWidth}) * ${MOBILE_MODEL_LABEL.top})`,
@@ -120,7 +117,7 @@ export default function Home() {
             }}
           >
             <h2
-              className="bg-clip-text text-[clamp(32px,12vw,46px)] uppercase leading-none text-transparent"
+              className="bg-clip-text text-[clamp(24px,9vw,36px)] uppercase leading-none text-transparent"
               style={{
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontStyle: "normal",
@@ -131,36 +128,32 @@ export default function Home() {
               МОДЕЛЬ &apos;2026
             </h2>
 
-            <div className="mt-1.5 flex items-center">
+            <div className="mt-1 flex items-center">
               {heroThumbs.map((item, index) => (
-                <div key={item.key} className={index === 0 ? "" : "-ml-1.5"}>
-                  <div className="relative size-[44px] overflow-hidden rounded-full bg-[#f4f4f2]">
-                    <img
-                      src={item.image}
-                      alt=""
-                      className="pointer-events-none absolute max-w-none object-cover"
-                      style={{
-                        left: item.frame.left * 0.66,
-                        top: item.frame.top * 0.66,
-                        width: item.frame.width * 0.66,
-                        height: item.frame.height * 0.66,
-                        transform: item.transform,
-                        transformOrigin: "center center",
-                      }}
-                    />
+                  <div key={item.key} className={`shrink-0 ${index === 0 ? "" : "-ml-3"}`}>
+                    <div className="relative h-[36px] w-[36px] min-h-[36px] min-w-[36px] shrink-0 overflow-hidden rounded-full bg-[#f4f4f2]">
+                      <img
+                        src={item.image}
+                        alt=""
+                        className="pointer-events-none absolute left-0 top-0 h-full w-full object-contain"
+                        style={{
+                          transform: item.transform ? `scale(1.1) ${item.transform}` : "scale(1.1)",
+                          transformOrigin: "center center",
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
               ))}
             </div>
 
             <p
-              className="mt-2 max-w-[305px] text-white"
+              className="mt-1.5 max-w-[305px] text-white"
               style={{
                 fontFamily: "var(--font-roboto-flex), sans-serif",
-                fontSize: "clamp(13px,3.8vw,15px)",
+                fontSize: "clamp(11px,3vw,13px)",
                 fontStyle: "normal",
                 fontWeight: 400,
-                lineHeight: "22px",
+                lineHeight: 1.35,
               }}
             >
               Разработано для силовых структур и спортивного образа жизни
@@ -213,38 +206,6 @@ export default function Home() {
               Купить
             </Link>
           </div>
-
-          <div
-            className="absolute right-4 z-20 overflow-hidden rounded-[11px] bg-white"
-            style={{
-              width: "min(133px, 36vw)",
-              height: "min(170px, 45vw)",
-              bottom: "max(0.625rem, env(safe-area-inset-bottom, 0px))",
-            }}
-          >
-            <img
-              src={figmaPreviewCardBackground}
-              alt=""
-              className="pointer-events-none absolute max-w-none object-cover opacity-85"
-              style={{ left: -52, top: -17, width: 288, height: 192 }}
-            />
-            <img
-              src={figmaMobilePreviewCardModel}
-              alt="Превью модели"
-              className="pointer-events-none absolute max-w-none object-cover"
-              style={{ left: 0, top: -10, width: 133, height: 177 }}
-            />
-          </div>
-
-          {/* | 01/04 | и точки-индикаторы
-          <p className="absolute bottom-3 right-[164px] z-20 text-[18px] leading-[1.1] text-white">| 01/04 |</p>
-          <div className="absolute bottom-[175px] right-[90px] z-20 flex items-center gap-[6px]">
-            <span className="size-[8px] rounded-full bg-white" />
-            <span className="size-[8px] rounded-full bg-white/45" />
-            <span className="size-[8px] rounded-full bg-white/45" />
-            <span className="size-[8px] rounded-full bg-white/45" />
-          </div>
-          */}
         </div>
       </section>
 
@@ -254,7 +215,7 @@ export default function Home() {
       >
         <div className="absolute inset-0">
           <img
-            src={figmaHeroBackground}
+            src={heroBackground}
             alt=""
             className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover"
           />
@@ -262,22 +223,21 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          <SiteHeader
+            tone="light"
+            className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full"
+          />
           <div
             className="absolute inset-x-0 top-0 h-[1000px] origin-top"
             style={{
               transform: `scale(${stageHeightFitScale})`,
             }}
           >
-        <div className="relative flex h-[1000px] w-full flex-col px-[clamp(24px,3.6vw,67px)] pb-0 pt-[18px]">
-          <SiteHeader
-            activeItem="home"
-            tone="light"
-            className="relative h-[96px]"
-            style={{ left: 0, width: "100%" }}
-          />
+        <div className="relative flex h-[1000px] w-full flex-col px-[clamp(28px,3.5vw,56px)] pb-0 pt-[18px]">
+          <div className="h-[96px] shrink-0" aria-hidden="true" />
 
           <div className="relative mt-[clamp(24px,6vh,74px)] flex flex-1">
-            <div className="relative z-20 w-[clamp(320px,28vw,420px)] shrink-0">
+            <div className="relative z-30 w-[clamp(320px,28vw,420px)] shrink-0 overflow-visible">
               <h2
                 className="bg-clip-text text-[clamp(40px,3.4vw,55px)] font-medium uppercase leading-none text-transparent"
                 style={{
@@ -290,24 +250,20 @@ export default function Home() {
 
               <div className="mt-1 flex items-center">
                 {heroThumbs.map((item) => (
-                  <div key={item.key} className="-ml-[8px] first:ml-0">
-                    <div className="relative size-[66px] overflow-hidden rounded-full bg-transparent">
-                      <img
-                        src={item.image}
-                        alt=""
-                        className="pointer-events-none absolute max-w-none object-cover"
-                        style={{
-                          left: item.frame.left,
-                          top: item.frame.top,
-                          width: item.frame.width,
-                          height: item.frame.height,
-                          transform: item.transform,
-                          transformOrigin: "center center",
-                          mixBlendMode: "multiply",
-                        }}
-                      />
+                    <div key={item.key} className="shrink-0 -ml-5 first:ml-0">
+                      <div className="relative h-[66px] w-[66px] min-h-[66px] min-w-[66px] shrink-0 overflow-hidden rounded-full bg-transparent">
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="pointer-events-none absolute left-0 top-0 h-full w-full object-contain"
+                          style={{
+                            transform: item.transform ? `scale(0.94) ${item.transform}` : "scale(0.94)",
+                            transformOrigin: "center center",
+                            mixBlendMode: "multiply",
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
                 ))}
               </div>
 
@@ -316,47 +272,35 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="relative flex-1">
-              <div className="absolute right-[clamp(0px,2vw,40px)] top-0 z-30 w-[clamp(320px,40vw,658px)] overflow-visible">
-                <h1
-                  className="flex flex-col items-end uppercase"
-                  style={{
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    textAlign: "right",
-                    fontSize: "clamp(50px,6vw,58px)",
-                    fontStyle: "normal",
-                    fontWeight: 500,
-                    lineHeight: "0.94",
-                    letterSpacing: "0.01em",
-                    backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
-                    backgroundClip: "text",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  <span className="whitespace-nowrap">ТАКТИЧЕСКАЯ ОБУВЬ</span>
-                  <span className="whitespace-nowrap">ИЗ НАТУРАЛЬНЫХ</span>
-                  <span className="whitespace-nowrap">МАТЕРИАЛОВ</span>
-                </h1>
-              </div>
+            <div className="relative flex-1" />
+          </div>
 
-              {/* | 01/04 | и точки-индикаторы
-              <p className="absolute bottom-[clamp(35px,2.4vh,34px)] right-[clamp(104px,13vw,226px)] z-20 text-[18px] leading-[26px] text-white">
-                | 01/04 |
-              </p>
-
-              <div className="absolute bottom-[clamp(2px,0.8vh,10px)] right-[clamp(16px,4vw,55px)] z-20 flex items-center gap-[7px]">
-                <span className="size-[9px] rounded-full bg-white" />
-                <span className="size-[9px] rounded-full bg-white/45" />
-                <span className="size-[9px] rounded-full bg-white/45" />
-                <span className="size-[9px] rounded-full bg-white/45" />
-              </div>
-              */}
-            </div>
+          <div
+            className="absolute right-0 top-[clamp(138px,calc(7.5rem+6vh),188px)] z-20 w-[clamp(320px,40vw,658px)] flex flex-col items-end"
+            style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}
+          >
+            <h1
+              className="flex flex-col items-end uppercase"
+              style={{
+                textAlign: "right",
+                fontSize: "clamp(37px,4.5vw,43px)",
+                fontStyle: "normal",
+                fontWeight: 500,
+                lineHeight: "0.94",
+                letterSpacing: "0.01em",
+                backgroundImage: "linear-gradient(180deg, #FCFFFC 0%, #E7D1C7 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              <span className="whitespace-nowrap">ТАКТИЧЕСКАЯ ОБУВЬ</span>
+              <span className="whitespace-nowrap">ИЗ НАТУРАЛЬНЫХ</span>
+              <span className="whitespace-nowrap">МАТЕРИАЛОВ</span>
+            </h1>
           </div>
 
           <div className="pointer-events-none absolute left-[320px] top-[194px] z-20 h-[690px] w-[844px] overflow-visible">
-            {/* left/top — сдвиг в пикселях, width — размер */}
             <img
               src="/images/pages/main-model-for-hero.png"
               alt="Тактическая обувь"
@@ -365,26 +309,8 @@ export default function Home() {
             />
           </div>
 
-          {/* Превью-карточка модели — убрана с главной
-          <div className="absolute right-[clamp(0px,2vw,40px)] top-[676px] z-20 h-[293px] w-[230px] overflow-hidden rounded-[19px] bg-white">
-            <div className="relative h-full w-full">
-              <img
-                src={figmaPreviewCardBackground}
-                alt=""
-                className="pointer-events-none absolute max-w-none object-cover opacity-85"
-                style={{ left: -92, top: -30, width: 498, height: 332 }}
-              />
-              <img
-                src={figmaPreviewCardModel}
-                alt="Превью модели"
-                className="pointer-events-none absolute max-w-none object-cover"
-                style={{ left: 0, top: -17, width: 230, height: 306 }}
-              />
-            </div>
-          </div>
-          */}
-
-          <div className="absolute bottom-[clamp(80px,1.1vh,16px)] right-[clamp(24px,3.6vw,67px)] z-20 flex flex-col items-end">
+          {/* Высота блока «Одна универсальная пара» + кнопка: больше bottom = выше */}
+          <div className="absolute bottom-[clamp(170px,10vh,100px)] right-0 z-20 flex flex-col items-end">
             <p className="w-[clamp(320px,24vw,398px)] max-w-full text-right text-[24px] font-medium leading-[33px] text-[#c6c6c6]">
               <span className="text-white">Одна универсальная пара обуви,</span> которая не подведет ни в походе, ни на службе, ни в городе
             </p>

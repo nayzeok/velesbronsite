@@ -33,11 +33,11 @@ const colorViewImages = {
     "/images/models/views/models/2sk/black/5.png",
   ],
   oliva: [
-    "/images/models/views/models/2sk/oliva/7.png",
+    "/images/models/views/models/2sk/oliva/1_3.png",
     "/images/models/views/models/2sk/oliva/6.png",
     "/images/models/views/models/2sk/oliva/3.png",
     "/images/models/views/models/2sk/oliva/4.png",
-    "/images/models/views/models/2sk/oliva/2.png",
+    "/images/models/views/models/2sk/oliva/1_2.png",
   ],
 } as const;
 
@@ -52,26 +52,26 @@ const views = [
     callout: { title: "Натуральный нубук", text: "" },
     calloutStyle: {
       w: 260,
-      h: 80,
+      h: 120,
       titleSize: 22,
       textSize: 22,
       textOpacity: 0.4,
-      notch: { w: 58, h: 58, x: 220, y: -29, color: "#8B8B8B" },
+      //notch: { w: 58, h: 58, x: 220, y: -29, color: "#8B8B8B" },
     },
     metricTop: { value: "12", title: "кН", line1: "НАГРУЗКА", line2: "НА ПРОКОЛ" },
     metricSide: { value: "10", line1: "СЛОЁВ", line2: "ЗАЩИТЫ" },
     glue: "Гидрофобное покрытие",
-    glueStyle: { w: 334, h: 80, textSize: 24 },
+    glueStyle: { w: 300, h: 109, textSize: 22 },
     showGlue: true,
     showMetrics: false,
     glueVariant: "card",
     bootBox: { x: 460, y: 351, w: 722, h: 565 },
     bootPose: { rotate: 0, x: 0, y: 0, scale: 1.60 },
-    olivaPose: { rotate: 0, x: 0, y: -75, scale: 1.50 },
+    olivaPose: { rotate: 0, x: 60, y: -175, scale: 3 },
     anchors: {
-      calloutCard: { x: 348, y: 600 },
-      calloutDot: { x: 230, y: -20 },
-      glueBubble: { x: 970, y: 570 },
+      calloutCard: { x: 370, y: 600 },
+      calloutDot: { x: 235, y: 65 },
+      glueBubble: { x: 1050, y: 570 },
       glueDot: { x: -14, y: 50 },
     },
   },
@@ -81,18 +81,18 @@ const views = [
       "Защита и фиксация стопы: носовая часть усилена композитным подноском, а система шнуровки Quick-Lock помогает быстро и точно зафиксировать посадку под нагрузку.",
     image: mainBootFront,
     callout: { title: "Композитный подносок", text: "" },
-    calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
+    calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
     glue: "Система Quick-Lock",
-    glueStyle: { w: 260, h: 80, textSize: 22 },
+    glueStyle: { w: 300, h: 109, textSize: 22 },
     showMetrics: false,
     glueVariant: "card",
     bootBox: { x: 684, y: 232, w: 273, h: 564 },
     bootPose: { rotate: 0, x: 10, y: 40, scale: 1.75 },
-    olivaPose: { rotate: 0, x: 25, y: 10, scale: 2 },
+    olivaPose: { rotate: 0, x: 25, y: 45, scale: 1.77 },
     anchors: {
       calloutCard: { x: 1066, y: 717 },
       calloutDot: { x: -20, y: 34 },
-      glueBubble: { x: 856, y: 340 },
+      glueBubble: { x: 806, y: 340 },
       glueDot: { x: -20, y: 50 },
     },
   },
@@ -102,14 +102,14 @@ const views = [
       "Гибридная подошва EVA с износостойкой резиновой накладкой обеспечивает амортизацию, сцепление и лёгкость. Антипрокольная вставка из кевлара K-29 выдерживает нагрузку свыше 1265Н и защищает от проколов.",
     image: mainBootTop,
     callout: { title: "Гибридная подошва", text: "" },
-    calloutStyle: { w: 210, h: 120, titleSize: 22, textSize: 22 },
-    glueStyle: { w: 300, h: 108, textSize: 22 },
+    calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
+    glueStyle: { w: 300, h: 109, textSize: 22 },
     glue: "Антипрокольная вставка.",
     glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 565, y: 105, w: 555.071, h: 689.873 },
     bootPose: { rotate: -10, x: 60, y: 20, scale: 1.55 },
-    olivaPose: { rotate: -5, x: 60, y: -10, scale: 1.35 },
+    olivaPose: { rotate: -5, x: 60, y: 50, scale: 1.28 },
     anchors: {
       calloutCard: { x: 983, y: 500 },
       calloutDot: { x: 35, y: -15 },
@@ -123,16 +123,16 @@ const views = [
       "Мембрана VELTEX™ выполнена \"чулком\", проклеена по швам, защищает от влаги и сохраняет оптимальный микроклимат. Анатомическая стелька поддерживает стопу и снижает усталость.",
     image: mainBootTilt,
     callout: { title: "Мембрана VELTEX™", text: "" },
-    calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
+    calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
     metricTop: { value: "35", title: "°C", line1: "РАБОЧИЙ", line2: "ДИАПАЗОН" },
     metricSide: { value: "15", line1: "ОТ -15°C", line2: "СТАРТ" },
     glue: "Анатомическая стелька",
-    glueStyle: { w: 260, h: 109, textSize: 22 },
+    glueStyle: { w: 300, h: 109, textSize: 22 },
     glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 708, y: 116, w: 247, h: 692 },
-    bootPose: { rotate: 0, x: 0, y: 10, scale: 2.55 },
-    olivaPose: { rotate: 0, x: 30, y: -10, scale: 2.55 },
+    bootPose: { rotate: 0, x: 0, y: 10, scale: 2.75 },
+    olivaPose: { rotate: 0, x: 30, y: 50, scale: 2.2 },
     tempWidget: {
       x: 951,
       y: 170,
@@ -147,8 +147,8 @@ const views = [
     anchors: {
       calloutCard: { x: 904, y: 589 },
       calloutDot: { x: -20, y: 38 },
-      glueBubble: { x: 569, y: 698 },
-      glueDot: { x: 172, y: -3 },
+      glueBubble: { x: 469, y: 698 },
+      glueDot: { x: 262, y: -13 },
     },
   },
   {
@@ -157,19 +157,19 @@ const views = [
       "Узлы усилены тройными швами и армированными лавсановыми нитями. Конструкция рассчитана на многократные сгибы и повышенную нагрузку без расхождения швов.",
     image: mainBootBack,
     callout: { title: "Тройные швы", text: "" },
-    calloutStyle: { w: 260, h: 109, titleSize: 22, textSize: 22 },
+    calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
     metricTop: { value: "14", title: "ДН", line1: "СРОК", line2: "АКТИВАЦИИ" },
     metricSide: { value: "08", line1: "FIT", line2: "ПОЛНОТА" },
     glue: "Армированные нити",
-    glueStyle: { w: 260, h: 109, textSize: 22 },
+    glueStyle: { w: 300, h: 109, textSize: 22 },
     glueVariant: "card",
     showMetrics: false,
     bootBox: { x: 677, y: 138, w: 311, h: 675 },
     bootPose: { rotate: 0, x: 0, y: 30, scale: 1.7 },
-    olivaPose: { rotate: 0, x: 0, y: 90, scale: 1.65 },
+    olivaPose: { rotate: 0, x: 60, y: 0, scale: 3.5 },
     anchors: {
       calloutCard: { x: 536, y: 460 },
-      calloutDot: { x: 175, y: 4 },
+      calloutDot: { x: 235, y: -18 },
       glueBubble: { x: 923, y: 726 },
       glueDot: { x: -25, y: -3 },
     },
@@ -391,6 +391,9 @@ export default function ModelsPage() {
       : null;
   const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
   const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
+  const isCalloutSingleLine = !String(currentView.callout.text ?? "").trim();
+  const calloutCardHeight = isCalloutSingleLine ? 80 : currentView.calloutStyle.h;
+  const isGlueSingleLine = !currentView.glue.includes("\n");
   const currentGlueStyle =
     "glueStyle" in currentView
       ? currentView.glueStyle
@@ -399,6 +402,8 @@ export default function ModelsPage() {
           h: currentView.glueVariant === "card" ? currentView.calloutStyle.h : 34,
           textSize: currentView.glueVariant === "card" ? currentView.calloutStyle.titleSize : 12,
         };
+  const glueCardHeight =
+    currentView.glueVariant === "card" ? (isGlueSingleLine ? 80 : currentGlueStyle.h) : currentGlueStyle.h;
   const isThermalCallout = currentView.title === "ВНУТРЕННИЙ МАТЕРИАЛ";
   const calloutDotPosition = isThermalCallout
     ? {
@@ -570,6 +575,7 @@ export default function ModelsPage() {
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          <SiteHeader className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />
           <div
             className="absolute inset-x-0 top-0 h-[1000px] origin-top"
             style={{
@@ -604,44 +610,47 @@ export default function ModelsPage() {
               ))}
             </div>
 
-            <SiteHeader />
+            <div className="h-[96px] shrink-0" aria-hidden="true" />
 
-            <div className="absolute z-20 h-[520px] w-[560px]" style={{ left: "clamp(40px, 6.2vw, 103px)", top: "clamp(164px, 22.7vh, 232px)" }}>
-              <div className="relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="34"
-                  height="8"
-                  viewBox="0 0 34 8"
-                  fill="none"
-                  aria-hidden="true"
-                  className="absolute left-[-58px] top-1/2 -translate-y-1/2 shrink-0"
-                >
-                  <circle opacity="0.4" cx="4" cy="4" r="4" fill="#111111" />
-                  <circle opacity="0.2" cx="17" cy="4" r="4" fill="#111111" />
-                  <circle opacity="0.1" cx="30" cy="4" r="4" fill="#111111" />
-                </svg>
-                <h1
-                  className="uppercase text-[#5b6a44]"
-                  style={{
-                    color: "#5B6A44",
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 45,
+            <div className="absolute z-20 h-[520px] w-[560px]" style={{ left: "clamp(20px, 3.5vw, 72px)", top: "clamp(164px, 22.7vh, 232px)" }}>
+              <div className="relative flex flex-col gap-5">
+                <div className="flex items-start gap-4">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="34"
+                    height="8"
+                    viewBox="0 0 34 8"
+                    fill="none"
+                    aria-hidden="true"
+                    className="mt-6 shrink-0"
+                  >
+                    <circle opacity="0.4" cx="4" cy="4" r="4" fill="#111111" />
+                    <circle opacity="0.2" cx="17" cy="4" r="4" fill="#111111" />
+                    <circle opacity="0.1" cx="30" cy="4" r="4" fill="#111111" />
+                  </svg>
+                  <h1
+                    className="uppercase leading-tight text-[#5b6a44]"
+                    style={{
+                      color: "#5B6A44",
+                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+fontSize: 34,
                     fontStyle: "normal",
                     fontWeight: 700,
-                    lineHeight: "normal",
                   }}
                 >
                   {currentView.title}
-                </h1>
+                  </h1>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-[34px] shrink-0" aria-hidden="true" />
+                  <p className="max-w-[532px] text-[24px] font-medium leading-[1.35] tracking-normal text-[#111]">
+                    {currentView.description}
+                  </p>
+                </div>
               </div>
-              <p className="absolute left-0 top-[84px] w-[532px] text-[24px] font-medium leading-[1.35] tracking-normal text-[#111]">
-                {currentView.description}
-              </p>
-
               <Link
                 href="/models"
-                className="absolute left-0 top-[332px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[34px] font-medium text-white"
+                className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
                 style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}
               >
                 Подробнее
@@ -833,7 +842,7 @@ export default function ModelsPage() {
                   left: currentView.anchors.calloutCard.x,
                   top: currentView.anchors.calloutCard.y,
                   width: currentView.calloutStyle.w,
-                  height: currentView.calloutStyle.h,
+                  height: calloutCardHeight,
                   filter: "drop-shadow(0 60px 100px rgba(0, 0, 0, 0.12))",
                 }}
               >
@@ -849,7 +858,7 @@ export default function ModelsPage() {
                     fill="white"
                   />
                 </svg>
-                <div className="absolute inset-0 flex flex-col justify-center pl-[56px] pr-[18px]">
+                <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
                   <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize }}>
                     <span className="font-bold">{currentView.callout.title}</span>
                   </p>
@@ -863,12 +872,12 @@ export default function ModelsPage() {
               </div>
             ) : (
               <div
-                className="absolute z-20 rounded-[22px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
+                className="absolute z-20 flex flex-col items-center justify-center rounded-[22px] bg-white p-6 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
                   left: currentView.anchors.calloutCard.x,
                   top: currentView.anchors.calloutCard.y,
                   width: currentView.calloutStyle.w,
-                  height: currentView.calloutStyle.h,
+                  height: calloutCardHeight,
                   ...(currentCalloutNotch
                     ? {
                         WebkitMask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
@@ -904,14 +913,14 @@ export default function ModelsPage() {
                 <div
                   className={`absolute z-20 bg-white text-[#111] shadow-[0_20px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ${
                     currentView.glueVariant === "card"
-                      ? "rounded-[22px] p-6 text-left"
+                      ? "flex flex-col items-center justify-center rounded-[22px] p-6 text-center"
                       : "flex items-center justify-center rounded-full px-6 py-3 text-center font-medium leading-[1.1]"
                   }`}
                   style={{
                     left: currentView.anchors.glueBubble.x,
                     top: currentView.anchors.glueBubble.y,
                     width: currentGlueStyle.w,
-                    height: currentGlueStyle.h,
+                    height: glueCardHeight,
                     fontSize: currentGlueStyle.textSize,
                   }}
                 >
@@ -1210,7 +1219,7 @@ export default function ModelsPage() {
         </div>
       </section>
 
-      <section className="min-[1200px]:hidden mobile-header-offset">
+      <section className="min-[1200px]:hidden">
         <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `${1024 * mobileScale}px` }}>
           <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left bg-[#f4f4f4]" style={{ transform: `scale(${mobileScale})` }}>
           <div className="pointer-events-none absolute inset-y-0 left-0 w-full">
@@ -1228,57 +1237,61 @@ export default function ModelsPage() {
             ))}
           </div>
 
-          <div className="absolute right-[10px] top-[30px] z-20 flex gap-2">
-            {/* Временно отключили переключение на черный. Блок оставлен для быстрого возврата. */}
-            {false && (
-              <button
-                type="button"
-                onClick={() => setColorVariant("black")}
-                aria-label="Показать черную модель"
-                className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${
-                  colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-45"
-                }`}
-              >
-                <img src={thumbA} alt="" className="h-full w-full object-contain" />
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={() => setColorVariant("oliva")}
-              aria-label="Показать оливковую модель"
-              className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${
-                colorVariant === "oliva" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-35"
-              }`}
-            >
-              <img src={thumbB} alt="" className="h-full w-full object-contain" />
-            </button>
-          </div>
+          {/*<div className="absolute right-[10px] top-[30px] z-20 flex gap-2">*/}
+          {/*   Временно отключили переключение на черный. Блок оставлен для быстрого возврата. */}
+          {/*  {false && (*/}
+          {/*    <button*/}
+          {/*      type="button"*/}
+          {/*      onClick={() => setColorVariant("black")}*/}
+          {/*      aria-label="Показать черную модель"*/}
+          {/*      className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${*/}
+          {/*        colorVariant === "black" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-45"*/}
+          {/*      }`}*/}
+          {/*    >*/}
+          {/*      <img src={thumbA} alt="" className="h-full w-full object-contain" />*/}
+          {/*    </button>*/}
+          {/*  )}*/}
+          {/*  <button*/}
+          {/*    type="button"*/}
+          {/*    onClick={() => setColorVariant("oliva")}*/}
+          {/*    aria-label="Показать оливковую модель"*/}
+          {/*    className={`h-[48px] w-[50px] overflow-hidden rounded-[6px] border bg-white p-1 transition ${*/}
+          {/*      colorVariant === "oliva" ? "border-[#c8c8c8]" : "border-[#9a9a9a] opacity-35"*/}
+          {/*    }`}*/}
+          {/*  >*/}
+          {/*    <img src={thumbB} alt="" className="h-full w-full object-contain" />*/}
+          {/*  </button>*/}
+          {/*</div>*/}
 
-          <div className="absolute left-[12px] top-[46px] z-20 w-[312px]">
-            <div className="flex items-center gap-[10px]">
-              <div className="flex h-2 w-[34px] items-center justify-between">
-                <span className="size-2 rounded-full bg-[#111]/40" />
-                <span className="size-2 rounded-full bg-[#111]/20" />
-                <span className="size-2 rounded-full bg-[#111]/10" />
-              </div>
-              <h1
-                className="uppercase text-[#5b6a44]"
-                style={{
-                  color: "#5B6A44",
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 28,
+          <div className="absolute left-[8px] top-[46px] z-20 w-[312px]">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-start gap-[10px]">
+                <div className="mt-3.5 flex h-2 w-[34px] shrink-0 items-center justify-between">
+                  <span className="size-2 rounded-full bg-[#111]/40" />
+                  <span className="size-2 rounded-full bg-[#111]/20" />
+                  <span className="size-2 rounded-full bg-[#111]/10" />
+                </div>
+                <h1
+                  className="uppercase leading-tight text-[#5b6a44]"
+                  style={{
+                    color: "#5B6A44",
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+fontSize: 21,
                   fontStyle: "normal",
                   fontWeight: 700,
-                  lineHeight: "100%",
                   letterSpacing: "0.02em",
                 }}
               >
                 {currentView.title}
               </h1>
             </div>
-            <p className="ml-[44px] mt-4 max-w-[236px] text-[14px] leading-[1.15] text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}>
-              {currentView.description}
-            </p>
+            <div className="flex gap-[10px]">
+              <div className="w-[34px] shrink-0" aria-hidden="true" />
+              <p className="max-w-[236px] text-[14px] leading-[1.15] text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}>
+                  {currentView.description}
+                </p>
+              </div>
+            </div>
             <Link
               href="/where-to-buy"
               className="ml-[44px] mt-5 flex h-12 w-[150px] items-center justify-center rounded-[12px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[14px] text-white"

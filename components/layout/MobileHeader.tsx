@@ -5,16 +5,15 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MOBILE_MENU_ITEMS = [
-  { label: "Главная", href: "/" },
   { label: "О бренде", href: "/brand" },
   { label: "Преимущества", href: "/advantages" },
   { label: "Модельный ряд", href: "/models" },
   { label: "Где купить", href: "/where-to-buy" },
-  { label: "Медиа", href: "/#media" },
+  { label: "Медиа", href: "/media" },
   { label: "Контакты", href: "/contacts" },
 ] as const;
 
-const LOGO_SRC = "/images/pages/velesbron_logo_countr.png";
+const LOGO_SRC = "/images/pages/velesbron_logo.png";
 
 export default function MobileHeader() {
   const pathname = usePathname();
@@ -37,17 +36,27 @@ export default function MobileHeader() {
       >
         <div className="size-10 shrink-0" aria-hidden="true" />
 
-        <Link
-          href="/"
-          className="absolute left-1/2 flex h-10 w-[180px] -translate-x-1/2 items-center justify-center"
-          aria-label="VelesBron — на главную"
-        >
-          <img
-            src={LOGO_SRC}
-            alt="VelesBron"
-            className="h-full w-full object-contain object-center"
-          />
-        </Link>
+        {pathname === "/" && (
+          <div className="absolute left-1/2 top-0 flex h-16 w-[220px] -translate-x-1/2 items-center justify-center">
+            {/* Белая плашка за лого: верх уходит за край экрана */}
+            <div
+              className="absolute left-1/2 top-0 z-[5] h-[88px] w-[220px] -translate-x-1/2 rounded-b-[10px] bg-white shadow-[0_6px_20px_rgba(0,0,0,0.08)]"
+              style={{ top: "-28px" }}
+              aria-hidden="true"
+            />
+            <Link
+              href="/"
+              className="relative z-10 flex h-10 w-[180px] items-center justify-center"
+              aria-label="VelesBron — на главную"
+            >
+              <img
+                src={LOGO_SRC}
+                alt="VelesBron"
+                className="h-full w-full object-contain object-center"
+              />
+            </Link>
+          </div>
+        )}
 
         <button
           type="button"
@@ -69,9 +78,10 @@ export default function MobileHeader() {
       />
       <aside
         className={`fixed right-0 top-0 z-[80] h-dvh w-[304px] border-l border-white/15 bg-[linear-gradient(180deg,rgba(30,30,30,0.98)_0%,rgba(18,18,18,0.96)_100%)] shadow-[-20px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-transform duration-300 ease-out min-[1200px]:hidden ${
-          isOpen ? "translate-x-0" : "translate-x-full"
+          isOpen ? "translate-x-0" : "translate-x-[calc(100%+24px)]"
         }`}
         aria-hidden={!isOpen}
+        style={{ willChange: isOpen ? "transform" : undefined }}
       >
         <div className="flex items-center justify-between px-5 pb-4 pt-5" style={{ paddingTop: "max(1.25rem, env(safe-area-inset-top, 0px))" }}>
           <div>
@@ -94,10 +104,7 @@ export default function MobileHeader() {
         <div className="mx-5 h-px bg-white/10" />
         <nav className="px-4 py-3">
           {MOBILE_MENU_ITEMS.map((item, index) => {
-            const isActive =
-              (item.href === "/" && pathname === "/") ||
-              (item.href !== "/" && item.href !== "/#media" && pathname?.startsWith(item.href)) ||
-              (item.href === "/#media" && pathname === "/" && false);
+            const isActive = pathname?.startsWith(item.href) ?? false;
             return (
               <Link
                 key={item.label}
