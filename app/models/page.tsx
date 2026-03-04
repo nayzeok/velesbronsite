@@ -14,7 +14,7 @@ const MOBILE_SCROLL_EXTRA = 48;
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами выбора (px). */
 const DESKTOP_MODEL_HEADING_GAP = 5;
 /** Отступ между блоком МОДЕЛЬ и блоком ЦВЕТ: top заголовка «ЦВЕТ» (px). Увеличить — больше промежуток. */
-const DESKTOP_COLOR_TOP = 398;
+const DESKTOP_COLOR_TOP = 457;
 /** Отступ между заголовком «ЦВЕТ» и квадратами цветов (px). */
 const DESKTOP_COLOR_HEADING_GAP = 5;
 
@@ -31,6 +31,20 @@ const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW = [1.5, 1, 1.3, 1.3, 1.05];
 const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW = [1, 1, 1, 1, 1];
 
 const backgroundShape = "/images/models/ui/background-shape.png";
+
+/** Ширина контейнера десктоп (px), для расчёта отступов в % */
+const DESKTOP_STAGE_WIDTH = 1670;
+/** Отступ левого блока от края в % ширины — при сужении экрана сохраняется */
+const DESKTOP_LEFT_MARGIN_PCT = (71 / DESKTOP_STAGE_WIDTH) * 100;
+/** Позиция центра правого блока в % от левого края — при сужении экрана сохраняется */
+const DESKTOP_RIGHT_CENTER_PCT = (1487 / DESKTOP_STAGE_WIDTH) * 100;
+
+/** Карусель десктоп: видно 4 карточки, размер карточек без изменений */
+const CAROUSEL_DESKTOP_CARD_WIDTH = 161;
+const CAROUSEL_DESKTOP_CARD_HEIGHT = 194;
+const CAROUSEL_DESKTOP_GAP = 12;
+const CAROUSEL_DESKTOP_WIDTH = CAROUSEL_DESKTOP_CARD_WIDTH * 4 + CAROUSEL_DESKTOP_GAP * 3;
+const CAROUSEL_DESKTOP_SCROLL = CAROUSEL_DESKTOP_CARD_WIDTH + CAROUSEL_DESKTOP_GAP;
 
 type ColorVariant = "black" | "oliva";
 type ModelKey = "high" | "low";
@@ -101,6 +115,9 @@ export default function BuyPage() {
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
   const mobileRailRef = useRef<HTMLDivElement | null>(null);
   const sizeGridCloseTimerRef = useRef<number | null>(null);
+  const desktopRailDragRef = useRef({ isDragging: false, startX: 0, startScrollLeft: 0 });
+  const mobileRailDragRef = useRef({ isDragging: false, startX: 0, startScrollLeft: 0 });
+  const railDidDragRef = useRef(false);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
   const selectedModel = MODEL_OPTIONS.find((item) => item.key === activeModelKey) ?? MODEL_OPTIONS[0];
   const modelImagesByColor = MODEL_IMAGES[activeModelKey];
@@ -109,10 +126,64 @@ export default function BuyPage() {
     : modelImagesByColor.black;
   const currentViewImage = activeViewImages[activeViewIndex] ?? activeViewImages[0];
 
+  const [desktopRailDragging, setDesktopRailDragging] = useState(false);
+  const [mobileRailDragging, setMobileRailDragging] = useState(false);
+
   useEffect(() => {
       // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveViewIndex(0);
   }, [activeModelKey, colorVariant]);
+
+  useEffect(() => {
+    if (!desktopRailDragging) return;
+    const move = (e: MouseEvent) => {
+      const el = desktopRailRef.current;
+      if (!el) return;
+      const ref = desktopRailDragRef.current;
+      railDidDragRef.current = true;
+      const deltaX = ref.startX - e.clientX;
+      el.scrollLeft = ref.startScrollLeft + deltaX;
+      ref.startX = e.clientX;
+      ref.startScrollLeft = el.scrollLeft;
+    };
+    const up = () => {
+      setDesktopRailDragging(false);
+      setTimeout(() => { railDidDragRef.current = false; }, 0);
+    };
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
+    return () => {
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", up);
+    };
+  }, [desktopRailDragging]);
+
+  useEffect(() => {
+    if (!mobileRailDragging) return;
+    const move = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      const el = mobileRailRef.current;
+      if (!el) return;
+      const ref = mobileRailDragRef.current;
+      const touchX = e.touches[0].clientX;
+      railDidDragRef.current = true;
+      const deltaX = ref.startX - touchX;
+      el.scrollLeft = ref.startScrollLeft + deltaX;
+      ref.startX = touchX;
+      ref.startScrollLeft = el.scrollLeft;
+      e.preventDefault();
+    };
+    const up = () => {
+      setMobileRailDragging(false);
+      setTimeout(() => { railDidDragRef.current = false; }, 0);
+    };
+    document.addEventListener("touchmove", move, { passive: false });
+    document.addEventListener("touchend", up);
+    return () => {
+      document.removeEventListener("touchmove", move);
+      document.removeEventListener("touchend", up);
+    };
+  }, [mobileRailDragging]);
 
   useEffect(() => {
     if (!isSizeGridOpen) return;
@@ -200,7 +271,7 @@ export default function BuyPage() {
             <div className="h-[96px] shrink-0" aria-hidden="true" />
 
             {/* Left — model name + description */}
-            <div className="absolute" style={{ left: 71, top: 186 }}>
+            <div className="absolute" style={{ left: `${DESKTOP_LEFT_MARGIN_PCT}%`, top: 186 }}>
               <h1
                 className="uppercase"
                 style={{
@@ -255,8 +326,8 @@ export default function BuyPage() {
                 onClick={openSizeGrid}
                 className="size-table-link absolute"
                 style={{
-                  left: 1465,
-                  top: 624,
+                  left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
+                  top: 656,
                   transform: "translateX(-50%)",
                   fontSize: 26,
                 }}
@@ -268,12 +339,12 @@ export default function BuyPage() {
                 </span>
               </button>
 
-              {/* Right — МОДЕЛЬ (заголовок и квадраты в одном блоке) */}
+              {/* Right — МОДЕЛЬ (заголовок и квадраты) */}
               <div
                 className="absolute flex flex-col items-center"
                 style={{
-                  left: 1465,
-                  top: 210,
+                  left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
+                  top: 269,
                   transform: "translateX(-50%)",
                   gap: DESKTOP_MODEL_HEADING_GAP,
                 }}
@@ -341,7 +412,7 @@ export default function BuyPage() {
               <div
                 className="absolute flex flex-col items-center"
                 style={{
-                  left: 1465,
+                  left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
                   top: DESKTOP_COLOR_TOP,
                   transform: "translateX(-50%)",
                   gap: DESKTOP_COLOR_HEADING_GAP,
@@ -422,8 +493,8 @@ export default function BuyPage() {
                 type="button"
                 className="absolute"
                 style={{
-                  left: 1465,
-                  top: 722,
+                  left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
+                  top: 754,
                   transform: "translateX(-50%)",
                   width: 224,
                   height: 72,
@@ -440,23 +511,24 @@ export default function BuyPage() {
               </button>
             </div>
 
-            {/* Bottom photo cards — 3 карточки в видимой области, у низа экрана, по центру */}
+            {/* Bottom photo cards — 4 карточки в видимой области, перетаскивание */}
             <div
               className="absolute left-1/2 -translate-x-1/2"
               style={{
-                top: 768,
-                width: 633,
-                cursor: desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
+                top: 739,
+                width: CAROUSEL_DESKTOP_WIDTH,
+                cursor: desktopRailDragging ? "grabbing" : desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
               }}
               onMouseEnter={() => setIsDesktopRailHover(true)}
               onMouseMove={(event) => {
+                if (desktopRailDragging) return;
                 const rect = event.currentTarget.getBoundingClientRect();
                 const x = event.clientX - rect.left;
-                if (x < 120) {
+                if (x < 80) {
                   setDesktopRailCursor("left");
                   return;
                 }
-                if (x > rect.width - 120) {
+                if (x > rect.width - 80) {
                   setDesktopRailCursor("right");
                   return;
                 }
@@ -468,16 +540,20 @@ export default function BuyPage() {
               }}
             >
               <div
-                className="pointer-events-none absolute left-0 top-0 z-[9] h-[242px] w-[86px] rounded-l-[16px] transition-opacity duration-200"
+                className="pointer-events-none absolute left-0 top-0 z-[9] rounded-l-[16px] transition-opacity duration-200"
                 style={{
+                  width: 70,
+                  height: CAROUSEL_DESKTOP_CARD_HEIGHT,
                   opacity: isDesktopRailHover && desktopRailCursor === "left" ? 1 : 0,
                   background:
                     "linear-gradient(90deg, rgba(240,116,38,0.26) 0%, rgba(240,116,38,0.12) 48%, rgba(240,116,38,0) 100%)",
                 }}
               />
               <div
-                className="pointer-events-none absolute right-0 top-0 z-[9] h-[242px] w-[86px] rounded-r-[16px] transition-opacity duration-200"
+                className="pointer-events-none absolute right-0 top-0 z-[9] rounded-r-[16px] transition-opacity duration-200"
                 style={{
+                  width: 70,
+                  height: CAROUSEL_DESKTOP_CARD_HEIGHT,
                   opacity: isDesktopRailHover && desktopRailCursor === "right" ? 1 : 0,
                   background:
                     "linear-gradient(270deg, rgba(240,116,38,0.26) 0%, rgba(240,116,38,0.12) 48%, rgba(240,116,38,0) 100%)",
@@ -485,21 +561,40 @@ export default function BuyPage() {
               />
               <div
                 ref={desktopRailRef}
-                className="flex gap-3 overflow-x-auto pb-2 pr-2"
-                style={{ scrollBehavior: "smooth" }}
+                className="scrollbar-hide flex overflow-x-auto pb-2 pr-2 select-none"
+                style={{
+                  gap: CAROUSEL_DESKTOP_GAP,
+                  scrollBehavior: desktopRailDragging ? "auto" : "smooth",
+                  userSelect: desktopRailDragging ? "none" : undefined,
+                }}
+                onMouseDown={(e) => {
+                  if (e.button !== 0) return;
+                  desktopRailDragRef.current = {
+                    isDragging: true,
+                    startX: e.clientX,
+                    startScrollLeft: desktopRailRef.current?.scrollLeft ?? 0,
+                  };
+                  setDesktopRailDragging(true);
+                }}
               >
                 {activeViewImages.map((image, i) => (
                   <button
                     key={`desktop-view-${i}`}
                     type="button"
-                    onClick={() => setActiveViewIndex(i)}
+                    onClick={() => {
+                      if (railDidDragRef.current) {
+                        railDidDragRef.current = false;
+                        return;
+                      }
+                      setActiveViewIndex(i);
+                    }}
                     className="shrink-0 overflow-hidden rounded-[16px] transition-all"
                     style={{
-                      width: 203,
-                      height: 242,
+                      width: CAROUSEL_DESKTOP_CARD_WIDTH,
+                      height: CAROUSEL_DESKTOP_CARD_HEIGHT,
                       background: "#eceef0",
                       border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)",
-                      cursor: "pointer",
+                      cursor: desktopRailDragging ? "grabbing" : "pointer",
                     }}
                   >
                     <img src={image} alt="" className="h-full w-full object-contain" />
@@ -509,7 +604,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото влево"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: -215, behavior: "smooth" })}
+                onClick={() => desktopRailRef.current?.scrollBy({ left: -CAROUSEL_DESKTOP_SCROLL, behavior: "smooth" })}
                 className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
                 style={{ cursor: "w-resize" }}
               >
@@ -518,7 +613,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото вправо"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: 215, behavior: "smooth" })}
+                onClick={() => desktopRailRef.current?.scrollBy({ left: CAROUSEL_DESKTOP_SCROLL, behavior: "smooth" })}
                 className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
                 style={{ cursor: "e-resize" }}
               >
@@ -764,14 +859,29 @@ export default function BuyPage() {
             <div className="absolute left-1/2 top-[1592px] w-[578px] -translate-x-1/2">
               <div
                 ref={mobileRailRef}
-                className="flex gap-[10px] overflow-x-auto pb-3 pr-3"
-                style={{ scrollBehavior: "smooth" }}
+                className="scrollbar-hide flex gap-[10px] overflow-x-auto pb-3 pr-3"
+                style={{ scrollBehavior: mobileRailDragging ? "auto" : "smooth", touchAction: "pan-y" }}
+                onTouchStart={(e) => {
+                  if (e.touches.length !== 1) return;
+                  mobileRailDragRef.current = {
+                    isDragging: true,
+                    startX: e.touches[0].clientX,
+                    startScrollLeft: mobileRailRef.current?.scrollLeft ?? 0,
+                  };
+                  setMobileRailDragging(true);
+                }}
               >
                 {activeViewImages.map((image, i) => (
                   <button
                     key={`mobile-view-${i}`}
                     type="button"
-                    onClick={() => setActiveViewIndex(i)}
+                    onClick={() => {
+                      if (railDidDragRef.current) {
+                        railDidDragRef.current = false;
+                        return;
+                      }
+                      setActiveViewIndex(i);
+                    }}
                     className="h-[186px] w-[140px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
                     style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
                   >
