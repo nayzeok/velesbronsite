@@ -25,6 +25,11 @@ const MOBILE_COLOR_TOP = 452;
 /** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px). */
 const MOBILE_COLOR_HEADING_GAP = 40;
 
+/** Масштаб фото ботинка по ракурсам: ПК. Высокая модель — 5 ракурсов [0..4], низкая — 4 [0..3], для низкой берётся scale[0..3]. */
+const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW = [1.5, 1, 1.3, 1.3, 1.05];
+/** Масштаб фото ботинка по ракурсам: мобильная. */
+const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW = [1, 1, 1, 1, 1];
+
 const backgroundShape = "/images/models/ui/background-shape.png";
 
 type ColorVariant = "black" | "oliva";
@@ -226,10 +231,14 @@ export default function BuyPage() {
               </p>
             </div>
 
-            {/* Center — boot image */}
+            {/* Center — boot image (масштаб через BOOT_IMAGE_SCALE_DESKTOP), по центру экрана */}
             <div
-              className="pointer-events-none absolute"
-              style={{ left: 479, top: 76, width: 746, height: 609 }}
+              className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
+              style={{
+                width: 746,
+                height: 609,
+                transform: `translate(-50%, calc(-50% - 28px)) scale(${BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[activeViewIndex] ?? 1})`,
+              }}
             >
               <img
                 key={`${activeModelKey}-${colorVariant}-${activeViewIndex}`}
@@ -240,24 +249,23 @@ export default function BuyPage() {
             </div>
 
             <div className="absolute inset-0" style={{ transform: "translateY(-90px)" }}>
-              {/* Size grid link */}
+              {/* Size grid link — подчёркнутый текст, при наведении заливка оранжевым слева направо */}
               <button
                 type="button"
                 onClick={openSizeGrid}
-                className="absolute rounded-[14px] px-5 py-2.5 text-white shadow-[0_8px_24px_rgba(240,116,38,0.35)] transition hover:brightness-105"
+                className="size-table-link absolute"
                 style={{
                   left: 1465,
                   top: 624,
                   transform: "translateX(-50%)",
-                  background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 26,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  letterSpacing: "0.08em",
                 }}
+                aria-label="Открыть таблицу размеров"
               >
-                Таблица размеров
+                <span className="size-table-link__base">Таблица размеров</span>
+                <span className="size-table-link__hover" aria-hidden="true">
+                  Таблица размеров
+                </span>
               </button>
 
               {/* Right — МОДЕЛЬ (заголовок и квадраты в одном блоке) */}
@@ -274,7 +282,7 @@ export default function BuyPage() {
                   className="uppercase"
                   style={{
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 36,
+                    fontSize: 34,
                     fontWeight: 700,
                     color: "#111",
                     letterSpacing: "0.08em",
@@ -343,7 +351,7 @@ export default function BuyPage() {
                   className="uppercase"
                   style={{
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 36,
+                    fontSize: 34,
                     fontWeight: 700,
                     color: "#111",
                     letterSpacing: "0.08em",
@@ -415,7 +423,7 @@ export default function BuyPage() {
                 className="absolute"
                 style={{
                   left: 1465,
-                  top: 752,
+                  top: 722,
                   transform: "translateX(-50%)",
                   width: 224,
                   height: 72,
@@ -436,8 +444,8 @@ export default function BuyPage() {
             <div
               className="absolute left-1/2 -translate-x-1/2"
               style={{
-                top: 664,
-                width: 822,
+                top: 768,
+                width: 633,
                 cursor: desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
               }}
               onMouseEnter={() => setIsDesktopRailHover(true)}
@@ -460,7 +468,7 @@ export default function BuyPage() {
               }}
             >
               <div
-                className="pointer-events-none absolute left-0 top-0 z-[9] h-[316px] w-[112px] rounded-l-[16px] transition-opacity duration-200"
+                className="pointer-events-none absolute left-0 top-0 z-[9] h-[242px] w-[86px] rounded-l-[16px] transition-opacity duration-200"
                 style={{
                   opacity: isDesktopRailHover && desktopRailCursor === "left" ? 1 : 0,
                   background:
@@ -468,7 +476,7 @@ export default function BuyPage() {
                 }}
               />
               <div
-                className="pointer-events-none absolute right-0 top-0 z-[9] h-[316px] w-[112px] rounded-r-[16px] transition-opacity duration-200"
+                className="pointer-events-none absolute right-0 top-0 z-[9] h-[242px] w-[86px] rounded-r-[16px] transition-opacity duration-200"
                 style={{
                   opacity: isDesktopRailHover && desktopRailCursor === "right" ? 1 : 0,
                   background:
@@ -487,8 +495,8 @@ export default function BuyPage() {
                     onClick={() => setActiveViewIndex(i)}
                     className="shrink-0 overflow-hidden rounded-[16px] transition-all"
                     style={{
-                      width: 266,
-                      height: 316,
+                      width: 203,
+                      height: 242,
                       background: "#eceef0",
                       border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)",
                       cursor: "pointer",
@@ -501,7 +509,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото влево"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: -275, behavior: "smooth" })}
+                onClick={() => desktopRailRef.current?.scrollBy({ left: -215, behavior: "smooth" })}
                 className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
                 style={{ cursor: "w-resize" }}
               >
@@ -510,7 +518,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото вправо"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: 275, behavior: "smooth" })}
+                onClick={() => desktopRailRef.current?.scrollBy({ left: 215, behavior: "smooth" })}
                 className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
                 style={{ cursor: "e-resize" }}
               >
@@ -598,16 +606,14 @@ export default function BuyPage() {
             <button
               type="button"
               onClick={openSizeGrid}
-              className="absolute left-[70px] top-[764px] flex h-[72px] w-[286px] items-center justify-center rounded-[16px] text-white shadow-[0_8px_20px_rgba(240,116,38,0.35)]"
-              style={{
-                background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 26,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-              }}
+              className="size-table-link absolute left-[70px] top-[764px]"
+              style={{ fontSize: 26 }}
+              aria-label="Открыть таблицу размеров"
             >
-              Таблица размеров
+              <span className="size-table-link__base">Таблица размеров</span>
+              <span className="size-table-link__hover" aria-hidden="true">
+                Таблица размеров
+              </span>
             </button>
 
             <div
@@ -618,7 +624,7 @@ export default function BuyPage() {
                 className="uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 40,
+                  fontSize: 21,
                   fontWeight: 700,
                   color: "#111",
                   letterSpacing: "0.08em",
@@ -681,9 +687,10 @@ export default function BuyPage() {
                 className="uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 40,
+                  fontSize: 21,
                   fontWeight: 700,
                   color: "#111",
+                  letterSpacing: "0.08em",
                 }}
               >
                 ЦВЕТ
@@ -737,7 +744,15 @@ export default function BuyPage() {
               Купить
             </button>
 
-            <div className="pointer-events-none absolute left-[-56px] top-[772px] h-[720px] w-[868px]">
+            {/* Текущее фото ботинка (мобильная). Масштаб через BOOT_IMAGE_SCALE_MOBILE, по центру экрана. */}
+            <div
+              className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
+              style={{
+                width: 741,
+                height: 944,
+                transform: `translate(-50%, calc(-50% - 28px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[activeViewIndex] ?? 1})`,
+              }}
+            >
               <img
                 key={`mobile-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
                 src={currentViewImage}
@@ -746,7 +761,7 @@ export default function BuyPage() {
               />
             </div>
 
-            <div className="absolute left-1/2 top-[1448px] w-[572px] -translate-x-1/2">
+            <div className="absolute left-1/2 top-[1592px] w-[578px] -translate-x-1/2">
               <div
                 ref={mobileRailRef}
                 className="flex gap-[10px] overflow-x-auto pb-3 pr-3"
@@ -757,7 +772,7 @@ export default function BuyPage() {
                     key={`mobile-view-${i}`}
                     type="button"
                     onClick={() => setActiveViewIndex(i)}
-                    className="h-[244px] w-[184px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
+                    className="h-[186px] w-[140px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
                     style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
                   >
                     <img src={image} alt="" className="h-full w-full object-contain" />
@@ -767,7 +782,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото влево"
-                onClick={() => mobileRailRef.current?.scrollBy({ left: -192, behavior: "smooth" })}
+                onClick={() => mobileRailRef.current?.scrollBy({ left: -196, behavior: "smooth" })}
                 className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
                 style={{ cursor: "w-resize" }}
               >
@@ -776,7 +791,7 @@ export default function BuyPage() {
               <button
                 type="button"
                 aria-label="Прокрутить фото вправо"
-                onClick={() => mobileRailRef.current?.scrollBy({ left: 192, behavior: "smooth" })}
+                onClick={() => mobileRailRef.current?.scrollBy({ left: 196, behavior: "smooth" })}
                 className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
                 style={{ cursor: "e-resize" }}
               >

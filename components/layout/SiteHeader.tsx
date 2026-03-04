@@ -94,25 +94,23 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
 
         <div aria-hidden="true" />
 
-        <div className="relative flex justify-center">
+        <Link
+          href="/"
+          className="relative flex justify-center min-h-[95px] w-full max-w-[306px]"
+          aria-label="Velesbron — на главную"
+        >
           {/* Белая плашка за лого: верх уходит за край экрана */}
           <div
-            className="logo-plaque absolute left-1/2 z-[5] h-[162px] w-full max-w-[306px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
+            className="logo-plaque pointer-events-none absolute left-1/2 z-[5] h-[162px] w-full max-w-[306px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
             style={{ top: "-63px" }}
             aria-hidden="true"
           />
-          <Link
-            href="/"
-            className="relative z-10 flex h-[95px] w-full max-w-[252px] items-center justify-center rounded-[10px]"
-            aria-label="Velesbron — на главную"
-          >
-            <img
-              src="/images/pages/velesbron_logo.png"
-              alt=""
-              className="h-[95px] w-full max-w-[252px] object-contain"
-            />
-          </Link>
-        </div>
+          <img
+            src="/images/pages/velesbron_logo.png"
+            alt=""
+            className="relative z-10 h-[95px] w-full max-w-[252px] object-contain"
+          />
+        </Link>
 
         <div aria-hidden="true" />
 

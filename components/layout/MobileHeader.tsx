@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const MOBILE_MENU_ITEMS = [
+  { label: "Главная", href: "/" },
   { label: "О бренде", href: "/brand" },
   { label: "Преимущества", href: "/advantages" },
   { label: "Модельный ряд", href: "/models" },
@@ -104,7 +105,7 @@ export default function MobileHeader() {
         <div className="mx-5 h-px bg-white/10" />
         <nav className="px-4 py-3">
           {MOBILE_MENU_ITEMS.map((item, index) => {
-            const isActive = pathname?.startsWith(item.href) ?? false;
+            const isActive = item.href === "/" ? pathname === "/" : (pathname?.startsWith(item.href) ?? false);
             return (
               <Link
                 key={item.label}
