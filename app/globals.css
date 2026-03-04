@@ -125,42 +125,124 @@ body {
   animation: viewRise 680ms cubic-bezier(0.18, 0.78, 0.22, 1);
 }
 
-/** «Таблица размеров»: подчёркнутый текст, при наведении окрашивается слева направо в оранжевый */
+/** «Таблица размеров»: закрашивание и линия выезжают вместе слева направо (один текст, без дубля) */
 .size-table-link {
   position: relative;
   display: inline-block;
   background: none;
   border: none;
   padding: 0;
+  padding-bottom: 10px;
   font-family: var(--font-roboto-flex), system-ui, sans-serif;
   font-weight: 500;
   letter-spacing: normal;
   color: #111;
-  text-decoration: underline;
-  text-underline-offset: 4px;
   cursor: pointer;
   transition: color 0.25s ease;
 }
 .size-table-link .size-table-link__base {
   position: relative;
   z-index: 0;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
 }
 .size-table-link .size-table-link__hover {
   position: absolute;
   left: 0;
   top: 0;
   z-index: 1;
+  display: block;
+  height: 100%;
+  padding-bottom: 10px;
+  box-sizing: border-box;
   color: #e7813f;
   overflow: hidden;
   width: 0;
   white-space: nowrap;
   transition: width 0.3s ease;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  border-bottom: 2px solid #e7813f;
+  margin-bottom: -2px;
+  pointer-events: none;
 }
 .size-table-link:hover .size-table-link__hover {
   width: 100%;
 }
+
+/** Пункты меню хедера — как «Таблица размеров»: __inner без padding (ширина = текст), оранжевый слой width 0 → 100% */
+.nav-link-fill {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  color: #333;
+}
+.nav-link-fill__inner {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  padding-bottom: 10px;
+}
+.nav-link-fill .nav-link-fill__base {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  color: inherit;
+}
+.nav-link-fill .nav-link-fill__hover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  display: block;
+  height: 100%;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  color: #e7813f;
+  overflow: hidden;
+  width: 0;
+  white-space: nowrap;
+  transition: width 0.2s ease-out;
+  border-bottom: 2px solid #e7813f;
+  margin-bottom: -2px;
+  pointer-events: none;
+}
+.nav-link-fill:hover .nav-link-fill__hover {
+  width: 100%;
+}
+/* Активный пункт — плашка чуть не доходит снизу (симметрия), без оранжевой полоски */
+.nav-link-fill.nav-link-fill--active {
+  position: relative;
+  color: #fff !important;
+}
+.nav-link-fill.nav-link-fill--active .nav-link-fill__base {
+  color: #fff !important;
+}
+.nav-link-fill.nav-link-fill--active .nav-link-fill__hover { display: none; }
+/* Плашка через псевдоэлемент: снизу отступ 4px — визуально симметричнее */
+.nav-link-fill.nav-link-fill--active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 4px;
+  border-radius: 10px;
+  z-index: -1;
+  background: linear-gradient(to right, #8b7a71, #756257);
+}
+.nav-link-fill.nav-link-fill--active.nav-link-fill--light::before {
+  background: rgba(255,255,255,0.2);
+}
+/* Фон плашки только в ::before, у ссылки сбрасываем Tailwind bg */
+.nav-link-fill.nav-link-fill--active {
+  background: none !important;
+}
+.nav-link-fill.nav-link-fill--light { color: rgba(255,255,255,0.9); }
+.nav-link-fill.nav-link-fill--light .nav-link-fill__hover { color: #fff; border-bottom-color: #fff; }
 
 /** Скрыть полосу прокрутки (карусель и др.), прокрутка остаётся */
 .scrollbar-hide {

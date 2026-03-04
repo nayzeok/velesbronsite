@@ -14,14 +14,14 @@ const MOBILE_SCROLL_EXTRA = 48;
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами выбора (px). */
 const DESKTOP_MODEL_HEADING_GAP = 5;
 /** Отступ между блоком МОДЕЛЬ и блоком ЦВЕТ: top заголовка «ЦВЕТ» (px). Увеличить — больше промежуток. */
-const DESKTOP_COLOR_TOP = 457;
+const DESKTOP_COLOR_TOP = 497;
 /** Отступ между заголовком «ЦВЕТ» и квадратами цветов (px). */
 const DESKTOP_COLOR_HEADING_GAP = 5;
 
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами на мобиле (px). */
 const MOBILE_MODEL_HEADING_GAP = 16;
 /** Блок ЦВЕТ на мобиле: top заголовка (px). Чем больше — тем больше отступ от блока МОДЕЛЬ. */
-const MOBILE_COLOR_TOP = 452;
+const MOBILE_COLOR_TOP = 492;
 /** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px). */
 const MOBILE_COLOR_HEADING_GAP = 40;
 
@@ -327,7 +327,7 @@ export default function BuyPage() {
                 className="size-table-link absolute"
                 style={{
                   left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
-                  top: 656,
+                  top: 706,
                   transform: "translateX(-50%)",
                   fontSize: 26,
                 }}
@@ -489,12 +489,12 @@ export default function BuyPage() {
               </div>
 
               {/* Buy button */}
-              <button
-                type="button"
-                className="absolute"
+              <Link
+                href="/where-to-buy"
+                className="absolute flex items-center justify-center no-underline"
                 style={{
                   left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
-                  top: 754,
+                  top: 794,
                   transform: "translateX(-50%)",
                   width: 224,
                   height: 72,
@@ -508,14 +508,14 @@ export default function BuyPage() {
                 }}
               >
                 Где Купить
-              </button>
+              </Link>
             </div>
 
             {/* Bottom photo cards — 4 карточки в видимой области, перетаскивание */}
             <div
               className="absolute left-1/2 -translate-x-1/2"
               style={{
-                top: 739,
+                top: 779,
                 width: CAROUSEL_DESKTOP_WIDTH,
                 cursor: desktopRailDragging ? "grabbing" : desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
               }}
@@ -701,14 +701,10 @@ export default function BuyPage() {
             <button
               type="button"
               onClick={openSizeGrid}
-              className="size-table-link absolute left-[70px] top-[764px]"
-              style={{ fontSize: 26 }}
+              className="size-table-link absolute left-[70px] top-[814px]"
               aria-label="Открыть таблицу размеров"
             >
-              <span className="size-table-link__base">Таблица размеров</span>
-              <span className="size-table-link__hover" aria-hidden="true">
-                Таблица размеров
-              </span>
+              Таблица размеров
             </button>
 
             <div
@@ -826,9 +822,9 @@ export default function BuyPage() {
               </div>
             </div>
 
-            <button
-              type="button"
-              className="absolute left-[398px] top-[852px] h-[72px] w-[248px] rounded-[16px] text-[26px] text-white"
+            <Link
+              href="/where-to-buy"
+              className="absolute left-[398px] top-[892px] flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-[26px] text-white no-underline"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
@@ -837,7 +833,7 @@ export default function BuyPage() {
               }}
             >
               Купить
-            </button>
+            </Link>
 
             {/* Текущее фото ботинка (мобильная). Масштаб через BOOT_IMAGE_SCALE_MOBILE, по центру экрана. */}
             <div

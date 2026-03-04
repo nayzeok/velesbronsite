@@ -34,18 +34,11 @@ const RIGHT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
 export default function SiteHeader({ activeItem, tone = "dark", className, style }: SiteHeaderProps) {
   const pathname = usePathname();
   const isLight = tone === "light";
-  /** Выделение при наведении — полоска выезжает снизу под пунктом */
-  const hoverUnderlineClass =
-    "relative after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-current after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-200 after:ease-out";
-  const inactiveClass = isLight
-    ? "text-white/90 hover:text-white transition-colors rounded-[10px] " + hoverUnderlineClass
-    : "text-[#333] hover:text-[#111] transition-colors rounded-[10px] " + hoverUnderlineClass;
-  /** Общие отступы у всех пунктов — чтобы плашка активного не сдвигала сетку; компактнее для 13" */
+  /** Общие отступы у всех пунктов — чтобы плашка активного не сдвигала сетку */
   const itemPadding = "px-3 py-2.5 rounded-[10px]";
-  const activePlaqueClass =
-    "text-[22px] font-medium whitespace-nowrap text-white bg-gradient-to-r from-[#8b7a71] to-[#756257] " + itemPadding;
-  const activePlaqueClassLight =
-    "text-[22px] font-medium whitespace-nowrap text-white bg-white/20 " + itemPadding;
+  /** Активный пункт — плашка (Tailwind), без полоски; разметка одинаковая → меню не скачет */
+  const linkClass = (active: boolean) =>
+    `nav-link-fill ${itemPadding} ${isLight ? "nav-link-fill--light" : ""} ${active ? "nav-link-fill--active text-white bg-gradient-to-r from-[#8b7a71] to-[#756257]" : ""} ${active && isLight ? "!bg-white/20" : ""}`;
 
   return (
     <header
@@ -68,25 +61,23 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               (item.key === "advantages" && pathname?.startsWith("/advantages")) ||
               (item.key === "models" && pathname?.startsWith("/models"));
             const isActive = item.key === activeItem || isActiveByPath;
-            if (isActive) {
-              return (
-                <span
-                  key={item.key}
-                  className={isLight ? activePlaqueClassLight : activePlaqueClass}
-                  style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
-                >
-                  {item.label}
-                </span>
-              );
-            }
             return (
               <Link
                 key={item.key}
                 href={item.href}
-                className={`text-[22px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
-                style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
+                className={linkClass(isActive)}
+                style={{
+                  fontFamily: "var(--font-roboto-flex), sans-serif",
+                  ...(isActive && { color: "#fff" }),
+                }}
+                aria-current={isActive ? "page" : undefined}
               >
-                {item.label}
+                <span className="nav-link-fill__inner">
+                  <span className="nav-link-fill__base">{item.label}</span>
+                  <span className="nav-link-fill__hover" aria-hidden="true">
+                    {item.label}
+                  </span>
+                </span>
               </Link>
             );
           })}
@@ -121,25 +112,23 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               (item.key === "media" && pathname?.startsWith("/media")) ||
               (item.key === "contacts" && pathname?.startsWith("/contacts"));
             const isActive = item.key === activeItem || isActiveByPath;
-            if (isActive) {
-              return (
-                <span
-                  key={item.key}
-                  className={isLight ? activePlaqueClassLight : activePlaqueClass}
-                  style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
-                >
-                  {item.label}
-                </span>
-              );
-            }
             return (
               <Link
                 key={item.key}
                 href={item.href}
-                className={`text-[22px] font-medium whitespace-nowrap ${itemPadding} ${inactiveClass}`}
-                style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}
+                className={linkClass(isActive)}
+                style={{
+                  fontFamily: "var(--font-roboto-flex), sans-serif",
+                  ...(isActive && { color: "#fff" }),
+                }}
+                aria-current={isActive ? "page" : undefined}
               >
-                {item.label}
+                <span className="nav-link-fill__inner">
+                  <span className="nav-link-fill__base">{item.label}</span>
+                  <span className="nav-link-fill__hover" aria-hidden="true">
+                    {item.label}
+                  </span>
+                </span>
               </Link>
             );
           })}
