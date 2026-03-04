@@ -38,25 +38,23 @@ export default function MobileHeader() {
         <div className="size-10 shrink-0" aria-hidden="true" />
 
         {pathname === "/" && (
-          <div className="absolute left-1/2 top-0 flex h-16 w-[220px] -translate-x-1/2 items-center justify-center">
-            {/* Белая плашка за лого: верх уходит за край экрана */}
+          <Link
+            href="/"
+            className="header-logo-link group absolute left-1/2 top-0 flex h-16 w-[220px] -translate-x-1/2 items-center justify-center"
+            aria-label="VelesBron — на главную"
+          >
+            {/* Белая плашка за лого: при наведении подсвечивается */}
             <div
-              className="logo-plaque absolute left-1/2 top-0 z-[5] h-[88px] w-[220px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)]"
+              className="logo-plaque pointer-events-none absolute left-1/2 top-0 z-[5] h-[88px] w-[220px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-200 group-hover:shadow-[0_10px_40px_rgba(231,129,63,0.5),0_0_0_3px_rgba(231,129,63,0.4)]"
               style={{ top: "-28px" }}
               aria-hidden="true"
             />
-            <Link
-              href="/"
-              className="relative z-10 flex h-10 w-[180px] items-center justify-center"
-              aria-label="VelesBron — на главную"
-            >
-              <img
-                src={LOGO_SRC}
-                alt="VelesBron"
-                className="h-full w-full object-contain object-center"
-              />
-            </Link>
-          </div>
+            <img
+              src={LOGO_SRC}
+              alt="VelesBron"
+              className="relative z-10 h-10 w-[180px] object-contain object-center"
+            />
+          </Link>
         )}
 
         <button

@@ -236,13 +236,18 @@ const MOBILE_BOOT_BY_VIEW_BY_COLOR = {
     { left: -2, top: 382, width: 472, height: 450, objectPosition: "50% 53%" }, // 4
   ],
 } as const;
+
+/** Единые размеры мобильных плашек (форма и размер одинаковые у всех ракурсов) */
+const MOBILE_CALLOUT_SIZE = { width: 156, height: 66 };
+const MOBILE_GLUE_PILL_SIZE = { width: 200, height: 72 };
+
 const MOBILE_PLATES = {
   topMetric: { left: 62, top: 442, width: 182, height: 78 },
   topMetricDot: { x: 170, y: 63 },
-  callout: { left: 22, top: 760, width: 156, height: 66 },
+  callout: { left: 22, top: 760, ...MOBILE_CALLOUT_SIZE },
   calloutDot: { x: 66, y: -10 },
   sideMetric: { left: 348, top: 724, width: 103, height: 188 },
-  gluePill: { left: 38, top: 700, width: 179, height: 34 },
+  gluePill: { left: 38, top: 700, ...MOBILE_GLUE_PILL_SIZE },
   glueDot: { x: 172, y: 3 },
 } as const;
 const MOBILE_PLATES_BY_VIEW = [
@@ -254,12 +259,12 @@ const MOBILE_PLATES_BY_VIEW = [
     showSecondaryCallout: false,
     topMetric: MOBILE_PLATES.topMetric,
     topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: MOBILE_PLATES.callout,
+    callout: { ...MOBILE_PLATES.callout, left: 22, top: 760 },
     calloutDot: MOBILE_PLATES.calloutDot,
     secondaryCallout: MOBILE_PLATES.callout,
     secondaryCalloutDot: MOBILE_PLATES.calloutDot,
     sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { left: 18, top: 700, width: 224, height: 82 },
+    gluePill: { ...MOBILE_PLATES.gluePill, left: 18, top: 700 },
     glueDot: { x: 206, y: 10 },
   },
   {
@@ -270,12 +275,12 @@ const MOBILE_PLATES_BY_VIEW = [
     showSecondaryCallout: false,
     topMetric: MOBILE_PLATES.topMetric,
     topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { left: 310, top: 706, width: 156, height: 66 },
+    callout: { ...MOBILE_PLATES.callout, left: 310, top: 706 },
     calloutDot: { x: -12, y: 10 },
     secondaryCallout: MOBILE_PLATES.callout,
     secondaryCalloutDot: MOBILE_PLATES.calloutDot,
     sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { left: -28, top: 694, width: 232, height: 44 },
+    gluePill: { ...MOBILE_PLATES.gluePill, left: -28, top: 694 },
     glueDot: { x: 172, y: 3 },
   },
   {
@@ -286,9 +291,9 @@ const MOBILE_PLATES_BY_VIEW = [
     showSecondaryCallout: true,
     topMetric: MOBILE_PLATES.topMetric,
     topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { left: 304, top: 664, width: 156, height: 66 },
+    callout: { ...MOBILE_PLATES.callout, left: 304, top: 664 },
     calloutDot: { x: -12, y: 12 },
-    secondaryCallout: { left: 38, top: 774, width: 156, height: 66 },
+    secondaryCallout: { ...MOBILE_PLATES.callout, left: 38, top: 774 },
     secondaryCalloutDot: { x: 110, y: -12 },
     sideMetric: MOBILE_PLATES.sideMetric,
     gluePill: MOBILE_PLATES.gluePill,
@@ -302,12 +307,12 @@ const MOBILE_PLATES_BY_VIEW = [
     showSecondaryCallout: false,
     topMetric: MOBILE_PLATES.topMetric,
     topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { left: 300, top: 482, width: 156, height: 66 },
+    callout: { ...MOBILE_PLATES.callout, left: 300, top: 482 },
     calloutDot: { x: -12, y: 10 },
     secondaryCallout: MOBILE_PLATES.callout,
     secondaryCalloutDot: MOBILE_PLATES.calloutDot,
     sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { left: 54, top: 776, width: 179, height: 34 },
+    gluePill: { ...MOBILE_PLATES.gluePill, left: 54, top: 776 },
     glueDot: { x: 172, y: 3 },
   },
   {
@@ -318,12 +323,12 @@ const MOBILE_PLATES_BY_VIEW = [
     showSecondaryCallout: false,
     topMetric: MOBILE_PLATES.topMetric,
     topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { left: 48, top: 650, width: 156, height: 66 },
+    callout: { ...MOBILE_PLATES.callout, left: 48, top: 650 },
     calloutDot: { x: 112, y: -12 },
     secondaryCallout: MOBILE_PLATES.callout,
     secondaryCalloutDot: MOBILE_PLATES.calloutDot,
     sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { left: 286, top: 740, width: 146, height: 30 },
+    gluePill: { ...MOBILE_PLATES.gluePill, left: 286, top: 740 },
     glueDot: { x: -8, y: -3 },
   },
 ] as const;
@@ -1463,7 +1468,7 @@ export default function ModelsPage() {
           {currentMobilePlates.showTopMetric && (
             <>
               <div
-                className="absolute z-30 rounded-[14px] bg-white px-4 py-3 shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.topMetric.left,
                   top: currentMobilePlates.topMetric.top,
@@ -1471,8 +1476,8 @@ export default function ModelsPage() {
                   height: currentMobilePlates.topMetric.height,
                 }}
               >
-                <p className="text-[43px] font-bold leading-none tracking-[-0.04em]">{currentView.metricTop.value}</p>
-                <div className="absolute right-[14px] top-[12px] text-[14px] leading-[1.03]">
+                <p className="text-[43px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentView.metricTop.value}</p>
+                <div className="mt-1 text-[14px] leading-[1.03]">
                   <p className="font-bold text-[#111]">{currentView.metricTop.title}</p>
                   <p className="text-[#111]/35">{currentView.metricTop.line1}</p>
                   <p className="text-[#111]/35">{currentView.metricTop.line2}</p>
@@ -1493,7 +1498,7 @@ export default function ModelsPage() {
           {currentMobilePlates.showGluePill && (
             <>
               <div
-                className="absolute z-30 rounded-[135px] bg-white shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.gluePill.left,
                   top: currentMobilePlates.gluePill.top,
@@ -1506,14 +1511,14 @@ export default function ModelsPage() {
                   const glueTitle = glueLines[0] ?? "";
                   const glueItems = glueLines.slice(1);
                   return (
-                    <div className="px-3 pt-[10px] text-left">
+                    <>
                       <p className="text-[13px] leading-[1.05] tracking-[-0.01em] font-bold text-[#111]">{glueTitle}</p>
                       {glueItems.map((line) => (
                         <p key={line} className="mt-0.5 text-[11px] leading-[1.05] text-[#111]/75">
                           {line}
                         </p>
                       ))}
-                    </div>
+                    </>
                   );
                 })()}
               </div>
@@ -1532,7 +1537,7 @@ export default function ModelsPage() {
           {currentMobilePlates.showCallout && (
             <>
               <div
-                className="absolute z-30 rounded-[14px] bg-white px-4 py-3 shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.callout.left,
                   top: currentMobilePlates.callout.top,
@@ -1541,7 +1546,7 @@ export default function ModelsPage() {
                 }}
               >
                 <p className="text-[13px] leading-[1.05]">
-                  <span className="font-bold">{currentView.callout.title}</span>
+                  <span className="font-bold text-[#111]">{currentView.callout.title}</span>
                 </p>
                 <p className="text-[13px] leading-[1.05] text-[#111]/40">{currentView.callout.text}</p>
               </div>
@@ -1560,7 +1565,7 @@ export default function ModelsPage() {
           {currentMobilePlates.showSecondaryCallout && (
             <>
               <div
-                className="absolute z-30 rounded-[14px] bg-white px-4 py-3 shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+                className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.secondaryCallout.left,
                   top: currentMobilePlates.secondaryCallout.top,
@@ -1569,7 +1574,7 @@ export default function ModelsPage() {
                 }}
               >
                 <p className="text-[13px] leading-[1.05]">
-                  <span className="font-bold">{currentView.callout.title}</span>
+                  <span className="font-bold text-[#111]">{currentView.callout.title}</span>
                 </p>
                 <p className="text-[13px] leading-[1.05] text-[#111]/40">{currentView.callout.text}</p>
               </div>
@@ -1587,7 +1592,7 @@ export default function ModelsPage() {
 
           {currentMobilePlates.showSideMetric && (
             <div
-              className="absolute z-30 rounded-[16px] bg-white shadow-[0_30px_60px_rgba(0,0,0,0.12)] transition-all duration-500"
+              className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
               style={{
                 left: currentMobilePlates.sideMetric.left,
                 top: currentMobilePlates.sideMetric.top,
@@ -1598,10 +1603,10 @@ export default function ModelsPage() {
               <span className="absolute -left-[8px] top-[18px] flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                 <span className="size-[6px] rounded-full bg-white" />
               </span>
-              <p className="pt-4 text-center text-[43px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
-              <p className="pt-2 text-center text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line1}</p>
-              <p className="text-center text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line2}</p>
-              <div className="absolute bottom-[6px] left-1/2 h-[56px] w-[91px] -translate-x-1/2 overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+              <p className="text-[43px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
+              <p className="pt-2 text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line1}</p>
+              <p className="text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line2}</p>
+              <div className="relative mt-2 h-[56px] w-[91px] overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                 <img src={metricSideImage} alt="" className="absolute max-w-none object-cover" style={{ width: 164, height: 118, left: -42, top: -64 }} />
               </div>
             </div>

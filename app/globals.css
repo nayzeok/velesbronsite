@@ -270,11 +270,15 @@ body {
   min-height: var(--figma-stage-height, 1024px);
 }
 
-/** Единый вид белой плашки за лого (десктоп и мобильный хедер) */
+/** Единый вид белой плашки за лого (десктоп и мобильный хедер). При наведении на лого — подсветка. */
 .logo-plaque {
   background: #fff;
   border-radius: 0 0 12px 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.25s ease;
+}
+.header-logo-link:hover .logo-plaque {
+  box-shadow: 0 10px 40px rgba(231, 129, 63, 0.7), 0 0 0 3px rgba(231, 129, 63, 0.4) !important;
 }
 
 /* Отступ контента под фиксированный мобильный хедер: 4rem = высота хедера h-16 (только на мобильных) */
