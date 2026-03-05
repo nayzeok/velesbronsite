@@ -279,11 +279,11 @@ const views = [
 
 /** scale в image — масштаб картинки внутри карточки (1 = 100%). */
 const carouselItems = [
-  { x: 181.24, y: 80.41, rotate: 53.36, z: 5, image: { w: 99, h: 70, x: -25, y: -25, rotate: -45.9, flipY: false, scale: 5 }, exact53: true },
+  { x: 181.24, y: 80.41, rotate: 53.36, z: 5, image: { w: 99, h: 70, x: -20, y: -30, rotate: -45.9, flipY: false, scale: 5.5 }, exact53: true },
   { x: 92.17, y: 176.92, rotate: 30.46, z: 4, image: { w: 41, h: 86, x: -5, y: -25, rotate: -30.24, flipY: false, scale: 2.7 }, exact30: true },
   { x: 58.5, y: 289.47, rotate: 0, z: 3, image: { w: 70, h: 87, x: 10, y: -15, rotate: 0, flipY: false, scale: 2 }, exact0: true },
-  { x: 99.81, y: 400.48, rotate: -36.65, z: 2, image: { w: 39, h: 107, x: 0, y: 0, rotate: -45, flipY: true, scale: 2.7 }, exactNeg36: true },
-  { x: 180.72, y: 481.93, rotate: -54.79, z: 1, image: { w: 38, h: 84, x: 20, y: -25, rotate: 55, flipY: false, scale: 5.5 }, exactNeg54: true },
+  { x: 99.81, y: 400.48, rotate: -36.65, z: 2, image: { w: 39, h: 107, x: 0, y: 0, rotate: -45, flipY: true, scale: 2.9 }, exactNeg36: true },
+  { x: 180.72, y: 481.93, rotate: -54.79, z: 1, image: { w: 38, h: 84, x: 20, y: -25, rotate: 55, flipY: false, scale: 5.7 }, exactNeg54: true },
 ];
 const CAROUSEL_ARC_CENTER = { x: 313, y: 296 };
 const CAROUSEL_MARKER_RADIUS = 168;
