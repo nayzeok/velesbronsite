@@ -25,12 +25,46 @@ const MOBILE_COLOR_TOP = 492;
 /** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px). */
 const MOBILE_COLOR_HEADING_GAP = 40;
 
-/** Масштаб фото ботинка по ракурсам: ПК. Высокая модель — 5 ракурсов [0..4], низкая — 4 [0..3], для низкой берётся scale[0..3]. */
-const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW = [1.5, 1, 1.3, 1.3, 1.05];
-/** Масштаб фото ботинка по ракурсам: мобильная. */
-const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW = [1, 1, 1, 1, 1];
+/**
+ * Масштаб большого фото карточки (центральная картинка), по индексу карточки 0..9.
+ * Отдельно для чёрных и для оливы — подгоняйте под ракурс.
+ */
+const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW: Record<"black" | "oliva", number[]> = {
+  black: [1.5, 1.5, 1, 1.2, 1.5, 1.5, 1.4, 1.4, 1.4, 1.4],
+  oliva: [1.5, 1.5, 1, 1.2, 1.5, 1.5, 1.4, 1.3, 1.4, 1.4],
+};
+const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW: Record<"black" | "oliva", number[]> = {
+  black: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  oliva: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+};
+
+/**
+ * Смещение центрального фото в пикселях (x, y) для каждой карточки 0..9.
+ * Отдельно для чёрных и оливы. Положительный x — вправо, y — вниз.
+ */
+const BOOT_IMAGE_OFFSET_DESKTOP: Record<"black" | "oliva", { x: number; y: number }[]> = {
+  black: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+  ],
+  oliva: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 50 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+  ],
+};
+const BOOT_IMAGE_OFFSET_MOBILE: Record<"black" | "oliva", { x: number; y: number }[]> = {
+  black: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+  ],
+  oliva: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+  ],
+};
 
 const backgroundShape = "/images/models/ui/background-shape.png";
+/** Фото для страницы models лежат в public/images/models/cards/ (2sk/black|oliva, 2n/black). */
 
 /** Ширина контейнера десктоп (px), для расчёта отступов в % */
 const DESKTOP_STAGE_WIDTH = 1670;
@@ -39,26 +73,28 @@ const DESKTOP_LEFT_MARGIN_PCT = (71 / DESKTOP_STAGE_WIDTH) * 100;
 /** Позиция центра правого блока в % от левого края — при сужении экрана сохраняется */
 const DESKTOP_RIGHT_CENTER_PCT = (1487 / DESKTOP_STAGE_WIDTH) * 100;
 
-/** Карусель десктоп: видно 4 карточки, размер карточек без изменений */
-const CAROUSEL_DESKTOP_CARD_WIDTH = 161;
-const CAROUSEL_DESKTOP_CARD_HEIGHT = 194;
-const CAROUSEL_DESKTOP_GAP = 12;
+/** Карусель десктоп: размер миниатюр (ширина × высота), уменьшено на 15%. */
+const CAROUSEL_DESKTOP_CARD_WIDTH = 137;
+const CAROUSEL_DESKTOP_CARD_HEIGHT = 165;
+const CAROUSEL_DESKTOP_GAP = 10;
 const CAROUSEL_DESKTOP_WIDTH = CAROUSEL_DESKTOP_CARD_WIDTH * 4 + CAROUSEL_DESKTOP_GAP * 3;
 const CAROUSEL_DESKTOP_SCROLL = CAROUSEL_DESKTOP_CARD_WIDTH + CAROUSEL_DESKTOP_GAP;
 
 type ColorVariant = "black" | "oliva";
 type ModelKey = "high" | "low";
 
-const MODEL_OPTIONS: { key: ModelKey; label: string; description: string }[] = [
+const MODEL_OPTIONS: { key: ModelKey; label: string; title: string; description: string }[] = [
   {
     key: "high",
     label: "Высокая",
+    title: "2СК",
     description:
       "Высокая модель обеспечивает усиленную фиксацию голеностопа и стабильность шага на смешанных покрытиях. Подходит для активной эксплуатации в городе, на объекте и в полевых условиях.",
   },
   {
     key: "low",
     label: "Низкая",
+    title: "Низкая",
     description:
       "Низкая модель легче по ощущениям и дает больше свободы движения при длительной носке. Оптимальный выбор для городского ритма, маршрутов с высокой подвижностью и повседневной нагрузки.",
   },
@@ -91,6 +127,120 @@ const MODEL_IMAGES: Record<ModelKey, { black: string[]; oliva?: string[] }> = {
   },
 };
 
+/** Карточки карусели только для высокой модели: 10 слотов, данные пока для 7. На каждой карточке — фото (ссылка) и тексты: для черных — заголовок + текст, для оливы — заголовок (если есть) + текст. Фото подставляете сами, размер подгоним. */
+type CarouselCard = {
+  imageBlack: string;
+  imageOliva: string;
+  titleBlack: string;
+  textBlack: string;
+  /** Заголовок для оливы (опционально) */
+  titleOliva?: string;
+  textOliva: string;
+};
+
+const CAROUSEL_CARDS: CarouselCard[] = [
+  {
+    imageBlack: "/images/models/cards/1_card_black.png",
+    imageOliva: "/images/models/cards/1_card_oliva.png",
+    titleBlack: "КОНСТРУКЦИЯ МОДЕЛИ",
+    textBlack:
+      "Все элементы ботинка – от материалов до сборки – подбираются с расчётом на интенсивную эксплуатацию. Усиленные зоны, прочные соединения и продуманная архитектура позволяют конструкции сохранять ресурс при высокой нагрузке.",
+    titleOliva: "СТАБИЛЬНОСТЬ И \n ФИКСАЦИЯ ГОЛЕНОСТОПА",
+    textOliva:
+      "Высокая конструкция ботинка обеспечивает дополнительную поддержку голеностопного сустава. Это повышает устойчивость на неровной поверхности и помогает сохранять контроль движения.",
+  },
+  {
+    imageBlack: "/images/models/cards/2_card_black.png",
+    imageOliva: "/images/models/cards/2_card_oliva.png",
+    titleBlack: "СЦЕПЛЕНИЕ НА РАЗНЫХ ПОКРЫТИЯХ",
+    textBlack:
+      "Специальный рисунок подмётки и состав резиновой смеси обеспечивают уверенное сцепление на асфальте, грунте, камнях и влажных поверхностях. Подошва стабильно работает как в городской среде, так и на пересечённой местности.",
+    titleOliva: "ГИБРИДНАЯ ПОДОШВА ПОВЫШЕННОЙ ПРОЧНОСТИ",
+    textOliva:
+      "Подошва выполнена по гибридной технологии: амортизирующая основа обеспечивает лёгкость и комфорт, а износостойкая подмётка отвечает за сцепление и устойчивость. Такая конструкция снижает нагрузку на стопу и сохраняет стабильность на разных типах поверхности.",
+  },
+  {
+    imageBlack: "/images/models/cards/3_card_black.png",
+    imageOliva: "/images/models/cards/3_card_oliva.png",
+    titleBlack: "АНТИПРОКОЛЬНАЯ \n ЗАЩИТА ПОДОШВЫ",
+    textBlack:
+      "Внутри подошвы расположена гибкая антипрокольная вставка из арамидного волокна. Материал сочетает малый вес и высокую прочность, защищая стопу от острых предметов и снижая риск травмы при движении по сложному рельефу.",
+    titleOliva: "ГИБРИДНАЯ ПОДОШВА ПОВЫШЕННОЙ ПРОЧНОСТИ",
+    textOliva:
+      "Подошва выполнена по гибридной технологии: амортизирующая основа обеспечивает лёгкость и комфорт, а износостойкая подмётка отвечает за сцепление и устойчивость. Такая конструкция снижает нагрузку на стопу и сохраняет стабильность на разных типах поверхности.",
+  },
+  {
+    imageBlack: "/images/models/cards/4_card_black.png",
+    imageOliva: "/images/models/cards/4_card_oliva.png",
+    titleBlack: "КОМПОЗИТНАЯ \n ЗАЩИТА НОСКА",
+    textBlack:
+      "Носочная часть ботинка усилена композитным элементом, который защищает пальцы от давления, ударов и случайных контактов с жёсткими предметами. Материал сохраняет прочность при меньшем весе по сравнению с металлическими решениями, поэтому защита не утяжеляет обувь и не снижает комфорт при длительном движении.",
+    titleOliva: "УСИЛЕННАЯ УДАРНАЯ \n ЗОНА НОСКА",
+    textOliva:
+      "Передняя часть ботинка рассчитана на повышенную нагрузку и защищает стопу при контакте с камнями, ступенями, инструментом или строительными элементами. Усиленная конструкция распределяет энергию удара по корпусу ботинка и снижает риск травм при активной эксплуатации.",
+  },
+  {
+    imageBlack: "/images/models/cards/5_card_black.png",
+    imageOliva: "/images/models/cards/5_card_oliva.png",
+    titleBlack: "ИЗНОСОСТОЙКИЕ \n МАТЕРИАЛЫ ВЕРХА",
+    textBlack:
+      "Верх ботинка выполнен из натурального нубука в сочетании с высокопрочной тканью Cordura. Такое сочетание обеспечивает баланс прочности, гибкости и износостойкости, позволяя обуви выдерживать интенсивную эксплуатацию.",
+    titleOliva: "ИЗНОСОСТОЙКИЕ \n МАТЕРИАЛЫ",
+    textOliva:
+      "Мы используем натуральный нубук в сочетании с высокопрочным текстилем. Благодаря этому ботинки не теряют форму и защитные свойства даже после многих месяцев активного использования в самых жестких условиях.",
+  },
+  {
+    imageBlack: "/images/models/cards/6_card_black.png",
+    imageOliva: "/images/models/cards/6_card_oliva.png",
+    titleBlack: "ЗАЩИТА ОТ ВЛАГИ \n И ЗАГРЯЗНЕНИЙ",
+    textBlack:
+      "Каждый ботинок проходит обработку гидрофобным составом, который снижает впитывание влаги и защищает материал от загрязнений. Обувь дольше сохраняет внешний вид и рабочие свойства при использовании в разных условиях.",
+    titleOliva: "ВОДООТТАЛКИВАЮЩАЯ \n ЗАЩИТА ВЕРХА",
+    textOliva:
+      "Материалы верха обработаны гидрофобным составом, который снижает впитывание влаги и защищает поверхность от загрязнений. Капли воды не проникают в структуру материала, а скатываются с поверхности. Такая обработка помогает дольше сохранять внешний вид обуви и облегчает уход при эксплуатации в разных условиях.",
+  },
+  {
+    imageBlack: "/images/models/cards/7_card_black.png",
+    imageOliva: "/images/models/cards/7_card_oliva.png",
+    titleBlack: "МЕМБРАНА VELTEX \n ВНУТРИ БОТИНКА",
+    textBlack:
+      "Внутренняя мембрана выполнена в виде цельной чулочной конструкции. Она препятствует проникновению влаги внутрь обуви и помогает отводить избыточное тепло от стопы. Благодаря этому внутри поддерживается комфортный микроклимат, позволяющий использовать ботинки в широком диапазоне температур — от −15 до +20 °C.",
+    titleOliva: "МЕМБРАНА VELTEX: \n ЗАЩИТА И КОМФОРТ",
+    textOliva:
+      "Внутри ботинка используется мембрана VELTEX в виде цельной чулочной конструкции. Она защищает от проникновения влаги и помогает отводить избыточное тепло и влагу от стопы. Такая система поддерживает комфортный микроклимат внутри обуви и позволяет использовать ботинки в широком диапазоне температур – от −15 до +20 °C.",
+  },
+  {
+    imageBlack: "/images/models/cards/8_card_black.png",
+    imageOliva: "/images/models/cards/8_card_oliva.png",
+    titleBlack: "СИСТЕМА БЫСТРОЙ \n ШНУРОВКИ",
+    textBlack:
+      "Механизм Quick-Lock позволяет быстро и точно зафиксировать ботинок на ноге. Система обеспечивает стабильную посадку, равномерно распределяет нагрузку и облегчает регулировку шнуровки во время движения.",
+    titleOliva: "QUICK-LOCK: \n БЫСТРАЯ ФИКСАЦИЯ",
+    textOliva:
+      "Система шнуровки Quick-Lock позволяет быстро и точно зафиксировать ботинок на ноге. Механизм равномерно распределяет натяжение шнурков и помогает отрегулировать посадку без лишних усилий. Ботинок надёжно удерживает стопу, обеспечивая стабильность и комфорт при движении.",
+  },
+  {
+    imageBlack: "/images/models/cards/9_card_black.png",
+    imageOliva: "/images/models/cards/9_card_oliva.png",
+    titleBlack: "УСИЛЕННЫЕ ШВЫ \n КОНСТРУКЦИИ",
+    textBlack:
+      "Ключевые зоны ботинка прошиты прочными армированными нитями. Усиленная строчка повышает прочность соединений и помогает конструкции выдерживать многократные сгибы и повышенные нагрузки.",
+    titleOliva: "ТРОЙНЫЕ ШВЫ, \n АРМИРОВАННЫЕ НИТИ",
+    textOliva:
+      "Ключевые зоны ботинка прошиты тройными швами с использованием армированных полиэфирных лавсановых нитей. Такая технология усиливает соединения материалов и повышает устойчивость конструкции к нагрузкам, изгибам и длительной эксплуатации, сохраняя надёжность ботинка при активном использовании.",
+  },
+  {
+    imageBlack: "/images/models/cards/10_card_black.png",
+    imageOliva: "/images/models/cards/10_card_oliva.png",
+    titleBlack: "КОМФОРТ НА ДЛИННОЙ ДИСТАНЦИИ",
+    textBlack:
+      "Амортизирующие элементы подошвы и анатомическая стелька помогают снизить усталость при длительном движении. Конструкция ботинка учитывает форму стопы и обеспечивает устойчивую фиксацию пятки и средней части. Обувь остаётся комфортной не только при примерке, но и после многих часов активной эксплуатации.",
+    titleOliva: "АНАТОМИЧЕСКАЯ \n ПОДДЕРЖКА СТОПЫ",
+    textOliva:
+      "Конструкция ботинка учитывает форму стопы и обеспечивает устойчивую фиксацию пятки и средней части. Внутри используется анатомическая стелька, которая поддерживает свод стопы и помогает равномерно распределять нагрузку. Это снижает усталость и повышает стабильность шага при длительной ходьбе.",
+  },
+];
+
 const SIZE_GRID_ROWS = [
   { size: "39", insole: "26,0", foot: "24,5 - 25,0" },
   { size: "40", insole: "26,5", foot: "25,1 - 25,6" },
@@ -115,75 +265,43 @@ export default function BuyPage() {
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
   const mobileRailRef = useRef<HTMLDivElement | null>(null);
   const sizeGridCloseTimerRef = useRef<number | null>(null);
-  const desktopRailDragRef = useRef({ isDragging: false, startX: 0, startScrollLeft: 0 });
-  const mobileRailDragRef = useRef({ isDragging: false, startX: 0, startScrollLeft: 0 });
-  const railDidDragRef = useRef(false);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
   const selectedModel = MODEL_OPTIONS.find((item) => item.key === activeModelKey) ?? MODEL_OPTIONS[0];
   const modelImagesByColor = MODEL_IMAGES[activeModelKey];
-  const activeViewImages = (modelImagesByColor[colorVariant] && modelImagesByColor[colorVariant]!.length > 0)
-    ? modelImagesByColor[colorVariant]!
-    : modelImagesByColor.black;
+  const isHighModel = activeModelKey === "high";
+  const activeViewImages = isHighModel
+    ? CAROUSEL_CARDS.map((c) => (colorVariant === "black" ? c.imageBlack : c.imageOliva))
+    : (modelImagesByColor[colorVariant] && modelImagesByColor[colorVariant]!.length > 0)
+      ? modelImagesByColor[colorVariant]!
+      : modelImagesByColor.black;
   const currentViewImage = activeViewImages[activeViewIndex] ?? activeViewImages[0];
-
-  const [desktopRailDragging, setDesktopRailDragging] = useState(false);
-  const [mobileRailDragging, setMobileRailDragging] = useState(false);
+  const activeCard = isHighModel ? CAROUSEL_CARDS[activeViewIndex] : null;
+  const leftBlockTitle = activeCard
+    ? (colorVariant === "black" ? activeCard.titleBlack : activeCard.titleOliva ?? "")
+    : "";
+  const leftBlockText = activeCard
+    ? (colorVariant === "black" ? activeCard.textBlack : activeCard.textOliva)
+    : selectedModel.description;
 
   useEffect(() => {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveViewIndex(0);
-  }, [activeModelKey, colorVariant]);
+  }, [activeModelKey]);
 
   useEffect(() => {
-    if (!desktopRailDragging) return;
-    const move = (e: MouseEvent) => {
-      const el = desktopRailRef.current;
-      if (!el) return;
-      const ref = desktopRailDragRef.current;
-      railDidDragRef.current = true;
-      const deltaX = ref.startX - e.clientX;
-      el.scrollLeft = ref.startScrollLeft + deltaX;
-      ref.startX = e.clientX;
-      ref.startScrollLeft = el.scrollLeft;
+    const maxIndex = Math.max(0, activeViewImages.length - 1);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isSizeGridOpen) return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setActiveViewIndex((i) => (i >= maxIndex ? 0 : i + 1));
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setActiveViewIndex((i) => (i <= 0 ? maxIndex : i - 1));
+      }
     };
-    const up = () => {
-      setDesktopRailDragging(false);
-      setTimeout(() => { railDidDragRef.current = false; }, 0);
-    };
-    document.addEventListener("mousemove", move);
-    document.addEventListener("mouseup", up);
-    return () => {
-      document.removeEventListener("mousemove", move);
-      document.removeEventListener("mouseup", up);
-    };
-  }, [desktopRailDragging]);
-
-  useEffect(() => {
-    if (!mobileRailDragging) return;
-    const move = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-      const el = mobileRailRef.current;
-      if (!el) return;
-      const ref = mobileRailDragRef.current;
-      const touchX = e.touches[0].clientX;
-      railDidDragRef.current = true;
-      const deltaX = ref.startX - touchX;
-      el.scrollLeft = ref.startScrollLeft + deltaX;
-      ref.startX = touchX;
-      ref.startScrollLeft = el.scrollLeft;
-      e.preventDefault();
-    };
-    const up = () => {
-      setMobileRailDragging(false);
-      setTimeout(() => { railDidDragRef.current = false; }, 0);
-    };
-    document.addEventListener("touchmove", move, { passive: false });
-    document.addEventListener("touchend", up);
-    return () => {
-      document.removeEventListener("touchmove", move);
-      document.removeEventListener("touchend", up);
-    };
-  }, [mobileRailDragging]);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isSizeGridOpen, activeViewImages.length]);
 
   useEffect(() => {
     if (!isSizeGridOpen) return;
@@ -237,7 +355,7 @@ export default function BuyPage() {
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
-          <SiteHeader className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />
+          <SiteHeader activeItem="models" className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />
           <div
             className="absolute inset-x-0 top-0 h-[1000px] origin-top"
             style={{ transform: `scale(${stageHeightFitScale})` }}
@@ -270,25 +388,26 @@ export default function BuyPage() {
 
             <div className="h-[96px] shrink-0" aria-hidden="true" />
 
-            {/* Left — model name + description */}
-            <div className="absolute" style={{ left: `${DESKTOP_LEFT_MARGIN_PCT}%`, top: 186 }}>
+            {/* Left — заголовок + текст. width задана с запасом: контейнер масштабируется (scale), после scale эффективная ширина меньше — берём ~720, чтобы в 2 строки. */}
+            <div className="absolute" style={{ left: `${DESKTOP_LEFT_MARGIN_PCT}%`, top: 186, width: 720, maxWidth: 720 }}>
               <h1
-                className="uppercase"
+                className="uppercase w-full"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 34,
                   fontWeight: 700,
-                  lineHeight: "normal",
+                  lineHeight: 1.15,
                   color: "#111",
                   letterSpacing: "0.08em",
+                  whiteSpace: "pre-line",
                 }}
               >
-                {`МОДЕЛЬ ${selectedModel.label.toUpperCase()}`}
+                {activeCard && leftBlockTitle ? leftBlockTitle : selectedModel.title}
               </h1>
               <p
                 className="absolute"
                 style={{
-                  top: 88,
+                  top: 115,
                   left: 0,
                   width: 408,
                   fontFamily: "var(--font-roboto-flex), sans-serif",
@@ -298,17 +417,17 @@ export default function BuyPage() {
                   color: "#111",
                 }}
               >
-                {selectedModel.description}
+                {leftBlockText}
               </p>
             </div>
 
-            {/* Center — boot image (масштаб через BOOT_IMAGE_SCALE_DESKTOP), по центру экрана */}
+            {/* Center — boot image (масштаб и смещение отдельно для black/oliva) */}
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
               style={{
                 width: 746,
                 height: 609,
-                transform: `translate(-50%, calc(-50% - 28px)) scale(${BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[activeViewIndex] ?? 1})`,
+                transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% - 28px + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
               }}
             >
               <img
@@ -333,9 +452,9 @@ export default function BuyPage() {
                 }}
                 aria-label="Открыть таблицу размеров"
               >
-                <span className="size-table-link__base">Таблица размеров</span>
+                <span className="size-table-link__base">ТАБЛИЦА РАЗМЕРОВ</span>
                 <span className="size-table-link__hover" aria-hidden="true">
-                  Таблица размеров
+                  ТАБЛИЦА РАЗМЕРОВ
                 </span>
               </button>
 
@@ -507,21 +626,20 @@ export default function BuyPage() {
                   letterSpacing: "0.08em",
                 }}
               >
-                Где Купить
+                ГДЕ КУПИТЬ
               </Link>
             </div>
 
-            {/* Bottom photo cards — 4 карточки в видимой области, перетаскивание */}
+            {/* Bottom photo cards — 4 карточки в видимой области */}
             <div
               className="absolute left-1/2 -translate-x-1/2"
               style={{
                 top: 779,
                 width: CAROUSEL_DESKTOP_WIDTH,
-                cursor: desktopRailDragging ? "grabbing" : desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "grab",
+                cursor: desktopRailCursor === "left" ? "w-resize" : desktopRailCursor === "right" ? "e-resize" : "default",
               }}
               onMouseEnter={() => setIsDesktopRailHover(true)}
               onMouseMove={(event) => {
-                if (desktopRailDragging) return;
                 const rect = event.currentTarget.getBoundingClientRect();
                 const x = event.clientX - rect.left;
                 if (x < 80) {
@@ -561,45 +679,48 @@ export default function BuyPage() {
               />
               <div
                 ref={desktopRailRef}
-                className="scrollbar-hide flex overflow-x-auto pb-2 pr-2 select-none"
-                style={{
-                  gap: CAROUSEL_DESKTOP_GAP,
-                  scrollBehavior: desktopRailDragging ? "auto" : "smooth",
-                  userSelect: desktopRailDragging ? "none" : undefined,
-                }}
-                onMouseDown={(e) => {
-                  if (e.button !== 0) return;
-                  desktopRailDragRef.current = {
-                    isDragging: true,
-                    startX: e.clientX,
-                    startScrollLeft: desktopRailRef.current?.scrollLeft ?? 0,
-                  };
-                  setDesktopRailDragging(true);
-                }}
+                className="scrollbar-hide flex overflow-x-auto pb-2 pr-2"
+                style={{ gap: CAROUSEL_DESKTOP_GAP, scrollBehavior: "smooth" }}
               >
-                {activeViewImages.map((image, i) => (
-                  <button
-                    key={`desktop-view-${i}`}
-                    type="button"
-                    onClick={() => {
-                      if (railDidDragRef.current) {
-                        railDidDragRef.current = false;
-                        return;
-                      }
-                      setActiveViewIndex(i);
-                    }}
-                    className="shrink-0 overflow-hidden rounded-[16px] transition-all"
-                    style={{
-                      width: CAROUSEL_DESKTOP_CARD_WIDTH,
-                      height: CAROUSEL_DESKTOP_CARD_HEIGHT,
-                      background: "#eceef0",
-                      border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)",
-                      cursor: desktopRailDragging ? "grabbing" : "pointer",
-                    }}
-                  >
-                    <img src={image} alt="" className="h-full w-full object-contain" />
-                  </button>
-                ))}
+                {isHighModel
+                  ? CAROUSEL_CARDS.map((card, i) => (
+                      <button
+                        key={`desktop-view-${i}`}
+                        type="button"
+                        onClick={() => setActiveViewIndex(i)}
+                        className="shrink-0 overflow-hidden rounded-[16px] transition-all"
+                        style={{
+                          width: CAROUSEL_DESKTOP_CARD_WIDTH,
+                          height: CAROUSEL_DESKTOP_CARD_HEIGHT,
+                          background: "#eceef0",
+                          border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <img
+                          src={colorVariant === "black" ? card.imageBlack : card.imageOliva}
+                          alt=""
+                          className="h-full w-full object-contain"
+                        />
+                      </button>
+                    ))
+                  : activeViewImages.map((image, i) => (
+                      <button
+                        key={`desktop-view-${i}`}
+                        type="button"
+                        onClick={() => setActiveViewIndex(i)}
+                        className="shrink-0 overflow-hidden rounded-[16px] transition-all"
+                        style={{
+                          width: CAROUSEL_DESKTOP_CARD_WIDTH,
+                          height: CAROUSEL_DESKTOP_CARD_HEIGHT,
+                          background: "#eceef0",
+                          border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <img src={image} alt="" className="h-full w-full object-contain" />
+                      </button>
+                    ))}
               </div>
               <button
                 type="button"
@@ -673,20 +794,22 @@ export default function BuyPage() {
             </div>
 
             <h1
-              className="absolute left-[74px] top-[59px] uppercase"
+              className="absolute left-[74px] top-[59px] w-[520px] max-w-[90vw] uppercase"
               style={{
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                 fontSize: 21,
                 fontWeight: 700,
+                lineHeight: 1.15,
                 color: "#111",
                 letterSpacing: "0.08em",
+                whiteSpace: "pre-line",
               }}
             >
-              {`МОДЕЛЬ ${selectedModel.label.toUpperCase()}`}
+              {activeCard && leftBlockTitle ? leftBlockTitle : selectedModel.title}
             </h1>
 
             <p
-              className="absolute left-[74px] top-[147px] w-[408px]"
+              className="absolute left-[74px] top-[165px] w-[408px]"
               style={{
                 fontFamily: "var(--font-roboto-flex), sans-serif",
                 fontSize: 20,
@@ -695,7 +818,7 @@ export default function BuyPage() {
                 color: "#111",
               }}
             >
-              {selectedModel.description}
+              {leftBlockText}
             </p>
 
             <button
@@ -704,7 +827,7 @@ export default function BuyPage() {
               className="size-table-link absolute left-[70px] top-[814px]"
               aria-label="Открыть таблицу размеров"
             >
-              Таблица размеров
+              ТАБЛИЦА РАЗМЕРОВ
             </button>
 
             <div
@@ -835,13 +958,13 @@ export default function BuyPage() {
               Купить
             </Link>
 
-            {/* Текущее фото ботинка (мобильная). Масштаб через BOOT_IMAGE_SCALE_MOBILE, по центру экрана. */}
+            {/* Текущее фото ботинка (мобильная). Масштаб и смещение отдельно для black/oliva. */}
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
               style={{
                 width: 741,
                 height: 944,
-                transform: `translate(-50%, calc(-50% - 28px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[activeViewIndex] ?? 1})`,
+                transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% - 28px + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
               }}
             >
               <img
@@ -856,34 +979,35 @@ export default function BuyPage() {
               <div
                 ref={mobileRailRef}
                 className="scrollbar-hide flex gap-[10px] overflow-x-auto pb-3 pr-3"
-                style={{ scrollBehavior: mobileRailDragging ? "auto" : "smooth", touchAction: "pan-y" }}
-                onTouchStart={(e) => {
-                  if (e.touches.length !== 1) return;
-                  mobileRailDragRef.current = {
-                    isDragging: true,
-                    startX: e.touches[0].clientX,
-                    startScrollLeft: mobileRailRef.current?.scrollLeft ?? 0,
-                  };
-                  setMobileRailDragging(true);
-                }}
+                style={{ scrollBehavior: "smooth" }}
               >
-                {activeViewImages.map((image, i) => (
-                  <button
-                    key={`mobile-view-${i}`}
-                    type="button"
-                    onClick={() => {
-                      if (railDidDragRef.current) {
-                        railDidDragRef.current = false;
-                        return;
-                      }
-                      setActiveViewIndex(i);
-                    }}
-                    className="h-[186px] w-[140px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
-                    style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
-                  >
-                    <img src={image} alt="" className="h-full w-full object-contain" />
-                  </button>
-                ))}
+                {isHighModel
+                  ? CAROUSEL_CARDS.map((card, i) => (
+                      <button
+                        key={`mobile-view-${i}`}
+                        type="button"
+                        onClick={() => setActiveViewIndex(i)}
+                        className="h-[158px] w-[119px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
+                        style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
+                      >
+                        <img
+                          src={colorVariant === "black" ? card.imageBlack : card.imageOliva}
+                          alt=""
+                          className="h-full w-full object-contain"
+                        />
+                      </button>
+                    ))
+                  : activeViewImages.map((image, i) => (
+                      <button
+                        key={`mobile-view-${i}`}
+                        type="button"
+                        onClick={() => setActiveViewIndex(i)}
+                        className="h-[158px] w-[119px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
+                        style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
+                      >
+                        <img src={image} alt="" className="h-full w-full object-contain" />
+                      </button>
+                    ))}
               </div>
               <button
                 type="button"
@@ -938,7 +1062,7 @@ export default function BuyPage() {
                 </svg>
               </button>
             </div>
-            <div className="max-h-[calc(84dvh-78px)] overflow-auto">
+            <div className="max-h-[calc(84dvh-78px)] overflow-hidden">
               <table className="w-full table-fixed border-collapse text-left min-[1200px]:w-auto min-[1200px]:min-w-[640px]">
                 <colgroup>
                   <col className="w-[72px] min-[1200px]:w-[92px]" />

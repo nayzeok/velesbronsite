@@ -232,10 +232,19 @@ body {
   bottom: 4px;
   border-radius: 10px;
   z-index: -1;
-  background: linear-gradient(to right, #8b7a71, #756257);
+  background: linear-gradient(to right, rgba(139,122,113,0.25), rgba(117,98,87,0.25));
 }
 .nav-link-fill.nav-link-fill--active.nav-link-fill--light::before {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+}
+/* Светлый фон: тёмный текст, плашка активного — полупрозрачный серый */
+.nav-link-fill.nav-link-fill--lightBg { color: #111; }
+.nav-link-fill.nav-link-fill--lightBg .nav-link-fill__base { color: inherit; }
+.nav-link-fill.nav-link-fill--lightBg .nav-link-fill__hover { color: #e7813f; border-bottom-color: #e7813f; }
+.nav-link-fill.nav-link-fill--active.nav-link-fill--lightBg { color: #fff !important; }
+.nav-link-fill.nav-link-fill--active.nav-link-fill--lightBg .nav-link-fill__base { color: #fff !important; }
+.nav-link-fill.nav-link-fill--active.nav-link-fill--lightBg::before {
+  background: linear-gradient(to right, #8b7a71, #756257);
 }
 /* Фон плашки только в ::before, у ссылки сбрасываем Tailwind bg */
 .nav-link-fill.nav-link-fill--active {

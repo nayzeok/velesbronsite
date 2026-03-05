@@ -5,39 +5,57 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import SiteHeader from "@/components/layout/SiteHeader";
+import {
+  mobileCarouselCards,
+  mobileCarouselMarkerAngles,
+  MOBILE_BOOT,
+  MOBILE_BOOT_BY_VIEW_BY_COLOR,
+  MOBILE_CAROUSEL_ELLIPSE,
+  MOBILE_CAROUSEL_IMAGE_BOOST,
+  MOBILE_CAROUSEL_IMAGE_TUNE,
+  MOBILE_CAROUSEL_LAYOUT_SCALE,
+  MOBILE_CAROUSEL_MARKER,
+  MOBILE_CAROUSEL_MARKER_ANGLE_OFFSETS,
+  MOBILE_PEDESTAL,
+  MOBILE_PLAQUE_DOT,
+  MOBILE_PLAQUE_TEXT_SCALE,
+  MOBILE_PLAQUE_WIDTH_SCALE,
+  MOBILE_PLATES_BY_VIEW,
+} from "./constants-mobile";
 
 const DESIGN_HEIGHT = 1000;
 
-const mainBootSide = "/images/models/views/models/2sk/black/1.png";
-const mainBootFront = "/images/models/views/models/2sk/black/2.png";
-const mainBootTop = "/images/models/views/models/2sk/black/3.png";
-const mainBootTilt = "/images/models/views/models/2sk/black/4.png";
-const mainBootBack = "/images/models/views/models/2sk/black/5.png";
+/** Ракурсы ботинка: папка public/images/models/advantages-views/2sk/ */
+const mainBootSide = "/images/models/advantages-views/2sk/black/1.png";
+const mainBootFront = "/images/models/advantages-views/2sk/black/2.png";
+const mainBootTop = "/images/models/advantages-views/2sk/black/3.png";
+const mainBootTilt = "/images/models/advantages-views/2sk/black/4.png";
+const mainBootBack = "/images/models/advantages-views/2sk/black/5.png";
 const pedestalImage = "/images/models/ui/pedestal-bg.png";
 const thumbA = "/images/models/ui/thumb-dark.png";
 const thumbB = "/images/models/ui/thumb-light.png";
-const carouselCardBoot53 = "/images/models/views/models/2sk/oliva/1.png";
-const carouselCardBoot30 = "/images/models/views/models/2sk/oliva/6.png";
-const carouselCardBoot0 = "/images/models/views/models/2sk/oliva/3.png";
-const carouselCardBootNeg36 = "/images/models/views/models/2sk/oliva/4.png";
-const carouselCardBootNeg54 = "/images/models/views/models/2sk/oliva/2.png";
+const carouselCardBoot53 = "/images/models/advantages-views/2sk/oliva/1_3.png";
+const carouselCardBoot30 = "/images/models/advantages-views/2sk/oliva/6.png";
+const carouselCardBoot0 = "/images/models/advantages-views/2sk/oliva/3.png";
+const carouselCardBootNeg36 = "/images/models/advantages-views/2sk/oliva/4.png";
+const carouselCardBootNeg54 = "/images/models/advantages-views/2sk/oliva/1_2.png";
 const backgroundShape = "/images/models/ui/background-shape.png";
 const metricSideImage = "/images/models/ui/metric-side-image.png";
 
 const colorViewImages = {
   black: [
-    "/images/models/views/models/2sk/black/1.png",
-    "/images/models/views/models/2sk/black/2.png",
-    "/images/models/views/models/2sk/black/3.png",
-    "/images/models/views/models/2sk/black/4.png",
-    "/images/models/views/models/2sk/black/5.png",
+    "/images/models/advantages-views/2sk/black/1.png",
+    "/images/models/advantages-views/2sk/black/2.png",
+    "/images/models/advantages-views/2sk/black/3.png",
+    "/images/models/advantages-views/2sk/black/4.png",
+    "/images/models/advantages-views/2sk/black/5.png",
   ],
   oliva: [
-    "/images/models/views/models/2sk/oliva/1_3.png",
-    "/images/models/views/models/2sk/oliva/6.png",
-    "/images/models/views/models/2sk/oliva/3.png",
-    "/images/models/views/models/2sk/oliva/4.png",
-    "/images/models/views/models/2sk/oliva/1_2.png",
+    "/images/models/advantages-views/2sk/oliva/1_3.png",
+    "/images/models/advantages-views/2sk/oliva/6.png",
+    "/images/models/advantages-views/2sk/oliva/3.png",
+    "/images/models/advantages-views/2sk/oliva/4.png",
+    "/images/models/advantages-views/2sk/oliva/1_2.png",
   ],
 } as const;
 
@@ -69,10 +87,26 @@ const views = [
     bootPose: { rotate: 0, x: 0, y: 0, scale: 1.60 },
     olivaPose: { rotate: 0, x: 60, y: -175, scale: 3 },
     anchors: {
-      calloutCard: { x: 370, y: 600 },
+      calloutCard: { x: 420, y: 600 },
       calloutDot: { x: 235, y: 65 },
       glueBubble: { x: 1050, y: 570 },
       glueDot: { x: -14, y: 50 },
+    },
+    mobilePlates: {
+      showTopMetric: false,
+      showSideMetric: false,
+      showCallout: true,
+      showGluePill: true,
+      showSecondaryCallout: false,
+      topMetric: { left: 62, top: 442, width: 182, height: 78 },
+      topMetricDot: { x: 170, y: 63 },
+      callout: { left: 0, top: 700, width: 125, height: 72 },
+      calloutDot: { x: 136, y: 0 },
+      secondaryCallout: { left: 22, top: 60, width: 125, height: 72 },
+      secondaryCalloutDot: { x: 66, y: -10 },
+      sideMetric: { left: 348, top: 724, width: 103, height: 188 },
+      gluePill: { left: 318, top: 700, width: 125, height: 72 },
+      glueDot: { x: -5, y: -5 },
     },
   },
   {
@@ -95,6 +129,22 @@ const views = [
       glueBubble: { x: 806, y: 340 },
       glueDot: { x: -20, y: 50 },
     },
+    mobilePlates: {
+      showTopMetric: false,
+      showSideMetric: false,
+      showCallout: true,
+      showGluePill: true,
+      showSecondaryCallout: false,
+      topMetric: { left: 62, top: 442, width: 182, height: 78 },
+      topMetricDot: { x: 170, y: 63 },
+      callout: { left: 330, top: 756, width: 125, height: 72 },
+      calloutDot: { x: -12, y: 10 },
+      secondaryCallout: { left: 22, top: 60, width: 125, height: 72 },
+      secondaryCalloutDot: { x: 66, y: -10 },
+      sideMetric: { left: 348, top: 724, width: 103, height: 188 },
+      gluePill: { left: 228, top: 494, width: 125, height: 72 },
+      glueDot: { x: -10, y: 53 },
+    },
   },
   {
     title: "ПОДОШВА БОТИНКА",
@@ -103,6 +153,8 @@ const views = [
         "Антипрокольная вставка из кевлара K-29 выдерживает нагрузку свыше 1265Н и защищает от проколов.",
     image: mainBootTop,
     callout: { title: "Гибридная подошва", text: "" },
+    /** Текст левой плашки на мобиле (правая плашка — callout «Гибридная подошва») */
+    calloutSecondary: { title: "Антипрокольная вставка", text: "" },
     calloutStyle: { w: 260, h: 120, titleSize: 22, textSize: 22 },
     glueStyle: { w: 300, h: 109, textSize: 22 },
     glue: "Антипрокольная вставка",
@@ -114,8 +166,24 @@ const views = [
     anchors: {
       calloutCard: { x: 983, y: 500 },
       calloutDot: { x: 35, y: -15 },
-      glueBubble: { x: 420, y: 735 },
+      glueBubble: { x: 460, y: 735 },
       glueDot: { x: 281, y: -13 },
+    },
+    mobilePlates: {
+      showTopMetric: false,
+      showSideMetric: false,
+      showCallout: true,
+      showGluePill: false,
+      showSecondaryCallout: true,
+      topMetric: { left: 62, top: 442, width: 182, height: 78 },
+      topMetricDot: { x: 170, y: 63 },
+      callout: { left: 304, top: 664, width: 125, height: 72 },
+      calloutDot: { x: -12, y: 12 },
+      secondaryCallout: { left: 38, top: 774, width: 125, height: 72 },
+      secondaryCalloutDot: { x: 110, y: -12 },
+      sideMetric: { left: 348, top: 724, width: 103, height: 188 },
+      gluePill: { left: 38, top: 700, width: 125, height: 72 },
+      glueDot: { x: 172, y: 3 },
     },
   },
   {
@@ -143,13 +211,29 @@ const views = [
       bottomLabel: "-15°C",
       topLabelPos: { x: 1009, y: 131 },
       bottomLabelPos: { x: 1009, y: 409 },
-      dot: { x: 913, y: 370 },
+      dot: { x: 963, y: 370 },
     },
     anchors: {
       calloutCard: { x: 904, y: 589 },
       calloutDot: { x: -20, y: 38 },
-      glueBubble: { x: 490, y: 685 },
+      glueBubble: { x: 540, y: 685 },
       glueDot: { x: 280, y: -13 },
+    },
+    mobilePlates: {
+      showTopMetric: false,
+      showSideMetric: false,
+      showCallout: true,
+      showGluePill: true,
+      showSecondaryCallout: false,
+      topMetric: { left: 62, top: 442, width: 182, height: 78 },
+      topMetricDot: { x: 170, y: 63 },
+      callout: { left: 300, top: 482, width: 125, height: 72 },
+      calloutDot: { x: -12, y: 10 },
+      secondaryCallout: { left: 22, top: 60, width: 125, height: 72 },
+      secondaryCalloutDot: { x: 66, y: -10 },
+      sideMetric: { left: 348, top: 724, width: 103, height: 188 },
+      gluePill: { left: 54, top: 706, width: 125, height: 72 },
+      glueDot: { x: 172, y: 3 },
     },
   },
   {
@@ -174,15 +258,32 @@ const views = [
       glueBubble: { x: 1053, y: 726 },
       glueDot: { x: -25, y: -15 },
     },
+    mobilePlates: {
+      showTopMetric: false,
+      showSideMetric: false,
+      showCallout: true,
+      showGluePill: true,
+      showSecondaryCallout: false,
+      topMetric: { left: 62, top: 442, width: 182, height: 78 },
+      topMetricDot: { x: 170, y: 63 },
+      callout: { left: 38, top: 650, width: 125, height: 72 },
+      calloutDot: { x: 142, y: 60 },
+      secondaryCallout: { left: 22, top: 60, width: 125, height: 72 },
+      secondaryCalloutDot: { x: 66, y: -10 },
+      sideMetric: { left: 348, top: 724, width: 103, height: 188 },
+      gluePill: { left: 316, top: 740, width: 125, height: 72 },
+      glueDot: { x: -8, y: -3 },
+    },
   },
 ] as const;
 
+/** scale в image — масштаб картинки внутри карточки (1 = 100%). */
 const carouselItems = [
-  { x: 181.24, y: 80.41, rotate: 53.36, z: 5, image: { w: 99, h: 70, x: 8, y: 5, rotate: 0.5, flipY: false }, exact53: true },
-  { x: 92.17, y: 176.92, rotate: 30.46, z: 4, image: { w: 41, h: 86, x: 39, y: -3, rotate: 0.24, flipY: false }, exact30: true },
-  { x: 58.5, y: 289.47, rotate: 0, z: 3, image: { w: 70, h: 87, x: 21, y: -9, rotate: 0, flipY: false }, exact0: true },
-  { x: 99.81, y: 400.48, rotate: -36.65, z: 2, image: { w: 39, h: 107, x: 50, y: -14, rotate: 0, flipY: true }, exactNeg36: true },
-  { x: 180.72, y: 481.93, rotate: -54.79, z: 1, image: { w: 38, h: 84, x: 39, y: -2, rotate: 2.94, flipY: false }, exactNeg54: true },
+  { x: 181.24, y: 80.41, rotate: 53.36, z: 5, image: { w: 99, h: 70, x: -25, y: -25, rotate: -45.9, flipY: false, scale: 5 }, exact53: true },
+  { x: 92.17, y: 176.92, rotate: 30.46, z: 4, image: { w: 41, h: 86, x: -5, y: -25, rotate: -30.24, flipY: false, scale: 2.7 }, exact30: true },
+  { x: 58.5, y: 289.47, rotate: 0, z: 3, image: { w: 70, h: 87, x: 10, y: -15, rotate: 0, flipY: false, scale: 2 }, exact0: true },
+  { x: 99.81, y: 400.48, rotate: -36.65, z: 2, image: { w: 39, h: 107, x: 0, y: 0, rotate: -45, flipY: true, scale: 2.7 }, exactNeg36: true },
+  { x: 180.72, y: 481.93, rotate: -54.79, z: 1, image: { w: 38, h: 84, x: 20, y: -25, rotate: 55, flipY: false, scale: 5.5 }, exactNeg54: true },
 ];
 const CAROUSEL_ARC_CENTER = { x: 313, y: 296 };
 const CAROUSEL_MARKER_RADIUS = 168;
@@ -193,169 +294,6 @@ const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) =
   const rawAngle =
     (Math.atan2(item.y + CAROUSEL_ITEMS_Y_OFFSET - CAROUSEL_ARC_CENTER.y, item.x + CAROUSEL_ITEMS_X_OFFSET - CAROUSEL_ARC_CENTER.x) * 180) /
     Math.PI;
-  if (index === 0) return [rawAngle];
-  let angle = rawAngle;
-  while (angle > acc[index - 1]) angle -= 360;
-  return [...acc, angle];
-}, []);
-const mobileCarouselCards = [
-  { x: 431, y: 217, rotate: 53.36 },
-  { x: 393, y: 259, rotate: 30.46 },
-  { x: 379, y: 313, rotate: 0 },
-  { x: 394, y: 370, rotate: -30.65 },
-  { x: 431, y: 415, rotate: -54.79 },
-] as const;
-const MOBILE_PEDESTAL = {
-  left: -350,
-  top: 590,
-  width: 1158,
-  height: 772,
-  opacity: 0.95,
-} as const;
-const MOBILE_BOOT = {
-  left: -74,
-  top: 292,
-  width: 630,
-  height: 520,
-  objectPosition: "50% 50%",
-} as const;
-const MOBILE_BOOT_BY_VIEW_BY_COLOR = {
-  black: [
-    { left: -16, top: 372, width: 469, height: 566, objectPosition: "50% 50%" }, // 0: ВНЕШНИЙ МАТЕРИАЛ
-    { left: -4, top: 415, width: 470, height: 420, objectPosition: "52% 56%" }, // 1: НОСОК БОТИНКА
-    { left: -12, top: 334, width: 512, height: 560, objectPosition: "50% 52%" }, // 2: ПОДОШВА БОТИНКА
-    { left: -8, top: 308, width: 476, height: 584, objectPosition: "50% 52%" }, // 3: ВНУТРЕННИЙ МАТЕРИАЛ
-    { left: -6, top: 382, width: 472, height: 450, objectPosition: "50% 53%" }, // 4: ЗАДНЯЯ ЧАСТЬ
-  ],
-  // Подгоняй oliva отдельно от black — те же ракурсы 0..4.
-  oliva: [
-    { left: -16, top: 382, width: 469, height: 566, objectPosition: "50% 50%" }, // 0
-    { left: 9, top: 410, width: 470, height: 460, objectPosition: "52% 56%" }, // 1
-    { left: -12, top: 324, width: 512, height: 560, objectPosition: "50% 52%" }, // 2
-    { left: 9, top: 308, width: 476, height: 584, objectPosition: "50% 52%" }, // 3
-    { left: -2, top: 382, width: 472, height: 450, objectPosition: "50% 53%" }, // 4
-  ],
-} as const;
-
-/** Единые размеры мобильных плашек (форма и размер одинаковые у всех ракурсов) */
-const MOBILE_CALLOUT_SIZE = { width: 156, height: 66 };
-const MOBILE_GLUE_PILL_SIZE = { width: 200, height: 72 };
-
-const MOBILE_PLATES = {
-  topMetric: { left: 62, top: 442, width: 182, height: 78 },
-  topMetricDot: { x: 170, y: 63 },
-  callout: { left: 22, top: 760, ...MOBILE_CALLOUT_SIZE },
-  calloutDot: { x: 66, y: -10 },
-  sideMetric: { left: 348, top: 724, width: 103, height: 188 },
-  gluePill: { left: 38, top: 700, ...MOBILE_GLUE_PILL_SIZE },
-  glueDot: { x: 172, y: 3 },
-} as const;
-const MOBILE_PLATES_BY_VIEW = [
-  {
-    showTopMetric: false,
-    showSideMetric: false,
-    showCallout: true,
-    showGluePill: true,
-    showSecondaryCallout: false,
-    topMetric: MOBILE_PLATES.topMetric,
-    topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { ...MOBILE_PLATES.callout, left: 22, top: 760 },
-    calloutDot: MOBILE_PLATES.calloutDot,
-    secondaryCallout: MOBILE_PLATES.callout,
-    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
-    sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { ...MOBILE_PLATES.gluePill, left: 18, top: 700 },
-    glueDot: { x: 206, y: 10 },
-  },
-  {
-    showTopMetric: false,
-    showSideMetric: false,
-    showCallout: true,
-    showGluePill: true,
-    showSecondaryCallout: false,
-    topMetric: MOBILE_PLATES.topMetric,
-    topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { ...MOBILE_PLATES.callout, left: 310, top: 706 },
-    calloutDot: { x: -12, y: 10 },
-    secondaryCallout: MOBILE_PLATES.callout,
-    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
-    sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { ...MOBILE_PLATES.gluePill, left: -28, top: 694 },
-    glueDot: { x: 172, y: 3 },
-  },
-  {
-    showTopMetric: false,
-    showSideMetric: false,
-    showCallout: true,
-    showGluePill: false,
-    showSecondaryCallout: true,
-    topMetric: MOBILE_PLATES.topMetric,
-    topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { ...MOBILE_PLATES.callout, left: 304, top: 664 },
-    calloutDot: { x: -12, y: 12 },
-    secondaryCallout: { ...MOBILE_PLATES.callout, left: 38, top: 774 },
-    secondaryCalloutDot: { x: 110, y: -12 },
-    sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: MOBILE_PLATES.gluePill,
-    glueDot: MOBILE_PLATES.glueDot,
-  },
-  {
-    showTopMetric: false,
-    showSideMetric: false,
-    showCallout: true,
-    showGluePill: true,
-    showSecondaryCallout: false,
-    topMetric: MOBILE_PLATES.topMetric,
-    topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { ...MOBILE_PLATES.callout, left: 300, top: 482 },
-    calloutDot: { x: -12, y: 10 },
-    secondaryCallout: MOBILE_PLATES.callout,
-    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
-    sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { ...MOBILE_PLATES.gluePill, left: 54, top: 776 },
-    glueDot: { x: 172, y: 3 },
-  },
-  {
-    showTopMetric: false,
-    showSideMetric: false,
-    showCallout: true,
-    showGluePill: true,
-    showSecondaryCallout: false,
-    topMetric: MOBILE_PLATES.topMetric,
-    topMetricDot: MOBILE_PLATES.topMetricDot,
-    callout: { ...MOBILE_PLATES.callout, left: 48, top: 650 },
-    calloutDot: { x: 112, y: -12 },
-    secondaryCallout: MOBILE_PLATES.callout,
-    secondaryCalloutDot: MOBILE_PLATES.calloutDot,
-    sideMetric: MOBILE_PLATES.sideMetric,
-    gluePill: { ...MOBILE_PLATES.gluePill, left: 286, top: 740 },
-    glueDot: { x: -8, y: -3 },
-  },
-] as const;
-const MOBILE_CAROUSEL_LAYOUT_SCALE = 0.615;
-const MOBILE_CAROUSEL_IMAGE_BOOST = 1.24;
-const MOBILE_CAROUSEL_IMAGE_TUNE = [
-  { boost: 1, x: 0, y: 0 },
-  { boost: 1, x: 0, y: 0 },
-  { boost: 1, x: 0, y: 0 },
-  { boost: 1, x: 0, y: 0 },
-  { boost: 1, x: 0, y: 0 },
-] as const;
-const MOBILE_CAROUSEL_ELLIPSE = {
-  left: 386,
-  top: 202,
-  size: 182,
-  thickness: 22,
-} as const;
-const MOBILE_CAROUSEL_MARKER = {
-  centerX: MOBILE_CAROUSEL_ELLIPSE.left + MOBILE_CAROUSEL_ELLIPSE.size / 2,
-  centerY: MOBILE_CAROUSEL_ELLIPSE.top + MOBILE_CAROUSEL_ELLIPSE.size / 2,
-  radius: 82,
-  size: 16,
-} as const;
-const MOBILE_CAROUSEL_MARKER_ANGLE_OFFSETS = [-10, 0, 13, 20, 20];
-const mobileCarouselMarkerAngles = mobileCarouselCards.reduce<number[]>((acc, item, index) => {
-  const rawAngle = (Math.atan2(item.y - MOBILE_CAROUSEL_MARKER.centerY, item.x - MOBILE_CAROUSEL_MARKER.centerX) * 180) / Math.PI;
   if (index === 0) return [rawAngle];
   let angle = rawAngle;
   while (angle > acc[index - 1]) angle -= 360;
@@ -385,7 +323,8 @@ export default function ModelsPage() {
   const displayViewImage = colorViewImages[displayColorVariant][activeIndex] ?? currentView.image;
   const mobileBootByColor = MOBILE_BOOT_BY_VIEW_BY_COLOR[displayColorVariant] ?? MOBILE_BOOT_BY_VIEW_BY_COLOR.black;
   const currentMobileBoot = mobileBootByColor[activeIndex] ?? MOBILE_BOOT;
-  const currentMobilePlates = MOBILE_PLATES_BY_VIEW[activeIndex] ?? MOBILE_PLATES_BY_VIEW[0];
+  const fallbackMobilePlates = MOBILE_PLATES_BY_VIEW[activeIndex] ?? MOBILE_PLATES_BY_VIEW[0];
+  const currentMobilePlates = (currentView as { mobilePlates?: typeof fallbackMobilePlates }).mobilePlates ?? fallbackMobilePlates;
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
   const currentBootPose =
     colorVariant === "oliva" && "olivaPose" in currentView
@@ -395,26 +334,32 @@ export default function ModelsPage() {
     "bootImageFrame" in currentView
       ? (currentView.bootImageFrame as { wPct: number; hPct: number; leftPct: number; topPct: number })
       : null;
+  /** Плашки: сузить по горизонтали на 20%, текст +20%. Точка привязана к плашке (позиция от плашки + смещение). */
+  const DESKTOP_PLAQUE_WIDTH_SCALE = 0.8;
+  const DESKTOP_PLAQUE_TEXT_SCALE = 1.2;
   const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
   const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
   const isCalloutSingleLine = !String(currentView.callout.text ?? "").trim();
+  const calloutCardWidth = currentView.calloutStyle.w * DESKTOP_PLAQUE_WIDTH_SCALE;
   const calloutCardHeight = isCalloutSingleLine ? 80 : currentView.calloutStyle.h;
   const isGlueSingleLine = !currentView.glue.includes("\n");
   const currentGlueStyle =
     "glueStyle" in currentView
       ? currentView.glueStyle
       : { w: 180, h: 34, textSize: 12 };
+  const glueCardWidth = currentGlueStyle.w * DESKTOP_PLAQUE_WIDTH_SCALE;
   const glueVariant = "glueVariant" in currentView ? currentView.glueVariant : "bubble";
   const glueCardHeight =
     glueVariant === "card" ? (isGlueSingleLine ? 80 : currentGlueStyle.h) : currentGlueStyle.h;
   const isThermalCallout = (currentView.title as string) === "ВНУТРЕННИЙ МАТЕРИАЛ";
+  /** Точка привязана к плашке: позиция плашки + смещение (как на мобильной). При сужении плашки смещение по X масштабируем. */
   const calloutDotPosition = isThermalCallout
     ? {
-        left: currentView.anchors.calloutCard.x + 10,
+        left: currentView.anchors.calloutCard.x + 10 * DESKTOP_PLAQUE_WIDTH_SCALE,
         top: currentView.anchors.calloutCard.y + 42,
       }
     : {
-        left: currentView.anchors.calloutCard.x + currentView.anchors.calloutDot.x,
+        left: currentView.anchors.calloutCard.x + currentView.anchors.calloutDot.x * DESKTOP_PLAQUE_WIDTH_SCALE,
         top: currentView.anchors.calloutCard.y + currentView.anchors.calloutDot.y,
       };
   const calloutDotOuterSize = isThermalCallout ? 34 : 30;
@@ -667,7 +612,7 @@ export default function ModelsPage() {
                 className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
                 style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", letterSpacing: "0.08em" }}
               >
-                Подробнее
+                ПОДРОБНЕЕ
               </Link>
             </div>
 
@@ -857,7 +802,7 @@ export default function ModelsPage() {
                 style={{
                   left: currentView.anchors.calloutCard.x + bootCenterOffsetX,
                   top: currentView.anchors.calloutCard.y,
-                  width: currentView.calloutStyle.w,
+                  width: calloutCardWidth,
                   height: calloutCardHeight,
                   filter: "drop-shadow(0 60px 100px rgba(0, 0, 0, 0.12))",
                 }}
@@ -875,12 +820,12 @@ export default function ModelsPage() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
-                  <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize }}>
+                  <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize * DESKTOP_PLAQUE_TEXT_SCALE }}>
                     <span className="font-bold">{currentView.callout.title}</span>
                   </p>
                   <p
                     className="leading-[1.08] tracking-[-0.02em]"
-                    style={{ fontSize: currentView.calloutStyle.textSize, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+                    style={{ fontSize: currentView.calloutStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
                   >
                     {currentView.callout.text}
                   </p>
@@ -892,26 +837,26 @@ export default function ModelsPage() {
                 style={{
                   left: currentView.anchors.calloutCard.x + bootCenterOffsetX,
                   top: currentView.anchors.calloutCard.y,
-                  width: currentView.calloutStyle.w,
+                  width: calloutCardWidth,
                   height: calloutCardHeight,
                   ...(currentCalloutNotch
                     ? {
-                        WebkitMask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
-                          currentCalloutNotch.x + currentCalloutNotch.w / 2
+                        WebkitMask: `radial-gradient(circle ${(currentCalloutNotch.w * DESKTOP_PLAQUE_WIDTH_SCALE) / 2}px at ${
+                          (currentCalloutNotch.x + currentCalloutNotch.w / 2) * DESKTOP_PLAQUE_WIDTH_SCALE
                         }px -8px, transparent 98%, #000 100%)`,
-                        mask: `radial-gradient(circle ${currentCalloutNotch.w / 2}px at ${
-                          currentCalloutNotch.x + currentCalloutNotch.w / 2
+                        mask: `radial-gradient(circle ${(currentCalloutNotch.w * DESKTOP_PLAQUE_WIDTH_SCALE) / 2}px at ${
+                          (currentCalloutNotch.x + currentCalloutNotch.w / 2) * DESKTOP_PLAQUE_WIDTH_SCALE
                         }px -8px, transparent 98%, #000 100%)`,
                       }
                     : {}),
                 }}
               >
-                <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize }}>
+                <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize * DESKTOP_PLAQUE_TEXT_SCALE }}>
                   <span className="font-bold">{currentView.callout.title}</span>
                 </p>
                 <p
                   className="leading-[1.08] tracking-[-0.02em]"
-                  style={{ fontSize: currentView.calloutStyle.textSize, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+                  style={{ fontSize: currentView.calloutStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
                 >
                   {currentView.callout.text}
                 </p>
@@ -935,9 +880,9 @@ export default function ModelsPage() {
                   style={{
                     left: currentView.anchors.glueBubble.x + bootCenterOffsetX,
                     top: currentView.anchors.glueBubble.y,
-                    width: currentGlueStyle.w,
+                    width: glueCardWidth,
                     height: glueCardHeight,
-                    fontSize: currentGlueStyle.textSize,
+                    fontSize: currentGlueStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE,
                   }}
                 >
                   {glueVariant === "card" ? (
@@ -946,13 +891,15 @@ export default function ModelsPage() {
                         const glueLines = currentView.glue.split("\n");
                         const glueTitle = glueLines[0] ?? "";
                         const glueItems = glueLines.slice(1);
+                        const glueTitleSize = currentGlueStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE;
+                        const glueBodySize = Math.max(glueTitleSize - 7, 14);
                         return (
                           <>
-                            <p className="leading-[1.08] tracking-[-0.02em] font-bold text-[#111]" style={{ fontSize: currentGlueStyle.textSize }}>
+                            <p className="leading-[1.08] tracking-[-0.02em] font-bold text-[#111]" style={{ fontSize: glueTitleSize }}>
                               {glueTitle}
                             </p>
                             {glueItems.map((line) => (
-                              <p key={line} className="mt-1 leading-[1.08] tracking-[-0.02em] text-[#111]/75" style={{ fontSize: Math.max(currentGlueStyle.textSize - 7, 14) }}>
+                              <p key={line} className="mt-1 leading-[1.08] tracking-[-0.02em] text-[#111]/75" style={{ fontSize: glueBodySize }}>
                                 {line}
                               </p>
                             ))}
@@ -968,7 +915,7 @@ export default function ModelsPage() {
                 <span
                   className="absolute z-20 size-[40px] transition-all duration-500"
                   style={{
-                    left: currentView.anchors.glueBubble.x + currentView.anchors.glueDot.x + bootCenterOffsetX,
+                    left: currentView.anchors.glueBubble.x + currentView.anchors.glueDot.x * DESKTOP_PLAQUE_WIDTH_SCALE + bootCenterOffsetX,
                     top: currentView.anchors.glueBubble.y + currentView.anchors.glueDot.y,
                   }}
                 >
@@ -1065,7 +1012,7 @@ export default function ModelsPage() {
                         </svg>
                       </div>
                       <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-[121.701px] w-[115.55px] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-                        <img src={carouselCardBoot53} alt="" className="h-[70.769px] w-[99.017px] object-contain" />
+                        <img src={carouselCardBoot53} alt="" className="h-[70.769px] w-[99.017px] object-contain" style={{ transform: `translate(${item.image.x}px, ${item.image.y}px) rotate(${item.image.rotate}deg) scale(${item.image.scale ?? 1})`, transformOrigin: "50% 50%" }} />
                       </div>
                     </>
                   ) : item.exact30 ? (
@@ -1098,7 +1045,7 @@ export default function ModelsPage() {
                         </svg>
                       </div>
                       <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-[94.88px] w-[79.156px] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-                        <img src={carouselCardBoot30} alt="" className="h-[86px] w-[41px] object-contain" />
+                        <img src={carouselCardBoot30} alt="" className="h-[86px] w-[41px] object-contain" style={{ transform: `translate(${item.image.x}px, ${item.image.y}px) rotate(${item.image.rotate}deg) scale(${item.image.scale ?? 1})`, transformOrigin: "50% 50%" }} />
                       </div>
                     </>
                   ) : item.exact0 ? (
@@ -1124,7 +1071,7 @@ export default function ModelsPage() {
                         </svg>
                       </div>
                       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[87px] w-[70px] -translate-x-1/2 -translate-y-1/2">
-                        <img src={carouselCardBoot0} alt="" className="h-full w-full object-contain" />
+                        <img src={carouselCardBoot0} alt="" className="h-full w-full object-contain" style={{ transform: `translate(${item.image.x}px, ${item.image.y}px) rotate(${item.image.rotate}deg) scale(${item.image.scale ?? 1})`, transformOrigin: "50% 50%" }} />
                       </div>
                     </>
                   ) : item.exactNeg36 ? (
@@ -1150,7 +1097,7 @@ export default function ModelsPage() {
                         </svg>
                       </div>
                       <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-[107px] w-[39px] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-                        <img src={carouselCardBootNeg36} alt="" className="h-[107px] w-[39px] -scale-y-100 rotate-180 object-contain" />
+                        <img src={carouselCardBootNeg36} alt="" className="h-[107px] w-[39px] object-contain" style={{ transform: `scaleY(-1) rotate(180deg) translate(${item.image.x}px, ${item.image.y}px) rotate(${item.image.rotate}deg) scale(${item.image.scale ?? 1})`, transformOrigin: "50% 50%" }} />
                       </div>
                     </>
                   ) : item.exactNeg54 ? (
@@ -1176,7 +1123,7 @@ export default function ModelsPage() {
                         </svg>
                       </div>
                       <div className="pointer-events-none absolute left-1/2 top-1/2 flex h-[81.773px] w-[89.53px] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-                        <img src={carouselCardBootNeg54} alt="" className="h-[84px] w-[38px] object-contain" style={{ transform: "rotate(2.94deg)" }} />
+                        <img src={carouselCardBootNeg54} alt="" className="h-[84px] w-[38px] object-contain" style={{ transform: `translate(${item.image.x}px, ${item.image.y}px) rotate(${item.image.rotate}deg) scale(${item.image.scale ?? 1})`, transformOrigin: "50% 50%" }} />
                       </div>
                     </>
                   ) : (
@@ -1215,7 +1162,7 @@ export default function ModelsPage() {
                           height: item.image.h,
                           left: item.image.x,
                           top: item.image.y,
-                          transform: `${item.image.flipY ? "scaleY(-1) rotate(180deg)" : ""} rotate(${item.image.rotate}deg)`,
+                          transform: `${item.image.flipY ? "scaleY(-1) rotate(180deg)" : ""} rotate(${item.image.rotate}deg) scale(${item.image.scale ?? 1})`,
                           transformOrigin: "50% 50%",
                         }}
                       />
@@ -1409,7 +1356,7 @@ export default function ModelsPage() {
                         (MOBILE_CAROUSEL_IMAGE_BOOST * MOBILE_CAROUSEL_IMAGE_TUNE[index].boost - 1)) /
                         2 +
                       MOBILE_CAROUSEL_IMAGE_TUNE[index].y,
-                    transform: `${carouselItems[index].image.flipY ? "scaleY(-1) rotate(180deg)" : ""} rotate(${carouselItems[index].image.rotate}deg)`,
+                    transform: `${carouselItems[index].image.flipY ? "scaleY(-1) rotate(180deg)" : ""} rotate(${carouselItems[index].image.rotate}deg) scale(${carouselItems[index].image.scale ?? 1})`,
                     transformOrigin: "50% 50%",
                   }}
                 />
@@ -1445,7 +1392,8 @@ export default function ModelsPage() {
               width: currentMobileBoot.width,
               height: currentMobileBoot.height,
               touchAction: "pan-x",
-              transform: `translateX(${mobileBootShiftX}px)`,
+              transform: `translateX(${mobileBootShiftX}px) scale(${currentMobileBoot.scale ?? 1})`,
+              transformOrigin: "50% 50%",
               transition: mobileBootShiftTransition ? `transform ${mobileBootShiftDurationMs}ms ease-out` : "none",
             }}
             onTouchStart={handleMobileBootTouchStart}
@@ -1476,21 +1424,23 @@ export default function ModelsPage() {
                   height: currentMobilePlates.topMetric.height,
                 }}
               >
-                <p className="text-[43px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentView.metricTop.value}</p>
-                <div className="mt-1 text-[14px] leading-[1.03]">
+                <p className="font-bold leading-none tracking-[-0.04em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricTop.value}</p>
+                <div className="mt-1 leading-[1.03]" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>
                   <p className="font-bold text-[#111]">{currentView.metricTop.title}</p>
                   <p className="text-[#111]/35">{currentView.metricTop.line1}</p>
                   <p className="text-[#111]/35">{currentView.metricTop.line2}</p>
                 </div>
               </div>
               <span
-                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.topMetric.left + currentMobilePlates.topMetricDot.x,
                   top: currentMobilePlates.topMetric.top + currentMobilePlates.topMetricDot.y,
+                  width: MOBILE_PLAQUE_DOT.outer,
+                  height: MOBILE_PLAQUE_DOT.outer,
                 }}
               >
-                <span className="size-[6px] rounded-full bg-white" />
+                <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
               </span>
             </>
           )}
@@ -1512,9 +1462,9 @@ export default function ModelsPage() {
                   const glueItems = glueLines.slice(1);
                   return (
                     <>
-                      <p className="text-[13px] leading-[1.05] tracking-[-0.01em] font-bold text-[#111]">{glueTitle}</p>
+                      <p className="leading-[1.05] tracking-[-0.01em] font-bold text-[#111]" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{glueTitle}</p>
                       {glueItems.map((line) => (
-                        <p key={line} className="mt-0.5 text-[11px] leading-[1.05] text-[#111]/75">
+                        <p key={line} className="mt-0.5 leading-[1.05] text-[#111]/75" style={{ fontSize: 11 * MOBILE_PLAQUE_TEXT_SCALE }}>
                           {line}
                         </p>
                       ))}
@@ -1523,13 +1473,15 @@ export default function ModelsPage() {
                 })()}
               </div>
               <span
-                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.gluePill.left + currentMobilePlates.glueDot.x,
+                  left: currentMobilePlates.gluePill.left + currentMobilePlates.glueDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
                   top: currentMobilePlates.gluePill.top + currentMobilePlates.glueDot.y,
+                  width: MOBILE_PLAQUE_DOT.outer,
+                  height: MOBILE_PLAQUE_DOT.outer,
                 }}
               >
-                <span className="size-[6px] rounded-full bg-white" />
+                <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
               </span>
             </>
           )}
@@ -1545,24 +1497,28 @@ export default function ModelsPage() {
                   height: currentMobilePlates.callout.height,
                 }}
               >
-                <p className="text-[13px] leading-[1.05]">
+                <p className="leading-[1.05]" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>
                   <span className="font-bold text-[#111]">{currentView.callout.title}</span>
                 </p>
-                <p className="text-[13px] leading-[1.05] text-[#111]/40">{currentView.callout.text}</p>
+                <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.callout.text}</p>
               </div>
               <span
-                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.callout.left + currentMobilePlates.calloutDot.x,
+                  left: currentMobilePlates.callout.left + currentMobilePlates.calloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
                   top: currentMobilePlates.callout.top + currentMobilePlates.calloutDot.y,
+                  width: MOBILE_PLAQUE_DOT.outer,
+                  height: MOBILE_PLAQUE_DOT.outer,
                 }}
               >
-                <span className="size-[6px] rounded-full bg-white" />
+                <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
               </span>
             </>
           )}
 
-          {currentMobilePlates.showSecondaryCallout && (
+          {currentMobilePlates.showSecondaryCallout && (() => {
+            const secondaryCalloutContent = (currentView as { calloutSecondary?: { title: string; text: string } }).calloutSecondary ?? currentView.callout;
+            return (
             <>
               <div
                 className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
@@ -1573,22 +1529,25 @@ export default function ModelsPage() {
                   height: currentMobilePlates.secondaryCallout.height,
                 }}
               >
-                <p className="text-[13px] leading-[1.05]">
-                  <span className="font-bold text-[#111]">{currentView.callout.title}</span>
+                <p className="leading-[1.05]" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>
+                  <span className="font-bold text-[#111]">{secondaryCalloutContent.title}</span>
                 </p>
-                <p className="text-[13px] leading-[1.05] text-[#111]/40">{currentView.callout.text}</p>
+                <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{secondaryCalloutContent.text}</p>
               </div>
               <span
-                className="absolute z-30 flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.secondaryCallout.left + currentMobilePlates.secondaryCalloutDot.x,
+                  left: currentMobilePlates.secondaryCallout.left + currentMobilePlates.secondaryCalloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
                   top: currentMobilePlates.secondaryCallout.top + currentMobilePlates.secondaryCalloutDot.y,
+                  width: MOBILE_PLAQUE_DOT.outer,
+                  height: MOBILE_PLAQUE_DOT.outer,
                 }}
               >
-                <span className="size-[6px] rounded-full bg-white" />
+                <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
               </span>
             </>
-          )}
+            );
+          })()}
 
           {currentMobilePlates.showSideMetric && (
             <div
@@ -1600,12 +1559,15 @@ export default function ModelsPage() {
                 height: currentMobilePlates.sideMetric.height,
               }}
             >
-              <span className="absolute -left-[8px] top-[18px] flex size-4 items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
-                <span className="size-[6px] rounded-full bg-white" />
+              <span
+                className="absolute -left-[8px] top-[18px] flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]"
+                style={{ width: MOBILE_PLAQUE_DOT.outer, height: MOBILE_PLAQUE_DOT.outer }}
+              >
+                <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
               </span>
-              <p className="text-[43px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
-              <p className="pt-2 text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line1}</p>
-              <p className="text-[14px] leading-[1.05] text-[#111]/40">{currentView.metricSide.line2}</p>
+              <p className="font-bold leading-none tracking-[-0.08em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricSide.value}</p>
+              <p className="pt-2 leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricSide.line1}</p>
+              <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricSide.line2}</p>
               <div className="relative mt-2 h-[56px] w-[91px] overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                 <img src={metricSideImage} alt="" className="absolute max-w-none object-cover" style={{ width: 164, height: 118, left: -42, top: -64 }} />
               </div>

@@ -11,7 +11,7 @@ const HEADER_EDGE_PADDING_RIGHT = "clamp(16px, 2.2vw, 106px)";
 const LOGO_GAP = 48;
 
 type MenuKey = "brand" | "advantages" | "models" | "whereToBuy" | "media" | "contacts";
-type HeaderTone = "dark" | "light";
+type HeaderTone = "dark" | "light" | "lightBg";
 
 type SiteHeaderProps = {
   activeItem?: MenuKey;
@@ -34,11 +34,12 @@ const RIGHT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
 export default function SiteHeader({ activeItem, tone = "dark", className, style }: SiteHeaderProps) {
   const pathname = usePathname();
   const isLight = tone === "light";
+  const isLightBg = tone === "lightBg";
   /** Общие отступы у всех пунктов — чтобы плашка активного не сдвигала сетку */
   const itemPadding = "px-3 py-2.5 rounded-[10px]";
-  /** Активный пункт — плашка (Tailwind), без полоски; разметка одинаковая → меню не скачет */
+  /** Активный пункт — плашка через CSS ::before; light = на тёмном фоне, lightBg = на белом фоне (тёмный текст) */
   const linkClass = (active: boolean) =>
-    `nav-link-fill ${itemPadding} ${isLight ? "nav-link-fill--light" : ""} ${active ? "nav-link-fill--active text-white bg-gradient-to-r from-[#8b7a71] to-[#756257]" : ""} ${active && isLight ? "!bg-white/20" : ""}`;
+    `nav-link-fill ${itemPadding} ${isLight ? "nav-link-fill--light" : ""} ${isLightBg ? "nav-link-fill--lightBg" : ""} ${active ? "nav-link-fill--active text-white bg-gradient-to-r from-[#8b7a71] to-[#756257]" : ""} ${active && isLight ? "!bg-white/10" : ""}`;
 
   return (
     <header
@@ -68,7 +69,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
                 className={linkClass(isActive)}
                 style={{
                   fontFamily: "var(--font-roboto-flex), sans-serif",
-                  ...(isActive && { color: "#fff" }),
+                  ...(isActive && !isLightBg && { color: "#fff" }),
                 }}
                 aria-current={isActive ? "page" : undefined}
               >
@@ -119,7 +120,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
                 className={linkClass(isActive)}
                 style={{
                   fontFamily: "var(--font-roboto-flex), sans-serif",
-                  ...(isActive && { color: "#fff" }),
+                  ...(isActive && !isLightBg && { color: "#fff" }),
                 }}
                 aria-current={isActive ? "page" : undefined}
               >
