@@ -125,6 +125,45 @@ body {
   animation: viewRise 680ms cubic-bezier(0.18, 0.78, 0.22, 1);
 }
 
+/** Появление карточек «Миссия и ценности» на мобилке (по очереди) */
+@keyframes brandCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 639px) {
+  .brand-card-mobile-enter {
+    animation: brandCardEnter 0.5s ease-out both;
+  }
+}
+
+@media (max-width: 639px) and (prefers-reduced-motion: reduce) {
+  .brand-card-mobile-enter {
+    animation: none;
+  }
+}
+
+/** Подсветка при скролле (одна карточка по центру): шапка, галочки, текст — как при hover в «Почему» и «Гарантия» */
+.group[data-highlighted="true"] .scroll-highlight-header {
+  background-color: rgb(240 116 38 / 0.2);
+}
+.group[data-highlighted="true"] .scroll-highlight-check {
+  opacity: 1;
+  transform: scale(1);
+}
+.group[data-highlighted="true"] .scroll-highlight-text {
+  color: #f07426;
+}
+.group[data-highlighted="true"] .scroll-highlight-checkmark {
+  opacity: 1;
+}
+
 /** «Таблица размеров»: закрашивание и линия выезжают вместе слева направо (один текст, без дубля) */
 .size-table-link {
   position: relative;

@@ -1,3 +1,5 @@
+import ScrollHighlightBlock from "@/components/ScrollHighlightBlock";
+import { ScrollHighlightProvider, ScrollHighlightScrollMain } from "@/components/ScrollHighlightContext";
 import SiteHeader from "@/components/layout/SiteHeader";
 
 export const metadata = {
@@ -90,9 +92,10 @@ const GUARANTEE_CARDS = [
 
 export default function BrandPage() {
   return (
-    <main className="figma-site-page min-h-screen overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111]">
-      <section className="figma-site-stage relative mx-auto min-h-[100dvh] w-full overflow-hidden bg-white">
-        <div className="relative mx-auto h-full min-h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+    <ScrollHighlightProvider>
+      <ScrollHighlightScrollMain className="figma-site-page min-h-screen overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111]">
+        <section className="figma-site-stage relative mx-auto min-h-[100dvh] w-full overflow-hidden bg-white">
+          <div className="relative mx-auto h-full min-h-[100dvh] w-full max-w-[1670px] overflow-hidden">
           <div className="pointer-events-none absolute inset-0">
             {Array.from({ length: 14 }).map((_, i) => (
               <div key={i} className="absolute inset-y-0" style={{ left: `${(i * 100) / 14}%`, width: `${100 / 14}%` }}>
@@ -209,11 +212,16 @@ export default function BrandPage() {
             </div>
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {MISSION_VALUES.map((item) => (
-              <article
+            {MISSION_VALUES.map((item, index) => (
+              <ScrollHighlightBlock
                 key={item.key}
+                id={`mission-${item.key}`}
+                as="article"
+                liftPx={4}
+                shadowOpacity={0.18}
                 tabIndex={0}
-                className="group rounded-xl border-2 border-[#e5e5e5] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#f07426] hover:shadow-[0_12px_28px_rgba(240,116,38,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f07426] focus-visible:ring-offset-2"
+                className="group relative rounded-xl border-2 border-[#e5e5e5] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f07426] focus-visible:ring-offset-2 active:scale-[0.99] active:bg-[#fafafa] sm:p-5 brand-card-mobile-enter"
+                style={{ animationDelay: `${index * 120}ms` }}
                 aria-label={`${item.title}: ${item.text.slice(0, 60)}…`}
               >
                 <div className="flex items-center gap-3">
@@ -228,7 +236,7 @@ export default function BrandPage() {
                   </h3>
                 </div>
                 <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{item.text}</p>
-              </article>
+              </ScrollHighlightBlock>
             ))}
           </div>
         </section>
@@ -294,11 +302,15 @@ export default function BrandPage() {
             </div>
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
               {WHY_VELESBRON_CARDS.map((card) => (
-                <article
+                <ScrollHighlightBlock
                   key={card.id}
-                  className="group cursor-pointer overflow-hidden rounded-xl border-2 border-[#e5e5e5] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#f07426] hover:shadow-[0_12px_28px_rgba(240,116,38,0.25)]"
+                  id={`why-${card.id}`}
+                  as="article"
+                  liftPx={6}
+                  shadowOpacity={0.25}
+                  className="group cursor-pointer overflow-hidden rounded-xl border-2 border-[#e5e5e5] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300"
                 >
-                  <div className="px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
+                  <div className="scroll-highlight-header px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
                     <h3
                       className="uppercase text-[#111]"
                       style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
@@ -315,7 +327,7 @@ export default function BrandPage() {
                           className={`object-contain ${(card as { iconScale?: number }).iconScale === 2 ? "h-24 w-24" : "h-12 w-12"}`}
                         />
                         <span
-                          className="absolute bottom-3 right-0 flex size-8 items-center justify-center rounded-full bg-[#f07426] text-white opacity-0 shadow transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 scale-90"
+                          className="scroll-highlight-check absolute bottom-3 right-0 flex size-8 items-center justify-center rounded-full bg-[#f07426] text-white opacity-0 shadow transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 scale-90"
                           aria-hidden
                         >
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -329,11 +341,11 @@ export default function BrandPage() {
                     {card.points.map((point, pointIndex) => (
                       <p
                         key={point}
-                        className="flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
+                        className="scroll-highlight-text flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
                         style={{ transitionDelay: `${pointIndex * 80}ms` }}
                       >
                         <span
-                          className="mr-1.5 inline-flex w-4 shrink-0 items-center justify-center opacity-0 text-[#f07426] transition-opacity duration-200 group-hover:opacity-100"
+                          className="scroll-highlight-checkmark mr-1.5 inline-flex w-4 shrink-0 items-center justify-center opacity-0 text-[#f07426] transition-opacity duration-200 group-hover:opacity-100"
                           style={{ transitionDelay: `${pointIndex * 80}ms` }}
                           aria-hidden
                         >
@@ -344,7 +356,7 @@ export default function BrandPage() {
                     ))}
                     </div>
                   </div>
-                </article>
+                </ScrollHighlightBlock>
               ))}
             </div>
             <div className="mt-8 max-w-[900px] space-y-3 text-center">
@@ -384,11 +396,15 @@ export default function BrandPage() {
             </div>
             <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
               {GUARANTEE_CARDS.map((card) => (
-                <article
+                <ScrollHighlightBlock
                   key={card.id}
-                  className="group cursor-pointer overflow-hidden rounded-xl border-2 border-[#e5e5e5] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#f07426] hover:shadow-[0_12px_28px_rgba(240,116,38,0.25)]"
+                  id={`guarantee-${card.id}`}
+                  as="article"
+                  liftPx={6}
+                  shadowOpacity={0.25}
+                  className="group cursor-pointer overflow-hidden rounded-xl border-2 border-[#e5e5e5] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300"
                 >
-                  <div className="px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
+                  <div className="scroll-highlight-header px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
                     <h3
                       className="uppercase text-[#111]"
                       style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
@@ -405,7 +421,7 @@ export default function BrandPage() {
                           className={`object-contain ${(card as { iconScale?: number }).iconScale === 2 ? "h-24 w-24" : "h-12 w-12"}`}
                         />
                         <span
-                          className="absolute bottom-3 right-0 flex size-8 items-center justify-center rounded-full bg-[#f07426] text-white opacity-0 shadow transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 scale-90"
+                          className="scroll-highlight-check absolute bottom-3 right-0 flex size-8 items-center justify-center rounded-full bg-[#f07426] text-white opacity-0 shadow transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 scale-90"
                           aria-hidden
                         >
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -418,11 +434,11 @@ export default function BrandPage() {
                       {[card.text, card.line2].map((line, pointIndex) => (
                         <p
                           key={pointIndex}
-                          className="flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
+                          className="scroll-highlight-text flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
                           style={{ transitionDelay: `${pointIndex * 80}ms` }}
                         >
                           <span
-                            className="mr-1.5 inline-flex w-4 shrink-0 items-center justify-center opacity-0 text-[#f07426] transition-opacity duration-200 group-hover:opacity-100"
+                            className="scroll-highlight-checkmark mr-1.5 inline-flex w-4 shrink-0 items-center justify-center opacity-0 text-[#f07426] transition-opacity duration-200 group-hover:opacity-100"
                             style={{ transitionDelay: `${pointIndex * 80}ms` }}
                             aria-hidden
                           >
@@ -433,7 +449,7 @@ export default function BrandPage() {
                       ))}
                     </div>
                   </div>
-                </article>
+                </ScrollHighlightBlock>
               ))}
             </div>
             <div className="mt-8 max-w-[900px] space-y-3 text-center">
@@ -446,6 +462,7 @@ export default function BrandPage() {
           </div>
         </div>
       </section>
-    </main>
+      </ScrollHighlightScrollMain>
+    </ScrollHighlightProvider>
   );
 }
