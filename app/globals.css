@@ -296,3 +296,18 @@ body {
     padding-top: calc(4rem + env(safe-area-inset-top, 0px));
   }
 }
+
+/** Блок принятия cookie — появление снизу слева */
+@keyframes cookie-in {
+  from {
+    opacity: 0;
+    transform: translate(-20px, 24px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+.animate-cookie-in {
+  animation: cookie-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}

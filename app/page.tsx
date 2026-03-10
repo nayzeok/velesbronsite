@@ -96,7 +96,7 @@ export default function Home() {
                             Преимущества
                         </p>
                         <div className="mt-2 flex flex-col gap-2">
-                            {["Антипрокольная защита", "Мембрана VELTEX", "Пожизненная гарантия"].map((label) => (
+                            {["Антипрокольная защита", "Мембрана VELTEX™", "Пожизненная гарантия"].map((label) => (
                                 <span key={label} className="text-white" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 14 }}>
                   • {label}
                 </span>
@@ -248,7 +248,7 @@ export default function Home() {
                                                     <path d="M8 12c0-1.5.5-2.8 1.4-3.8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                                                 </svg>
                                             ),
-                                            label: "Мембрана VELTEX",
+                                            label: "Мембрана VELTEX™",
                                         },
                                         {
                                             icon: (

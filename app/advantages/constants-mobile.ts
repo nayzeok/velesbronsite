@@ -163,6 +163,9 @@ export const MOBILE_PLATES_BY_VIEW = [
 /** Масштаб карусели ракурсов */
 export const MOBILE_CAROUSEL_LAYOUT_SCALE = 0.615;
 export const MOBILE_CAROUSEL_IMAGE_BOOST = 1.24;
+
+/** Масштаб миниатюр в карусели (размер карточек с фото) */
+export const MOBILE_CAROUSEL_CARD_SCALE = 0.75;
 export const MOBILE_CAROUSEL_IMAGE_TUNE = [
   { boost: 1, x: 0, y: 0 },
   { boost: 1, x: 0, y: 0 },

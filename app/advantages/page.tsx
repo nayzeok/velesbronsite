@@ -11,6 +11,7 @@ import {
   MOBILE_BOOT,
   MOBILE_BOOT_BY_VIEW_BY_COLOR,
   MOBILE_CAROUSEL_ELLIPSE,
+  MOBILE_CAROUSEL_CARD_SCALE,
   MOBILE_CAROUSEL_IMAGE_BOOST,
   MOBILE_CAROUSEL_IMAGE_TUNE,
   MOBILE_CAROUSEL_LAYOUT_SCALE,
@@ -1306,10 +1307,12 @@ export default function ModelsPage() {
                 type="button"
                 onClick={() => handleChangeView(index)}
                 aria-label={`Показать ракурс ${index + 1}`}
-                className="absolute h-[47px] w-[69px] -translate-x-1/2 -translate-y-1/2"
+                className="absolute -translate-x-1/2 -translate-y-1/2"
                 style={{
                   left: mobileCarouselCards[index].x,
                   top: mobileCarouselCards[index].y,
+                  width: 69 * MOBILE_CAROUSEL_CARD_SCALE,
+                  height: 47 * MOBILE_CAROUSEL_CARD_SCALE,
                   transform: `translate(-50%, -50%) rotate(${mobileCarouselCards[index].rotate}deg)`,
                   zIndex: carouselItems[index].z,
                   opacity: index === activeIndex ? 1 : 0.9,
@@ -1336,26 +1339,30 @@ export default function ModelsPage() {
                       carouselItems[index].image.w *
                       MOBILE_CAROUSEL_LAYOUT_SCALE *
                       MOBILE_CAROUSEL_IMAGE_BOOST *
-                      MOBILE_CAROUSEL_IMAGE_TUNE[index].boost,
+                      MOBILE_CAROUSEL_IMAGE_TUNE[index].boost *
+                      MOBILE_CAROUSEL_CARD_SCALE,
                     height:
                       carouselItems[index].image.h *
                       MOBILE_CAROUSEL_LAYOUT_SCALE *
                       MOBILE_CAROUSEL_IMAGE_BOOST *
-                      MOBILE_CAROUSEL_IMAGE_TUNE[index].boost,
+                      MOBILE_CAROUSEL_IMAGE_TUNE[index].boost *
+                      MOBILE_CAROUSEL_CARD_SCALE,
                     left:
-                      carouselItems[index].image.x * MOBILE_CAROUSEL_LAYOUT_SCALE -
-                      (carouselItems[index].image.w *
-                        MOBILE_CAROUSEL_LAYOUT_SCALE *
-                        (MOBILE_CAROUSEL_IMAGE_BOOST * MOBILE_CAROUSEL_IMAGE_TUNE[index].boost - 1)) /
-                        2 +
-                      MOBILE_CAROUSEL_IMAGE_TUNE[index].x,
+                      (carouselItems[index].image.x * MOBILE_CAROUSEL_LAYOUT_SCALE -
+                        (carouselItems[index].image.w *
+                          MOBILE_CAROUSEL_LAYOUT_SCALE *
+                          (MOBILE_CAROUSEL_IMAGE_BOOST * MOBILE_CAROUSEL_IMAGE_TUNE[index].boost - 1)) /
+                          2 +
+                        MOBILE_CAROUSEL_IMAGE_TUNE[index].x) *
+                      MOBILE_CAROUSEL_CARD_SCALE,
                     top:
-                      carouselItems[index].image.y * MOBILE_CAROUSEL_LAYOUT_SCALE -
-                      (carouselItems[index].image.h *
-                        MOBILE_CAROUSEL_LAYOUT_SCALE *
-                        (MOBILE_CAROUSEL_IMAGE_BOOST * MOBILE_CAROUSEL_IMAGE_TUNE[index].boost - 1)) /
-                        2 +
-                      MOBILE_CAROUSEL_IMAGE_TUNE[index].y,
+                      (carouselItems[index].image.y * MOBILE_CAROUSEL_LAYOUT_SCALE -
+                        (carouselItems[index].image.h *
+                          MOBILE_CAROUSEL_LAYOUT_SCALE *
+                          (MOBILE_CAROUSEL_IMAGE_BOOST * MOBILE_CAROUSEL_IMAGE_TUNE[index].boost - 1)) /
+                          2 +
+                        MOBILE_CAROUSEL_IMAGE_TUNE[index].y) *
+                      MOBILE_CAROUSEL_CARD_SCALE,
                     transform: `${carouselItems[index].image.flipY ? "scaleY(-1) rotate(180deg)" : ""} rotate(${carouselItems[index].image.rotate}deg) scale(${carouselItems[index].image.scale ?? 1})`,
                     transformOrigin: "50% 50%",
                   }}

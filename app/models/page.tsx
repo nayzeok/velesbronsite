@@ -20,10 +20,10 @@ const DESKTOP_COLOR_HEADING_GAP = 5;
 
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами на мобиле (px). */
 const MOBILE_MODEL_HEADING_GAP = 16;
-/** Блок ЦВЕТ на мобиле: top заголовка (px). Чем больше — тем больше отступ от блока МОДЕЛЬ. */
-const MOBILE_COLOR_TOP = 492;
-/** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px). */
-const MOBILE_COLOR_HEADING_GAP = 40;
+/** Блок ЦВЕТ на мобиле: top заголовка (px). На одном уровне с блоком МОДЕЛЬ. */
+const MOBILE_COLOR_TOP = 452;
+/** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px), как у блока МОДЕЛЬ. */
+const MOBILE_COLOR_HEADING_GAP = 16;
 
 /**
  * Масштаб большого фото карточки (центральная картинка), по индексу карточки 0..9.
@@ -33,9 +33,10 @@ const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW: Record<"black" | "oliva", number[]> = {
   black: [1.5, 1.5, 1, 1.2, 1.5, 1.5, 1.4, 1.4, 1.4, 1.4],
   oliva: [1.5, 1.5, 1, 1.2, 1.5, 1.5, 1.4, 1.3, 1.4, 1.4],
 };
+/** Масштаб фото ботинка на мобиле (0.85 = уменьшенный размер). */
 const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW: Record<"black" | "oliva", number[]> = {
-  black: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  oliva: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  black: [0.85, 0.85, 0.85, 0.65, 0.85, 0.85, 0.85, 0.85, 0.85, 0.80],
+  oliva: [0.85, 0.85, 0.85, 0.65, 0.85, 0.85, 0.85, 0.85, 0.85, 0.80],
 };
 
 /**
@@ -54,12 +55,12 @@ const BOOT_IMAGE_OFFSET_DESKTOP: Record<"black" | "oliva", { x: number; y: numbe
 };
 const BOOT_IMAGE_OFFSET_MOBILE: Record<"black" | "oliva", { x: number; y: number }[]> = {
   black: [
-    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
-    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 10 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 25 },
   ],
   oliva: [
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
-    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 25 },
   ],
 };
 
@@ -174,7 +175,7 @@ const CAROUSEL_CARDS: CarouselCard[] = [
     imageOliva: "/images/models/cards/4_card_oliva.png",
     titleBlack: "КОМПОЗИТНАЯ \n ЗАЩИТА НОСКА",
     textBlack:
-      "Носочная часть ботинка усилена композитным элементом, который защищает пальцы от давления, ударов и случайных контактов с жёсткими предметами. Материал сохраняет прочность при меньшем весе по сравнению с металлическими решениями, поэтому защита не утяжеляет обувь и не снижает комфорт при длительном движении.",
+      "Носочная часть усилена композитным элементом: защита пальцев от ударов и контактов с твёрдыми предметами. Материал прочный при меньшем весе, чем металл — обувь не утяжеляется и остаётся комфортной.",
     titleOliva: "УСИЛЕННАЯ УДАРНАЯ \n ЗОНА НОСКА",
     textOliva:
       "Передняя часть ботинка рассчитана на повышенную нагрузку и защищает стопу при контакте с камнями, ступенями, инструментом или строительными элементами. Усиленная конструкция распределяет энергию удара по корпусу ботинка и снижает риск травм при активной эксплуатации.",
@@ -197,17 +198,17 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Каждый ботинок проходит обработку гидрофобным составом, который снижает впитывание влаги и защищает материал от загрязнений. Обувь дольше сохраняет внешний вид и рабочие свойства при использовании в разных условиях.",
     titleOliva: "ВОДООТТАЛКИВАЮЩАЯ \n ЗАЩИТА ВЕРХА",
     textOliva:
-      "Материалы верха обработаны гидрофобным составом, который снижает впитывание влаги и защищает поверхность от загрязнений. Капли воды не проникают в структуру материала, а скатываются с поверхности. Такая обработка помогает дольше сохранять внешний вид обуви и облегчает уход при эксплуатации в разных условиях.",
+      "Материалы верха обработаны гидрофобным составом, который снижает впитывание влаги и защищает поверхность от загрязнений. Капли воды не проникают в материал, а скатываются с поверхности. Такая обработка помогает сохранять внешний вид обуви и облегчает уход при эксплуатации в разных условиях.",
   },
   {
     imageBlack: "/images/models/cards/7_card_black.png",
     imageOliva: "/images/models/cards/7_card_oliva.png",
-    titleBlack: "МЕМБРАНА VELTEX \n ВНУТРИ БОТИНКА",
+    titleBlack: "МЕМБРАНА VELTEX™ \n ВНУТРИ БОТИНКА",
     textBlack:
-      "Внутренняя мембрана выполнена в виде цельной чулочной конструкции. Она препятствует проникновению влаги внутрь обуви и помогает отводить избыточное тепло от стопы. Благодаря этому внутри поддерживается комфортный микроклимат, позволяющий использовать ботинки в широком диапазоне температур — от −15 до +20 °C.",
-    titleOliva: "МЕМБРАНА VELTEX: \n ЗАЩИТА И КОМФОРТ",
+      "Внутренняя мембрана выполнена в виде цельной чулочной конструкции: не пропускает влагу внутрь и отводит тепло от стопы. Благодаря этому сохраняется комфортный микроклимат, ботинки можно носить в диапазоне температур — от −15 до +20 °C.",
+    titleOliva: "МЕМБРАНА VELTEX™: \n ЗАЩИТА И КОМФОРТ",
     textOliva:
-      "Внутри ботинка используется мембрана VELTEX в виде цельной чулочной конструкции. Она защищает от проникновения влаги и помогает отводить избыточное тепло и влагу от стопы. Такая система поддерживает комфортный микроклимат внутри обуви и позволяет использовать ботинки в широком диапазоне температур – от −15 до +20 °C.",
+      "Внутри ботинка используется мембрана VELTEX™ в виде цельной чулочной конструкции. Она защищает от проникновения влаги, помогает отводить тепло, влагу от стопы. Такая система поддерживает комфортный микроклимат обуви позволяет использовать ботинки в диапазоне температур −15 до+20 °C.",
   },
   {
     imageBlack: "/images/models/cards/8_card_black.png",
@@ -227,17 +228,17 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Ключевые зоны ботинка прошиты прочными армированными нитями. Усиленная строчка повышает прочность соединений и помогает конструкции выдерживать многократные сгибы и повышенные нагрузки.",
     titleOliva: "ТРОЙНЫЕ ШВЫ, \n АРМИРОВАННЫЕ НИТИ",
     textOliva:
-      "Ключевые зоны ботинка прошиты тройными швами с использованием армированных полиэфирных лавсановых нитей. Такая технология усиливает соединения материалов и повышает устойчивость конструкции к нагрузкам, изгибам и длительной эксплуатации, сохраняя надёжность ботинка при активном использовании.",
+      "Ключевые зоны ботинка прошиты тройными швами армированными полиэфирными нитями. Такая технология усиливает соединения материалов и повышает устойчивость конструкции к нагрузкам и изгибам, сохраняя надёжность ботинка при эксплуатации.",
   },
   {
     imageBlack: "/images/models/cards/10_card_black.png",
     imageOliva: "/images/models/cards/10_card_oliva.png",
     titleBlack: "КОМФОРТ НА ДЛИННОЙ ДИСТАНЦИИ",
     textBlack:
-      "Амортизирующие элементы подошвы и анатомическая стелька помогают снизить усталость при длительном движении. Конструкция ботинка учитывает форму стопы и обеспечивает устойчивую фиксацию пятки и средней части. Обувь остаётся комфортной не только при примерке, но и после многих часов активной эксплуатации.",
+      "Амортизирующие элементы подошвы и анатомическая стелька помогают снизить усталость при движении. Конструкция ботинка учитывает форму стопы и обеспечивает фиксацию пятки и средней части. Обувь остаётся комфортной не только при примерке, но и после многих часов эксплуатации.",
     titleOliva: "АНАТОМИЧЕСКАЯ \n ПОДДЕРЖКА СТОПЫ",
     textOliva:
-      "Конструкция ботинка учитывает форму стопы и обеспечивает устойчивую фиксацию пятки и средней части. Внутри используется анатомическая стелька, которая поддерживает свод стопы и помогает равномерно распределять нагрузку. Это снижает усталость и повышает стабильность шага при длительной ходьбе.",
+      "Конструкция ботинка учитывает форму стопы и обеспечивает устойчивую фиксацию пятки и средней части. Внутри используется анатомическая стелька, поддерживает свод стопы, помогает равномерно распределять нагрузку. Это снижает усталость и повышает стабильность шага при ходьбе.",
   },
 ];
 
@@ -263,9 +264,27 @@ export default function BuyPage() {
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
   const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
-  const mobileRailRef = useRef<HTMLDivElement | null>(null);
   const sizeGridCloseTimerRef = useRef<number | null>(null);
+  const mobileSwipeStartX = useRef<number | null>(null);
+  const viewSlidePhaseTimerRef = useRef<number | null>(null);
+  const viewSlideFinishTimerRef = useRef<number | null>(null);
+  const [mobileScale, setMobileScale] = useState(0.5);
+  const [viewSlideOffsetX, setViewSlideOffsetX] = useState(0);
+  const [viewSlideTransition, setViewSlideTransition] = useState(false);
+  const [viewSlideDurationMs, setViewSlideDurationMs] = useState(400);
+  const [viewTransitionTick, setViewTransitionTick] = useState(0);
+  const [isViewSliding, setIsViewSliding] = useState(false);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
+
+  useEffect(() => {
+    const updateMobileScale = () => {
+      const w = typeof window !== "undefined" ? window.innerWidth : MOBILE_DESIGN_WIDTH;
+      setMobileScale(Math.min(1, Math.max(0.4, w / MOBILE_DESIGN_WIDTH)));
+    };
+    updateMobileScale();
+    window.addEventListener("resize", updateMobileScale);
+    return () => window.removeEventListener("resize", updateMobileScale);
+  }, []);
   const selectedModel = MODEL_OPTIONS.find((item) => item.key === activeModelKey) ?? MODEL_OPTIONS[0];
   const modelImagesByColor = MODEL_IMAGES[activeModelKey];
   const isHighModel = activeModelKey === "high";
@@ -287,21 +306,59 @@ export default function BuyPage() {
     setActiveViewIndex(0);
   }, [activeModelKey]);
 
+  const SLIDE_EXIT_DISTANCE = 420;
+  const SLIDE_MS = 400;
+
+  const changeViewWithSlide = (nextIndex: number, direction: 1 | -1) => {
+    if (nextIndex === activeViewIndex || isViewSliding) return;
+    const maxIndex = Math.max(0, activeViewImages.length - 1);
+    if (nextIndex < 0 || nextIndex > maxIndex) return;
+
+    if (viewSlidePhaseTimerRef.current != null) window.clearTimeout(viewSlidePhaseTimerRef.current);
+    if (viewSlideFinishTimerRef.current != null) window.clearTimeout(viewSlideFinishTimerRef.current);
+    setIsViewSliding(true);
+
+    const exitTarget = -direction * SLIDE_EXIT_DISTANCE;
+    const enterStart = direction * SLIDE_EXIT_DISTANCE;
+
+    setViewSlideDurationMs(SLIDE_MS);
+    setViewSlideTransition(true);
+    setViewSlideOffsetX(exitTarget);
+
+    viewSlidePhaseTimerRef.current = window.setTimeout(() => {
+      setActiveViewIndex(nextIndex);
+      setViewTransitionTick((t) => t + 1);
+      setViewSlideTransition(false);
+      setViewSlideOffsetX(enterStart);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setViewSlideDurationMs(SLIDE_MS);
+          setViewSlideTransition(true);
+          setViewSlideOffsetX(0);
+        });
+      });
+    }, SLIDE_MS);
+
+    viewSlideFinishTimerRef.current = window.setTimeout(() => {
+      setIsViewSliding(false);
+    }, SLIDE_MS * 2);
+  };
+
   useEffect(() => {
     const maxIndex = Math.max(0, activeViewImages.length - 1);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isSizeGridOpen) return;
       if (e.key === "ArrowRight") {
         e.preventDefault();
-        setActiveViewIndex((i) => (i >= maxIndex ? 0 : i + 1));
+        changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
       } else if (e.key === "ArrowLeft") {
         e.preventDefault();
-        setActiveViewIndex((i) => (i <= 0 ? maxIndex : i - 1));
+        changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isSizeGridOpen, activeViewImages.length]);
+  }, [isSizeGridOpen, activeViewImages.length, activeViewIndex]);
 
   useEffect(() => {
     if (!isSizeGridOpen) return;
@@ -315,9 +372,9 @@ export default function BuyPage() {
 
   useEffect(() => {
     return () => {
-      if (sizeGridCloseTimerRef.current) {
-        window.clearTimeout(sizeGridCloseTimerRef.current);
-      }
+      if (sizeGridCloseTimerRef.current) window.clearTimeout(sizeGridCloseTimerRef.current);
+      if (viewSlidePhaseTimerRef.current) window.clearTimeout(viewSlidePhaseTimerRef.current);
+      if (viewSlideFinishTimerRef.current) window.clearTimeout(viewSlideFinishTimerRef.current);
     };
   }, []);
 
@@ -405,15 +462,15 @@ export default function BuyPage() {
                 {activeCard && leftBlockTitle ? leftBlockTitle : selectedModel.title}
               </h1>
               <p
-                className="absolute"
+                className="absolute max-w-[532px] font-medium tracking-normal text-[#111]"
                 style={{
                   top: 115,
                   left: 0,
                   width: 408,
                   fontFamily: "var(--font-roboto-flex), sans-serif",
-                  fontSize: 20,
+                  fontSize: 24,
                   fontWeight: 500,
-                  lineHeight: 1.45,
+                  lineHeight: 1.35,
                   color: "#111",
                 }}
               >
@@ -421,21 +478,29 @@ export default function BuyPage() {
               </p>
             </div>
 
-            {/* Center — boot image (масштаб и смещение отдельно для black/oliva) */}
+            {/* Center — boot image (масштаб и смещение отдельно для black/oliva), обёртка для анимации перелистывания */}
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
               style={{
                 width: 746,
                 height: 609,
-                transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% - 28px + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                transform: `translateX(${viewSlideOffsetX}px)`,
+                transition: viewSlideTransition ? `transform ${viewSlideDurationMs}ms ease-out` : "none",
               }}
             >
-              <img
-                key={`${activeModelKey}-${colorVariant}-${activeViewIndex}`}
-                src={currentViewImage}
-                alt="Тактическая обувь"
-                className="h-full w-full animate-view-rise object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
-              />
+              <div
+                className="h-full w-full origin-center"
+                style={{
+                  transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% - 28px + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                }}
+              >
+                <img
+                  key={`desktop-${viewTransitionTick}-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
+                  src={currentViewImage}
+                  alt="Тактическая обувь"
+                  className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                />
+              </div>
             </div>
 
             <div className="absolute inset-0" style={{ transform: "translateY(-90px)" }}>
@@ -444,12 +509,12 @@ export default function BuyPage() {
                 type="button"
                 onClick={openSizeGrid}
                 className="size-table-link absolute"
-                style={{
-                  left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
-                  top: 706,
-                  transform: "translateX(-50%)",
-                  fontSize: 26,
-                }}
+                  style={{
+                    left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
+                    top: 706,
+                    transform: "translateX(-50%)",
+                    fontSize: 26,
+                  }}
                 aria-label="Открыть таблицу размеров"
               >
                 <span className="size-table-link__base">ТАБЛИЦА РАЗМЕРОВ</span>
@@ -472,7 +537,7 @@ export default function BuyPage() {
                   className="uppercase"
                   style={{
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 34,
+                    fontSize: 36,
                     fontWeight: 700,
                     color: "#111",
                     letterSpacing: "0.08em",
@@ -568,7 +633,7 @@ export default function BuyPage() {
                       margin: 0,
                       padding: 0,
                       fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                      fontSize: 17,
+                      fontSize: 19,
                       fontWeight: 700,
                       color: colorVariant === "black" ? "#f07426" : "#9a9a9a",
                       textDecoration: colorVariant === "black" ? "underline" : "none",
@@ -687,7 +752,7 @@ export default function BuyPage() {
                       <button
                         key={`desktop-view-${i}`}
                         type="button"
-                        onClick={() => setActiveViewIndex(i)}
+                        onClick={() => changeViewWithSlide(i, i > activeViewIndex ? 1 : -1)}
                         className="shrink-0 overflow-hidden rounded-[16px] transition-all"
                         style={{
                           width: CAROUSEL_DESKTOP_CARD_WIDTH,
@@ -708,7 +773,7 @@ export default function BuyPage() {
                       <button
                         key={`desktop-view-${i}`}
                         type="button"
-                        onClick={() => setActiveViewIndex(i)}
+                        onClick={() => changeViewWithSlide(i, i > activeViewIndex ? 1 : -1)}
                         className="shrink-0 overflow-hidden rounded-[16px] transition-all"
                         style={{
                           width: CAROUSEL_DESKTOP_CARD_WIDTH,
@@ -751,13 +816,13 @@ export default function BuyPage() {
         <div
           className="relative w-full overflow-hidden bg-white"
           style={{
-            ["--mobile-scale" as string]: `min(1, calc(100vw / ${MOBILE_DESIGN_WIDTH}px))`,
-            height: `calc(${MOBILE_DESIGN_HEIGHT}px * var(--mobile-scale) + ${MOBILE_SCROLL_EXTRA}px)`,
+            minHeight: "100dvh",
+            height: MOBILE_DESIGN_HEIGHT * mobileScale + MOBILE_SCROLL_EXTRA,
           }}
         >
           <div
             className="absolute left-0 top-0 h-[1716px] w-[741px] origin-top-left bg-white"
-            style={{ transform: "scale(var(--mobile-scale))" }}
+            style={{ transform: `scale(${mobileScale})` }}
           >
             <div className="pointer-events-none absolute left-[-1px] top-0 h-[1716px] w-[743px]">
               {Array.from({ length: 10 }).map((_, offset) => {
@@ -787,17 +852,17 @@ export default function BuyPage() {
             </div>
             <div className="pointer-events-none absolute right-0 top-0 h-[1716px] w-[10px] bg-white" />
 
-            <div className="absolute left-[21px] top-[90px] flex h-[8px] w-[34px] items-center justify-between">
+            <div className="absolute left-[38px] top-[78px] flex h-[8px] w-[34px] items-center justify-between">
               <span className="size-[8px] rounded-full bg-[#111]/35" />
               <span className="size-[8px] rounded-full bg-[#111]/20" />
               <span className="size-[8px] rounded-full bg-[#111]/12" />
             </div>
 
             <h1
-              className="absolute left-[74px] top-[59px] w-[520px] max-w-[90vw] uppercase"
+              className="absolute left-[74px] right-[74px] top-[55px] uppercase"
               style={{
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 21,
+                fontSize: 40,
                 fontWeight: 700,
                 lineHeight: 1.15,
                 color: "#111",
@@ -809,12 +874,11 @@ export default function BuyPage() {
             </h1>
 
             <p
-              className="absolute left-[74px] top-[165px] w-[408px]"
+              className="absolute left-[74px] right-[74px] top-[210px] text-[#111]"
               style={{
                 fontFamily: "var(--font-roboto-flex), sans-serif",
-                fontSize: 20,
-                fontWeight: 500,
-                lineHeight: 1.28,
+                fontSize: 28,
+                lineHeight: 1.2,
                 color: "#111",
               }}
             >
@@ -824,21 +888,22 @@ export default function BuyPage() {
             <button
               type="button"
               onClick={openSizeGrid}
-              className="size-table-link absolute left-[70px] top-[814px]"
+              className="size-table-link absolute left-[70px] top-[698px] z-20"
+              style={{ fontSize: 20 }}
               aria-label="Открыть таблицу размеров"
             >
               ТАБЛИЦА РАЗМЕРОВ
             </button>
 
             <div
-              className="absolute left-[70px] top-[452px] flex flex-col"
+              className="absolute left-[70px] top-[452px] z-20 flex w-[200px] flex-col items-center"
               style={{ gap: MOBILE_MODEL_HEADING_GAP }}
             >
               <p
-                className="uppercase"
+                className="w-full text-center uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 21,
+                  fontSize: 28,
                   fontWeight: 700,
                   color: "#111",
                   letterSpacing: "0.08em",
@@ -874,12 +939,12 @@ export default function BuyPage() {
                       <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
                     </button>
                     <p
-                      className="flex min-w-0 w-full justify-center uppercase"
+                      className="flex min-w-0 w-full justify-center text-center uppercase"
                       style={{
                         margin: 0,
                         padding: 0,
-                        fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                        fontSize: 19,
+                        fontFamily: "var(--font-roboto-flex), sans-serif",
+                        fontSize: 18,
                         fontWeight: 700,
                         color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
                         textDecoration: activeModelKey === model.key ? "underline" : "none",
@@ -894,14 +959,14 @@ export default function BuyPage() {
             </div>
 
             <div
-              className="absolute left-[398px] flex flex-col"
+              className="absolute left-[471px] z-20 flex w-[200px] flex-col items-center"
               style={{ top: MOBILE_COLOR_TOP, gap: MOBILE_COLOR_HEADING_GAP }}
             >
               <p
-                className="uppercase"
+                className="w-full text-center uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 21,
+                  fontSize: 28,
                   fontWeight: 700,
                   color: "#111",
                   letterSpacing: "0.08em",
@@ -909,7 +974,7 @@ export default function BuyPage() {
               >
                 ЦВЕТ
               </p>
-              <div className="flex gap-[20px]">
+              <div className="flex gap-[24px]">
               {(["black", "oliva"] as ColorVariant[]).map((v) => {
                 const colW = v === "black" ? 96 : 94;
                 return (
@@ -925,20 +990,20 @@ export default function BuyPage() {
                         border: colorVariant === v ? "2px solid #f07426" : "1px solid #9a9a9a",
                       }}
                     />
-                    <p
-                      className="flex min-w-0 w-full justify-center uppercase"
-                      style={{
-                        margin: 0,
-                        padding: 0,
-                        fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                        fontSize: 19,
-                        fontWeight: 700,
-                        color: colorVariant === v ? "#f07426" : "#9a9a9a",
-                        textDecoration: colorVariant === v ? "underline" : "none",
-                      }}
-                    >
-                      {v === "black" ? "ЧЕРНЫЙ" : "ОЛИВА"}
-                    </p>
+                      <p
+                        className="flex min-w-0 w-full justify-center text-center uppercase"
+                        style={{
+                          margin: 0,
+                          padding: 0,
+                          fontFamily: "var(--font-roboto-flex), sans-serif",
+                          fontSize: 18,
+                          fontWeight: 700,
+                          color: colorVariant === v ? "#f07426" : "#9a9a9a",
+                          textDecoration: colorVariant === v ? "underline" : "none",
+                        }}
+                      >
+                        {v === "black" ? "ЧЕРНЫЙ" : "ОЛИВА"}
+                      </p>
                   </div>
                 );
               })}
@@ -947,7 +1012,7 @@ export default function BuyPage() {
 
             <Link
               href="/where-to-buy"
-              className="absolute left-[398px] top-[892px] flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-[26px] text-white no-underline"
+              className="absolute left-[447px] top-[678px] z-20 flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-[30px] text-white no-underline"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
@@ -958,76 +1023,90 @@ export default function BuyPage() {
               Купить
             </Link>
 
-            {/* Текущее фото ботинка (мобильная). Масштаб и смещение отдельно для black/oliva. */}
+            {/* Текущее фото ботинка (мобильная). Масштаб и смещение отдельно для black/oliva, обёртка для анимации перелистывания. */}
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
               style={{
                 width: 741,
                 height: 944,
-                transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% - 28px + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                transform: `translateX(${viewSlideOffsetX}px)`,
+                transition: viewSlideTransition ? `transform ${viewSlideDurationMs}ms ease-out` : "none",
               }}
             >
-              <img
-                key={`mobile-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
-                src={currentViewImage}
-                alt="Тактическая обувь"
-                className="h-full w-full animate-view-rise object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,0.18)]"
-              />
+              <div
+                className="h-full w-full origin-center"
+                style={{
+                  transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% + 125px + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                }}
+              >
+                <img
+                  key={`mobile-${viewTransitionTick}-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
+                  src={currentViewImage}
+                  alt="Тактическая обувь"
+                  className="h-full w-full object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,0.18)]"
+                />
+              </div>
             </div>
 
-            <div className="absolute left-1/2 top-[1592px] w-[578px] -translate-x-1/2">
-              <div
-                ref={mobileRailRef}
-                className="scrollbar-hide flex gap-[10px] overflow-x-auto pb-3 pr-3"
-                style={{ scrollBehavior: "smooth" }}
+            {/* Зона свайпа по центру: смена фото влево/вправо (z ниже кнопок, чтобы не перекрывать) */}
+            <div
+              className="absolute left-0 top-[20%] z-[1] h-[60%] w-full touch-none"
+              aria-label="Свайп влево или вправо для смены фото"
+              onTouchStart={(e) => {
+                mobileSwipeStartX.current = e.targetTouches[0]?.clientX ?? null;
+              }}
+              onTouchEnd={(e) => {
+                const start = mobileSwipeStartX.current;
+                if (start == null) return;
+                const end = e.changedTouches[0]?.clientX;
+                if (end == null) return;
+                mobileSwipeStartX.current = null;
+                const delta = start - end;
+                const maxIndex = Math.max(0, activeViewImages.length - 1);
+                if (delta > 50) {
+                  changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
+                } else if (delta < -50) {
+                  changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
+                }
+              }}
+            />
+
+            {/* Стрелки свайпа: акцентные, кликабельные */}
+            <button
+              type="button"
+              onClick={() => {
+                const maxIndex = Math.max(0, activeViewImages.length - 1);
+                changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
+              }}
+              className="absolute left-0 top-[36%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-end pr-1 transition-opacity hover:opacity-100 active:opacity-90"
+              style={{ background: "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 70%, transparent 100%)" }}
+              aria-label="Предыдущее фото"
+            >
+              <span
+                className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#f07426] text-white shadow-[0_4px_12px_rgba(240,116,38,0.4)]"
+                style={{ fontSize: 28, fontWeight: 700, lineHeight: 1 }}
               >
-                {isHighModel
-                  ? CAROUSEL_CARDS.map((card, i) => (
-                      <button
-                        key={`mobile-view-${i}`}
-                        type="button"
-                        onClick={() => setActiveViewIndex(i)}
-                        className="h-[158px] w-[119px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
-                        style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
-                      >
-                        <img
-                          src={colorVariant === "black" ? card.imageBlack : card.imageOliva}
-                          alt=""
-                          className="h-full w-full object-contain"
-                        />
-                      </button>
-                    ))
-                  : activeViewImages.map((image, i) => (
-                      <button
-                        key={`mobile-view-${i}`}
-                        type="button"
-                        onClick={() => setActiveViewIndex(i)}
-                        className="h-[158px] w-[119px] shrink-0 overflow-hidden rounded-[20px] bg-[#eceef0] transition-all"
-                        style={{ border: activeViewIndex === i ? "3px solid #f07426" : "1px solid rgba(0,0,0,0.04)" }}
-                      >
-                        <img src={image} alt="" className="h-full w-full object-contain" />
-                      </button>
-                    ))}
-              </div>
-              <button
-                type="button"
-                aria-label="Прокрутить фото влево"
-                onClick={() => mobileRailRef.current?.scrollBy({ left: -196, behavior: "smooth" })}
-                className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
-                style={{ cursor: "w-resize" }}
+                ‹
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const maxIndex = Math.max(0, activeViewImages.length - 1);
+                changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
+              }}
+              className="absolute right-0 top-[36%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-start pl-1 transition-opacity hover:opacity-100 active:opacity-90"
+              style={{ background: "linear-gradient(to left, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 70%, transparent 100%)" }}
+              aria-label="Следующее фото"
+            >
+              <span
+                className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#f07426] text-white shadow-[0_4px_12px_rgba(240,116,38,0.4)]"
+                style={{ fontSize: 28, fontWeight: 700, lineHeight: 1 }}
               >
-                <span className="text-[22px] leading-none">‹</span>
-              </button>
-              <button
-                type="button"
-                aria-label="Прокрутить фото вправо"
-                onClick={() => mobileRailRef.current?.scrollBy({ left: 196, behavior: "smooth" })}
-                className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/85 px-2.5 py-4 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.16)]"
-                style={{ cursor: "e-resize" }}
-              >
-                <span className="text-[22px] leading-none">›</span>
-              </button>
-            </div>
+                ›
+              </span>
+            </button>
+
           </div>
 
         </div>

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Oswald } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import CookieConsent from "@/components/CookieConsent";
 import MobileHeader from "@/components/layout/MobileHeader";
 
 const geistSans = Geist({
@@ -88,6 +89,7 @@ export default function RootLayout({
           {children}
         </div>
         <AnalyticsTracker />
+        <CookieConsent />
       </body>
     </html>
   );

@@ -2,88 +2,91 @@ import SiteHeader from "@/components/layout/SiteHeader";
 
 export const metadata = {
   title: "О бренде — VelesBron",
-  description: "О бренде VelesBron: история, производство и гарантия",
+  description: "О бренде VelesBron: миссия, ценности, архитектура продукта",
 };
 
 const backgroundShape = "/images/models/ui/background-shape.png";
 
-const BRAND_BLOCKS = [
-  {
-    title: "История",
-    text: "VELESBRON появился как прагматичный ответ на разрыв между массовой обувью и дорогим импортом. Мы адаптировали европейскую конструкцию под российские условия, климат и особенности стопы.",
-  },
-  {
-    title: "Производство",
-    text: "Гибридная подошва EVA + резина, кевлар K-29, композитный подносок, Cordura 1000D и усиленные узлы сборки. Конструкция рассчитана на реальную нагрузку и долгий ресурс.",
-  },
-  {
-    title: "Гарантия",
-    text: "Расширенная пожизненная гарантия действует при активации сертификата в течение 14 дней. Мы не обещаем лишнего: при подтверждении дефекта выполняется ремонт или замена.",
-  },
-] as const;
+/** Картинки для блока «Миссия и ценности»: Прагматизм, Адаптация, Технологичность, Ответственность */
+const PRINCIPLE_IMAGES: Record<"pragmatism" | "adaptation" | "technology" | "responsibility", string> = {
+  pragmatism: "/images/models/ui/15.png",
+  adaptation: "/images/models/ui/14.png",
+  technology: "/images/models/ui/12.png",
+  responsibility: "/images/models/ui/13.png",
+};
 
-const BRAND_TIMELINE = [
-  { year: "Этап 1", text: "Изучены лучшие европейские и американские образцы треккингово-тактической обуви." },
-  { year: "Этап 2", text: "Европейская конструкция переосмыслена инженерами-технологами под российские сценарии." },
-  { year: "Этап 3", text: "Сделан акцент на ресурсе, защите, анатомической посадке и сервисной ответственности." },
-] as const;
-
-const CORE_ADVANTAGES = [
-  "Повышенная износостойкость за счет гибридной подошвы и материалов верха.",
-  "Усиленная конструкция с тройными швами и армированными лавсановыми нитями.",
-  "Антипрокольная защита: кевлар K-29 и сопротивление точечной нагрузке более 1265 Н.",
-  "Всесезонный комфорт: мембрана VELTEX в диапазоне от -15°C до +20°C.",
-  "Анатомическая посадка под полноту 8 и размерный ряд, адаптированный под российскую стопу.",
-] as const;
-
-const BRAND_VALUES = [
-  {
-    title: "Прагматизм",
-    text: "Мы появились не из моды, а из реального запроса: убрать разрыв между «одноразовым» сегментом и дорогим неадаптированным импортом.",
-  },
-  {
-    title: "Адаптация",
-    text: "Российская стопа шире, климат жестче, покрытия агрессивнее. Конструкция, колодка и материалы рассчитаны именно на эти условия.",
-  },
-  {
-    title: "Технологичность",
-    text: "Кевлар K-29, композитный подносок, Cordura 1000D, гибридная подошва и усиленная сборка — не ради маркетинга, а ради функциональности.",
-  },
-  {
-    title: "Ответственность",
-    text: "Вместо стоимости скидок мы закладываем стоимость ресурса и сервиса. Гарантия — это контракт ответственности бренда.",
-  },
-  {
-    title: "Честность",
-    text: "Мы не обещаем легкий путь. Мы обещаем, что пара рассчитана на нагрузку и что по сервису мы действительно разбираемся в ситуации.",
-  },
-] as const;
+const MISSION_VALUES = [
+  { key: "pragmatism" as const, title: "Прагматизм", text: "Мы появились не из моды, а из реального запроса: убрать разрыв между «одноразовым» сегментом и дорогим неадаптированным импортом." },
+  { key: "adaptation" as const, title: "Адаптация", text: "Российская стопа шире, климат жёстче, покрытия агрессивнее. Конструкция, колодка и материалы рассчитаны именно на эти условия." },
+  { key: "technology" as const, title: "Технологичность", text: "Кевлар K-29, композитный подносок, Cordura 1000D, гибридная подошва и усиленная сборка — не ради маркетинга, а ради функциональности." },
+  { key: "responsibility" as const, title: "Ответственность", text: "Вместо стоимости скидок мы закладываем стоимость ресурса и сервиса. Гарантия — это контракт ответственности бренда." },
+];
 
 const PRODUCT_ARCHITECTURE = [
-  {
-    title: "Гибридная подошва и защита",
-    text: "Основа EVA с амортизацией и устойчивостью к холоду, подметка из износостойкой резиновой смеси, антипрокольная вставка из кевлара K-29.",
-  },
-  {
-    title: "Верх ботинка",
-    text: "Натуральный нубук с гидрофобной обработкой, вставки Cordura 1000D и композитный подносок для защиты без лишнего веса.",
-  },
-  {
-    title: "Мембрана VELTEX",
-    text: "«Чулочная» конструкция с герметизацией швов: защита от влаги при типовых сценариях и комфортная терморегуляция.",
-  },
-  {
-    title: "Сборка и контроль",
-    text: "Тройные швы, армированные нити, проклейка ключевых узлов и многоуровневый контроль качества на этапах производства.",
-  },
-] as const;
+  { title: "Гибридная подошва и защита", text: "Основа EVA с амортизацией и устойчивостью к холоду, подмётка из износостойкой резиновой смеси, антипрокольная вставка из кевлара K-29." },
+  { title: "Верх ботинка", text: "Натуральный нубук с гидрофобной обработкой, вставки Cordura 1000D и композитный подносок для защиты без лишнего веса." },
+  { title: "Мембрана VELTEX™", text: "«Чулочная» конструкция с герметизацией швов: защита от влаги при типовых сценариях и комфортная терморегуляция." },
+  { title: "Сборка и контроль", text: "Тройные швы, армированные нити, проклейка ключевых узлов и многоуровневый контроль качества на этапах производства." },
+];
 
-const VOICE_RULES = [
-  "Спокойно, точно, по делу: факты вместо пафоса.",
-  "Сила без агрессии и уважение к человеку в формулировках.",
-  "Без обещаний сверх регламента и условий сертификата.",
-  "Если есть проблема — разбираемся и предлагаем решение.",
-] as const;
+/** Блок «Почему появился VELESBRON»: три карточки */
+const WHY_VELESBRON_CARDS = [
+  {
+    id: "mass",
+    title: "Массовый сегмент",
+    icon: "/images/models/ui/1ico.png",
+    iconScale: 2,
+    text: "Часто рассчитан на внешний вид, а не на реальную эксплуатацию.",
+    points: ["Низкий ресурс", "Слабая защита", "Быстрый износ"],
+    highlight: false,
+  },
+  {
+    id: "solution",
+    title: "Решение VELESBRON",
+    icon: "/images/models/ui/6ico.png",
+    iconScale: 2,
+    text: "Мы изучили лучшие европейские и американские конструкции, переосмыслили их и адаптировали под реальные условия эксплуатации.",
+    points: ["Защита", "Ресурс", "Ответственность"],
+    highlight: true,
+  },
+  {
+    id: "import",
+    title: "Импортные бренды",
+    icon: "/images/models/ui/3ico.png",
+    iconScale: 2,
+    text: "Высокое качество, но не всегда адаптация под российский климат, покрытия и форму стопы.",
+    points: ["Высокая стоимость"],
+    highlight: false,
+  },
+];
+
+/** Блок «Гарантия VELESBRON»: три карточки */
+const GUARANTEE_CARDS = [
+  {
+    id: "lifetime",
+    title: "Пожизненная гарантия",
+    icon: "/images/models/ui/2ico.png",
+    iconScale: 2,
+    text: "Расширенная гарантия действует при активации сертификата.",
+    line2: "Мы уверены в конструкции и берем ответственность",
+  },
+  {
+    id: "repair",
+    title: "Ремонт или замена",
+    icon: "/images/models/ui/4ico.png",
+    iconScale: 2,
+    text: "Если дефект подтверждается, мы выполняем ремонт или замену пары.",
+    line2: "Решение принимается после диагностики.",
+  },
+  {
+    id: "service",
+    title: "Сервисная поддержка",
+    icon: "/images/models/ui/5ico.png",
+    iconScale: 2,
+    text: "Экспертиза и ремонт осуществляются брендом.",
+    line2: "Обратная отправка обуви выполняется за счёт бренда.",
+  },
+];
 
 export default function BrandPage() {
   return (
@@ -114,91 +117,332 @@ export default function BrandPage() {
             ))}
           </div>
 
-          <SiteHeader />
+          <SiteHeader activeItem="brand" />
 
-          <div className="relative mx-auto w-[min(1120px,92vw)] pb-24 min-[1200px]:pt-[168px]">
-            <section className="rounded-[28px] bg-white/90 p-8 shadow-[0_30px_70px_rgba(0,0,0,0.1)] backdrop-blur-sm min-[980px]:p-10">
+          <div
+            className="relative mx-auto max-w-[1000px] px-4 pb-20 pt-[calc(5rem+env(safe-area-inset-top))] min-[1200px]:px-8 min-[1200px]:pt-[7rem]"
+            style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 400 }}
+          >
+
+        {/* О VELESBRON */}
+        <header className="mb-14">
+          <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
+            <div className="text-center">
               <h1
                 className="uppercase text-[#111]"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: "clamp(32px,3.75vw,66px)",
-                  lineHeight: 1,
+                  fontSize: 30,
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "0.08em",
                 }}
               >
-                О VELESBRON
+                О VELESBRON - надёжность в деталях
               </h1>
-              <div className="mt-5 max-w-[1060px] space-y-5 text-[19px] leading-[1.38] text-[#111]/72">
-                <p>VELESBRON — это обувь повышенной надёжности, разработанная в России для реальных условий эксплуатации.</p>
-                <p>Бренд появился как ответ на разрыв между массовыми моделями «для вида» и дорогими импортными решениями, не всегда адаптированными под климат, покрытия и особенности стопы.</p>
-                <p>Мы изучили лучшие зарубежные конструкции, переосмыслили их и доработали с учётом российских условий. Усилили зоны нагрузки. Скорректировали посадку. Подобрали материалы, которые работают в широком диапазоне температур и сохраняют свойства при активной эксплуатации.</p>
-                <p>Каждая пара VELESBRON — это продуманная система защиты и поддержки: износостойкие материалы верха, усиленная сборка, устойчивая подошва, внутренняя мембранная конструкция и элементы дополнительной безопасности. Ничего лишнего. Только то, что действительно работает.</p>
-                <p>Мы не обещаем лёгкий путь.<br />Мы создаём обувь, рассчитанную на нагрузку.</p>
-                <p>Отдельная часть философии бренда — гарантийные обязательства.<br />Мы изначально закладываем в продукт ресурс и ответственность. Гарантия для нас — не инструмент продаж и не формальность в документах. Это подтверждение уверенности в конструкции и готовности отвечать за результат.</p>
-                <p>Если пара требует внимания — мы разбираемся и принимаем решение. Спокойно, по делу, без перекладывания ответственности и без громких заявлений.</p>
-                <p>VELESBRON стоит выше массового сегмента по ресурсу и контролю качества, сохраняя главный принцип — устойчивость, защиту и опору в каждом шаге.</p>
-                <p>VELESBRON — броня для ваших ног.<br />Ты идёшь — мы держим землю под ногами.</p>
-              </div>
-            </section>
+            </div>
+            <div className="mt-6 max-w-[900px] space-y-4 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+            <p>
+              VELESBRON — это обувь повышенной надёжности, разработанная в России для реальных условий эксплуатации.
+            </p>
+            <p>
+              Бренд появился как ответ на разрыв между массовыми моделями «для вида» и дорогими импортными решениями, не всегда адаптированными под климат, покрытия и особенности стопы.
+            </p>
+            <p>
+              Мы изучили лучшие зарубежные конструкции, переосмыслили их и доработали с учётом российских условий. Усилили зоны нагрузки. Скорректировали посадку. Подобрали материалы, которые работают в широком диапазоне температур и сохраняют свойства при активной эксплуатации.
+            </p>
+            <p>
+              Каждая пара VELESBRON — это продуманная система защиты и поддержки: износостойкие материалы верха, усиленная сборка, устойчивая подошва, внутренняя мембранная конструкция и элементы дополнительной безопасности. Ничего лишнего. Только то, что действительно работает.
+            </p>
+            <p>
+              Мы не обещаем лёгкий путь.<br />
+              Мы создаём обувь, рассчитанную на нагрузку.
+            </p>
+            <p>
+              Отдельная часть философии бренда — гарантийные обязательства.<br />
+              Мы изначально закладываем в продукт ресурс и ответственность. Гарантия для нас — не инструмент продаж и не формальность в документах. Это подтверждение уверенности в конструкции и готовности отвечать за результат.
+            </p>
+            <p>
+              Если пара требует внимания — мы разбираемся и принимаем решение. Спокойно, по делу, без перекладывания ответственности и без громких заявлений.
+            </p>
+            <p>
+              VELESBRON стоит выше массового сегмента по ресурсу и контролю качества, сохраняя главный принцип — устойчивость, защиту и опору в каждом шаге.
+            </p>
+            <p>
+              VELESBRON — броня для ваших ног.<br />
+              Ты идёшь — мы держим землю под ногами.
+            </p>
+            </div>
+          </div>
+        </header>
 
-            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+        {/* МИССИЯ И ЦЕННОСТИ */}
+        <section className="mb-14">
+          <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
+            <div className="text-center">
               <h2
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+                style={{
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 30,
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "0.08em",
+                }}
               >
                 Миссия и ценности
               </h2>
-              <p className="mt-4 max-w-[850px] text-[17px] leading-[1.35] text-[#111]/72">
-                Создавать надежную обувь для тех, кто идет своим маршрутом — в городе, на объекте, в лесу, в горах или при выполнении
-                тактических задач. Мы не обещаем легкий путь. Мы гарантируем защиту и поддержку на нём.
+            </div>
+            <div className="mt-5 max-w-[900px] space-y-4 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+              <p>
+                Мы создаём надёжную обувь для тех, кто идёт своим маршрутом — в городе, на объекте, в лесу, в горах или при выполнении тактических задач.
               </p>
-              <div className="mt-7 grid gap-4 min-[980px]:grid-cols-2">
-                {BRAND_VALUES.map((item) => (
-                  <article key={item.title} className="rounded-[18px] border border-[#111]/10 bg-[#f6f6f6] p-5">
-                    <h3 className="text-[30px] leading-none text-[#111]" style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}>
-                      {item.title}
-                    </h3>
-                    <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/72">{item.text}</p>
-                  </article>
-                ))}
-              </div>
-            </section>
-
-            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
-              <h2
-                className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+              <p className="flex items-start gap-2">
+                <span className="mt-0.5 shrink-0 text-[#111]/40" aria-hidden>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                </span>
+                <span>Мы не обещаем лёгкий путь. Мы гарантируем защиту и поддержку на нём.</span>
+              </p>
+            </div>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {MISSION_VALUES.map((item) => (
+              <article
+                key={item.key}
+                tabIndex={0}
+                className="group rounded-xl border-2 border-[#e5e5e5] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#f07426] hover:shadow-[0_12px_28px_rgba(240,116,38,0.18)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f07426] focus-visible:ring-offset-2"
+                aria-label={`${item.title}: ${item.text.slice(0, 60)}…`}
               >
-                Ключевые преимущества
-              </h2>
-              <ul className="mt-6 grid gap-3 min-[980px]:grid-cols-2">
-                {CORE_ADVANTAGES.map((item) => (
-                  <li key={item} className="rounded-[14px] bg-[#f3f3f3] px-4 py-3 text-[15px] leading-[1.35] text-[#111]/78">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </section>
+                <div className="flex items-center gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[#f5f5f5] transition-transform duration-300 group-hover:scale-105">
+                    <img src={PRINCIPLE_IMAGES[item.key]} alt="" className="h-8 w-8 object-contain" />
+                  </span>
+                  <h3
+                    className="uppercase text-[#111]"
+                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                  >
+                    {item.title}
+                  </h3>
+                </div>
+                <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
-            <section className="mt-8 rounded-[28px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)] min-[980px]:p-10">
+        {/* АРХИТЕКТУРА ПРОДУКТА */}
+        <section className="mb-14">
+          <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
+            <div className="text-center">
               <h2
                 className="uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: "clamp(36px,3.2vw,56px)", lineHeight: 1 }}
+                style={{
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 30,
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "0.08em",
+                }}
               >
                 Архитектура продукта
               </h2>
-              <div className="mt-7 grid gap-4 min-[980px]:grid-cols-2">
-                {PRODUCT_ARCHITECTURE.map((item) => (
-                  <article key={item.title} className="rounded-[18px] border border-[#111]/10 bg-[#fafafa] p-5">
-                    <h3 className="text-[27px] leading-none text-[#111]" style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}>
-                      {item.title}
-                    </h3>
-                    <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/72">{item.text}</p>
-                  </article>
-                ))}
-              </div>
-            </section>
+            </div>
+            <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#555]">
+              Каждая пара VELESBRON — это система защиты, устойчивости и комфорта.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {PRODUCT_ARCHITECTURE.map((item) => (
+                <article
+                  key={item.title}
+                  className="rounded-xl border border-[#e5e5e5] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
+                >
+                  <h3
+                    className="uppercase text-[#111]"
+                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.25 }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
+        {/* ПОЧЕМУ ПОЯВИЛСЯ VELESBRON */}
+        <section className="mb-14">
+          <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
+            <div className="text-center">
+              <h2
+                className="uppercase text-[#111]"
+                style={{
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 30,
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Почему появился VELESBRON
+              </h2>
+              <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+                Ответ на разрыв между массовым сегментом и дорогим импортом.
+              </p>
+            </div>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {WHY_VELESBRON_CARDS.map((card) => (
+                <article
+                  key={card.id}
+                  className="group cursor-pointer overflow-hidden rounded-xl border-2 border-[#e5e5e5] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#f07426] hover:shadow-[0_12px_28px_rgba(240,116,38,0.25)]"
+                >
+                  <div className="px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
+                    <h3
+                      className="uppercase text-[#111]"
+                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                    >
+                      {card.title}
+                    </h3>
+                  </div>
+                  <div className="px-5 pt-0.5 pb-5">
+                    <div className="flex justify-center">
+                      <span className={`relative inline-flex items-center justify-center ${(card as { iconScale?: number }).iconScale === 2 ? "size-28" : "size-14"}`}>
+                        <img
+                          src={card.icon}
+                          alt=""
+                          className={`object-contain ${(card as { iconScale?: number }).iconScale === 2 ? "h-24 w-24" : "h-12 w-12"}`}
+                        />
+                        <span
+                          className="absolute bottom-3 right-0 flex size-8 items-center justify-center rounded-full bg-[#f07426] text-white opacity-0 shadow transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 scale-90"
+                          aria-hidden
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 6L9 17l-5-5" />
+                          </svg>
+                        </span>
+                      </span>
+                    </div>
+                    <p className="mt-2 text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{card.text}</p>
+                    <div className="mt-4 border-t border-[#e5e5e5] pt-4">
+                    {card.points.map((point, pointIndex) => (
+                      <p
+                        key={point}
+                        className="flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
+                        style={{ transitionDelay: `${pointIndex * 80}ms` }}
+                      >
+                        <span
+                          className="mr-1.5 inline-flex w-4 shrink-0 items-center justify-center opacity-0 text-[#f07426] transition-opacity duration-200 group-hover:opacity-100"
+                          style={{ transitionDelay: `${pointIndex * 80}ms` }}
+                          aria-hidden
+                        >
+                          ✓
+                        </span>
+                        {point}
+                      </p>
+                    ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="mt-8 max-w-[900px] space-y-3 text-center">
+              <p className="text-[20px] font-semibold leading-[1.35] tracking-normal text-[#111]">
+                VELESBRON создавался как прагматичный ответ на этот разрыв.
+              </p>
+              <p className="text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+                Мы взяли лучшие инженерные решения, доработали конструкцию, адаптировали колодку под российскую стопу и усилили ключевые узлы. Получилась обувь, рассчитанная на реальную нагрузку.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ГАРАНТИЯ VELESBRON */}
+        <section className="mb-14">
+          <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
+            <div className="text-center">
+              <h2
+                className="uppercase text-[#111]"
+                style={{
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 34,
+                  fontWeight: 700,
+                  lineHeight: 1.15,
+                  letterSpacing: "0.08em",
+                }}
+              >
+                Гарантия VELESBRON
+              </h2>
+              <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+                Мы отвечаем за свою работу.
+              </p>
+            </div>
+            <div className="mt-6 max-w-[900px] space-y-4 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+              <p>Гарантия — это не маркетинг. Это ответственность за конструкцию.</p>
+              <p>Гарантия распространяется на производственные дефекты, расхождение швов, отслоение подошвы и нарушения конструкций.</p>
+            </div>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {GUARANTEE_CARDS.map((card) => (
+                <article
+                  key={card.id}
+                  className="group cursor-pointer overflow-hidden rounded-xl border-2 border-[#e5e5e5] bg-white shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#f07426] hover:shadow-[0_12px_28px_rgba(240,116,38,0.25)]"
+                >
+                  <div className="px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
+                    <h3
+                      className="uppercase text-[#111]"
+                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                    >
+                      {card.title}
+                    </h3>
+                  </div>
+                  <div className="px-5 pt-2 pb-5">
+                    <div className="mb-4 flex justify-center">
+                      <span className={`relative inline-flex items-center justify-center ${(card as { iconScale?: number }).iconScale === 2 ? "size-28" : "size-16"}`}>
+                        <img
+                          src={card.icon}
+                          alt=""
+                          className={`object-contain ${(card as { iconScale?: number }).iconScale === 2 ? "h-24 w-24" : "h-12 w-12"}`}
+                        />
+                        <span
+                          className="absolute bottom-3 right-0 flex size-8 items-center justify-center rounded-full bg-[#f07426] text-white opacity-0 shadow transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 scale-90"
+                          aria-hidden
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 6L9 17l-5-5" />
+                          </svg>
+                        </span>
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {[card.text, card.line2].map((line, pointIndex) => (
+                        <p
+                          key={pointIndex}
+                          className="flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
+                          style={{ transitionDelay: `${pointIndex * 80}ms` }}
+                        >
+                          <span
+                            className="mr-1.5 inline-flex w-4 shrink-0 items-center justify-center opacity-0 text-[#f07426] transition-opacity duration-200 group-hover:opacity-100"
+                            style={{ transitionDelay: `${pointIndex * 80}ms` }}
+                            aria-hidden
+                          >
+                            ✓
+                          </span>
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="mt-8 max-w-[900px] space-y-3 text-center">
+              <p className="text-[20px] font-semibold leading-[1.35] tracking-normal text-[#111]">
+                Если пара подвела — мы разбираемся и решаем.
+              </p>
+            </div>
+          </div>
+        </section>
           </div>
         </div>
       </section>
