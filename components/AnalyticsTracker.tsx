@@ -22,6 +22,7 @@ export function AnalyticsTracker() {
   };
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     startRef.current = Date.now();
 
     const onLeave = () => {
@@ -30,7 +31,7 @@ export function AnalyticsTracker() {
     };
 
     const onVisibilityChange = () => {
-      if (document.visibilityState === "hidden") onLeave();
+      if (typeof document !== "undefined" && document.visibilityState === "hidden") onLeave();
     };
 
     window.addEventListener("visibilitychange", onVisibilityChange);

@@ -274,11 +274,29 @@ export default function BuyPage() {
   const [viewSlideDurationMs, setViewSlideDurationMs] = useState(400);
   const [viewTransitionTick, setViewTransitionTick] = useState(0);
   const [isViewSliding, setIsViewSliding] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [mobileReady, setMobileReady] = useState(false);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
 
   useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) return;
+    const mql = window.matchMedia("(min-width: 1200px)");
+    const update = () => setIsDesktop(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (isDesktop) return;
+    const t = setTimeout(() => setMobileReady(true), 50);
+    return () => clearTimeout(t);
+  }, [isDesktop]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
     const updateMobileScale = () => {
-      const w = typeof window !== "undefined" ? window.innerWidth : MOBILE_DESIGN_WIDTH;
+      const w = window.innerWidth;
       setMobileScale(Math.min(1, Math.max(0.4, w / MOBILE_DESIGN_WIDTH)));
     };
     updateMobileScale();
@@ -345,6 +363,7 @@ export default function BuyPage() {
   };
 
   useEffect(() => {
+    if (typeof document === "undefined") return;
     const maxIndex = Math.max(0, activeViewImages.length - 1);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isSizeGridOpen) return;
@@ -361,8 +380,7 @@ export default function BuyPage() {
   }, [isSizeGridOpen, activeViewImages.length, activeViewIndex]);
 
   useEffect(() => {
-    if (!isSizeGridOpen) return;
-
+    if (typeof document === "undefined" || !isSizeGridOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -371,6 +389,7 @@ export default function BuyPage() {
   }, [isSizeGridOpen]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     return () => {
       if (sizeGridCloseTimerRef.current) window.clearTimeout(sizeGridCloseTimerRef.current);
       if (viewSlidePhaseTimerRef.current) window.clearTimeout(viewSlidePhaseTimerRef.current);
@@ -406,9 +425,10 @@ export default function BuyPage() {
         </div>
       )}
 
-      {/* ── DESKTOP ── */}
+      {/* ── DESKTOP: рендерим только при width >= 1200px, чтобы на телефоне не грузить тяжёлую сцену ── */}
+      {isDesktop && (
       <section
-        className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-white min-[1200px]:block"
+        className="figma-site-stage relative mx-auto h-[100dvh] w-full overflow-hidden bg-white"
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
@@ -810,9 +830,16 @@ export default function BuyPage() {
           </div>
         </div>
       </section>
+      )}
 
-      {/* ── MOBILE ── */}
-      <section className="min-[1200px]:hidden">
+      {/* ── MOBILE: рендерим только при width < 1200px; контент — после mount, чтобы не ронять Safari при первом кадре ── */}
+      {!isDesktop && !mobileReady && (
+      <section className="flex min-h-[100dvh] items-center justify-center bg-[#d9d9d9]">
+        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 18 }}>Загрузка…</p>
+      </section>
+      )}
+      {!isDesktop && mobileReady && (
+      <section>
         <div
           className="relative w-full overflow-hidden bg-white"
           style={{
@@ -824,33 +851,23 @@ export default function BuyPage() {
             className="absolute left-0 top-0 h-[1716px] w-[741px] origin-top-left bg-white"
             style={{ transform: `scale(${mobileScale})` }}
           >
-            <div className="pointer-events-none absolute left-[-1px] top-0 h-[1716px] w-[743px]">
-              {Array.from({ length: 10 }).map((_, offset) => {
-                const i = offset + 2;
-                return (
-                <div key={i} className="absolute inset-y-0" style={{ left: `${(i * 100) / 14}%`, width: `${100 / 14}%` }}>
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
-                    }}
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage: `url(${backgroundShape})`,
-                      backgroundSize: "832px 832px",
-                      backgroundPosition: "top left",
-                      filter: "blur(90px)",
-                      opacity: 0.03,
-                    }}
-                  />
-                </div>
-                );
-              })}
+            {/* Облегчённые полосы: тот же градиент, что на десктопе, без blur и картинки */}
+            <div
+              className="pointer-events-none absolute inset-0 z-0"
+              aria-hidden
+            >
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute inset-y-0 w-full"
+                  style={{
+                    left: `${(i * 100) / 6}%`,
+                    width: `${100 / 6}%`,
+                    backgroundImage: "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                  }}
+                />
+              ))}
             </div>
-            <div className="pointer-events-none absolute right-0 top-0 h-[1716px] w-[10px] bg-white" />
 
             <div className="absolute left-[38px] top-[78px] flex h-[8px] w-[34px] items-center justify-between">
               <span className="size-[8px] rounded-full bg-[#111]/35" />
@@ -888,8 +905,8 @@ export default function BuyPage() {
             <button
               type="button"
               onClick={openSizeGrid}
-              className="size-table-link absolute left-[70px] top-[698px] z-20"
-              style={{ fontSize: 20 }}
+              className="size-table-link absolute left-[70px] top-[698px] z-20 min-h-[48px] py-2 pr-3 pl-0 text-left"
+              style={{ fontSize: 26, lineHeight: 1.2 }}
               aria-label="Открыть таблицу размеров"
             >
               ТАБЛИЦА РАЗМЕРОВ
@@ -1020,7 +1037,7 @@ export default function BuyPage() {
                 letterSpacing: "0.08em",
               }}
             >
-              Купить
+              Где купить
             </Link>
 
             {/* Текущее фото ботинка (мобильная). Масштаб и смещение отдельно для black/oliva, обёртка для анимации перелистывания. */}
@@ -1111,6 +1128,7 @@ export default function BuyPage() {
 
         </div>
       </section>
+      )}
 
       {isSizeGridOpen && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center px-4">

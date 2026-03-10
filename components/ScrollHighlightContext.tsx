@@ -97,6 +97,7 @@ export function ScrollHighlightProvider({
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const scrollEl = scrollContainerRef?.current ?? scrollContainer ?? null;
     const target: HTMLElement | Window = scrollEl ?? window;
 

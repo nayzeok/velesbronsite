@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Oswald } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import ClientErrorToServer from "@/components/ClientErrorToServer";
 import CookieConsent from "@/components/CookieConsent";
 import MobileHeader from "@/components/layout/MobileHeader";
 
@@ -84,6 +85,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${drukCyr.variable} ${pobeda.variable} ${gilroyLight.variable} ${russoOne.variable} ${robotoFlex.variable} antialiased`}
       >
+        <ClientErrorToServer />
         <MobileHeader />
         <div>
           {children}

@@ -164,6 +164,15 @@ body {
   opacity: 1;
 }
 
+@media (max-width: 639px) {
+  .group[data-highlighted="true"] .scroll-highlight-header {
+    background-color: rgb(240 116 38 / 0.32);
+  }
+  .group[data-highlighted="true"] .scroll-highlight-text {
+    color: #e65c1a;
+  }
+}
+
 /** «Таблица размеров»: закрашивание и линия выезжают вместе слева направо (один текст, без дубля) */
 .size-table-link {
   position: relative;

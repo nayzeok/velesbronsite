@@ -317,7 +317,24 @@ export default function ModelsPage() {
   const mobileBootPhaseTimerRef = useRef<number | null>(null);
   const mobileBootFinishTimerRef = useRef<number | null>(null);
   const [mobileScale, setMobileScale] = useState(1);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [mobileReady, setMobileReady] = useState(false);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) return;
+    const mql = window.matchMedia("(min-width: 1200px)");
+    const update = () => setIsDesktop(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (isDesktop) return;
+    const t = setTimeout(() => setMobileReady(true), 50);
+    return () => clearTimeout(t);
+  }, [isDesktop]);
 
   const currentView = views[activeIndex];
   const currentViewImage = colorViewImages[colorVariant][activeIndex] ?? currentView.image;
@@ -498,6 +515,7 @@ export default function ModelsPage() {
   };
 
   useEffect(() => {
+    if (isDesktop) return;
     const node = mobileSceneRef.current;
     if (!node) return;
 
@@ -511,7 +529,7 @@ export default function ModelsPage() {
     observer.observe(node);
 
     return () => observer.disconnect();
-  }, []);
+  }, [isDesktop, mobileReady]);
 
   return (
     <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
@@ -520,8 +538,9 @@ export default function ModelsPage() {
           <img key={src} src={src} alt="" />
         ))}
       </div>
+      {isDesktop && (
       <section
-        className="figma-site-stage relative mx-auto hidden h-[100dvh] w-full overflow-hidden bg-white min-[1200px]:block"
+        className="figma-site-stage relative mx-auto h-[100dvh] w-full overflow-hidden bg-white"
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
@@ -1184,35 +1203,29 @@ export default function ModelsPage() {
           </div>
         </div>
       </section>
+      )}
 
-      <section className="min-[1200px]:hidden">
+      {!isDesktop && !mobileReady && (
+      <section className="flex min-h-[100dvh] items-center justify-center bg-[#d9d9d9]">
+        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 18 }}>Загрузка…</p>
+      </section>
+      )}
+      {!isDesktop && mobileReady && (
+      <section>
         <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `${1024 * mobileScale}px` }}>
           <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left bg-[#f4f4f4]" style={{ transform: `scale(${mobileScale})` }}>
-          <div className="pointer-events-none absolute inset-0">
-            {Array.from({ length: 14 }).map((_, index) => (
+          {/* Облегчённые полосы: только градиент, без blur и картинки */}
+          <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+            {Array.from({ length: 6 }).map((_, i) => (
               <div
-                key={index}
-                className="absolute inset-y-0"
-                style={{ left: `${(index * 100) / 14}%`, width: `${100 / 14}%` }}
-              >
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
-                  }}
-                />
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage: `url(${backgroundShape})`,
-                    backgroundSize: "832px 832px",
-                    backgroundPosition: "top left",
-                    filter: "blur(90px)",
-                    opacity: 0.03,
-                  }}
-                />
-              </div>
+                key={i}
+                className="absolute inset-y-0 w-full"
+                style={{
+                  left: `${(i * 100) / 6}%`,
+                  width: `${100 / 6}%`,
+                  backgroundImage: "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                }}
+              />
             ))}
           </div>
 
@@ -1276,10 +1289,15 @@ export default function ModelsPage() {
             </div>
             <Link
               href="/where-to-buy"
-              className="ml-[44px] mt-5 flex h-12 w-[150px] items-center justify-center rounded-[12px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[14px] text-white"
-              style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 500 }}
+              className="ml-[44px] mt-5 flex h-[52px] w-[165px] items-center justify-center rounded-[14px] text-[22px] text-white no-underline"
+              style={{
+                background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
+                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+              }}
             >
-              Купить
+              Подробнее
             </Link>
           </div>
 
@@ -1583,6 +1601,7 @@ export default function ModelsPage() {
         </div>
         </div>
       </section>
+      )}
     </main>
   );
 }

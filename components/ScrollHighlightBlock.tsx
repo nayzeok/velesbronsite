@@ -10,6 +10,11 @@ import {
 } from "react";
 import { useScrollHighlight } from "./ScrollHighlightContext";
 
+const MOBILE_BREAKPOINT = 640;
+
+/** Подсветка на мобилке чуть акцентнее: множители для тени и подъёма */
+const MOBILE_BOOST = { shadow: 1.55, lift: 1.2 };
+
 /** Параметры подсветки при скролле (как на hover) */
 type ScrollHighlightBlockProps = {
   children: ReactNode;
@@ -49,8 +54,18 @@ export default function ScrollHighlightBlock({
   const ref = useRef<HTMLElement>(null);
   const [localIntensity, setLocalIntensity] = useState(0);
   const [hover, setHover] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const raf = useRef<number | null>(null);
   const ctx = useScrollHighlight();
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) return;
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const update = () => setIsMobile(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
 
   const update = useCallback(() => {
     const el = ref.current;
@@ -101,13 +116,26 @@ export default function ScrollHighlightBlock({
   const scrollIntensity =
     blockId && ctx ? ctx.getIntensity(blockId) : localIntensity;
   const effective = hover ? 1 : scrollIntensity;
+  const isScrollHighlight = effective > 0 && !hover;
+  const mobileBoost =
+    isMobile && isScrollHighlight
+      ? { lift: MOBILE_BOOST.lift, shadow: MOBILE_BOOST.shadow }
+      : { lift: 1, shadow: 1 };
   const dynamicStyle: CSSProperties = {
     transition: "transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out",
-    transform: effective > 0 ? `translateY(${-liftPx * effective}px)` : undefined,
-    borderColor: effective > 0 ? blendBorder(effective) : undefined,
+    transform:
+      effective > 0
+        ? `translateY(${-liftPx * effective * mobileBoost.lift}px)`
+        : undefined,
+    borderColor:
+      effective > 0
+        ? isMobile && isScrollHighlight
+          ? BORDER_HOVER
+          : blendBorder(effective)
+        : undefined,
     boxShadow:
       effective > 0
-        ? `0 ${lerp(2, 12, effective)}px ${lerp(12, 28, effective)}px rgba(0,0,0,${0.04 * (1 - effective)}), 0 12px 28px rgba(240,116,38,${shadowOpacity * effective})`
+        ? `0 ${lerp(2, 12, effective)}px ${lerp(12, 28, effective)}px rgba(0,0,0,${0.04 * (1 - effective)}), 0 12px 28px rgba(240,116,38,${(shadowOpacity * effective * mobileBoost.shadow)})`
         : undefined,
   };
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const MOBILE_MENU_ITEMS = [
   { label: "Главная", href: "/" },
@@ -19,9 +19,15 @@ const LOGO_SRC = "/images/pages/velesbron_logo.png";
 export default function MobileHeader() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  const closeMenu = useCallback(() => {
+    menuButtonRef.current?.focus();
+    setIsOpen(false);
+  }, []);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (typeof document === "undefined" || !isOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
@@ -58,6 +64,7 @@ export default function MobileHeader() {
         )}
 
         <button
+          ref={menuButtonRef}
           type="button"
           aria-label="Меню"
           aria-expanded={isOpen}
@@ -72,7 +79,7 @@ export default function MobileHeader() {
 
       <div
         className={`fixed inset-0 z-[70] bg-black/55 backdrop-blur-[1px] transition-opacity duration-300 min-[1200px]:hidden ${isOpen ? "opacity-100" : "pointer-events-none opacity-0"}`}
-        onClick={() => setIsOpen(false)}
+        onClick={closeMenu}
         aria-hidden={!isOpen}
       />
       <aside
@@ -93,7 +100,7 @@ export default function MobileHeader() {
             type="button"
             aria-label="Закрыть меню"
             className="flex size-9 items-center justify-center rounded-[10px] bg-white/10 text-white transition-colors hover:bg-white/20"
-            onClick={() => setIsOpen(false)}
+            onClick={closeMenu}
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
               <path d="M6 6l12 12M18 6L6 18" />
@@ -120,7 +127,7 @@ export default function MobileHeader() {
                   fontWeight: 500,
                   transitionDelay: isOpen ? `${100 + index * 55}ms` : "0ms",
                 }}
-                onClick={() => setIsOpen(false)}
+                onClick={closeMenu}
               >
                 <span className="flex items-center gap-2.5">
                   <span className={`size-2 rounded-full ${isActive ? "bg-white/90" : "bg-white/35"}`} />
