@@ -1271,10 +1271,11 @@ export default function ModelsPage() {
                   style={{
                     color: "#111",
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 21,
+                    fontSize: 30,
                     fontStyle: "normal",
                     fontWeight: 700,
                     letterSpacing: "0.08em",
+                    lineHeight: 1.15,
                   }}
                 >
                 {currentView.title}
@@ -1282,14 +1283,14 @@ export default function ModelsPage() {
             </div>
             <div className="flex gap-[10px]">
               <div className="w-[34px] shrink-0" aria-hidden="true" />
-              <p className="max-w-[236px] text-[14px] leading-[1.15] text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}>
+              <p className="max-w-[280px] font-medium text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 20, lineHeight: 1.35 }}>
                   {currentView.description}
                 </p>
               </div>
             </div>
             <Link
               href="/where-to-buy"
-              className="ml-[44px] mt-5 flex h-[52px] w-[165px] items-center justify-center rounded-[14px] text-[22px] text-white no-underline"
+              className="ml-[44px] mt-5 flex h-[56px] w-[180px] items-center justify-center rounded-[14px] text-[20px] font-medium text-white no-underline"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",

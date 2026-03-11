@@ -22,8 +22,8 @@ type SiteHeaderProps = {
 
 const LEFT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
   { key: "brand", label: "О бренде", href: "/brand" },
-  { key: "advantages", label: "Преимущества", href: "/advantages" },
-  { key: "models", label: "Модельный ряд", href: "/models" },
+  { key: "advantages", label: "Конструкция", href: "/advantages" },
+  { key: "models", label: "Модели", href: "/models" },
 ];
 const RIGHT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
   { key: "whereToBuy", label: "Где купить", href: "/where-to-buy" },

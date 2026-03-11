@@ -1,13 +1,106 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import SiteHeader from "@/components/layout/SiteHeader";
 
-const heroBackground = "/images/pages/hero-background.png";
+const heroBackgroundDesktop = "/images/pages/main_background_for_hero_dekstop.png";
+const heroBackgroundMobile = "/images/pages/hero-background.png";
 const DESIGN_HEIGHT = 1000;
+
+/** Эффекты поверх фона hero (как в Figma): затемнение + градиенты. Подстрой под node 260-3. */
+const HERO_BG_EFFECTS = {
+  /** Общее затемнение поверх картинки (0–1) — сделаем светлее */
+  overlayOpacity: 0.08,
+  /** Градиент сверху: лёгкое затемнение для читаемости заголовка */
+  topGradient: "linear-gradient(180deg, rgba(0,0,0,0.22) 0%, transparent 45%)",
+  /** Градиент снизу: лёгкое затемнение к низу */
+  bottomGradient: "linear-gradient(0deg, rgba(0,0,0,0.26) 0%, transparent 50%)",
+  /** Виньетка по краям (опционально, тоже помягче) */
+  vignette: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(0,0,0,0.18) 100%)",
+  /** Включить виньетку */
+  vignetteOn: true,
+};
+
+/** Ботинок в hero: мобильная версия — только px, без vh/vw для одинакового вида в браузере и на телефоне */
+const HERO_BOOT_MOBILE = {
+  leftPct: 50,
+  translateXPct: -50,
+  /** Отступ сверху от начала контента (px) */
+  topPx: 380,
+  /** Ширина картинки (px); на узких экранах можно через clamp в разметке */
+  widthPx: 340,
+};
+/** Высота ботинка по aspect ratio 93/76 (px), для расчёта позиции карусели */
+const HERO_BOOT_MOBILE_HEIGHT = Math.round((HERO_BOOT_MOBILE.widthPx * 76) / 93);
+/** Отступ карусели от низа ботинка (px) */
+const MOBILE_CAROUSEL_GAP_BELOW_BOOT = 24;
+
+/** Иконки преимуществ на главной: картинки вместо векторной графики */
+const HERO_ADVANTAGES = [
+  { label: "Антипрокольная защита", icon: "/images/models/ui/13.png" },
+  { label: "Мембрана VELTEX™", icon: "/images/models/ui/14.png" },
+  { label: "Пожизненная гарантия", icon: "/images/models/ui/4ico.png" },
+];
+
+/** Ботинок в hero: десктоп — адаптивная позиция и размер (при сужении экрана двигается и уменьшается) */
+const HERO_BOOT_DESKTOP = {
+  /** Позиция контейнера: left (clamp или %, от ширины экрана) */
+  containerLeft: "clamp(140px, 22vw, 320px)",
+  /** Позиция контейнера: top (clamp или vh) */
+  containerTop: "clamp(60px, 10vh, 120px)",
+  /** Смещение картинки внутри контейнера, px */
+  imgOffsetX: 450,
+  imgOffsetY: 300,
+  /** Ширина картинки ботинка — адаптивно при сужении */
+  width: "clamp(380px, 36vw, 550px)",
+};
+
+/** Равные отступы от краёв экрана у блоков «Новая модель» и «Ботинки повышенной надёжности» (px) */
+const MOBILE_HERO_EDGE = 24;
+const MOBILE_CARD_WIDTH = 260;
+const MOBILE_CARD_GAP = 56;
+const MOBILE_SET_WIDTH = HERO_ADVANTAGES.length * MOBILE_CARD_WIDTH + (HERO_ADVANTAGES.length - 1) * MOBILE_CARD_GAP;
+/** Расстояние между карточками в карусели (px) */
+const MOBILE_CAROUSEL_GAP = 16;
+/** Запас по краям окна карусели, чтобы кольцо/тень подсветки не обрезались (px с каждой стороны) */
+const MOBILE_CAROUSEL_RING_PAD = 14;
+/** Запас сверху/снизу окна карусели (px), чтобы подсветка не обрезалась */
+const MOBILE_CAROUSEL_VERTICAL_PAD = 18;
+const MOBILE_CAROUSEL_SLOT = MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_GAP;
+const MOBILE_CAROUSEL_TRACK_WIDTH = HERO_ADVANTAGES.length * 2 * MOBILE_CARD_WIDTH + (HERO_ADVANTAGES.length * 2 - 1) * MOBILE_CAROUSEL_GAP;
+/** Длительность показа одной карточки (мс), затем смена на следующую */
+const MOBILE_CAROUSEL_HOLD_MS = 2500;
+/** Длительность анимации сдвига к следующей карточке (мс) */
+const MOBILE_CAROUSEL_TRANSITION_MS = 800;
 
 export default function Home() {
     const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
+    const mobileCarouselTrackRef = useRef<HTMLDivElement>(null);
+    const [mobileCarouselActiveIndex, setMobileCarouselActiveIndex] = useState(0);
+    const [carouselTransitionEnabled, setCarouselTransitionEnabled] = useState(true);
+
+    useEffect(() => {
+        const t = setInterval(() => {
+            setMobileCarouselActiveIndex((prev) => {
+                const next = (prev + 1) % (HERO_ADVANTAGES.length * 2);
+                if (next === 0) setCarouselTransitionEnabled(false);
+                return next;
+            });
+        }, MOBILE_CAROUSEL_HOLD_MS);
+        return () => clearInterval(t);
+    }, []);
+
+    useEffect(() => {
+        if (mobileCarouselActiveIndex !== 0 || carouselTransitionEnabled) return;
+        const id = requestAnimationFrame(() => {
+            requestAnimationFrame(() => setCarouselTransitionEnabled(true));
+        });
+        return () => cancelAnimationFrame(id);
+    }, [mobileCarouselActiveIndex, carouselTransitionEnabled]);
+
+    /** Смещение трека: слот = карточка + зазор, по центру окна с запасом под кольцо */
+    const carouselOffset = MOBILE_CAROUSEL_RING_PAD - mobileCarouselActiveIndex * MOBILE_CAROUSEL_SLOT;
 
     return (
         <main className="figma-site-page overflow-x-hidden bg-[#e8e8e8] text-white">
@@ -15,110 +108,135 @@ export default function Home() {
                 <div
                     className="relative overflow-hidden"
                     style={{
-                        minHeight: "max(100dvh, 720px)",
+                        minHeight: 840,
                         paddingTop: "calc(4rem + env(safe-area-inset-top, 0px))",
-                        paddingLeft: "env(safe-area-inset-left, 20px)",
-                        paddingRight: "env(safe-area-inset-right, 20px)",
-                        paddingBottom: "env(safe-area-inset-bottom, 24px)",
+                        paddingLeft: `max(${MOBILE_HERO_EDGE}px, env(safe-area-inset-left))`,
+                        paddingRight: `max(${MOBILE_HERO_EDGE}px, env(safe-area-inset-right))`,
+                        paddingBottom: "max(48px, env(safe-area-inset-bottom, 24px))",
                     }}
                 >
-                    {/* Фон */}
+                    {/* Фон: отзеркален, по высоте вписан в рамки */}
                     <div
                         className="absolute left-0 right-0 bottom-0 z-0"
                         style={{ top: "calc(-4rem - env(safe-area-inset-top, 0px))" }}
                     >
-                        <img src={heroBackground} alt="" className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover" />
-                        <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)]" />
+                        <div
+                            className="absolute inset-0 pointer-events-none"
+                            style={{
+                                background: `url(${heroBackgroundMobile}) lightgray 50% center / auto 100% no-repeat`,
+                                transform: "scaleX(-1)",
+                            }}
+                        />
+                        <div className="absolute inset-0 bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
+                        <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.topGradient }} />
+                        <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.bottomGradient }} />
+                        {HERO_BG_EFFECTS.vignetteOn && (
+                            <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.vignette }} />
+                        )}
                     </div>
 
-                    {/* Заголовок и подзаголовок — вверху справа (как раньше «ТАКТИЧЕСКАЯ ОБУВЬ ИЗ НАТУРАЛЬНЫХ МАТЕРИАЛОВ») */}
-                    <div
-                        className="absolute right-0 top-[calc(4rem+env(safe-area-inset-top,0px)+12px)] z-20 text-right"
-                        style={{ paddingRight: "max(20px, env(safe-area-inset-right))", maxWidth: "70vw" }}
-                    >
-                        <h1
-                            className="uppercase leading-tight text-white"
-                            style={{
-                                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                                fontSize: "clamp(18px, 5vw, 26px)",
-                                fontWeight: 700,
-                                letterSpacing: "0.02em",
-                                lineHeight: 1.15,
-                            }}
-                        >
-                            БОТИНКИ ПОВЫШЕННОЙ НАДЁЖНОСТИ
-                        </h1>
-                        <p
-                            className="mt-1.5 text-white/90"
-                            style={{
-                                fontFamily: "var(--font-roboto-flex), sans-serif",
-                                fontSize: "clamp(11px, 3vw, 14px)",
-                                lineHeight: 1.45,
-                            }}
-                        >
-                            Треккингово-тактическая обувь из натуральных материалов для города, работы и активной эксплуатации.
-                        </p>
-                    </div>
-
-                    {/* Левый блок: кнопка, текст модели, преимущества */}
-                    <div className="relative z-20 max-w-[calc(100vw-40px)]">
-                        <Link
-                            href="/models"
-                            className="mt-4 inline-flex h-12 min-w-[180px] items-center justify-center rounded-[12px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-5 text-[16px] font-medium text-white"
-                            style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 500 }}
-                        >
-                            Изучить модель
-                        </Link>
-
+                    {/* Верхний блок: Новая модель — прижат к левому краю, отступ от края как у второго блока */}
+                    <div className="relative z-20" style={{ maxWidth: `calc(100vw - ${MOBILE_HERO_EDGE * 2}px)` }}>
                         <h2
-                            className="mt-6 uppercase text-white"
+                            className="mt-4 uppercase text-white text-left"
                             style={{
                                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                                fontSize: "clamp(18px, 4.5vw, 22px)",
+                                fontSize: 30,
                                 fontWeight: 700,
-                                letterSpacing: "0.04em",
+                                letterSpacing: "0.08em",
+                                lineHeight: 1.15,
                             }}
                         >
                             НОВАЯ МОДЕЛЬ VELESBRON
                         </h2>
                         <p
-                            className="mt-1.5 text-white/90"
+                            className="mt-1.5 text-white/90 text-left font-medium"
                             style={{
                                 fontFamily: "var(--font-roboto-flex), sans-serif",
-                                fontSize: "clamp(13px, 3.5vw, 15px)",
-                                lineHeight: 1.45,
+                                fontSize: 20,
+                                lineHeight: 1.35,
                             }}
                         >
                             Усиленная конструкция, гибридная подошва и современные материалы обеспечивают защиту, устойчивость и комфорт на дистанции.
                         </p>
-
-                        <p className="mt-5 font-bold text-white" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 15 }}>
-                            Преимущества
-                        </p>
-                        <div className="mt-2 flex flex-col gap-2">
-                            {["Антипрокольная защита", "Мембрана VELTEX™", "Пожизненная гарантия"].map((label) => (
-                                <span key={label} className="text-white" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 14 }}>
-                  • {label}
-                </span>
-                            ))}
-                        </div>
-                        <p className="mt-3 text-white/80" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 13 }}>
-                            Для города, работы и сложного рельефа
-                        </p>
+                        <Link
+                            href="/models"
+                            className="mt-4 inline-flex h-14 min-w-[220px] items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 text-[18px] font-medium uppercase tracking-[0.08em] text-white"
+                            style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700 }}
+                        >
+                            Изучить модель
+                        </Link>
                     </div>
 
-                    {/* Ботинок */}
+                    {/* Ботинок — размер и положение в px (стабильно в браузере и на телефоне) */}
                     <div
                         className="pointer-events-none absolute z-10 overflow-hidden"
                         style={{
-                            left: "50%",
-                            top: "min(52vw, 380px)",
-                            width: "min(75vw, 340px)",
-                            transform: "translateX(-45%)",
+                            left: `${HERO_BOOT_MOBILE.leftPct}%`,
+                            top: HERO_BOOT_MOBILE.topPx,
+                            width: HERO_BOOT_MOBILE.widthPx,
+                            transform: `translateX(${HERO_BOOT_MOBILE.translateXPct}%)`,
                             aspectRatio: "93 / 76",
                         }}
                     >
-                        <img src="/images/pages/main-model-for-hero.png" alt="Тактическая обувь" className="h-full w-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]" />
+                        <img src="/images/pages/main_left_model for_hero.png" alt="Тактическая обувь" className="h-full w-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]" />
+                    </div>
+
+                    {/* Карусель преимуществ: под ботинком по px (привязка к контейнеру) */}
+                    <div
+                        className="absolute left-0 right-0 z-20 w-full"
+                        style={{
+                            top: HERO_BOOT_MOBILE.topPx + HERO_BOOT_MOBILE_HEIGHT + MOBILE_CAROUSEL_GAP_BELOW_BOOT,
+                        }}
+                    >
+                        {/* Окно карусели: одна карточка + запас под кольцо (по бокам и сверху/снизу), плавная смена */}
+                        <div
+                            className="mx-auto overflow-hidden"
+                            style={{
+                                width: MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_RING_PAD * 2,
+                                paddingTop: MOBILE_CAROUSEL_VERTICAL_PAD,
+                                paddingBottom: MOBILE_CAROUSEL_VERTICAL_PAD,
+                            }}
+                        >
+                            <div
+                                ref={mobileCarouselTrackRef}
+                                className="flex pb-2"
+                                style={{
+                                    width: MOBILE_CAROUSEL_TRACK_WIDTH,
+                                    gap: MOBILE_CAROUSEL_GAP,
+                                    transform: `translateX(${carouselOffset}px)`,
+                                    transition: carouselTransitionEnabled ? `transform ${MOBILE_CAROUSEL_TRANSITION_MS}ms cubic-bezier(0.25, 0.1, 0.25, 1)` : "none",
+                                }}
+                            >
+                            {[...HERO_ADVANTAGES, ...HERO_ADVANTAGES].map((item, index) => {
+                                const isActive = mobileCarouselActiveIndex === index;
+                                return (
+                                    <div
+                                        key={`${item.label}-${index}`}
+                                        data-carousel-card={index}
+                                        className={`group flex shrink-0 items-center gap-3 rounded-xl py-2.5 pr-3 pl-2.5 transition-all duration-200 hover:scale-[1.02] hover:bg-white/20 hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:ring-2 hover:ring-[#e7813f]/70 ${
+                                            isActive ? "!scale-[1.04] !bg-white/25 !shadow-[0_6px_24px_rgba(0,0,0,0.25)] !ring-2 !ring-[#e7813f]" : ""
+                                        }`}
+                                        style={{
+                                            width: MOBILE_CARD_WIDTH,
+                                            minWidth: MOBILE_CARD_WIDTH,
+                                        }}
+                                    >
+                                        <span
+                                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-inner transition-all duration-200 hero-advantage-icon-glow ${
+                                                isActive ? "!bg-white/60 shadow-[0_0_16px_4px_rgba(231,129,63,0.5)]" : "bg-white/25 group-hover:bg-white/50"
+                                            }`}
+                                        >
+                                            <img src={item.icon} alt="" className="h-8 w-8 object-contain transition-transform duration-200 group-hover:scale-105" />
+                                        </span>
+                                        <span className="min-w-0 flex-1 text-white/90 font-medium" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 20, lineHeight: 1.35 }}>
+                                            {item.label}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        </div>
                     </div>
 
                     </div>
@@ -129,12 +247,19 @@ export default function Home() {
                 style={{ ["--figma-stage-height" as string]: "100dvh" }}
             >
                 <div className="absolute inset-0">
-                    <img
-                        src={heroBackground}
-                        alt=""
-                        className="pointer-events-none absolute inset-0 h-full w-full max-w-none object-cover"
+                    <div
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                            background: `url(${heroBackgroundDesktop}) lightgray 50% / cover no-repeat`,
+                            transform: "scaleX(-1)",
+                        }}
                     />
-                    <div className="absolute inset-0 bg-black/20" />
+                    <div className="absolute inset-0 bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
+                    <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.topGradient }} />
+                    <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.bottomGradient }} />
+                    {HERO_BG_EFFECTS.vignetteOn && (
+                        <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.vignette }} />
+                    )}
                 </div>
 
                 <div className="relative z-10 mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
@@ -151,27 +276,28 @@ export default function Home() {
                         <div className="relative flex h-[1000px] w-full flex-col px-[clamp(28px,3.5vw,56px)] pb-0 pt-[18px]">
                             <div className="h-[96px] shrink-0" aria-hidden="true" />
 
-                            {/* Заголовок и подзаголовок — справа вверху (как раньше «ТАКТИЧЕСКАЯ ОБУВЬ ИЗ НАТУРАЛЬНЫХ МАТЕРИАЛОВ») */}
+                            {/* Заголовок и подзаголовок — справа вверху, в один уровень с левым блоком (96px spacer + clamp как у левого) */}
                             <div
-                                className="absolute right-0 top-[clamp(138px,calc(7.5rem+6vh),188px)] z-20 flex flex-col items-end text-right"
-                                style={{ maxWidth: "min(520px, 32vw)", fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}
+                                className="absolute right-0 z-20 flex flex-col items-end text-right"
+                                style={{ top: "clamp(140px, calc(116px + 5vh), 164px)", maxWidth: "min(520px, 32vw)" }}
                             >
                                 <h1
-                                    className="uppercase leading-tight text-white"
+                                    className="uppercase text-white"
                                     style={{
-                                        fontSize: "clamp(32px, 3.2vw, 44px)",
+                                        fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                                        fontSize: "clamp(30px, 1.8vw, 32px)",
                                         fontWeight: 700,
-                                        letterSpacing: "0.02em",
-                                        lineHeight: 1.1,
+                                        letterSpacing: "0.04em",
+                                        lineHeight: 1.25,
                                     }}
                                 >
                                     БОТИНКИ ПОВЫШЕННОЙ НАДЁЖНОСТИ
                                 </h1>
                                 <p
-                                    className="mt-3 text-white/95"
+                                    className="mt-2 text-white/90"
                                     style={{
                                         fontFamily: "var(--font-roboto-flex), sans-serif",
-                                        fontSize: "clamp(16px, 1.1vw, 18px)",
+                                        fontSize: "clamp(25px, 1vw, 27px)",
                                         fontWeight: 400,
                                         lineHeight: 1.45,
                                     }}
@@ -180,7 +306,7 @@ export default function Home() {
                                 </p>
                             </div>
 
-                            {/* Левый блок: кнопка, новая модель, преимущества */}
+                            {/* Левый блок: новая модель, кнопка, преимущества */}
                             <div
                                 className="relative z-30 flex flex-col"
                                 style={{
@@ -188,21 +314,14 @@ export default function Home() {
                                     maxWidth: 480,
                                 }}
                             >
-                                <Link
-                                    href="/models"
-                                    className="flex h-14 w-[220px] shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[18px] font-medium text-white"
-                                    style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 500 }}
-                                >
-                                    Изучить модель
-                                </Link>
-
                                 <h2
-                                    className="mt-10 uppercase text-white"
+                                    className="uppercase text-white"
                                     style={{
                                         fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                                        fontSize: "clamp(22px, 1.8vw, 28px)",
+                                        fontSize: "clamp(30px, 1.8vw, 32px)",
                                         fontWeight: 700,
                                         letterSpacing: "0.04em",
+                                        lineHeight: 1.25,
                                     }}
                                 >
                                     НОВАЯ МОДЕЛЬ VELESBRON
@@ -211,60 +330,46 @@ export default function Home() {
                                     className="mt-2 text-white/90"
                                     style={{
                                         fontFamily: "var(--font-roboto-flex), sans-serif",
-                                        fontSize: "clamp(15px, 1vw, 17px)",
+                                        fontSize: "clamp(25px, 1vw, 27px)",
                                         fontWeight: 400,
                                         lineHeight: 1.45,
                                     }}
                                 >
                                     Усиленная конструкция, гибридная подошва и современные материалы обеспечивают защиту, устойчивость и комфорт на дистанции.
                                 </p>
+                                <Link
+                                    href="/models"
+                                    className="mt-4 flex h-16 w-[260px] shrink-0 items-center justify-center rounded-[16px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[20px] font-medium uppercase tracking-[0.08em] text-white"
+                                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700 }}
+                                >
+                                    Изучить модель
+                                </Link>
 
                                 {/* Преимущества */}
-                                <p
-                                    className="mt-8 font-bold text-white"
+                                <h2
+                                    className="mt-8 uppercase text-white"
                                     style={{
-                                        fontFamily: "var(--font-roboto-flex), sans-serif",
-                                        fontSize: "clamp(16px, 1.1vw, 18px)",
+                                        fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                                        fontSize: "clamp(30px, 1.8vw, 32px)",
+                                        fontWeight: 700,
+                                        letterSpacing: "0.04em",
                                     }}
                                 >
                                     Преимущества
-                                </p>
-                                <div className="mt-3 flex flex-wrap gap-x-8 gap-y-4">
-                                    {[
-                                        {
-                                            icon: (
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0 text-white" aria-hidden>
-                                                    <path d="M12 2L3 7v10c0 5.55 3.84 7.74 9 10 5.16-2.26 9-4.45 9-10V7l-9-5z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
-                                                    <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
-                                            ),
-                                            label: "Антипрокольная защита",
-                                        },
-                                        {
-                                            icon: (
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0 text-white" aria-hidden>
-                                                    <path d="M12 3v2M12 19v2M5 12H3M21 12h-2M7.34 7.34l-1.42-1.42M18.08 18.08l-1.42-1.42M7.34 16.66l-1.42 1.42M18.08 5.92l-1.42 1.42" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                                                    <path d="M12 8c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z" stroke="currentColor" strokeWidth="1.5" />
-                                                    <path d="M8 12c0-1.5.5-2.8 1.4-3.8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-                                                </svg>
-                                            ),
-                                            label: "Мембрана VELTEX™",
-                                        },
-                                        {
-                                            icon: (
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="shrink-0 text-white" aria-hidden>
-                                                    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 11-2.12-2.12L17.3 7.7l-2.6-2.6a1 1 0 00-1.4 0z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    <path d="M12 12l-2 2-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
-                                            ),
-                                            label: "Пожизненная гарантия",
-                                        },
-                                    ].map((item) => (
-                                        <div key={item.label} className="flex items-center gap-2">
-                                            {item.icon}
-                                            <span className="text-white" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 15, fontWeight: 500 }}>
-                        {item.label}
-                      </span>
+                                </h2>
+                                <div className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+                                    {HERO_ADVANTAGES.map((item, index) => (
+                                        <div
+                                            key={item.label}
+                                            className="hero-advantage-entry group flex cursor-default items-center gap-3 rounded-xl py-3 pr-4 pl-3 transition-all duration-200 hover:scale-[1.02] hover:bg-white/20 hover:shadow-[0_6px_24px_rgba(0,0,0,0.25)] hover:ring-2 hover:ring-[#e7813f]/70"
+                                            style={{ animationDelay: `${index * 100}ms` }}
+                                        >
+                                            <span className="hero-advantage-icon-glow flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white/25 shadow-inner transition-all duration-200 group-hover:bg-white/50">
+                                                <img src={item.icon} alt="" className="h-9 w-9 object-contain transition-transform duration-200 group-hover:scale-105" />
+                                            </span>
+                                            <span className="text-white/90" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: "clamp(25px, 1vw, 27px)", fontWeight: 400, lineHeight: 1.45 }}>
+                                                {item.label}
+                                            </span>
                                         </div>
                                     ))}
                                 </div>
@@ -272,21 +377,34 @@ export default function Home() {
                                     className="mt-4 text-white/80"
                                     style={{
                                         fontFamily: "var(--font-roboto-flex), sans-serif",
-                                        fontSize: "clamp(14px, 0.95vw, 16px)",
+                                        fontSize: "clamp(25px, 1vw, 27px)",
                                         fontWeight: 400,
+                                        lineHeight: 1.45,
                                     }}
                                 >
                                     Для города, работы и сложного рельефа
                                 </p>
                             </div>
 
-                            {/* Ботинок справа */}
-                            <div className="pointer-events-none absolute left-[320px] top-[120px] z-20 h-[700px] w-[860px] overflow-visible">
+                            {/* Ботинок — адаптивные размер и положение в HERO_BOOT_DESKTOP */}
+                            <div
+                                className="pointer-events-none absolute z-20 overflow-visible"
+                                style={{
+                                    left: HERO_BOOT_DESKTOP.containerLeft,
+                                    top: HERO_BOOT_DESKTOP.containerTop,
+                                    width: "clamp(400px, 50vw, 860px)",
+                                    height: "clamp(400px, 55vh, 700px)",
+                                }}
+                            >
                                 <img
-                                    src="/images/pages/main-model-for-hero.png"
+                                    src="/images/pages/main_left_model for_hero.png"
                                     alt="Тактическая обувь"
                                     className="pointer-events-none absolute max-w-none drop-shadow-[0_40px_80px_rgba(0,0,0,0.28)]"
-                                    style={{ left: -120, top: -150, width: 750 }}
+                                    style={{
+                                        left: HERO_BOOT_DESKTOP.imgOffsetX,
+                                        top: HERO_BOOT_DESKTOP.imgOffsetY,
+                                        width: HERO_BOOT_DESKTOP.width,
+                                    }}
                                 />
                             </div>
 
