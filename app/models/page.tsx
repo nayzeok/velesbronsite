@@ -879,7 +879,7 @@ export default function BuyPage() {
               className="absolute left-[74px] right-[74px] top-[55px] uppercase"
               style={{
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 40,
+                fontSize: 49,
                 fontWeight: 700,
                 lineHeight: 1.15,
                 color: "#111",
@@ -894,7 +894,7 @@ export default function BuyPage() {
               className="absolute left-[74px] right-[74px] top-[210px] text-[#111]"
               style={{
                 fontFamily: "var(--font-roboto-flex), sans-serif",
-                fontSize: 28,
+                fontSize: 34,
                 lineHeight: 1.2,
                 color: "#111",
               }}
@@ -906,7 +906,7 @@ export default function BuyPage() {
               type="button"
               onClick={openSizeGrid}
               className="size-table-link absolute left-[70px] top-[698px] z-20 min-h-[48px] py-2 pr-3 pl-0 text-left"
-              style={{ fontSize: 26, lineHeight: 1.2 }}
+              style={{ fontSize: 31, lineHeight: 1.2 }}
               aria-label="Открыть таблицу размеров"
             >
               ТАБЛИЦА РАЗМЕРОВ
@@ -920,7 +920,7 @@ export default function BuyPage() {
                 className="w-full text-center uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 28,
+                  fontSize: 34,
                   fontWeight: 700,
                   color: "#111",
                   letterSpacing: "0.08em",
@@ -961,7 +961,7 @@ export default function BuyPage() {
                         margin: 0,
                         padding: 0,
                         fontFamily: "var(--font-roboto-flex), sans-serif",
-                        fontSize: 18,
+                        fontSize: 22,
                         fontWeight: 700,
                         color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
                         textDecoration: activeModelKey === model.key ? "underline" : "none",
@@ -983,7 +983,7 @@ export default function BuyPage() {
                 className="w-full text-center uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 28,
+                  fontSize: 34,
                   fontWeight: 700,
                   color: "#111",
                   letterSpacing: "0.08em",
@@ -1013,7 +1013,7 @@ export default function BuyPage() {
                           margin: 0,
                           padding: 0,
                           fontFamily: "var(--font-roboto-flex), sans-serif",
-                          fontSize: 18,
+                          fontSize: 22,
                           fontWeight: 700,
                           color: colorVariant === v ? "#f07426" : "#9a9a9a",
                           textDecoration: colorVariant === v ? "underline" : "none",
@@ -1029,7 +1029,7 @@ export default function BuyPage() {
 
             <Link
               href="/where-to-buy"
-              className="absolute left-[447px] top-[678px] z-20 flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-[30px] text-white no-underline"
+              className="absolute left-[447px] top-[678px] z-20 flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-[36px] text-white no-underline"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",

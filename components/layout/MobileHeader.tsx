@@ -7,8 +7,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 const MOBILE_MENU_ITEMS = [
   { label: "Главная", href: "/" },
   { label: "О бренде", href: "/brand" },
-  { label: "Преимущества", href: "/advantages" },
-  { label: "Модельный ряд", href: "/models" },
+  { label: "Конструкция", href: "/advantages" },
+  { label: "Модели", href: "/models" },
   { label: "Где купить", href: "/where-to-buy" },
   { label: "Медиа", href: "/media" },
   { label: "Контакты", href: "/contacts" },
