@@ -132,10 +132,9 @@ export default function BrandPage() {
           <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
             <div className="text-center">
               <h1
-                className="uppercase text-[#111]"
+                className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 30,
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -144,7 +143,7 @@ export default function BrandPage() {
                 О VELESBRON - надёжность в деталях
               </h1>
             </div>
-            <div className="mt-6 max-w-[900px] space-y-4 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+            <div className="mt-6 max-w-[900px] space-y-4 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
             <p>
               VELESBRON — это обувь повышенной надёжности, разработанная в России для реальных условий эксплуатации.
             </p>
@@ -184,10 +183,9 @@ export default function BrandPage() {
           <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
             <div className="text-center">
               <h2
-                className="uppercase text-[#111]"
+                className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 30,
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -196,7 +194,7 @@ export default function BrandPage() {
                 Миссия и ценности
               </h2>
             </div>
-            <div className="mt-5 max-w-[900px] space-y-4 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+            <div className="mt-5 max-w-[900px] space-y-4 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
               <p>
                 Мы создаём надёжную обувь для тех, кто идёт своим маршрутом — в городе, на объекте, в лесу, в горах или при выполнении тактических задач.
               </p>
@@ -229,13 +227,13 @@ export default function BrandPage() {
                     <img src={PRINCIPLE_IMAGES[item.key]} alt="" className="h-8 w-8 object-contain" />
                   </span>
                   <h3
-                    className="uppercase text-[#111]"
-                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                    className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
+                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
                   >
                     {item.title}
                   </h3>
                 </div>
-                <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{item.text}</p>
+                <p className="mt-3 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{item.text}</p>
               </ScrollHighlightBlock>
             ))}
           </div>
@@ -246,10 +244,9 @@ export default function BrandPage() {
           <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
             <div className="text-center">
               <h2
-                className="uppercase text-[#111]"
+                className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 30,
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -258,7 +255,7 @@ export default function BrandPage() {
                 Архитектура продукта
               </h2>
             </div>
-            <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#555]">
+            <p className="mt-3 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#555]">
               Каждая пара VELESBRON — это система защиты, устойчивости и комфорта.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -268,12 +265,12 @@ export default function BrandPage() {
                   className="rounded-xl border border-[#e5e5e5] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
                 >
                   <h3
-                    className="uppercase text-[#111]"
-                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.25 }}
+                    className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
+                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.25 }}
                   >
                     {item.title}
                   </h3>
-                  <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{item.text}</p>
+                  <p className="mt-3 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{item.text}</p>
                 </article>
               ))}
             </div>
@@ -285,10 +282,9 @@ export default function BrandPage() {
           <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
             <div className="text-center">
               <h2
-                className="uppercase text-[#111]"
+                className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 30,
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -296,7 +292,7 @@ export default function BrandPage() {
               >
                 Почему появился VELESBRON
               </h2>
-              <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+              <p className="mt-3 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
                 Ответ на разрыв между массовым сегментом и дорогим импортом.
               </p>
             </div>
@@ -312,8 +308,8 @@ export default function BrandPage() {
                 >
                   <div className="scroll-highlight-header px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
                     <h3
-                      className="uppercase text-[#111]"
-                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                      className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
+                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
                     >
                       {card.title}
                     </h3>
@@ -336,12 +332,12 @@ export default function BrandPage() {
                         </span>
                       </span>
                     </div>
-                    <p className="mt-2 text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{card.text}</p>
+                    <p className="mt-2 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#444]">{card.text}</p>
                     <div className="mt-4 border-t border-[#e5e5e5] pt-4">
                     {card.points.map((point, pointIndex) => (
                       <p
                         key={point}
-                        className="scroll-highlight-text flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
+                        className="scroll-highlight-text flex items-center text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
                         style={{ transitionDelay: `${pointIndex * 80}ms` }}
                       >
                         <span
@@ -360,10 +356,10 @@ export default function BrandPage() {
               ))}
             </div>
             <div className="mt-8 max-w-[900px] space-y-3 text-center">
-              <p className="text-[20px] font-semibold leading-[1.35] tracking-normal text-[#111]">
+              <p className="text-[17px] min-[1200px]:text-[20px] font-semibold leading-[1.35] tracking-normal text-[#111]">
                 VELESBRON создавался как прагматичный ответ на этот разрыв.
               </p>
-              <p className="text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+              <p className="text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
                 Мы взяли лучшие инженерные решения, доработали конструкцию, адаптировали колодку под российскую стопу и усилили ключевые узлы. Получилась обувь, рассчитанная на реальную нагрузку.
               </p>
             </div>
@@ -375,10 +371,9 @@ export default function BrandPage() {
           <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
             <div className="text-center">
               <h2
-                className="uppercase text-[#111]"
+                className="text-[29px] min-[1200px]:text-[34px] uppercase text-[#111]"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 34,
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -386,11 +381,11 @@ export default function BrandPage() {
               >
                 Гарантия VELESBRON
               </h2>
-              <p className="mt-3 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+              <p className="mt-3 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
                 Мы отвечаем за свою работу.
               </p>
             </div>
-            <div className="mt-6 max-w-[900px] space-y-4 text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
+            <div className="mt-6 max-w-[900px] space-y-4 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">
               <p>Гарантия — это не маркетинг. Это ответственность за конструкцию.</p>
               <p>Гарантия распространяется на производственные дефекты, расхождение швов, отслоение подошвы и нарушения конструкций.</p>
             </div>
@@ -406,8 +401,8 @@ export default function BrandPage() {
                 >
                   <div className="scroll-highlight-header px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
                     <h3
-                      className="uppercase text-[#111]"
-                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 17, fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                      className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
+                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
                     >
                       {card.title}
                     </h3>
@@ -434,7 +429,7 @@ export default function BrandPage() {
                       {[card.text, card.line2].map((line, pointIndex) => (
                         <p
                           key={pointIndex}
-                          className="scroll-highlight-text flex items-center text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
+                          className="scroll-highlight-text flex items-center text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#444] transition-colors duration-300 group-hover:text-[#f07426]"
                           style={{ transitionDelay: `${pointIndex * 80}ms` }}
                         >
                           <span
@@ -453,7 +448,7 @@ export default function BrandPage() {
               ))}
             </div>
             <div className="mt-8 max-w-[900px] space-y-3 text-center">
-              <p className="text-[20px] font-semibold leading-[1.35] tracking-normal text-[#111]">
+              <p className="text-[17px] min-[1200px]:text-[20px] font-semibold leading-[1.35] tracking-normal text-[#111]">
                 Если пара подвела — мы разбираемся и решаем.
               </p>
             </div>

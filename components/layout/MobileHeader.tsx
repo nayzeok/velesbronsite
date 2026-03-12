@@ -83,23 +83,29 @@ export default function MobileHeader() {
         aria-hidden={!isOpen}
       />
       <aside
-        className={`fixed right-0 top-0 z-[80] h-dvh w-[304px] border-l border-white/15 bg-[linear-gradient(180deg,rgba(30,30,30,0.98)_0%,rgba(18,18,18,0.96)_100%)] shadow-[-20px_0_40px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-transform duration-300 ease-out min-[1200px]:hidden ${
+        className={`fixed right-0 top-0 z-[80] h-dvh w-[304px] border-l border-[#e5e5e5] bg-white shadow-[-20px_0_40px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out min-[1200px]:hidden ${
           isOpen ? "translate-x-0" : "translate-x-[calc(100%+24px)]"
         }`}
         aria-hidden={!isOpen}
         style={{ willChange: isOpen ? "transform" : undefined }}
       >
         <div className="flex items-center justify-between px-5 pb-4 pt-5" style={{ paddingTop: "max(1.25rem, env(safe-area-inset-top, 0px))" }}>
-          <div>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-white/45">Меню</p>
-            <p className="mt-0.5 text-[21px] text-white" style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}>
-              VELESBRON
-            </p>
-          </div>
+          <Link
+            href="/"
+            onClick={closeMenu}
+            className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e7813f] focus-visible:ring-offset-2 focus-visible:ring-offset-white rounded-[8px]"
+            aria-label="VelesBron — на главную"
+          >
+            <img
+              src={LOGO_SRC}
+              alt="VelesBron"
+              className="h-9 w-[160px] object-contain object-left"
+            />
+          </Link>
           <button
             type="button"
             aria-label="Закрыть меню"
-            className="flex size-9 items-center justify-center rounded-[10px] bg-white/10 text-white transition-colors hover:bg-white/20"
+            className="flex size-9 items-center justify-center rounded-[10px] bg-[#f0f0f0] text-[#111] transition-colors hover:bg-[#e5e5e5]"
             onClick={closeMenu}
           >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
@@ -107,7 +113,7 @@ export default function MobileHeader() {
             </svg>
           </button>
         </div>
-        <div className="mx-5 h-px bg-white/10" />
+        <div className="mx-5 h-px bg-[#e5e5e5]" />
         <nav className="px-4 py-3">
           {MOBILE_MENU_ITEMS.map((item, index) => {
             const isActive = item.href === "/" ? pathname === "/" : (pathname?.startsWith(item.href) ?? false);
@@ -120,7 +126,7 @@ export default function MobileHeader() {
                 } ${
                   isActive
                     ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]"
-                    : "text-white/92 hover:bg-white/10"
+                    : "text-[#111] hover:bg-[#f5f5f5]"
                 }`}
                 style={{
                   fontFamily: "var(--font-roboto-flex), sans-serif",
@@ -130,16 +136,16 @@ export default function MobileHeader() {
                 onClick={closeMenu}
               >
                 <span className="flex items-center gap-2.5">
-                  <span className={`size-2 rounded-full ${isActive ? "bg-white/90" : "bg-white/35"}`} />
+                  <span className={`size-2 rounded-full ${isActive ? "bg-white/90" : "bg-[#111]/25"}`} />
                   {item.label}
                 </span>
-                <span className={`text-base ${isActive ? "text-white/95" : "text-white/45"}`}>›</span>
+                <span className={`text-base ${isActive ? "text-white/95" : "text-[#111]/45"}`}>›</span>
               </Link>
             );
           })}
         </nav>
         <div
-          className="absolute bottom-6 left-4 right-4 rounded-[12px] border border-white/10 bg-white/[0.04] px-4 py-3 text-[12px] leading-[1.35] text-white/60"
+          className="absolute bottom-6 left-4 right-4 rounded-[12px] border border-[#e5e5e5] bg-[#f5f5f5] px-4 py-3 text-[12px] leading-[1.35] text-[#666]"
           style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))" }}
         >
           Тактическая обувь из натуральных материалов

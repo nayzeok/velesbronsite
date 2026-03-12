@@ -8,7 +8,7 @@ import SiteHeader from "@/components/layout/SiteHeader";
 
 const DESIGN_HEIGHT = 1000;
 const MOBILE_DESIGN_WIDTH = 741;
-const MOBILE_DESIGN_HEIGHT = 1716;
+const MOBILE_DESIGN_HEIGHT = 1580;
 const MOBILE_SCROLL_EXTRA = 48;
 
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами выбора (px). */
@@ -19,11 +19,11 @@ const DESKTOP_COLOR_TOP = 497;
 const DESKTOP_COLOR_HEADING_GAP = 5;
 
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами на мобиле (px). */
-const MOBILE_MODEL_HEADING_GAP = 16;
+const MOBILE_MODEL_HEADING_GAP = 12;
 /** Блок ЦВЕТ на мобиле: top заголовка (px). На одном уровне с блоком МОДЕЛЬ. */
-const MOBILE_COLOR_TOP = 452;
+const MOBILE_COLOR_TOP = 492;
 /** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px), как у блока МОДЕЛЬ. */
-const MOBILE_COLOR_HEADING_GAP = 16;
+const MOBILE_COLOR_HEADING_GAP = 12;
 
 /**
  * Масштаб большого фото карточки (центральная картинка), по индексу карточки 0..9.
@@ -835,7 +835,7 @@ export default function BuyPage() {
       {/* ── MOBILE: рендерим только при width < 1200px; контент — после mount, чтобы не ронять Safari при первом кадре ── */}
       {!isDesktop && !mobileReady && (
       <section className="flex min-h-[100dvh] items-center justify-center bg-[#d9d9d9]">
-        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 18 }}>Загрузка…</p>
+        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 15 }}>Загрузка…</p>
       </section>
       )}
       {!isDesktop && mobileReady && (
@@ -848,7 +848,7 @@ export default function BuyPage() {
           }}
         >
           <div
-            className="absolute left-0 top-0 h-[1716px] w-[741px] origin-top-left bg-white"
+            className="absolute left-0 top-0 h-[1580px] w-[741px] origin-top-left bg-white"
             style={{ transform: `scale(${mobileScale})` }}
           >
             {/* Облегчённые полосы: тот же градиент, что на десктопе, без blur и картинки */}
@@ -879,7 +879,7 @@ export default function BuyPage() {
               className="absolute left-[74px] right-[74px] top-[55px] uppercase"
               style={{
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 49,
+                fontSize: 38,
                 fontWeight: 700,
                 lineHeight: 1.15,
                 color: "#111",
@@ -891,10 +891,10 @@ export default function BuyPage() {
             </h1>
 
             <p
-              className="absolute left-[74px] right-[74px] top-[210px] text-[#111]"
+              className="absolute left-[74px] right-[74px] top-[192px] text-[#111]"
               style={{
                 fontFamily: "var(--font-roboto-flex), sans-serif",
-                fontSize: 34,
+                fontSize: 29,
                 lineHeight: 1.2,
                 color: "#111",
               }}
@@ -905,22 +905,22 @@ export default function BuyPage() {
             <button
               type="button"
               onClick={openSizeGrid}
-              className="size-table-link absolute left-[70px] top-[698px] z-20 min-h-[48px] py-2 pr-3 pl-0 text-left"
-              style={{ fontSize: 31, lineHeight: 1.2 }}
+              className="size-table-link absolute left-[70px] top-[728px] z-20 min-h-[48px] py-2 pr-3 pl-0 text-left"
+              style={{ fontSize: 26, lineHeight: 1.2 }}
               aria-label="Открыть таблицу размеров"
             >
               ТАБЛИЦА РАЗМЕРОВ
             </button>
 
             <div
-              className="absolute left-[70px] top-[452px] z-20 flex w-[200px] flex-col items-center"
+              className="absolute left-[70px] top-[492px] z-20 flex w-[200px] flex-col items-center"
               style={{ gap: MOBILE_MODEL_HEADING_GAP }}
             >
               <p
                 className="w-full text-center uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 34,
+                  fontSize: 26,
                   fontWeight: 700,
                   color: "#111",
                   letterSpacing: "0.08em",
@@ -961,7 +961,7 @@ export default function BuyPage() {
                         margin: 0,
                         padding: 0,
                         fontFamily: "var(--font-roboto-flex), sans-serif",
-                        fontSize: 22,
+                        fontSize: 19,
                         fontWeight: 700,
                         color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
                         textDecoration: activeModelKey === model.key ? "underline" : "none",
@@ -983,7 +983,7 @@ export default function BuyPage() {
                 className="w-full text-center uppercase"
                 style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 34,
+                  fontSize: 26,
                   fontWeight: 700,
                   color: "#111",
                   letterSpacing: "0.08em",
@@ -1013,7 +1013,7 @@ export default function BuyPage() {
                           margin: 0,
                           padding: 0,
                           fontFamily: "var(--font-roboto-flex), sans-serif",
-                          fontSize: 22,
+                          fontSize: 19,
                           fontWeight: 700,
                           color: colorVariant === v ? "#f07426" : "#9a9a9a",
                           textDecoration: colorVariant === v ? "underline" : "none",
@@ -1029,10 +1029,11 @@ export default function BuyPage() {
 
             <Link
               href="/where-to-buy"
-              className="absolute left-[447px] top-[678px] z-20 flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-[36px] text-white no-underline"
+              className="absolute left-[447px] top-[708px] z-20 flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-white no-underline"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                fontSize: 31,
                 fontWeight: 700,
                 letterSpacing: "0.08em",
               }}
@@ -1053,7 +1054,7 @@ export default function BuyPage() {
               <div
                 className="h-full w-full origin-center"
                 style={{
-                  transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% + 125px + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                  transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% + 175px + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
                 }}
               >
                 <img
@@ -1067,7 +1068,7 @@ export default function BuyPage() {
 
             {/* Зона свайпа по центру: смена фото влево/вправо (z ниже кнопок, чтобы не перекрывать) */}
             <div
-              className="absolute left-0 top-[20%] z-[1] h-[60%] w-full touch-none"
+              className="absolute left-0 top-[26%] z-[1] h-[58%] w-full touch-none"
               aria-label="Свайп влево или вправо для смены фото"
               onTouchStart={(e) => {
                 mobileSwipeStartX.current = e.targetTouches[0]?.clientX ?? null;
@@ -1095,13 +1096,13 @@ export default function BuyPage() {
                 const maxIndex = Math.max(0, activeViewImages.length - 1);
                 changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
               }}
-              className="absolute left-0 top-[36%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-end pr-1 transition-opacity hover:opacity-100 active:opacity-90"
+              className="absolute left-0 top-[40%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-end pr-1 transition-opacity hover:opacity-100 active:opacity-90"
               style={{ background: "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 70%, transparent 100%)" }}
               aria-label="Предыдущее фото"
             >
               <span
                 className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#f07426] text-white shadow-[0_4px_12px_rgba(240,116,38,0.4)]"
-                style={{ fontSize: 28, fontWeight: 700, lineHeight: 1 }}
+                style={{ fontSize: 24, fontWeight: 700, lineHeight: 1 }}
               >
                 ‹
               </span>
@@ -1112,13 +1113,13 @@ export default function BuyPage() {
                 const maxIndex = Math.max(0, activeViewImages.length - 1);
                 changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
               }}
-              className="absolute right-0 top-[36%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-start pl-1 transition-opacity hover:opacity-100 active:opacity-90"
+              className="absolute right-0 top-[40%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-start pl-1 transition-opacity hover:opacity-100 active:opacity-90"
               style={{ background: "linear-gradient(to left, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 70%, transparent 100%)" }}
               aria-label="Следующее фото"
             >
               <span
                 className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#f07426] text-white shadow-[0_4px_12px_rgba(240,116,38,0.4)]"
-                style={{ fontSize: 28, fontWeight: 700, lineHeight: 1 }}
+                style={{ fontSize: 24, fontWeight: 700, lineHeight: 1 }}
               >
                 ›
               </span>
@@ -1141,9 +1142,9 @@ export default function BuyPage() {
               isSizeGridVisible ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
             }`}
           >
-            <div className="flex items-center justify-between border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
+            <div className="relative flex items-center justify-end border-b border-[#ececec] px-5 py-4 pr-2 min-[1200px]:px-7 min-[1200px]:pr-3">
               <h3
-                className="uppercase text-[#111]"
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase text-[#111]"
                 style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 24, fontWeight: 700, letterSpacing: "0.08em" }}
               >
                 Размерная сетка
@@ -1152,9 +1153,9 @@ export default function BuyPage() {
                 type="button"
                 aria-label="Закрыть таблицу размеров"
                 onClick={closeSizeGrid}
-                className="flex size-9 items-center justify-center rounded-[10px] bg-[#f4f4f4] text-[#111]"
+                className="-mr-1 flex size-12 min-w-12 min-h-12 items-center justify-center text-[#111] hover:opacity-70 focus:outline-none min-[1200px]:-mr-2 min-[1200px]:size-14 min-[1200px]:min-w-14 min-[1200px]:min-h-14"
               >
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M6 6l12 12M18 6L6 18" />
                 </svg>
               </button>
@@ -1162,9 +1163,9 @@ export default function BuyPage() {
             <div className="max-h-[calc(84dvh-78px)] overflow-hidden">
               <table className="w-full table-fixed border-collapse text-left min-[1200px]:w-auto min-[1200px]:min-w-[640px]">
                 <colgroup>
-                  <col className="w-[72px] min-[1200px]:w-[92px]" />
-                  <col className="w-[118px] min-[1200px]:w-[180px]" />
-                  <col />
+                  <col style={{ width: "33.33%" }} />
+                  <col style={{ width: "33.33%" }} />
+                  <col style={{ width: "33.33%" }} />
                 </colgroup>
                 <thead className="sticky top-0 bg-[#f7f7f7]">
                   <tr>
@@ -1172,10 +1173,10 @@ export default function BuyPage() {
                       Размер
                     </th>
                     <th className="border-b border-[#ececec] px-2 py-2.5 text-center text-[11px] font-semibold leading-[1.15] text-[#666] min-[1200px]:px-6 min-[1200px]:py-3.5 min-[1200px]:text-[13px]">
-                      Длина стельки, см
+                      Длина стопы, см
                     </th>
                     <th className="border-b border-[#ececec] px-2 py-2.5 text-center text-[11px] font-semibold leading-[1.15] text-[#666] min-[1200px]:px-6 min-[1200px]:py-3.5 min-[1200px]:text-[13px]">
-                      Рекомендуемая длина стопы, см
+                      Длина стельки, см
                     </th>
                   </tr>
                 </thead>
@@ -1191,8 +1192,8 @@ export default function BuyPage() {
                       }}
                     >
                       <td className="border-b border-[#f0f0f0] px-2 py-2.5 text-center text-[13px] leading-[1.2] text-[#111] min-[1200px]:px-6 min-[1200px]:py-3.5 min-[1200px]:text-[15px]">{row.size}</td>
-                      <td className="border-b border-[#f0f0f0] px-2 py-2.5 text-center text-[13px] leading-[1.2] text-[#111] min-[1200px]:px-6 min-[1200px]:py-3.5 min-[1200px]:text-[15px]">{row.insole}</td>
                       <td className="border-b border-[#f0f0f0] px-2 py-2.5 text-center text-[13px] leading-[1.2] text-[#111] min-[1200px]:px-6 min-[1200px]:py-3.5 min-[1200px]:text-[15px]">{row.foot}</td>
+                      <td className="border-b border-[#f0f0f0] px-2 py-2.5 text-center text-[13px] leading-[1.2] text-[#111] min-[1200px]:px-6 min-[1200px]:py-3.5 min-[1200px]:text-[15px]">{row.insole}</td>
                     </tr>
                   ))}
                 </tbody>

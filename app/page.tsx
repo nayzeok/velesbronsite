@@ -22,17 +22,16 @@ const HERO_BG_EFFECTS = {
   vignetteOn: true,
 };
 
-/** Ботинок в hero: мобильная версия — только px, без vh/vw для одинакового вида в браузере и на телефоне */
+/** Ботинок в hero: мобильная версия — адаптивные clamp() под разную ширину/высоту экрана */
 const HERO_BOOT_MOBILE = {
   leftPct: 50,
   translateXPct: -50,
-  /** Отступ сверху от начала контента (px) */
-  topPx: 380,
-  /** Ширина картинки (px); на узких экранах можно через clamp в разметке */
-  widthPx: 340,
+  /** Отступ сверху: clamp(min, vmin, max) — на узких/низких экранах меньше */
+  topCss: "clamp(300px, 38vmin, 420px)",
+  /** Ширина картинки: clamp(min, vw, max) — на узких экранах уже */
+  widthCss: "clamp(260px, 82vw, 340px)",
+  /** Высота по aspect 93/76 — в разметке через aspect-ratio, для карусели считаем в calc() */
 };
-/** Высота ботинка по aspect ratio 93/76 (px), для расчёта позиции карусели */
-const HERO_BOOT_MOBILE_HEIGHT = Math.round((HERO_BOOT_MOBILE.widthPx * 76) / 93);
 /** Отступ карусели от низа ботинка (px) */
 const MOBILE_CAROUSEL_GAP_BELOW_BOOT = 24;
 
@@ -56,8 +55,6 @@ const HERO_BOOT_DESKTOP = {
   width: "clamp(380px, 36vw, 550px)",
 };
 
-/** Равные отступы от краёв экрана у блоков «Новая модель» и «Ботинки повышенной надёжности» (px) */
-const MOBILE_HERO_EDGE = 24;
 const MOBILE_CARD_WIDTH = 260;
 const MOBILE_CARD_GAP = 56;
 const MOBILE_SET_WIDTH = HERO_ADVANTAGES.length * MOBILE_CARD_WIDTH + (HERO_ADVANTAGES.length - 1) * MOBILE_CARD_GAP;
@@ -108,10 +105,10 @@ export default function Home() {
                 <div
                     className="relative overflow-hidden"
                     style={{
-                        minHeight: 840,
+                        minHeight: "clamp(720px, 100dvh, 900px)",
                         paddingTop: "calc(4rem + env(safe-area-inset-top, 0px))",
-                        paddingLeft: `max(${MOBILE_HERO_EDGE}px, env(safe-area-inset-left))`,
-                        paddingRight: `max(${MOBILE_HERO_EDGE}px, env(safe-area-inset-right))`,
+                        paddingLeft: "max(clamp(16px, 4vw, 24px), env(safe-area-inset-left))",
+                        paddingRight: "max(clamp(16px, 4vw, 24px), env(safe-area-inset-right))",
                         paddingBottom: "max(48px, env(safe-area-inset-bottom, 24px))",
                     }}
                 >
@@ -136,7 +133,7 @@ export default function Home() {
                     </div>
 
                     {/* Верхний блок: Новая модель — прижат к левому краю, отступ от края как у второго блока */}
-                    <div className="relative z-20" style={{ maxWidth: `calc(100vw - ${MOBILE_HERO_EDGE * 2}px)` }}>
+                    <div className="relative z-20" style={{ maxWidth: "calc(100vw - 2 * clamp(16px, 4vw, 24px))" }}>
                         <h2
                             className="mt-4 uppercase text-white text-left"
                             style={{
@@ -168,13 +165,13 @@ export default function Home() {
                         </Link>
                     </div>
 
-                    {/* Ботинок — размер и положение в px (стабильно в браузере и на телефоне) */}
+                    {/* Ботинок — адаптивные размер и положение (clamp по vw/vmin) */}
                     <div
                         className="pointer-events-none absolute z-10 overflow-hidden"
                         style={{
                             left: `${HERO_BOOT_MOBILE.leftPct}%`,
-                            top: HERO_BOOT_MOBILE.topPx,
-                            width: HERO_BOOT_MOBILE.widthPx,
+                            top: HERO_BOOT_MOBILE.topCss,
+                            width: HERO_BOOT_MOBILE.widthCss,
                             transform: `translateX(${HERO_BOOT_MOBILE.translateXPct}%)`,
                             aspectRatio: "93 / 76",
                         }}
@@ -182,11 +179,11 @@ export default function Home() {
                         <img src="/images/pages/main_left_model for_hero.png" alt="Тактическая обувь" className="h-full w-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]" />
                     </div>
 
-                    {/* Карусель преимуществ: под ботинком по px (привязка к контейнеру) */}
+                    {/* Карусель преимуществ: под ботинком, top через calc(clamp...) для адаптивности */}
                     <div
                         className="absolute left-0 right-0 z-20 w-full"
                         style={{
-                            top: HERO_BOOT_MOBILE.topPx + HERO_BOOT_MOBILE_HEIGHT + MOBILE_CAROUSEL_GAP_BELOW_BOOT,
+                            top: `calc(${HERO_BOOT_MOBILE.topCss} + (${HERO_BOOT_MOBILE.widthCss} * 76 / 93) + ${MOBILE_CAROUSEL_GAP_BELOW_BOOT}px)`,
                         }}
                     >
                         {/* Окно карусели: одна карточка + запас под кольцо (по бокам и сверху/снизу), плавная смена */}
