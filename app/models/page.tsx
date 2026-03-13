@@ -1009,7 +1009,7 @@ export default function BuyPage() {
                       >
                         <div
                           style={{
-                            transform: `translate(${-64 + (BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x * 0.45}px, ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y * 0.45}px) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                            transform: `translate(${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x * 0.45}px, ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y * 0.45}px) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
                           }}
                         >
                           <img
