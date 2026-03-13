@@ -93,7 +93,7 @@ const GUARANTEE_CARDS = [
 export default function BrandPage() {
   return (
     <ScrollHighlightProvider>
-      <ScrollHighlightScrollMain className="figma-site-page min-h-screen overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111]">
+      <ScrollHighlightScrollMain className="figma-site-page min-h-screen overflow-x-hidden bg-[#d9d9d9] text-[#111]">
         <section className="figma-site-stage relative mx-auto min-h-[100dvh] w-full overflow-hidden bg-white">
           <div className="relative mx-auto h-full min-h-[100dvh] w-full max-w-[1670px] overflow-hidden">
           <div className="pointer-events-none absolute inset-0">

@@ -57,7 +57,7 @@ function MarketplaceIcon({ type }: { type: "wildberries" | "ozon" }) {
 
 export default function WhereToBuyPage() {
   return (
-    <main className="figma-site-page relative overflow-x-hidden overflow-y-auto bg-white text-[#111] min-h-screen">
+    <main className="figma-site-page relative overflow-x-hidden bg-white text-[#111] min-h-screen">
       {/* Фоновая подложка на всю страницу */}
       <div className="pointer-events-none fixed inset-0 z-0 mx-auto max-w-[1670px]">
         <div className="absolute left-1/2 top-0 h-[200vmin] w-[886px] -translate-x-1/2" style={{ marginTop: "-88px" }}>

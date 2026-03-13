@@ -9,7 +9,8 @@ import SiteHeader from "@/components/layout/SiteHeader";
 const DESIGN_HEIGHT = 1000;
 const MOBILE_DESIGN_WIDTH = 741;
 const MOBILE_DESIGN_HEIGHT = 1580;
-const MOBILE_SCROLL_EXTRA = 48;
+const MOBILE_VIEWPORT_TOP_RESERVE = 86;
+const MOBILE_VIEWPORT_BOTTOM_RESERVE = 18;
 
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами выбора (px). */
 const DESKTOP_MODEL_HEADING_GAP = 5;
@@ -20,10 +21,18 @@ const DESKTOP_COLOR_HEADING_GAP = 5;
 
 /** Отступ между заголовком «МОДЕЛЬ» и квадратами на мобиле (px). */
 const MOBILE_MODEL_HEADING_GAP = 12;
-/** Блок ЦВЕТ на мобиле: top заголовка (px). На одном уровне с блоком МОДЕЛЬ. */
-const MOBILE_COLOR_TOP = 492;
+/** Блоки МОДЕЛЬ и ЦВЕТ на мобиле: top (px). Расположены вверху. */
+const MOBILE_TOP_BLOCKS_TOP = 68;
 /** Отступ между заголовком «ЦВЕТ» и квадратами на мобиле (px), как у блока МОДЕЛЬ. */
 const MOBILE_COLOR_HEADING_GAP = 12;
+/** Заголовок и текст на мобиле: в нижней части, как на мокапе. */
+const MOBILE_TITLE_TOP = 1160;
+/** Текст под заголовком: top (px), с отступом от заголовка. */
+const MOBILE_TEXT_TOP = 1230;
+/** Блок выбора модели на мобиле: над ботинком. */
+const MOBILE_MODEL_BELOW_TEXT_TOP = 90;
+/** Блок выбора цвета на мобиле: слева от ботинка, как на мокапе. */
+const MOBILE_COLOR_DOTS_TOP = 280;
 
 /**
  * Масштаб большого фото карточки (центральная картинка), по индексу карточки 0..9.
@@ -146,7 +155,7 @@ const CAROUSEL_CARDS: CarouselCard[] = [
     titleBlack: "КОНСТРУКЦИЯ МОДЕЛИ",
     textBlack:
       "Все элементы ботинка – от материалов до сборки – подбираются с расчётом на интенсивную эксплуатацию. Усиленные зоны, прочные соединения и продуманная архитектура позволяют конструкции сохранять ресурс при высокой нагрузке.",
-    titleOliva: "СТАБИЛЬНОСТЬ И \n ФИКСАЦИЯ ГОЛЕНОСТОПА",
+    titleOliva: "СТАБИЛЬНОСТЬ И ФИКСАЦИЯ ГОЛЕНОСТОПА",
     textOliva:
       "Высокая конструкция ботинка обеспечивает дополнительную поддержку голеностопного сустава. Это повышает устойчивость на неровной поверхности и помогает сохранять контроль движения.",
   },
@@ -163,12 +172,12 @@ const CAROUSEL_CARDS: CarouselCard[] = [
   {
     imageBlack: "/images/models/cards/3_card_black.png",
     imageOliva: "/images/models/cards/3_card_oliva.png",
-    titleBlack: "АНТИПРОКОЛЬНАЯ \n ЗАЩИТА ПОДОШВЫ",
+    titleBlack: "ГИБРИДНАЯ ПОДОШВА ПОВЫШЕННОЙ ПРОЧНОСТИ",
     textBlack:
-      "Внутри подошвы расположена гибкая антипрокольная вставка из арамидного волокна. Материал сочетает малый вес и высокую прочность, защищая стопу от острых предметов и снижая риск травмы при движении по сложному рельефу.",
-    titleOliva: "ГИБРИДНАЯ ПОДОШВА ПОВЫШЕННОЙ ПРОЧНОСТИ",
-    textOliva:
       "Подошва выполнена по гибридной технологии: амортизирующая основа обеспечивает лёгкость и комфорт, а износостойкая подмётка отвечает за сцепление и устойчивость. Такая конструкция снижает нагрузку на стопу и сохраняет стабильность на разных типах поверхности.",
+    titleOliva: "АНТИПРОКОЛЬНАЯ \n ЗАЩИТА ПОДОШВЫ",
+    textOliva:
+      "Внутри подошвы расположена гибкая антипрокольная вставка из арамидного волокна. Материал сочетает малый вес и высокую прочность, защищая стопу от острых предметов и снижая риск травмы при движении по сложному рельефу.",
   },
   {
     imageBlack: "/images/models/cards/4_card_black.png",
@@ -258,6 +267,7 @@ export default function BuyPage() {
   const [colorVariant, setColorVariant] = useState<ColorVariant>("black");
   const [activeModelKey, setActiveModelKey] = useState<ModelKey>("high");
   const [activeViewIndex, setActiveViewIndex] = useState(0);
+  const [isMobileTextExpanded, setIsMobileTextExpanded] = useState(false);
   const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
   const [isSizeGridVisible, setIsSizeGridVisible] = useState(false);
   const [showLowComingSoon, setShowLowComingSoon] = useState(false);
@@ -269,6 +279,7 @@ export default function BuyPage() {
   const viewSlidePhaseTimerRef = useRef<number | null>(null);
   const viewSlideFinishTimerRef = useRef<number | null>(null);
   const [mobileScale, setMobileScale] = useState(0.5);
+  const [mobileViewportHeight, setMobileViewportHeight] = useState(0);
   const [viewSlideOffsetX, setViewSlideOffsetX] = useState(0);
   const [viewSlideTransition, setViewSlideTransition] = useState(false);
   const [viewSlideDurationMs, setViewSlideDurationMs] = useState(400);
@@ -297,11 +308,23 @@ export default function BuyPage() {
     if (typeof window === "undefined") return;
     const updateMobileScale = () => {
       const w = window.innerWidth;
-      setMobileScale(Math.min(1, Math.max(0.4, w / MOBILE_DESIGN_WIDTH)));
+      const viewportH = window.visualViewport?.height ?? window.innerHeight;
+      const scaleByWidth = w / MOBILE_DESIGN_WIDTH;
+      const availableHeight = Math.max(
+        320,
+        viewportH - MOBILE_VIEWPORT_TOP_RESERVE - MOBILE_VIEWPORT_BOTTOM_RESERVE
+      );
+      const scaleByHeight = availableHeight / MOBILE_DESIGN_HEIGHT;
+      setMobileScale(Math.min(1, Math.max(0.34, Math.min(scaleByWidth, scaleByHeight))));
+      setMobileViewportHeight(viewportH);
     };
     updateMobileScale();
     window.addEventListener("resize", updateMobileScale);
-    return () => window.removeEventListener("resize", updateMobileScale);
+    window.visualViewport?.addEventListener("resize", updateMobileScale);
+    return () => {
+      window.removeEventListener("resize", updateMobileScale);
+      window.visualViewport?.removeEventListener("resize", updateMobileScale);
+    };
   }, []);
   const selectedModel = MODEL_OPTIONS.find((item) => item.key === activeModelKey) ?? MODEL_OPTIONS[0];
   const modelImagesByColor = MODEL_IMAGES[activeModelKey];
@@ -323,6 +346,10 @@ export default function BuyPage() {
   useEffect(() => {
     setActiveViewIndex(0);
   }, [activeModelKey]);
+
+  useEffect(() => {
+    setIsMobileTextExpanded(false);
+  }, [activeModelKey, activeViewIndex, colorVariant]);
 
   const SLIDE_EXIT_DISTANCE = 420;
   const SLIDE_MS = 400;
@@ -415,7 +442,7 @@ export default function BuyPage() {
   };
 
   return (
-    <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
+    <main className="figma-site-page overflow-x-hidden bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
       {showLowComingSoon && (
         <div
           className="fixed left-1/2 top-[20%] z-[100] -translate-x-1/2 rounded-[12px] bg-[#111] px-6 py-3 text-center text-white shadow-lg"
@@ -839,294 +866,291 @@ export default function BuyPage() {
       </section>
       )}
       {!isDesktop && mobileReady && (
-      <section>
-        <div
-          className="relative w-full overflow-hidden bg-white"
-          style={{
-            minHeight: "100dvh",
-            height: MOBILE_DESIGN_HEIGHT * mobileScale + MOBILE_SCROLL_EXTRA,
-          }}
-        >
+      <section className="min-[1200px]:hidden">
+        <div className="relative min-h-[100dvh] overflow-hidden bg-white">
+          <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute inset-y-0"
+                style={{
+                  left: `${(i * 100) / 6}%`,
+                  width: `${100 / 6}%`,
+                  backgroundImage:
+                    "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                }}
+              />
+            ))}
+          </div>
+
           <div
-            className="absolute left-0 top-0 h-[1580px] w-[741px] origin-top-left bg-white"
-            style={{ transform: `scale(${mobileScale})` }}
+            className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-[480px] flex-col px-4"
+            style={{
+              paddingTop: "calc(78px + env(safe-area-inset-top, 0px))",
+              paddingBottom: "max(20px, env(safe-area-inset-bottom, 0px))",
+            }}
           >
-            {/* Облегчённые полосы: тот же градиент, что на десктопе, без blur и картинки */}
-            <div
-              className="pointer-events-none absolute inset-0 z-0"
-              aria-hidden
-            >
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute inset-y-0 w-full"
+            <div className="mx-auto mt-4 flex w-full max-w-[207px] overflow-hidden rounded-[10px] border border-[#d8d8d8] bg-[#efefef]">
+              {MODEL_OPTIONS.map((model) => {
+                const isLow = model.key === "low";
+                const isActive = activeModelKey === model.key;
+                return (
+                  <button
+                    key={`mobile-model-col-${model.key}`}
+                    type="button"
+                    onClick={() => {
+                      if (isLow) {
+                        setShowLowComingSoon(true);
+                        window.setTimeout(() => setShowLowComingSoon(false), 2500);
+                      } else {
+                        setActiveModelKey(model.key);
+                      }
+                    }}
+                    className="flex h-[35px] flex-1 items-center justify-center transition-all"
+                    style={{
+                      background: isActive ? "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)" : "#efefef",
+                      borderRight: model.key === "high" ? "1px solid #d8d8d8" : "none",
+                      color: isActive ? "#fff" : "#111",
+                      cursor: isLow ? "default" : "pointer",
+                      opacity: isLow ? 0.9 : 1,
+                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                      fontSize: 15,
+                      fontWeight: 700,
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    {model.key === "high" ? "2SK" : "2N"}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="relative mt-2">
+                <div className="absolute left-0 top-3 z-30 w-[124px]">
+                  <div className="flex items-start gap-4" aria-label="Выбор цвета">
+                    {([
+                      { key: "black", label: "Черный", fill: "#191919" },
+                      { key: "oliva", label: "Олива", fill: "#b9baa8" },
+                    ] as const).map((item) => {
+                      const isActive = colorVariant === item.key;
+                      return (
+                        <button
+                          key={item.key}
+                          type="button"
+                          onClick={() => setColorVariant(item.key)}
+                          className="flex min-h-[68px] min-w-[54px] flex-col items-center gap-2 border-0 bg-transparent px-[3px] py-[2px]"
+                          aria-label={item.label}
+                          aria-pressed={isActive}
+                        >
+                          <span
+                            className="flex items-center justify-center rounded-[12px] bg-white"
+                            style={{
+                              width: 48,
+                              height: 48,
+                              border: isActive ? "2px solid #f07426" : "1px solid #cfcfcf",
+                              boxShadow: isActive ? "0 4px 12px rgba(240,116,38,0.12)" : "none",
+                            }}
+                          >
+                            <span
+                              className="rounded-[8px]"
+                              style={{
+                                width: 28,
+                                height: 28,
+                                backgroundColor: item.fill,
+                              }}
+                            />
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: "var(--font-roboto-flex), sans-serif",
+                              fontSize: 12,
+                              fontWeight: 500,
+                              lineHeight: 1.1,
+                              color: "#555",
+                            }}
+                          >
+                            {item.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="relative mx-auto w-full max-w-[278px]">
+                    <div
+                      className="relative aspect-[0.88] w-full"
+                      style={{ touchAction: "pan-y" }}
+                      aria-label="Свайп влево или вправо для смены фото"
+                      onTouchStart={(e) => {
+                        mobileSwipeStartX.current = e.targetTouches[0]?.clientX ?? null;
+                      }}
+                      onTouchEnd={(e) => {
+                        const start = mobileSwipeStartX.current;
+                        if (start == null) return;
+                        const end = e.changedTouches[0]?.clientX;
+                        if (end == null) return;
+                        mobileSwipeStartX.current = null;
+                        const delta = start - end;
+                        const maxIndex = Math.max(0, activeViewImages.length - 1);
+                        if (delta > 50) {
+                          changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
+                        } else if (delta < -50) {
+                          changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
+                        }
+                      }}
+                    >
+                      <div
+                        className="absolute inset-0 flex items-center justify-center"
+                        style={{
+                          transform: `translateX(${viewSlideOffsetX}px)`,
+                          transition: viewSlideTransition ? `transform ${viewSlideDurationMs}ms ease-out` : "none",
+                        }}
+                      >
+                        <div
+                          style={{
+                            transform: `translate(${-64 + (BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x * 0.45}px, ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y * 0.45}px) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                          }}
+                        >
+                          <img
+                            key={`mobile-${viewTransitionTick}-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
+                            src={currentViewImage}
+                            alt="Тактическая обувь"
+                            className="h-auto max-h-[54vh] w-full max-w-[260px] object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.18)]"
+                          />
+                        </div>
+                      </div>
+
+                    </div>
+
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const maxIndex = Math.max(0, activeViewImages.length - 1);
+                    changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
+                  }}
+                  className="absolute left-0 top-[54%] z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#d8d8d8] bg-[#efefef] text-[#111] shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
+                  aria-label="Предыдущее фото"
+                >
+                  ‹
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const maxIndex = Math.max(0, activeViewImages.length - 1);
+                    changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
+                  }}
+                  className="absolute right-0 top-[54%] z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#d8d8d8] bg-[#efefef] text-[#111] shadow-[0_4px_12px_rgba(0,0,0,0.08)]"
+                  aria-label="Следующее фото"
+                >
+                  ›
+                </button>
+              </div>
+
+            <div className="-mt-2 flex justify-center gap-3" aria-label="Позиция фото">
+              {activeViewImages.map((_, i) => (
+                <span
+                  key={`mobile-view-dot-${i}`}
+                  className="rounded-full"
                   style={{
-                    left: `${(i * 100) / 6}%`,
-                    width: `${100 / 6}%`,
-                    backgroundImage: "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+                    width: 10,
+                    height: 10,
+                    backgroundColor: activeViewIndex === i ? "#8a8a8a" : "#d9d9d9",
                   }}
                 />
               ))}
             </div>
 
-            <div className="absolute left-[38px] top-[78px] flex h-[8px] w-[34px] items-center justify-between">
-              <span className="size-[8px] rounded-full bg-[#111]/35" />
-              <span className="size-[8px] rounded-full bg-[#111]/20" />
-              <span className="size-[8px] rounded-full bg-[#111]/12" />
-            </div>
+            <div className="mt-3 px-2">
+              <div className="rounded-[18px] border border-[#d8d8d8] bg-white/95 px-4 py-5 shadow-[0_8px_24px_rgba(0,0,0,0.05)]">
+                <h1
+                  className="uppercase text-[#111]"
+                  style={{
+                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                    fontSize: 18,
+                    fontWeight: 700,
+                    lineHeight: 1.12,
+                    letterSpacing: "0.08em",
+                    whiteSpace: "pre-line",
+                  }}
+                >
+                  {activeCard && leftBlockTitle ? leftBlockTitle : selectedModel.title}
+                </h1>
 
-            <h1
-              className="absolute left-[74px] right-[74px] top-[55px] uppercase"
-              style={{
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 38,
-                fontWeight: 700,
-                lineHeight: 1.15,
-                color: "#111",
-                letterSpacing: "0.08em",
-                whiteSpace: "pre-line",
-              }}
-            >
-              {activeCard && leftBlockTitle ? leftBlockTitle : selectedModel.title}
-            </h1>
+                <div className="relative mt-3">
+                  <p
+                    className="text-[#111]"
+                    style={{
+                      fontFamily: "var(--font-roboto-flex), sans-serif",
+                      fontSize: 17,
+                      lineHeight: 1.22,
+                      color: "#111",
+                      display: isMobileTextExpanded ? "block" : "-webkit-box",
+                      WebkitLineClamp: isMobileTextExpanded ? "unset" : 3,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {leftBlockText}
+                  </p>
 
-            <p
-              className="absolute left-[74px] right-[74px] top-[192px] text-[#111]"
-              style={{
-                fontFamily: "var(--font-roboto-flex), sans-serif",
-                fontSize: 29,
-                lineHeight: 1.2,
-                color: "#111",
-              }}
-            >
-              {leftBlockText}
-            </p>
-
-            <button
-              type="button"
-              onClick={openSizeGrid}
-              className="size-table-link absolute left-[70px] top-[728px] z-20 min-h-[48px] py-2 pr-3 pl-0 text-left"
-              style={{ fontSize: 26, lineHeight: 1.2 }}
-              aria-label="Открыть таблицу размеров"
-            >
-              ТАБЛИЦА РАЗМЕРОВ
-            </button>
-
-            <div
-              className="absolute left-[70px] top-[492px] z-20 flex w-[200px] flex-col items-center"
-              style={{ gap: MOBILE_MODEL_HEADING_GAP }}
-            >
-              <p
-                className="w-full text-center uppercase"
-                style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 26,
-                  fontWeight: 700,
-                  color: "#111",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                МОДЕЛЬ
-              </p>
-              <div className="flex gap-[24px]">
-              {MODEL_OPTIONS.map((model) => {
-                const colW = model.key === "high" ? 96 : 94;
-                const isLow = model.key === "low";
-                return (
-                  <div key={`mobile-model-col-${model.key}`} className="flex flex-col items-center gap-3" style={{ width: colW, minWidth: colW }}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (isLow) {
-                          setShowLowComingSoon(true);
-                          window.setTimeout(() => setShowLowComingSoon(false), 2500);
-                        } else {
-                          setActiveModelKey(model.key);
-                        }
-                      }}
-                      className="shrink-0 overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
+                  {!isMobileTextExpanded && (
+                    <div
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-8"
                       style={{
-                        width: colW,
-                        height: 95,
-                        border: activeModelKey === model.key ? "2px solid #f07426" : "1px solid #9a9a9a",
-                        cursor: isLow ? "default" : "pointer",
-                        opacity: isLow ? 0.85 : 1,
-                      }}
-                    >
-                      <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
-                    </button>
-                    <p
-                      className="flex min-w-0 w-full justify-center text-center uppercase"
-                      style={{
-                        margin: 0,
-                        padding: 0,
-                        fontFamily: "var(--font-roboto-flex), sans-serif",
-                        fontSize: 19,
-                        fontWeight: 700,
-                        color: activeModelKey === model.key ? "#f07426" : "#9a9a9a",
-                        textDecoration: activeModelKey === model.key ? "underline" : "none",
-                      }}
-                    >
-                      {model.label}
-                    </p>
-                  </div>
-                );
-              })}
-              </div>
-            </div>
-
-            <div
-              className="absolute left-[471px] z-20 flex w-[200px] flex-col items-center"
-              style={{ top: MOBILE_COLOR_TOP, gap: MOBILE_COLOR_HEADING_GAP }}
-            >
-              <p
-                className="w-full text-center uppercase"
-                style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                  fontSize: 26,
-                  fontWeight: 700,
-                  color: "#111",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                ЦВЕТ
-              </p>
-              <div className="flex gap-[24px]">
-              {(["black", "oliva"] as ColorVariant[]).map((v) => {
-                const colW = v === "black" ? 96 : 94;
-                return (
-                  <div key={v} className="flex flex-col items-center gap-3" style={{ width: colW, minWidth: colW }}>
-                    <button
-                      type="button"
-                      onClick={() => setColorVariant(v)}
-                      className="shrink-0 rounded-[8px] transition-all"
-                      style={{
-                        width: colW,
-                        height: 95,
-                        backgroundColor: v === "black" ? "#191919" : "#686248",
-                        border: colorVariant === v ? "2px solid #f07426" : "1px solid #9a9a9a",
+                        background: "linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.92) 70%, rgba(255,255,255,1) 100%)",
                       }}
                     />
-                      <p
-                        className="flex min-w-0 w-full justify-center text-center uppercase"
-                        style={{
-                          margin: 0,
-                          padding: 0,
-                          fontFamily: "var(--font-roboto-flex), sans-serif",
-                          fontSize: 19,
-                          fontWeight: 700,
-                          color: colorVariant === v ? "#f07426" : "#9a9a9a",
-                          textDecoration: colorVariant === v ? "underline" : "none",
-                        }}
-                      >
-                        {v === "black" ? "ЧЕРНЫЙ" : "ОЛИВА"}
-                      </p>
-                  </div>
-                );
-              })}
+                  )}
+                </div>
+
+                {!isMobileTextExpanded && (
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileTextExpanded(true)}
+                    className="mt-2 flex min-h-[36px] w-full items-end gap-2 text-left text-[#6d7339]"
+                    style={{
+                      fontFamily: "var(--font-roboto-flex), sans-serif",
+                      fontSize: 13,
+                      fontWeight: 500,
+                      textUnderlineOffset: "3px",
+                      color: "#f07426",
+                    }}
+                  >
+                    Больше <span aria-hidden="true">▾</span>
+                  </button>
+                )}
+
               </div>
-            </div>
 
-            <Link
-              href="/where-to-buy"
-              className="absolute left-[447px] top-[708px] z-20 flex h-[72px] w-[248px] items-center justify-center rounded-[16px] text-white no-underline"
-              style={{
-                background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 31,
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-              }}
-            >
-              Где купить
-            </Link>
+              <button
+                type="button"
+                onClick={openSizeGrid}
+                className="size-table-link mt-1 min-h-[48px] py-2 pr-3 pl-0 text-left"
+                style={{ fontSize: 17, lineHeight: 1.15 }}
+                aria-label="Открыть таблицу размеров"
+              >
+                ТАБЛИЦА РАЗМЕРОВ ›
+              </button>
 
-            {/* Текущее фото ботинка (мобильная). Масштаб и смещение отдельно для black/oliva, обёртка для анимации перелистывания. */}
-            <div
-              className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
-              style={{
-                width: 741,
-                height: 944,
-                transform: `translateX(${viewSlideOffsetX}px)`,
-                transition: viewSlideTransition ? `transform ${viewSlideDurationMs}ms ease-out` : "none",
-              }}
-            >
-              <div
-                className="h-full w-full origin-center"
+              <Link
+                href="/where-to-buy"
+                className="mt-1 mx-auto flex h-[40px] w-full max-w-[207px] items-center justify-center rounded-[12px] text-white no-underline"
                 style={{
-                  transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% + 175px + ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                  background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 17,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
                 }}
               >
-                <img
-                  key={`mobile-${viewTransitionTick}-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
-                  src={currentViewImage}
-                  alt="Тактическая обувь"
-                  className="h-full w-full object-contain drop-shadow-[0_35px_60px_rgba(0,0,0,0.18)]"
-                />
-              </div>
+                Где купить
+              </Link>
             </div>
-
-            {/* Зона свайпа по центру: смена фото влево/вправо (z ниже кнопок, чтобы не перекрывать) */}
-            <div
-              className="absolute left-0 top-[26%] z-[1] h-[58%] w-full touch-none"
-              aria-label="Свайп влево или вправо для смены фото"
-              onTouchStart={(e) => {
-                mobileSwipeStartX.current = e.targetTouches[0]?.clientX ?? null;
-              }}
-              onTouchEnd={(e) => {
-                const start = mobileSwipeStartX.current;
-                if (start == null) return;
-                const end = e.changedTouches[0]?.clientX;
-                if (end == null) return;
-                mobileSwipeStartX.current = null;
-                const delta = start - end;
-                const maxIndex = Math.max(0, activeViewImages.length - 1);
-                if (delta > 50) {
-                  changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
-                } else if (delta < -50) {
-                  changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
-                }
-              }}
-            />
-
-            {/* Стрелки свайпа: акцентные, кликабельные */}
-            <button
-              type="button"
-              onClick={() => {
-                const maxIndex = Math.max(0, activeViewImages.length - 1);
-                changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
-              }}
-              className="absolute left-0 top-[40%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-end pr-1 transition-opacity hover:opacity-100 active:opacity-90"
-              style={{ background: "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 70%, transparent 100%)" }}
-              aria-label="Предыдущее фото"
-            >
-              <span
-                className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#f07426] text-white shadow-[0_4px_12px_rgba(240,116,38,0.4)]"
-                style={{ fontSize: 24, fontWeight: 700, lineHeight: 1 }}
-              >
-                ‹
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                const maxIndex = Math.max(0, activeViewImages.length - 1);
-                changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
-              }}
-              className="absolute right-0 top-[40%] z-20 flex h-[44%] w-[56px] cursor-pointer items-center justify-start pl-1 transition-opacity hover:opacity-100 active:opacity-90"
-              style={{ background: "linear-gradient(to left, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.5) 70%, transparent 100%)" }}
-              aria-label="Следующее фото"
-            >
-              <span
-                className="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#f07426] text-white shadow-[0_4px_12px_rgba(240,116,38,0.4)]"
-                style={{ fontSize: 24, fontWeight: 700, lineHeight: 1 }}
-              >
-                ›
-              </span>
-            </button>
-
           </div>
-
         </div>
       </section>
       )}
@@ -1142,23 +1166,13 @@ export default function BuyPage() {
               isSizeGridVisible ? "translate-y-0 scale-100 opacity-100" : "translate-y-2 scale-95 opacity-0"
             }`}
           >
-            <div className="relative flex items-center justify-end border-b border-[#ececec] px-5 py-4 pr-2 min-[1200px]:px-7 min-[1200px]:pr-3">
+            <div className="relative flex items-center justify-center border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
               <h3
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase text-[#111]"
+                className="whitespace-nowrap uppercase text-[#111]"
                 style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 24, fontWeight: 700, letterSpacing: "0.08em" }}
               >
                 Размерная сетка
               </h3>
-              <button
-                type="button"
-                aria-label="Закрыть таблицу размеров"
-                onClick={closeSizeGrid}
-                className="-mr-1 flex size-12 min-w-12 min-h-12 items-center justify-center text-[#111] hover:opacity-70 focus:outline-none min-[1200px]:-mr-2 min-[1200px]:size-14 min-[1200px]:min-w-14 min-[1200px]:min-h-14"
-              >
-                <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M6 6l12 12M18 6L6 18" />
-                </svg>
-              </button>
             </div>
             <div className="max-h-[calc(84dvh-78px)] overflow-hidden">
               <table className="w-full table-fixed border-collapse text-left min-[1200px]:w-auto min-[1200px]:min-w-[640px]">

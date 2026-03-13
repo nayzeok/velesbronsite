@@ -52,7 +52,7 @@ export const MOBILE_BOOT_BY_VIEW_BY_COLOR = {
 /** Масштаб ширины плашек по горизонтали (1 = 100%) */
 export const MOBILE_PLAQUE_WIDTH_SCALE = 0.8;
 /** Масштаб размера текста в плашках (1.2 = +20%) */
-export const MOBILE_PLAQUE_TEXT_SCALE = 1.2;
+export const MOBILE_PLAQUE_TEXT_SCALE = 1.02;
 
 /** Размер точки у плашек на мобиле (px): внешний оранжевый круг и внутренний белый кружок */
 export const MOBILE_PLAQUE_DOT = { outer: 16, inner: 6 } as const;

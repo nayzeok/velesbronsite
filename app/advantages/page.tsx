@@ -301,7 +301,7 @@ const carouselMarkerAngles = carouselItems.reduce<number[]>((acc, item, index) =
   return [...acc, angle];
 }, []);
 
-export default function ModelsPage() {
+export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean } = {}) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [transitionTick, setTransitionTick] = useState(0);
   const [colorVariant, setColorVariant] = useState<ColorVariant>("oliva");
@@ -354,7 +354,7 @@ export default function ModelsPage() {
       : null;
   /** Плашки: сузить по горизонтали на 20%, текст +20%. Точка привязана к плашке (позиция от плашки + смещение). */
   const DESKTOP_PLAQUE_WIDTH_SCALE = 0.8;
-  const DESKTOP_PLAQUE_TEXT_SCALE = 1.2;
+  const DESKTOP_PLAQUE_TEXT_SCALE = 1.02;
   const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
   const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
   const isCalloutSingleLine = !String(currentView.callout.text ?? "").trim();
@@ -393,7 +393,7 @@ export default function ModelsPage() {
     justifyContent: "center",
     textAlign: "center" as const,
     fontFamily: "var(--font-roboto-flex), sans-serif",
-    fontSize: 22,
+    fontSize: 19,
     fontStyle: "normal" as const,
     fontWeight: 700,
     lineHeight: "115%",
@@ -532,7 +532,7 @@ export default function ModelsPage() {
   }, [isDesktop, mobileReady]);
 
   return (
-    <main className="figma-site-page overflow-x-hidden overflow-y-auto bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
+    <>
       <div className="sr-only" aria-hidden="true">
         {Object.values(colorViewImages).flat().map((src) => (
           <img key={src} src={src} alt="" />
@@ -544,7 +544,7 @@ export default function ModelsPage() {
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
-          <SiteHeader className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />
+          {showHeader && <SiteHeader className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />}
           <div
             className="absolute inset-x-0 top-0 h-[1000px] origin-top"
             style={{
@@ -611,7 +611,7 @@ export default function ModelsPage() {
                     style={{
                       color: "#111",
                       fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                      fontSize: 34,
+                      fontSize: 29,
                       fontStyle: "normal",
                       fontWeight: 700,
                       letterSpacing: "0.08em",
@@ -622,14 +622,14 @@ export default function ModelsPage() {
                 </div>
                 <div className="flex gap-4">
                   <div className="w-[34px] shrink-0" aria-hidden="true" />
-                  <p className="max-w-[532px] text-[24px] font-medium leading-[1.35] tracking-normal text-[#111]">
+                  <p className="max-w-[532px] text-[20px] font-medium leading-[1.35] tracking-normal text-[#111]">
                     {currentView.description}
                   </p>
                 </div>
               </div>
               <Link
                 href="/models"
-                className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[26px] font-medium text-white"
+                className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[22px] font-medium text-white"
                 style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", letterSpacing: "0.08em" }}
               >
                 ПОДРОБНЕЕ
@@ -710,8 +710,8 @@ export default function ModelsPage() {
             {currentView.showMetrics !== false && "metricTop" in currentView && "metricSide" in currentView && (
               <>
                 <div className="absolute left-[852px] top-[252px] z-20 h-[128px] w-[303px] rounded-[25px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
-                  <p className="text-[72px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentView.metricTop.value}</p>
-                  <div className="absolute left-[142px] top-[18px] text-[24px] leading-[1.1] tracking-[-0.02em]">
+                  <p className="text-[61px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentView.metricTop.value}</p>
+                  <div className="absolute left-[142px] top-[18px] text-[20px] leading-[1.1] tracking-[-0.02em]">
                     <p className="font-bold text-[#111]">{currentView.metricTop.title}</p>
                     <p className="text-[#111]/40">{currentView.metricTop.line1}</p>
                     <p className="text-[#111]/40">{currentView.metricTop.line2}</p>
@@ -725,9 +725,9 @@ export default function ModelsPage() {
                   <span className="absolute -left-[13px] -top-[13px] flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                     <span className="size-[10px] rounded-full bg-white" />
                   </span>
-                  <p className="pt-8 text-center text-[72px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
-                  <p className="-mt-1 text-center text-[24px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line1}</p>
-                  <p className="text-center text-[24px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line2}</p>
+                  <p className="pt-8 text-center text-[61px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
+                  <p className="-mt-1 text-center text-[20px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line1}</p>
+                  <p className="text-center text-[20px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line2}</p>
                   <div className="absolute left-[10px] top-[210px] h-[94px] w-[152px] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                     <img
                       src={metricSideImage}
@@ -1207,7 +1207,7 @@ export default function ModelsPage() {
 
       {!isDesktop && !mobileReady && (
       <section className="flex min-h-[100dvh] items-center justify-center bg-[#d9d9d9]">
-        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 18 }}>Загрузка…</p>
+        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 15 }}>Загрузка…</p>
       </section>
       )}
       {!isDesktop && mobileReady && (
@@ -1271,7 +1271,7 @@ export default function ModelsPage() {
                   style={{
                     color: "#111",
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                    fontSize: 30,
+                    fontSize: 26,
                     fontStyle: "normal",
                     fontWeight: 700,
                     letterSpacing: "0.08em",
@@ -1283,14 +1283,14 @@ export default function ModelsPage() {
             </div>
             <div className="flex gap-[10px]">
               <div className="w-[34px] shrink-0" aria-hidden="true" />
-              <p className="max-w-[280px] font-medium text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 20, lineHeight: 1.35 }}>
+              <p className="max-w-[280px] font-medium text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 17, lineHeight: 1.35 }}>
                   {currentView.description}
                 </p>
               </div>
             </div>
             <Link
               href="/where-to-buy"
-              className="ml-[44px] mt-5 flex h-[56px] w-[180px] items-center justify-center rounded-[14px] text-[20px] font-medium text-white no-underline"
+              className="ml-[44px] mt-5 flex h-[56px] w-[180px] items-center justify-center rounded-[14px] text-[17px] font-medium text-white no-underline"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                 fontFamily: "var(--font-russo-one), Russo One, sans-serif",
@@ -1417,19 +1417,28 @@ export default function ModelsPage() {
               top: currentMobileBoot.top,
               width: currentMobileBoot.width,
               height: currentMobileBoot.height,
-              touchAction: "pan-x",
               transform: `translateX(${mobileBootShiftX}px) scale(${currentMobileBoot.scale ?? 1})`,
               transformOrigin: "50% 50%",
               transition: mobileBootShiftTransition ? `transform ${mobileBootShiftDurationMs}ms ease-out` : "none",
             }}
-            onTouchStart={handleMobileBootTouchStart}
-            onTouchEnd={handleMobileBootTouchEnd}
           >
+            {/* Узкая зона по центру: блокирует вертикальный скролл только здесь, чтобы боковой свайп не сдвигал страницу; сверху/снизу скролл свободен */}
+            <div
+              className="absolute left-0 right-0 z-10"
+              style={{
+                top: "37.5%",
+                height: "25%",
+                touchAction: "pan-x",
+              }}
+              aria-label="Свайп влево или вправо для смены ракурса"
+              onTouchStart={handleMobileBootTouchStart}
+              onTouchEnd={handleMobileBootTouchEnd}
+            />
             <img
               key={`mobile-${transitionTick}-${colorVariant}`}
               src={displayViewImage}
               alt="Модель ботинка"
-              className="h-full w-full drop-shadow-[0_30px_70px_rgba(0,0,0,0.2)]"
+              className="h-full w-full drop-shadow-[0_30px_70px_rgba(0,0,0,0.2)] pointer-events-none"
               style={{
                 objectFit: "contain",
                 objectPosition: currentMobileBoot.objectPosition,
@@ -1603,6 +1612,14 @@ export default function ModelsPage() {
         </div>
       </section>
       )}
+    </>
+  );
+}
+
+export default function AdvantagesPage() {
+  return (
+    <main className="figma-site-page overflow-x-hidden bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
+      <AdvantagesContent />
     </main>
   );
 }

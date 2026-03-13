@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useScrollContainer } from "@/contexts/ScrollContainerContext";
 
 type ScrollHighlightContextValue = {
   register: (id: string, el: HTMLElement | null) => void;
