@@ -564,9 +564,9 @@ export default function BuyPage() {
                   }}
                 aria-label="Открыть таблицу размеров"
               >
-                <span className="size-table-link__base">ТАБЛИЦА РАЗМЕРОВ</span>
+                <span className="size-table-link__base">ТАБЛИЦА РАЗМЕРОВ ›</span>
                 <span className="size-table-link__hover" aria-hidden="true">
-                  ТАБЛИЦА РАЗМЕРОВ
+                  ТАБЛИЦА РАЗМЕРОВ ›
                 </span>
               </button>
 
@@ -627,11 +627,11 @@ export default function BuyPage() {
                           fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                           fontSize: 17,
                           fontWeight: 700,
-                          color: activeModelKey === model.key ? "#f07426" : isLow ? "#9a9a9a" : "#9a9a9a",
-                          textDecoration: activeModelKey === model.key ? "underline" : "none",
+                          color: activeModelKey === model.key ? "#f07426" : "#111",
+                          letterSpacing: "0.06em",
                         }}
                       >
-                        {model.label}
+                        {model.key === "high" ? "2SK" : "2N"}
                       </p>
                     </div>
                   );
@@ -666,14 +666,24 @@ export default function BuyPage() {
                   <button
                     type="button"
                     onClick={() => setColorVariant("black")}
-                    className="shrink-0 rounded-[8px] transition-all"
+                    className="shrink-0 rounded-[8px] bg-white transition-all"
                     style={{
                       width: 76,
                       height: 75,
-                      backgroundColor: "#191919",
                       border: colorVariant === "black" ? "2px solid #f07426" : "2px solid #e0e0e0",
+                      boxShadow: colorVariant === "black" ? "0 4px 12px rgba(240,116,38,0.12)" : "none",
+                      cursor: "pointer",
                     }}
-                  />
+                  >
+                    <span
+                      className="mx-auto flex items-center justify-center rounded-[8px]"
+                      style={{
+                        width: 44,
+                        height: 44,
+                        backgroundColor: "#191919",
+                      }}
+                    />
+                  </button>
                   <p
                     className="flex min-w-0 w-full justify-center uppercase"
                     style={{
@@ -682,8 +692,8 @@ export default function BuyPage() {
                       fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                       fontSize: 19,
                       fontWeight: 700,
-                      color: colorVariant === "black" ? "#f07426" : "#9a9a9a",
-                      textDecoration: colorVariant === "black" ? "underline" : "none",
+                      color: colorVariant === "black" ? "#f07426" : "#111",
+                      letterSpacing: "0.06em",
                     }}
                   >
                     ЧЕРНЫЙ
@@ -693,14 +703,24 @@ export default function BuyPage() {
                   <button
                     type="button"
                     onClick={() => setColorVariant("oliva")}
-                    className="shrink-0 rounded-[8px] transition-all"
+                    className="shrink-0 rounded-[8px] bg-white transition-all"
                     style={{
                       width: 74,
                       height: 75,
-                      backgroundColor: "#686248",
                       border: colorVariant === "oliva" ? "2px solid #f07426" : "2px solid #e0e0e0",
+                      boxShadow: colorVariant === "oliva" ? "0 4px 12px rgba(240,116,38,0.12)" : "none",
+                      cursor: "pointer",
                     }}
-                  />
+                  >
+                    <span
+                      className="mx-auto flex items-center justify-center rounded-[8px]"
+                      style={{
+                        width: 44,
+                        height: 44,
+                        backgroundColor: "#686248",
+                      }}
+                    />
+                  </button>
                   <p
                     className="flex min-w-0 w-full justify-center uppercase"
                     style={{
@@ -709,8 +729,8 @@ export default function BuyPage() {
                       fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                       fontSize: 17,
                       fontWeight: 700,
-                      color: colorVariant === "oliva" ? "#f07426" : "#9a9a9a",
-                      textDecoration: colorVariant === "oliva" ? "underline" : "none",
+                      color: colorVariant === "oliva" ? "#f07426" : "#111",
+                      letterSpacing: "0.06em",
                     }}
                   >
                     ОЛИВА
