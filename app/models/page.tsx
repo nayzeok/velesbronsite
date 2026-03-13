@@ -1138,7 +1138,7 @@ export default function BuyPage() {
 
               <Link
                 href="/where-to-buy"
-                className="mt-1 mx-auto flex h-[40px] w-full max-w-[207px] items-center justify-center rounded-[12px] text-white no-underline"
+                className="-mt-2 mx-auto flex h-[40px] w-full max-w-[207px] items-center justify-center rounded-[12px] text-white no-underline"
                 style={{
                   background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",

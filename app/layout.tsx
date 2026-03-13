@@ -87,9 +87,7 @@ export default function RootLayout({
       >
         <ClientErrorToServer />
         <MobileHeader />
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
         <AnalyticsTracker />
         <CookieConsent />
       </body>
