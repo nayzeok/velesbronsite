@@ -62,7 +62,77 @@ const colorViewImages = {
 
 type ColorVariant = keyof typeof colorViewImages;
 
-const views = [
+type MetricTop = { value: string; title: string; line1: string; line2: string };
+type MetricSide = { value: string; line1: string; line2: string };
+type Point = { x: number; y: number };
+type Rect = { left: number; top: number; width: number; height: number };
+type Pose = { rotate: number; x: number; y: number; scale: number };
+type CalloutContent = { title: string; text: string };
+type CalloutStyle = {
+  w: number;
+  h: number;
+  titleSize: number;
+  textSize: number;
+  textOpacity?: number;
+  notch?: { w: number; h: number; x: number; y: number; color: string };
+};
+type GlueStyle = { w: number; h: number; textSize: number };
+type TempWidget = {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  topLabel: string;
+  bottomLabel: string;
+  topLabelPos?: Point;
+  bottomLabelPos?: Point;
+  dot: Point;
+};
+type MobilePlatesConfig = {
+  showTopMetric: boolean;
+  showSideMetric: boolean;
+  showCallout: boolean;
+  showGluePill: boolean;
+  showSecondaryCallout: boolean;
+  topMetric: Rect;
+  topMetricDot: Point;
+  callout: Rect;
+  calloutDot: Point;
+  secondaryCallout: Rect;
+  secondaryCalloutDot: Point;
+  sideMetric: Rect;
+  gluePill: Rect;
+  glueDot: Point;
+};
+type AdvantageView = {
+  title: string;
+  description: string;
+  image: string;
+  callout: CalloutContent;
+  calloutSecondary?: CalloutContent;
+  calloutStyle: CalloutStyle;
+  metricTop?: MetricTop;
+  metricSide?: MetricSide;
+  glue: string;
+  glueStyle: GlueStyle;
+  showGlue?: boolean;
+  showMetrics?: boolean;
+  glueVariant?: "card" | "bubble";
+  bootBox?: { x: number; y: number; w: number; h: number };
+  bootPose?: Pose;
+  olivaPose?: Pose;
+  bootImageFrame?: { wPct: number; hPct: number; leftPct: number; topPct: number };
+  anchors: {
+    calloutCard: Point;
+    calloutDot: Point;
+    glueBubble: Point;
+    glueDot: Point;
+  };
+  mobilePlates?: MobilePlatesConfig;
+  tempWidget?: TempWidget;
+};
+
+const views: AdvantageView[] = [
   {
     title: "ВНЕШНИЙ МАТЕРИАЛ",
     description:
@@ -276,7 +346,7 @@ const views = [
       glueDot: { x: -8, y: -3 },
     },
   },
-] as const;
+];
 
 /** scale в image — масштаб картинки внутри карточки (1 = 100%). */
 const carouselItems = [
@@ -341,8 +411,11 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
   const displayViewImage = colorViewImages[displayColorVariant][activeIndex] ?? currentView.image;
   const mobileBootByColor = MOBILE_BOOT_BY_VIEW_BY_COLOR[displayColorVariant] ?? MOBILE_BOOT_BY_VIEW_BY_COLOR.black;
   const currentMobileBoot = mobileBootByColor[activeIndex] ?? MOBILE_BOOT;
-  const fallbackMobilePlates = MOBILE_PLATES_BY_VIEW[activeIndex] ?? MOBILE_PLATES_BY_VIEW[0];
-  const currentMobilePlates = (currentView as { mobilePlates?: typeof fallbackMobilePlates }).mobilePlates ?? fallbackMobilePlates;
+  const fallbackMobilePlates: MobilePlatesConfig = (MOBILE_PLATES_BY_VIEW[activeIndex] ?? MOBILE_PLATES_BY_VIEW[0]) as MobilePlatesConfig;
+  const currentMobilePlates: MobilePlatesConfig = currentView.mobilePlates ?? fallbackMobilePlates;
+  const currentMetricTop = currentView.metricTop ?? { value: "", title: "", line1: "", line2: "" };
+  const currentMetricSide = currentView.metricSide ?? { value: "", line1: "", line2: "" };
+  const currentTempWidget = currentView.tempWidget ?? null;
   const currentBootBox = currentView.bootBox ?? { x: 460, y: 351, w: 722, h: 565 };
   const currentBootPose =
     colorVariant === "oliva" && "olivaPose" in currentView
@@ -718,11 +791,11 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             {currentView.showMetrics !== false && "metricTop" in currentView && "metricSide" in currentView && (
               <>
                 <div className="absolute left-[852px] top-[252px] z-20 h-[128px] w-[303px] rounded-[25px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
-                  <p className="text-[61px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentView.metricTop.value}</p>
+                  <p className="text-[61px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentMetricTop.value}</p>
                   <div className="absolute left-[142px] top-[18px] text-[20px] leading-[1.1] tracking-[-0.02em]">
-                    <p className="font-bold text-[#111]">{currentView.metricTop.title}</p>
-                    <p className="text-[#111]/40">{currentView.metricTop.line1}</p>
-                    <p className="text-[#111]/40">{currentView.metricTop.line2}</p>
+                    <p className="font-bold text-[#111]">{currentMetricTop.title}</p>
+                    <p className="text-[#111]/40">{currentMetricTop.line1}</p>
+                    <p className="text-[#111]/40">{currentMetricTop.line2}</p>
                   </div>
                   <span className="absolute -bottom-5 left-0 flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                     <span className="size-[10px] rounded-full bg-white" />
@@ -733,9 +806,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   <span className="absolute -left-[13px] -top-[13px] flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                     <span className="size-[10px] rounded-full bg-white" />
                   </span>
-                  <p className="pt-8 text-center text-[61px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentView.metricSide.value}</p>
-                  <p className="-mt-1 text-center text-[20px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line1}</p>
-                  <p className="text-center text-[20px] leading-[1.1] text-[#111]/40">{currentView.metricSide.line2}</p>
+                  <p className="pt-8 text-center text-[61px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentMetricSide.value}</p>
+                  <p className="-mt-1 text-center text-[20px] leading-[1.1] text-[#111]/40">{currentMetricSide.line1}</p>
+                  <p className="text-center text-[20px] leading-[1.1] text-[#111]/40">{currentMetricSide.line2}</p>
                   <div className="absolute left-[10px] top-[210px] h-[94px] w-[152px] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                     <img
                       src={metricSideImage}
@@ -750,26 +823,26 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             )}
 
             {/* Градусник на 4-м ракурсе — временно отключен */}
-            {false && currentView.tempWidget && (
+            {false && currentTempWidget && (
               <>
                 <p
                   className="absolute z-20"
                   style={{
                     ...tempLabelStyle,
-                    left: currentView.tempWidget.topLabelPos?.x ?? currentView.tempWidget.x + 40,
-                    top: currentView.tempWidget.topLabelPos?.y ?? currentView.tempWidget.y - 40,
+                    left: currentTempWidget!.topLabelPos?.x ?? currentTempWidget!.x + 40,
+                    top: currentTempWidget!.topLabelPos?.y ?? currentTempWidget!.y - 40,
                     transform: "translateX(-50%)",
                   }}
                 >
-                  {currentView.tempWidget.topLabel}
+                  {currentTempWidget!.topLabel}
                 </p>
                 <div
                   className="absolute z-20"
                   style={{
-                    left: currentView.tempWidget.x,
-                    top: currentView.tempWidget.y,
-                    width: currentView.tempWidget.w,
-                    height: currentView.tempWidget.h,
+                    left: currentTempWidget!.x,
+                    top: currentTempWidget!.y,
+                    width: currentTempWidget!.w,
+                    height: currentTempWidget!.h,
                   }}
                 >
                   <svg
@@ -808,16 +881,16 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   className="absolute z-20"
                   style={{
                     ...tempLabelStyle,
-                    left: currentView.tempWidget.bottomLabelPos?.x ?? currentView.tempWidget.x + 36,
-                    top: currentView.tempWidget.bottomLabelPos?.y ?? currentView.tempWidget.y + currentView.tempWidget.h + 16,
+                    left: currentTempWidget!.bottomLabelPos?.x ?? currentTempWidget!.x + 36,
+                    top: currentTempWidget!.bottomLabelPos?.y ?? currentTempWidget!.y + currentTempWidget!.h + 16,
                     transform: "translateX(-50%)",
                   }}
                 >
-                  {currentView.tempWidget.bottomLabel}
+                  {currentTempWidget!.bottomLabel}
                 </p>
                 <span
                   className="absolute z-20 flex size-[30px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]"
-                  style={{ left: currentView.tempWidget.dot.x, top: currentView.tempWidget.dot.y }}
+                  style={{ left: currentTempWidget!.dot.x, top: currentTempWidget!.dot.y }}
                 >
                   <span className="size-[12px] rounded-full bg-white" />
                 </span>
@@ -1467,11 +1540,11 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   height: currentMobilePlates.topMetric.height,
                 }}
               >
-                <p className="font-bold leading-none tracking-[-0.04em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricTop.value}</p>
+                <p className="font-bold leading-none tracking-[-0.04em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricTop.value}</p>
                 <div className="mt-1 leading-[1.03]" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>
-                  <p className="font-bold text-[#111]">{currentView.metricTop.title}</p>
-                  <p className="text-[#111]/35">{currentView.metricTop.line1}</p>
-                  <p className="text-[#111]/35">{currentView.metricTop.line2}</p>
+                  <p className="font-bold text-[#111]">{currentMetricTop.title}</p>
+                  <p className="text-[#111]/35">{currentMetricTop.line1}</p>
+                  <p className="text-[#111]/35">{currentMetricTop.line2}</p>
                 </div>
               </div>
               <span
@@ -1560,7 +1633,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
           )}
 
           {currentMobilePlates.showSecondaryCallout && (() => {
-            const secondaryCalloutContent = (currentView as { calloutSecondary?: { title: string; text: string } }).calloutSecondary ?? currentView.callout;
+            const secondaryCalloutContent = currentView.calloutSecondary ?? currentView.callout;
             return (
             <>
               <div
@@ -1608,9 +1681,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               >
                 <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
               </span>
-              <p className="font-bold leading-none tracking-[-0.08em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricSide.value}</p>
-              <p className="pt-2 leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricSide.line1}</p>
-              <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.metricSide.line2}</p>
+              <p className="font-bold leading-none tracking-[-0.08em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.value}</p>
+              <p className="pt-2 leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line1}</p>
+              <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line2}</p>
               <div className="relative mt-2 h-[56px] w-[91px] overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                 <img src={metricSideImage} alt="" className="absolute max-w-none object-cover" style={{ width: 164, height: 118, left: -42, top: -64 }} />
               </div>

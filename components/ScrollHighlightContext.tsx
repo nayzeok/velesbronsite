@@ -9,7 +9,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useScrollContainer } from "@/contexts/ScrollContainerContext";
 
 type ScrollHighlightContextValue = {
   register: (id: string, el: HTMLElement | null) => void;
@@ -144,7 +143,7 @@ export function ScrollHighlightScrollMain({
 }: React.HTMLAttributes<HTMLElement>) {
   const ctx = useScrollHighlight();
   const setRef = useCallback(
-    (el: HTMLMainElement | null) => {
+    (el: HTMLElement | null) => {
       ctx?.registerScrollContainer(el);
     },
     [ctx]
