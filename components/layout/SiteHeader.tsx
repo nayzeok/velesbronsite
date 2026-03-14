@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 /** Отступ от краёв — на 13" меньше, чтобы меню не заходило под лого */
 const HEADER_EDGE_PADDING_LEFT = "clamp(16px, 2.2vw, 136px)";
@@ -22,7 +22,7 @@ type SiteHeaderProps = {
 
 const LEFT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
   { key: "brand", label: "О бренде", href: "/brand" },
-  { key: "advantages", label: "Конструкция", href: "/advantages" },
+  { key: "advantages", label: "Конструкция", href: "/#advantages" },
   { key: "models", label: "Модели", href: "/models" },
 ];
 const RIGHT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
@@ -33,8 +33,35 @@ const RIGHT_ITEMS: { key: MenuKey; label: string; href: string }[] = [
 
 export default function SiteHeader({ activeItem, tone = "dark", className, style }: SiteHeaderProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const isLight = tone === "light";
   const isLightBg = tone === "lightBg";
+  const handleAdvantagesClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/") {
+      event.preventDefault();
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("pending-home-scroll", "advantages");
+      }
+      router.push("/");
+      return;
+    }
+    const section = document.getElementById("advantages");
+    if (!section) return;
+    event.preventDefault();
+    const scrollEl = document.querySelector<HTMLElement>(".figma-site-page");
+    const isScrollable = scrollEl && scrollEl.scrollHeight > scrollEl.clientHeight;
+    if (isScrollable && scrollEl) {
+      scrollEl.scrollTo({
+        top: section.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop,
+        behavior: "smooth",
+      });
+      return;
+    }
+    window.scrollTo({
+      top: section.getBoundingClientRect().top + window.scrollY,
+      behavior: "smooth",
+    });
+  };
   /** Общие отступы у всех пунктов — чтобы плашка активного не сдвигала сетку */
   const itemPadding = "px-3 py-2.5 rounded-[10px]";
   /** Активный пункт — плашка через CSS ::before; light = на тёмном фоне, lightBg = на белом фоне (тёмный текст) */
@@ -66,6 +93,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               <Link
                 key={item.key}
                 href={item.href}
+                onClick={item.key === "advantages" ? handleAdvantagesClick : undefined}
                 className={linkClass(isActive)}
                 style={{
                   fontFamily: "var(--font-roboto-flex), sans-serif",

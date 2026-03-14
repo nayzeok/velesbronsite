@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const MOBILE_MENU_ITEMS = [
   { label: "Главная", href: "/" },
   { label: "О бренде", href: "/brand" },
-  { label: "Конструкция", href: "/advantages" },
+  { label: "Конструкция", href: "/#advantages" },
   { label: "Модели", href: "/models" },
   { label: "Где купить", href: "/where-to-buy" },
   { label: "Медиа", href: "/media" },
@@ -31,6 +31,7 @@ const SCROLL_DIRECTION_THRESHOLD_PX = 5;
 
 export default function MobileHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isMenuButtonVisible, setIsMenuButtonVisible] = useState(true);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -45,6 +46,35 @@ export default function MobileHeader() {
   const currentPageTitle =
     MOBILE_PAGE_TITLES.find((item) => item.match(pathname))?.title ?? "VELESBRON";
 
+  const handleAdvantagesClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/") {
+      event.preventDefault();
+      closeMenu();
+      if (typeof window !== "undefined") {
+        window.sessionStorage.setItem("pending-home-scroll", "advantages");
+      }
+      router.push("/");
+      return;
+    }
+    const section = document.getElementById("advantages");
+    if (!section) return;
+    event.preventDefault();
+    closeMenu();
+    const scrollEl = document.querySelector<HTMLElement>(".figma-site-page");
+    const isScrollable = scrollEl && scrollEl.scrollHeight > scrollEl.clientHeight;
+    if (isScrollable && scrollEl) {
+      scrollEl.scrollTo({
+        top: section.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop,
+        behavior: "smooth",
+      });
+      return;
+    }
+    window.scrollTo({
+      top: section.getBoundingClientRect().top + window.scrollY,
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
     if (typeof document === "undefined" || !isOpen) return;
     const prev = document.body.style.overflow;
@@ -53,6 +83,10 @@ export default function MobileHeader() {
       document.body.style.overflow = prev;
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -118,17 +152,25 @@ export default function MobileHeader() {
           </button>
 
           <div className="flex-1 px-2 text-center">
-            <span
-              className="block truncate uppercase text-[#111]"
-              style={{
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: 24,
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-              }}
-            >
-              {currentPageTitle}
-            </span>
+            {pathname === "/" ? (
+              <img
+                src={LOGO_SRC}
+                alt="VelesBron"
+                className="mx-auto h-8 w-[140px] object-contain object-center"
+              />
+            ) : (
+              <span
+                className="block truncate uppercase text-[#111]"
+                style={{
+                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontSize: 24,
+                  fontWeight: 700,
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {currentPageTitle}
+              </span>
+            )}
           </div>
 
           <div className="min-h-[44px] min-w-[44px] shrink-0" aria-hidden="true" />
@@ -181,6 +223,7 @@ export default function MobileHeader() {
               <Link
                 key={item.label}
                 href={item.href}
+                onClick={item.label === "Конструкция" ? handleAdvantagesClick : closeMenu}
                 className={`mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 text-[22px] transition-all duration-300 ${
                   isOpen ? "translate-x-0 opacity-100" : "-translate-x-6 opacity-0"
                 } ${
@@ -193,7 +236,6 @@ export default function MobileHeader() {
                   fontWeight: 500,
                   transitionDelay: isOpen ? `${100 + index * 55}ms` : "0ms",
                 }}
-                onClick={closeMenu}
               >
                 <span>{item.label}</span>
                 <span className={`text-base ${isActive ? "text-white/95" : "text-[#111]/45"}`}>›</span>

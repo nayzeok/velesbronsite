@@ -611,7 +611,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                     style={{
                       color: "#111",
                       fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                      fontSize: 29,
+                      fontSize: 34,
                       fontStyle: "normal",
                       fontWeight: 700,
                       letterSpacing: "0.08em",
@@ -622,7 +622,15 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 </div>
                 <div className="flex gap-4">
                   <div className="w-[34px] shrink-0" aria-hidden="true" />
-                  <p className="max-w-[532px] text-[20px] font-medium leading-[1.35] tracking-normal text-[#111]">
+                  <p
+                    className="max-w-[532px] tracking-normal text-[#111]"
+                    style={{
+                      fontFamily: "var(--font-roboto-flex), sans-serif",
+                      fontSize: 24,
+                      fontWeight: 500,
+                      lineHeight: 1.35,
+                    }}
+                  >
                     {currentView.description}
                   </p>
                 </div>

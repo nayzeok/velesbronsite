@@ -6,7 +6,7 @@ import { AdvantagesContent } from "@/app/advantages/page";
 import SiteHeader from "@/components/layout/SiteHeader";
 
 const heroBackgroundDesktop = "/images/pages/2.2.png";
-const heroBackgroundMobile = "/images/pages/hero-background.png";
+const heroBackgroundMobile = "/images/pages/hero_back_for_mobile.png";
 const DESIGN_HEIGHT = 1000;
 
 /** Эффекты поверх фона hero (как в Figma): затемнение + градиенты. Подстрой под node 260-3. */
@@ -98,6 +98,54 @@ export default function Home() {
         return () => cancelAnimationFrame(id);
     }, [mobileCarouselActiveIndex, carouselTransitionEnabled]);
 
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+
+        const pendingTarget = window.sessionStorage.getItem("pending-home-scroll");
+        const hashTarget = window.location.hash === "#advantages" ? "advantages" : null;
+        const target = pendingTarget ?? hashTarget;
+        if (target !== "advantages") return;
+
+        const scrollToAdvantages = () => {
+            const section = secondScreenRef.current ?? document.getElementById("advantages");
+            if (!section) return false;
+            const scrollEl = document.querySelector<HTMLElement>(".figma-site-page");
+            const isScrollable = scrollEl && scrollEl.scrollHeight > scrollEl.clientHeight;
+            if (isScrollable && scrollEl) {
+                const nextTop = section.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop;
+                if (nextTop <= 0) return false;
+                scrollEl.scrollTo({
+                    top: nextTop,
+                    behavior: "smooth",
+                });
+            } else {
+                const nextTop = section.getBoundingClientRect().top + window.scrollY;
+                if (nextTop <= 0) return false;
+                window.scrollTo({
+                    top: nextTop,
+                    behavior: "smooth",
+                });
+            }
+            window.sessionStorage.removeItem("pending-home-scroll");
+            if (window.location.hash === "#advantages") {
+                window.history.replaceState(null, "", "/");
+            }
+            return true;
+        };
+
+        let attempts = 0;
+        const maxAttempts = 20;
+        const intervalId = window.setInterval(() => {
+            attempts += 1;
+            const didScroll = scrollToAdvantages();
+            if (didScroll || attempts >= maxAttempts) {
+                window.clearInterval(intervalId);
+            }
+        }, 120);
+
+        return () => window.clearInterval(intervalId);
+    }, []);
+
     /** Смещение трека: слот = карточка + зазор, по центру окна с запасом под кольцо */
     const carouselOffset = MOBILE_CAROUSEL_RING_PAD - mobileCarouselActiveIndex * MOBILE_CAROUSEL_SLOT;
 
@@ -108,7 +156,7 @@ export default function Home() {
                     className="relative overflow-hidden"
                     style={{
                         minHeight: "clamp(720px, 100svh, 900px)",
-                        paddingTop: "calc(4rem + env(safe-area-inset-top, 0px))",
+                        paddingTop: "calc(5rem + env(safe-area-inset-top, 0px))",
                         paddingLeft: "max(clamp(16px, 4vw, 24px), env(safe-area-inset-left))",
                         paddingRight: "max(clamp(16px, 4vw, 24px), env(safe-area-inset-right))",
                         paddingBottom: "max(48px, env(safe-area-inset-bottom, 24px))",
@@ -122,7 +170,7 @@ export default function Home() {
                     <div
                         className="absolute inset-0 pointer-events-none"
                         style={{
-                            background: `url(${heroBackgroundMobile}) lightgray 50% center / auto 100% no-repeat`,
+                            background: `url(${heroBackgroundMobile}) lightgray 50% 42% / auto 100% no-repeat`,
                         }}
                     />
                         <div className="absolute inset-0 bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
@@ -133,27 +181,8 @@ export default function Home() {
                         )}
                     </div>
 
-                    {/* Лого в контенте у самого верха (скроллится вместе со страницей и уходит за экран); мобильное — уменьшено */}
-                    <Link
-                        href="/"
-                        className="header-logo-link group absolute left-1/2 top-0 z-20 flex h-12 w-[165px] -translate-x-1/2 items-center justify-center"
-                        style={{ top: "env(safe-area-inset-top, 0px)" }}
-                        aria-label="VelesBron — на главную"
-                    >
-                        <div
-                            className="logo-plaque pointer-events-none absolute left-1/2 top-0 z-[5] h-[66px] w-[165px] -translate-x-1/2 rounded-b-[10px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-200 group-hover:shadow-[0_10px_40px_rgba(231,129,63,0.5),0_0_0_3px_rgba(231,129,63,0.4)]"
-                            style={{ top: "-22px" }}
-                            aria-hidden="true"
-                        />
-                        <img
-                            src="/images/pages/velesbron_logo.png"
-                            alt="VelesBron"
-                            className="relative z-10 h-8 w-[140px] object-contain object-center"
-                        />
-                    </Link>
-
-                    {/* Верхний блок: Новая модель — прижат к левому краю, выше за счёт компактного лого */}
-                    <div className="relative z-20 mt-1" style={{ maxWidth: "calc(100vw - 2 * clamp(16px, 4vw, 24px))" }}>
+                    {/* Верхний блок: Новая модель */}
+                    <div className="relative z-20 mt-1 mb-5" style={{ maxWidth: "calc(100vw - 2 * clamp(16px, 4vw, 24px))" }}>
                         <h2
                             className="uppercase text-white text-left"
                             style={{
@@ -432,7 +461,7 @@ export default function Home() {
             </section>
 
             {/* Второй экран: контент страницы «Конструкция» (та же вставка на /advantages) */}
-            <section ref={secondScreenRef} className="min-h-[100dvh] w-full snap-start">
+            <section id="advantages" ref={secondScreenRef} className="min-h-[100dvh] w-full snap-start">
                 <AdvantagesContent showHeader={false} />
             </section>
         </main>
