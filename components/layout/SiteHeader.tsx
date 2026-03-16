@@ -4,9 +4,9 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-/** Отступ от краёв — на 13" меньше, чтобы меню не заходило под лого */
+/** Отступ от краёв — симметричный, чтобы плашка с лого была по центру */
 const HEADER_EDGE_PADDING_LEFT = "clamp(16px, 2.2vw, 136px)";
-const HEADER_EDGE_PADDING_RIGHT = "clamp(16px, 2.2vw, 106px)";
+const HEADER_EDGE_PADDING_RIGHT = "clamp(16px, 2.2vw, 136px)";
 /** Зазор между колонкой лого и пунктами меню — на узких экранах меньше */
 const LOGO_GAP = 48;
 
@@ -116,19 +116,19 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
 
         <Link
           href="/"
-          className="header-logo-link group relative flex justify-center min-h-[95px] w-full max-w-[306px]"
+          className="header-logo-link group relative flex justify-center min-h-[86px] w-full max-w-[276px] translate-x-[26px]"
           aria-label="Velesbron — на главную"
         >
           {/* Белая плашка за лого: при наведении подсвечивается */}
           <div
-            className="logo-plaque pointer-events-none absolute left-1/2 z-[5] h-[162px] w-full max-w-[306px] -translate-x-1/2 rounded-b-[12px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-200 group-hover:shadow-[0_10px_40px_rgba(231,129,63,0.5),0_0_0_3px_rgba(231,129,63,0.4)]"
+            className="logo-plaque pointer-events-none absolute left-1/2 z-[5] h-[146px] w-full max-w-[276px] -translate-x-1/2 rounded-b-[22px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-200 group-hover:shadow-[0_10px_40px_rgba(231,129,63,0.5),0_0_0_3px_rgba(231,129,63,0.4)]"
             style={{ top: "-63px" }}
             aria-hidden="true"
           />
           <img
             src="/images/pages/velesbron_logo.png"
             alt=""
-            className="relative z-10 h-[95px] w-full max-w-[252px] object-contain"
+            className="relative z-10 h-[86px] w-full max-w-[227px] object-contain"
           />
         </Link>
 

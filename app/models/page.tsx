@@ -276,6 +276,7 @@ export default function BuyPage() {
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
   const sizeGridCloseTimerRef = useRef<number | null>(null);
   const mobileSwipeStartX = useRef<number | null>(null);
+  const mobileDotsTouchIndexRef = useRef<number | null>(null);
   const viewSlidePhaseTimerRef = useRef<number | null>(null);
   const viewSlideFinishTimerRef = useRef<number | null>(null);
   const [mobileScale, setMobileScale] = useState(0.5);
@@ -1070,17 +1071,82 @@ export default function BuyPage() {
                 </button>
               </div>
 
-            <div className="-mt-2 flex justify-center gap-3" aria-label="Позиция фото">
+            <div
+              className="-mt-2 flex justify-center gap-[8.4px] py-2 touch-none"
+              aria-label="Позиция фото"
+              role="tablist"
+              onTouchStart={(e) => {
+                const touch = e.touches[0];
+                if (!touch) return;
+                const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                const idx = el?.closest("[data-dot-index]")?.getAttribute("data-dot-index");
+                if (idx != null) {
+                  const i = parseInt(idx, 10);
+                  if (!Number.isNaN(i)) {
+                    mobileDotsTouchIndexRef.current = i;
+                    const maxIndex = Math.max(0, activeViewImages.length - 1);
+                    if (i >= 0 && i <= maxIndex && i !== activeViewIndex) {
+                      changeViewWithSlide(i, i > activeViewIndex ? 1 : -1);
+                    }
+                  }
+                }
+              }}
+              onTouchMove={(e) => {
+                const touch = e.touches[0];
+                if (!touch) return;
+                const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                const idx = el?.closest("[data-dot-index]")?.getAttribute("data-dot-index");
+                if (idx == null) return;
+                const i = parseInt(idx, 10);
+                if (Number.isNaN(i)) return;
+                if (mobileDotsTouchIndexRef.current === i) return;
+                mobileDotsTouchIndexRef.current = i;
+                const maxIndex = Math.max(0, activeViewImages.length - 1);
+                if (i >= 0 && i <= maxIndex) changeViewWithSlide(i, i > activeViewIndex ? 1 : -1);
+              }}
+              onTouchEnd={() => {
+                mobileDotsTouchIndexRef.current = null;
+              }}
+              onTouchCancel={() => {
+                mobileDotsTouchIndexRef.current = null;
+              }}
+            >
               {activeViewImages.map((_, i) => (
-                <span
+                <div
                   key={`mobile-view-dot-${i}`}
-                  className="rounded-full"
-                  style={{
-                    width: 10,
-                    height: 10,
-                    backgroundColor: activeViewIndex === i ? "#8a8a8a" : "#d9d9d9",
-                  }}
-                />
+                  className="relative h-2.5 w-2.5 shrink-0"
+                  data-dot-index={i}
+                >
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-label={`Фото ${i + 1}`}
+                    aria-selected={activeViewIndex === i}
+                    onClick={() => {
+                      if (i === activeViewIndex) return;
+                      changeViewWithSlide(i, i > activeViewIndex ? 1 : -1);
+                    }}
+                    className="absolute inset-0 cursor-pointer rounded-full border-0 bg-transparent p-0"
+                    style={{
+                      left: -17,
+                      top: -17,
+                      right: -17,
+                      bottom: -17,
+                      width: "unset",
+                      height: "unset",
+                      boxShadow: "none",
+                    }}
+                  >
+                    <span
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                      style={{
+                        width: 10,
+                        height: 10,
+                        backgroundColor: activeViewIndex === i ? "#8a8a8a" : "#d9d9d9",
+                      }}
+                    />
+                  </button>
+                </div>
               ))}
             </div>
 
