@@ -624,7 +624,10 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               transform: `scale(${stageHeightFitScale})`,
             }}
           >
-            <div className="pointer-events-none absolute left-1/2 -top-[80px] h-full w-[886px] -translate-x-1/2">
+            <div
+              className="pointer-events-none absolute left-1/2 z-10 w-[886px] -translate-x-1/2"
+              style={{ top: -40, height: "calc(100% + 40px)" }}
+            >
               <div className="pointer-events-none absolute inset-0">
                 {Array.from({ length: 14 }).map((_, index) => (
                   <div

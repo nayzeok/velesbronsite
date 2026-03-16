@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AdvantagesContent } from "@/app/advantages/page";
 import SiteHeader from "@/components/layout/SiteHeader";
 
@@ -436,8 +436,30 @@ export default function Home() {
                                     />
                                 </div> */}
                             </div>
-
+                            {/* Вертикальные полосы под плашкой преимуществ, визуально продолжающие фон второго экрана */}
+                            <div
+                                className="pointer-events-none absolute left-1/2 z-[30] hidden h-[15px] w-[790px] -translate-x-1/2 min-[1200px]:block"
+                                style={{ top: "calc(100dvh - 10px)" }}
+                            >
+                                <div className="pointer-events-none absolute inset-0">
+                                    {Array.from({ length: 14 }).map((_, index) => (
+                                        <div
+                                            key={index}
+                                            className="absolute inset-y-0"
+                                            style={{ left: `${(index * 100) / 14}%`, width: `${100 / 14}%` }}
+                                        >
+                                            <div
+                                                className="absolute inset-0"
+                                                style={{
+                                                    backgroundImage:
+                                                        "linear-gradient(-90deg, rgba(255,255,255,0.01) 20%, rgba(40,40,40,0.12) 75.758%, rgba(255,255,255,0.01) 123.64%)",
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
+                        </div>
                     </div>
                 </div>
             </section>
