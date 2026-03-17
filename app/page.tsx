@@ -62,9 +62,18 @@ const HERO_FEATURES_STRIP = [
   },
 ];
 
+/** Горизонтальный отступ левого и правого блоков героя от краёв (desktop) */
+const HERO_CONTENT_PADDING_X = "39px";
+/** Отступ от верха: левый блок = 80px (спейсер) + HERO_LEFT_BLOCK_MARGIN_TOP */
+const HERO_LEFT_BLOCK_MARGIN_TOP = "clamp(60px, calc(36px + 5vh), 84px)";
+/** Отступ правого блока от верха. Увеличь числа — блок опустится (например 180px, 156px+5vh, 204px) */
+const HERO_RIGHT_BLOCK_TOP = "clamp(154px, calc(130px + 5vh), 178px)";
+/** Смещение скролла при переходе по якорю «Конструкция»: прокрутить ниже, чтобы плашка преимуществ не перекрывала контент (px) */
+const ADVANTAGES_SCROLL_OFFSET = 120;
+
 const MOBILE_CARD_WIDTH = 260;
 const MOBILE_CARD_GAP = 56;
-const MOBILE_SET_WIDTH = HERO_ADVANTAGES.length * MOBILE_CARD_WIDTH + (HERO_ADVANTAGES.length - 1) * MOBILE_CARD_GAP;
+const MOBILE_SET_WIDTH = HERO_FEATURES_STRIP.length * MOBILE_CARD_WIDTH + (HERO_FEATURES_STRIP.length - 1) * MOBILE_CARD_GAP;
 /** Расстояние между карточками в карусели (px) */
 const MOBILE_CAROUSEL_GAP = 16;
 /** Запас по краям окна карусели, чтобы кольцо/тень подсветки не обрезались (px с каждой стороны) */
@@ -72,14 +81,21 @@ const MOBILE_CAROUSEL_RING_PAD = 14;
 /** Запас сверху/снизу окна карусели (px), чтобы подсветка не обрезалась */
 const MOBILE_CAROUSEL_VERTICAL_PAD = 18;
 const MOBILE_CAROUSEL_SLOT = MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_GAP;
-const MOBILE_CAROUSEL_TRACK_WIDTH = HERO_ADVANTAGES.length * 2 * MOBILE_CARD_WIDTH + (HERO_ADVANTAGES.length * 2 - 1) * MOBILE_CAROUSEL_GAP;
+const MOBILE_CAROUSEL_TRACK_WIDTH = HERO_FEATURES_STRIP.length * 2 * MOBILE_CARD_WIDTH + (HERO_FEATURES_STRIP.length * 2 - 1) * MOBILE_CAROUSEL_GAP;
 /** Длительность показа одной карточки (мс), затем смена на следующую */
 const MOBILE_CAROUSEL_HOLD_MS = 2500;
 /** Длительность анимации сдвига к следующей карточке (мс) */
 const MOBILE_CAROUSEL_TRANSITION_MS = 800;
 
 export default function Home() {
-    const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
+    const [stageHeightFitScale, setStageHeightFitScale] = useState(1);
+    useEffect(() => {
+        const update = () => setStageHeightFitScale(Math.min(1, (typeof window !== "undefined" ? window.innerHeight : 900) / DESIGN_HEIGHT));
+        update();
+        if (typeof window === "undefined") return;
+        window.addEventListener("resize", update);
+        return () => window.removeEventListener("resize", update);
+    }, []);
     const mobileCarouselTrackRef = useRef<HTMLDivElement>(null);
     const secondScreenRef = useRef<HTMLElement>(null);
     const [mobileCarouselActiveIndex, setMobileCarouselActiveIndex] = useState(0);
@@ -88,7 +104,7 @@ export default function Home() {
     useEffect(() => {
         const t = setInterval(() => {
             setMobileCarouselActiveIndex((prev) => {
-                const next = (prev + 1) % (HERO_ADVANTAGES.length * 2);
+                const next = (prev + 1) % (HERO_FEATURES_STRIP.length * 2);
                 if (next === 0) setCarouselTransitionEnabled(false);
                 return next;
             });
@@ -118,14 +134,14 @@ export default function Home() {
             const scrollEl = document.querySelector<HTMLElement>(".figma-site-page");
             const isScrollable = scrollEl && scrollEl.scrollHeight > scrollEl.clientHeight;
             if (isScrollable && scrollEl) {
-                const nextTop = section.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop;
+                const nextTop = section.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop + ADVANTAGES_SCROLL_OFFSET;
                 if (nextTop <= 0) return false;
                 scrollEl.scrollTo({
                     top: nextTop,
                     behavior: "smooth",
                 });
             } else {
-                const nextTop = section.getBoundingClientRect().top + window.scrollY;
+                const nextTop = section.getBoundingClientRect().top + window.scrollY + ADVANTAGES_SCROLL_OFFSET;
                 if (nextTop <= 0) return false;
                 window.scrollTo({
                     top: nextTop,
@@ -213,7 +229,7 @@ export default function Home() {
                         </p>
                         <Link
                             href="/models"
-                            className="mt-4 inline-flex h-14 min-w-[220px] items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 text-[17px] font-medium uppercase tracking-[0.08em] text-white"
+                            className="mt-4 inline-flex h-14 min-w-[220px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 text-[17px] font-medium uppercase tracking-[0.08em] text-white"
                             style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700 }}
                         >
                             Изучить модель
@@ -262,11 +278,11 @@ export default function Home() {
                                     transition: carouselTransitionEnabled ? `transform ${MOBILE_CAROUSEL_TRANSITION_MS}ms cubic-bezier(0.25, 0.1, 0.25, 1)` : "none",
                                 }}
                             >
-                            {[...HERO_ADVANTAGES, ...HERO_ADVANTAGES].map((item, index) => {
+                            {[...HERO_FEATURES_STRIP, ...HERO_FEATURES_STRIP].map((item, index) => {
                                 const isActive = mobileCarouselActiveIndex === index;
                                 return (
                                     <div
-                                        key={`${item.label}-${index}`}
+                                        key={`${item.title}-${index}`}
                                         data-carousel-card={index}
                                         className={`group flex shrink-0 items-center gap-3 rounded-xl py-2.5 pr-3 pl-2.5 transition-all duration-200 hover:scale-[1.02] hover:bg-white/20 hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:ring-2 hover:ring-[#e7813f]/70 ${
                                             isActive ? "!scale-[1.04] !bg-white/25 !shadow-[0_6px_24px_rgba(0,0,0,0.25)] !ring-2 !ring-[#e7813f]" : ""
@@ -284,7 +300,7 @@ export default function Home() {
                                             <img src={item.icon} alt="" className="h-8 w-8 object-contain transition-transform duration-200 group-hover:scale-105" />
                                         </span>
                                         <span className="min-w-0 flex-1 text-white/90 font-medium" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 19, lineHeight: 1.35 }}>
-                                            {item.label}
+                                            {item.title}
                                         </span>
                                     </div>
                                 );
@@ -300,8 +316,8 @@ export default function Home() {
                 className="figma-site-stage relative hidden overflow-visible min-[1200px]:block snap-start snap-always"
                 style={{
                     ["--figma-stage-height" as string]: "100dvh",
-                    height: "calc(100dvh - 65px)",
-                    minHeight: "calc(100dvh - 65px)",
+                    height: "calc(100dvh - 90px)",
+                    minHeight: "calc(100dvh - 90px)",
                 }}
             >
                 <div className="absolute inset-0">
@@ -323,80 +339,92 @@ export default function Home() {
                     )}
                 </div>
 
-                <div className="relative z-10 mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+                <div className="relative z-10 h-[100dvh] w-full overflow-hidden">
                     <SiteHeader
                         tone="light"
                         className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full"
                     />
                     <div
-                        className="absolute inset-x-0 top-0 h-[1000px] origin-top"
+                        className="absolute top-0 h-[1000px]"
                         style={{
+                            left: HERO_CONTENT_PADDING_X,
+                            right: HERO_CONTENT_PADDING_X,
+                            width: `calc((100% - 78px) / ${stageHeightFitScale})`,
+                            transformOrigin: "top left",
                             transform: `scale(${stageHeightFitScale})`,
                         }}
                     >
-                        <div className="relative flex h-[1000px] w-full flex-col px-[clamp(28px,3.5vw,56px)] pb-0 pt-[18px]">
+                        <div className="relative flex h-[1000px] w-full flex-col pb-0 pt-[18px]">
                             <div className="h-[80px] shrink-0" aria-hidden="true" />
 
                             {/* Правый верхний блок с текстовкой, как в исходном варианте */}
                             <div
-                                className="absolute right-0 z-20 flex flex-col items-end text-right"
-                                style={{ top: "clamp(140px, calc(116px + 5vh), 164px)", maxWidth: "min(460px, 30vw)" }}
+                                className="absolute right-0 z-20 flex min-w-0 max-w-[585px] flex-col items-end text-right"
+                                style={{ top: HERO_RIGHT_BLOCK_TOP, width: "min(585px, 32.81vw)" }}
                             >
+                                {/*<div className="rounded-[22px] bg-black/25 px-5 py-4 backdrop-blur-sm w-full min-w-0">
                                 <h1
                                     className="uppercase text-white"
                                     style={{
                                         fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                                         fontSize: "clamp(29px, 1.68vw, 30px)",
                                         fontWeight: 700,
-                                        letterSpacing: "0.04em",
+                                        letterSpacing: "0.08em",
                                         lineHeight: 1.25,
                                     }}
                                 >
                                     РАССЧИТАНО НА НАГРУЗКУ
                                 </h1>
                                 <p
-                                    className="mt-2 text-white/90"
+                                    className="mt-3 text-white/90"
                                     style={{
                                         fontFamily: "var(--font-roboto-flex), sans-serif",
-                                        fontSize: "clamp(23px, 0.94vw, 25px)",
+                                        fontSize: "clamp(25px, 0.94vw, 25px)",
                                         fontWeight: 400,
                                         lineHeight: 1.45,
                                     }}
                                 >
                                     Конструкция, рассчитанная на нагрузку: гибридная подошва, усиленные узлы и современные материалы для защиты и комфорта на дистанции.
                                 </p>
+                                </div>*/}
                             </div>
 
                             {/* Слева — новая модель, кнопка */}
                             <div className="relative z-30 flex min-h-0 flex-1 items-start justify-between gap-[clamp(24px,4vw,64px)]">
                                 <div
-                                    className="flex max-w-[480px] flex-col"
-                                    style={{ marginTop: "clamp(60px, calc(36px + 5vh), 84px)" }}
+                                    className="flex max-w-[853px] flex-col"
+                                    style={{ marginTop: HERO_LEFT_BLOCK_MARGIN_TOP }}
                                 >
+                                    <div className="rounded-[22px] bg-black/25 px-5 py-4 backdrop-blur-sm">
                                     <h2
-                                        className="uppercase text-white"
+                                        className="whitespace-nowrap uppercase text-white"
                                         style={{
                                             fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                                             fontSize: "clamp(29px, 1.68vw, 30px)",
                                             fontWeight: 700,
-                                            letterSpacing: "0.04em",
+                                            letterSpacing: "0.08em",
                                             lineHeight: 1.25,
                                         }}
                                     >
                                         НОВЫЕ МОДЕЛИ VELESBRON
                                     </h2>
                                     <div className="mt-4 flex">
-                                        {["/images/pages/hero_mini_photo_1.png", "/images/pages/hero_mini_photo_2.png", "/images/pages/hero_mini_photo_3.png", "/images/pages/hero_mini_photo_4.png"].map((src, idx) => (
+                                        {[
+                                            "/images/models/ui/IMG_2384 с лого 500_500.png",
+                                            "/images/models/ui/IMG_2396_500_500.png",
+                                            "/images/models/ui/IMG_8761_500_500.png",
+                                            "/images/models/ui/mpphoto_qadrat.png",
+                                        ].map((src, idx) => (
                                             <div
                                                 key={src}
-                                                className={`flex h-[86px] w-[86px] items-center justify-center rounded-full border border-white/80 bg-white/95 shadow-[0_10px_30px_rgba(0,0,0,0.35)] ${
-                                                    idx === 0 ? "" : "-ml-3"
+                                                className={`flex h-[86px] w-[86px] items-center justify-center overflow-hidden rounded-full border-[0.5px] border-white/80 bg-white/95 shadow-[0_10px_30px_rgba(0,0,0,0.35)] ${
+                                                    idx === 0 ? "" : "-ml-1"
                                                 }`}
                                             >
                                                 <img
                                                     src={src}
                                                     alt={`Миниатюра модели ${idx + 1}`}
-                                                    className="h-[78px] w-[78px] rounded-full object-cover"
+                                                    className="h-[80px] w-[80px] object-contain"
                                                 />
                                             </div>
                                         ))}
@@ -405,16 +433,17 @@ export default function Home() {
                                         className="mt-3 text-white/90"
                                         style={{
                                             fontFamily: "var(--font-roboto-flex), sans-serif",
-                                            fontSize: "clamp(23px, 0.94vw, 25px)",
+                                            fontSize: "clamp(25px, 0.94vw, 25px)",
                                             fontWeight: 400,
                                             lineHeight: 1.45,
                                         }}
                                     >
                                         Гибридная подошва с антипрокольной защитой, мембрана VELTEX™ и продуманная конструкция моделей создают уверенность в каждом шаге.
                                     </p>
+                                    </div>
                                     <Link
                                         href="/models"
-                                        className="mt-4 inline-flex h-[75px] w-[260px] shrink-0 items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[19px] font-medium uppercase tracking-[0.08em] text-white"
+                                        className="mt-4 inline-flex h-[75px] w-[260px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[19px] font-medium uppercase tracking-[0.08em] text-white"
                                         style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700 }}
                                     >
                                         Изучить модель
@@ -439,7 +468,7 @@ export default function Home() {
                             {/* Вертикальные полосы под плашкой преимуществ, визуально продолжающие фон второго экрана */}
                             <div
                                 className="pointer-events-none absolute left-1/2 z-[30] hidden h-[15px] w-[790px] -translate-x-1/2 min-[1200px]:block"
-                                style={{ top: "calc(100dvh - 10px)" }}
+                                style={{ top: "calc(100dvh - 35px)" }}
                             >
                                 <div className="pointer-events-none absolute inset-0">
                                     {Array.from({ length: 14 }).map((_, index) => (
@@ -466,23 +495,23 @@ export default function Home() {
 
             {/* Нижняя полоска: 3 преимущества (мокап), отдельным слоем поверх границы экранов */}
             <div
-                className="pointer-events-none hidden min-[1200px]:flex absolute left-1/2 z-[50] h-[110px] min-h-[110px] min-w-[min(100%,1280px)] -translate-x-1/2 items-stretch justify-center gap-0 rounded-[22px] bg-white/98 px-[clamp(20px,3vw,56px)] py-6 shadow-[0_18px_40px_rgba(0,0,0,0.55),0_-6px_18px_rgba(0,0,0,0.16)] ring-1 ring-white/70"
-                style={{ top: "calc(100dvh - 120px)" }}
+                className="pointer-events-none hidden min-[1200px]:flex absolute left-1/2 z-[50] h-[125px] min-h-[125px] w-full max-w-[1280px] -translate-x-1/2 items-stretch justify-center gap-0 rounded-[22px] bg-white/85 px-[clamp(8px,1.2vw,24px)] py-6 shadow-[0_18px_40px_rgba(0,0,0,0.55),0_-6px_18px_rgba(0,0,0,0.16)] ring-1 ring-white/70"
+                style={{ top: "calc(100dvh - 145px)" }}
             >
-                {HERO_FEATURES_STRIP.map((item, index) => (
+                {HERO_FEATURES_STRIP.map((item) => (
                     <div
                         key={item.title}
-                        className="flex min-w-0 flex-1 items-center border-r border-[#e0e0e0] px-5 last:border-r-0"
-                        style={{ maxWidth: index === 1 ? 700 :380 }}
+                        className="flex min-w-0 flex-1 items-center justify-center border-r border-[#e0e0e0] px-[clamp(12px,2.2vw,28px)] last:border-r-0"
                     >
-                        <div className="mr-4 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
+                        <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden">
                             <img
                                 src={item.icon}
                                 alt=""
                                 className="h-full w-full object-contain"
                             />
                         </div>
-                        <div className="flex min-w-0 flex-1 flex-col items-start text-left">
+                        <div className="flex min-w-0 flex-col items-left text-left">
                             <span
                                 className="whitespace-nowrap text-[#222222] uppercase"
                                 style={{
@@ -496,7 +525,7 @@ export default function Home() {
                                 {item.title}
                             </span>
                             <span
-                                className="mt-1 text-[#6b6b6b]"
+                                className="mt-4 text-[#6b6b6b]"
                                 style={{
                                     fontFamily: "var(--font-roboto-flex), sans-serif",
                                     fontSize: "clamp(14px, 0.9vw, 16px)",
@@ -506,6 +535,7 @@ export default function Home() {
                             >
                                 {item.desc}
                             </span>
+                        </div>
                         </div>
                     </div>
                 ))}

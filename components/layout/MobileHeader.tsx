@@ -137,7 +137,7 @@ export default function MobileHeader() {
           transform: isMenuButtonVisible ? "translateY(0)" : "translateY(-100%)",
         }}
       >
-        <div className="mx-3 flex h-14 items-center rounded-[14px] border border-[#ececec] bg-white/95 px-2 shadow-[0_8px_24px_rgba(0,0,0,0.06)] backdrop-blur-sm">
+        <div className="mx-3 flex h-14 items-center rounded-[22px] border border-[#ececec] bg-white/78 px-2 shadow-[0_8px_24px_rgba(0,0,0,0.06)] backdrop-blur-sm">
           <button
             ref={menuButtonRef}
             type="button"

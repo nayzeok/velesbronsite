@@ -9,6 +9,8 @@ const HEADER_EDGE_PADDING_LEFT = "clamp(16px, 2.2vw, 136px)";
 const HEADER_EDGE_PADDING_RIGHT = "clamp(16px, 2.2vw, 136px)";
 /** Зазор между колонкой лого и пунктами меню — на узких экранах меньше */
 const LOGO_GAP = 48;
+/** Смещение скролла при клике «Конструкция»: прокрутить ниже плашки преимуществ (px) */
+const ADVANTAGES_SCROLL_OFFSET = 120;
 
 type MenuKey = "brand" | "advantages" | "models" | "whereToBuy" | "media" | "contacts";
 type HeaderTone = "dark" | "light" | "lightBg";
@@ -52,13 +54,13 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
     const isScrollable = scrollEl && scrollEl.scrollHeight > scrollEl.clientHeight;
     if (isScrollable && scrollEl) {
       scrollEl.scrollTo({
-        top: section.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop,
+        top: section.getBoundingClientRect().top - scrollEl.getBoundingClientRect().top + scrollEl.scrollTop + ADVANTAGES_SCROLL_OFFSET,
         behavior: "smooth",
       });
       return;
     }
     window.scrollTo({
-      top: section.getBoundingClientRect().top + window.scrollY,
+      top: section.getBoundingClientRect().top + window.scrollY + ADVANTAGES_SCROLL_OFFSET,
       behavior: "smooth",
     });
   };
@@ -121,7 +123,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
         >
           {/* Белая плашка за лого: при наведении подсвечивается */}
           <div
-            className="logo-plaque pointer-events-none absolute left-1/2 z-[5] h-[146px] w-full max-w-[276px] -translate-x-1/2 rounded-b-[22px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-200 group-hover:shadow-[0_10px_40px_rgba(231,129,63,0.5),0_0_0_3px_rgba(231,129,63,0.4)]"
+            className="logo-plaque pointer-events-none absolute left-1/2 z-[5] h-[146px] w-full max-w-[276px] -translate-x-1/2 rounded-[22px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-200 group-hover:shadow-[0_10px_40px_rgba(231,129,63,0.5),0_0_0_3px_rgba(231,129,63,0.4)]"
             style={{ top: "-63px" }}
             aria-hidden="true"
           />

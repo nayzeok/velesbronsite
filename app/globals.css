@@ -340,10 +340,10 @@ body {
   min-height: var(--figma-stage-height, 1024px);
 }
 
-/** Единый вид белой плашки за лого (десктоп и мобильный хедер). При наведении на лого — подсветка. */
+/** Единый вид плашки за лого (десктоп и мобильный хедер). Прозрачность как у плашки преимуществ. При наведении на лого — подсветка. */
 .logo-plaque {
-  background: #fff;
-  border-radius: 0 0 12px 12px;
+  background: rgba(255, 255, 255, 0.50);
+  border-radius: 22px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   transition: box-shadow 0.25s ease;
 }

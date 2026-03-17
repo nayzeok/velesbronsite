@@ -450,7 +450,7 @@ export default function BuyPage() {
           style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 16 }}
         >
           Ожидается поступление
-        </div>
+      </div>
       )}
 
       {/* ── DESKTOP: рендерим только при width >= 1200px, чтобы на телефоне не грузить тяжёлую сцену ── */}
@@ -497,18 +497,18 @@ export default function BuyPage() {
             <div className="absolute" style={{ left: `${DESKTOP_LEFT_MARGIN_PCT}%`, top: 186, width: 720, maxWidth: 720 }}>
               <h1
                 className="uppercase w-full"
-                style={{
+                  style={{
                   fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                   fontSize: 34,
-                  fontWeight: 700,
+                    fontWeight: 700,
                   lineHeight: 1.15,
                   color: "#111",
                   letterSpacing: "0.08em",
                   whiteSpace: "pre-line",
-                }}
-              >
+                  }}
+                >
                 {activeCard && leftBlockTitle ? leftBlockTitle : selectedModel.title}
-              </h1>
+                </h1>
               <p
                 className="absolute max-w-[532px] font-medium tracking-normal text-[#111]"
                 style={{
@@ -538,16 +538,16 @@ export default function BuyPage() {
             >
               <div
                 className="h-full w-full origin-center"
-                style={{
+                  style={{
                   transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% - 28px + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
-                }}
-              >
-                <img
+                  }}
+                >
+                      <img
                   key={`desktop-${viewTransitionTick}-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
-                  src={currentViewImage}
+                        src={currentViewImage}
                   alt="Тактическая обувь"
-                  className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
-                />
+                      className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                    />
               </div>
             </div>
 
@@ -557,7 +557,7 @@ export default function BuyPage() {
                 type="button"
                 onClick={openSizeGrid}
                 className="size-table-link absolute"
-                  style={{
+              style={{
                     left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
                     top: 706,
                     transform: "translateX(-50%)",
@@ -568,16 +568,16 @@ export default function BuyPage() {
                 <span className="size-table-link__base">ТАБЛИЦА РАЗМЕРОВ ›</span>
                 <span className="size-table-link__hover" aria-hidden="true">
                   ТАБЛИЦА РАЗМЕРОВ ›
-                </span>
+                  </span>
               </button>
 
               {/* Right — МОДЕЛЬ (заголовок и квадраты) */}
               <div
                 className="absolute flex flex-col items-center"
-                style={{
+                  style={{
                   left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
                   top: 269,
-                  transform: "translateX(-50%)",
+                    transform: "translateX(-50%)",
                   gap: DESKTOP_MODEL_HEADING_GAP,
                 }}
               >
@@ -610,7 +610,7 @@ export default function BuyPage() {
                           }
                         }}
                         className="shrink-0 overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
-                        style={{
+                  style={{
                           width: colW,
                           height: 75,
                           border: activeModelKey === model.key ? "2px solid #f07426" : "2px solid #e0e0e0",
@@ -622,7 +622,7 @@ export default function BuyPage() {
                       </button>
                       <p
                         className="flex min-w-0 w-full justify-center uppercase"
-                        style={{
+                  style={{
                           margin: 0,
                           padding: 0,
                           fontFamily: "var(--font-russo-one), Russo One, sans-serif",
@@ -705,7 +705,7 @@ export default function BuyPage() {
                     type="button"
                     onClick={() => setColorVariant("oliva")}
                     className="shrink-0 rounded-[8px] bg-white transition-all"
-                    style={{
+                style={{
                       width: 74,
                       height: 75,
                       border: colorVariant === "oliva" ? "2px solid #f07426" : "2px solid #e0e0e0",
@@ -735,8 +735,8 @@ export default function BuyPage() {
                     }}
                   >
                     ОЛИВА
-                  </p>
-                </div>
+                </p>
+              </div>
                 </div>
               </div>
 
@@ -761,7 +761,7 @@ export default function BuyPage() {
               >
                 ГДЕ КУПИТЬ
               </Link>
-            </div>
+                </div>
 
             {/* Bottom photo cards — 4 карточки в видимой области */}
             <div
@@ -817,9 +817,9 @@ export default function BuyPage() {
               >
                 {isHighModel
                   ? CAROUSEL_CARDS.map((card, i) => (
-                      <button
+              <button
                         key={`desktop-view-${i}`}
-                        type="button"
+                type="button"
                         onClick={() => changeViewWithSlide(i, i > activeViewIndex ? 1 : -1)}
                         className="shrink-0 overflow-hidden rounded-[16px] transition-all"
                         style={{
@@ -835,12 +835,12 @@ export default function BuyPage() {
                           alt=""
                           className="h-full w-full object-contain"
                         />
-                      </button>
+              </button>
                     ))
                   : activeViewImages.map((image, i) => (
-                      <button
+              <button
                         key={`desktop-view-${i}`}
-                        type="button"
+                type="button"
                         onClick={() => changeViewWithSlide(i, i > activeViewIndex ? 1 : -1)}
                         className="shrink-0 overflow-hidden rounded-[16px] transition-all"
                         style={{
@@ -916,9 +916,9 @@ export default function BuyPage() {
                 const isLow = model.key === "low";
                 const isActive = activeModelKey === model.key;
                 return (
-                  <button
+                <button
                     key={`mobile-model-col-${model.key}`}
-                    type="button"
+                  type="button"
                     onClick={() => {
                       if (isLow) {
                         setShowLowComingSoon(true);
@@ -928,7 +928,7 @@ export default function BuyPage() {
                       }
                     }}
                     className="flex h-[35px] flex-1 items-center justify-center transition-all"
-                    style={{
+                  style={{
                       background: isActive ? "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)" : "#efefef",
                       borderRight: model.key === "high" ? "1px solid #d8d8d8" : "none",
                       color: isActive ? "#fff" : "#111",
@@ -995,8 +995,8 @@ export default function BuyPage() {
                         </button>
                       );
                     })}
-                  </div>
-                </div>
+                      </div>
+                      </div>
 
                 <div className="relative mx-auto w-full max-w-[278px]">
                     <div
@@ -1039,12 +1039,12 @@ export default function BuyPage() {
                             alt="Тактическая обувь"
                             className="h-auto max-h-[54vh] w-full max-w-[260px] object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.18)]"
                           />
-                        </div>
+                      </div>
                       </div>
 
-                    </div>
+                      </div>
 
-                </div>
+                      </div>
 
                 <button
                   type="button"
@@ -1069,7 +1069,7 @@ export default function BuyPage() {
                 >
                   ›
                 </button>
-              </div>
+                      </div>
 
             <div
               className="-mt-2 flex justify-center gap-[8.4px] py-2 touch-none"
@@ -1127,7 +1127,7 @@ export default function BuyPage() {
                       changeViewWithSlide(i, i > activeViewIndex ? 1 : -1);
                     }}
                     className="absolute inset-0 cursor-pointer rounded-full border-0 bg-transparent p-0"
-                    style={{
+                        style={{
                       left: -17,
                       top: -17,
                       right: -17,
@@ -1145,7 +1145,7 @@ export default function BuyPage() {
                         backgroundColor: activeViewIndex === i ? "#8a8a8a" : "#d9d9d9",
                       }}
                     />
-                  </button>
+                </button>
                 </div>
               ))}
             </div>
@@ -1154,7 +1154,7 @@ export default function BuyPage() {
               <div className="rounded-[18px] border border-[#d8d8d8] bg-white/95 px-4 py-5 shadow-[0_8px_24px_rgba(0,0,0,0.05)]">
                 <h1
                   className="uppercase text-[#111]"
-                  style={{
+                style={{
                     fontFamily: "var(--font-russo-one), Russo One, sans-serif",
                     fontSize: 18,
                     fontWeight: 700,
@@ -1191,14 +1191,14 @@ export default function BuyPage() {
                       }}
                     />
                   )}
-                </div>
+          </div>
 
                 {!isMobileTextExpanded && (
                   <button
                     type="button"
                     onClick={() => setIsMobileTextExpanded(true)}
                     className="mt-2 flex min-h-[36px] w-full items-end gap-2 text-left text-[#6d7339]"
-                    style={{
+          style={{
                       fontFamily: "var(--font-roboto-flex), sans-serif",
                       fontSize: 13,
                       fontWeight: 500,
@@ -1210,19 +1210,19 @@ export default function BuyPage() {
                   </button>
                 )}
 
-              </div>
+        </div>
 
-              <button
-                type="button"
+            <button
+              type="button"
                 onClick={openSizeGrid}
                 className="size-table-link mt-1 min-h-[48px] py-2 pr-3 pl-0 text-left"
                 style={{ fontSize: 17, lineHeight: 1.15 }}
                 aria-label="Открыть таблицу размеров"
               >
                 ТАБЛИЦА РАЗМЕРОВ ›
-              </button>
+            </button>
 
-              <Link
+        <Link
                 href="/where-to-buy"
                 className="-mt-2 mx-auto flex h-[40px] w-full max-w-[207px] items-center justify-center rounded-[12px] text-white no-underline"
                 style={{
@@ -1234,7 +1234,7 @@ export default function BuyPage() {
                 }}
               >
                 Где купить
-              </Link>
+        </Link>
             </div>
           </div>
         </div>
