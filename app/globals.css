@@ -334,6 +334,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Главная: не обрезать контент героя (раскрытая карточка карусели вверх) */
+.figma-site-page--hero-visible {
+  overflow-y: visible !important;
+}
+
 .figma-site-stage {
   position: relative;
   width: 100%;

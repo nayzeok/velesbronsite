@@ -75,9 +75,9 @@ const MOBILE_CARD_WIDTH = 260;
 const MOBILE_CARD_GAP = 56;
 const MOBILE_SET_WIDTH = HERO_FEATURES_STRIP.length * MOBILE_CARD_WIDTH + (HERO_FEATURES_STRIP.length - 1) * MOBILE_CARD_GAP;
 /** Расстояние между карточками в карусели (px) */
-const MOBILE_CAROUSEL_GAP = 16;
-/** Запас по краям окна карусели, чтобы кольцо/тень подсветки не обрезались (px с каждой стороны) */
-const MOBILE_CAROUSEL_RING_PAD = 14;
+const MOBILE_CAROUSEL_GAP = 77;
+/** Запас по краям окна: только активная карточка в кадре, соседние почти не видны (px с каждой стороны) */
+const MOBILE_CAROUSEL_RING_PAD = 4;
 /** Запас сверху/снизу окна карусели (px), чтобы подсветка не обрезалась */
 const MOBILE_CAROUSEL_VERTICAL_PAD = 18;
 const MOBILE_CAROUSEL_SLOT = MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_GAP;
@@ -86,6 +86,12 @@ const MOBILE_CAROUSEL_TRACK_WIDTH = HERO_FEATURES_STRIP.length * 2 * MOBILE_CARD
 const MOBILE_CAROUSEL_HOLD_MS = 2500;
 /** Длительность анимации сдвига к следующей карточке (мс) */
 const MOBILE_CAROUSEL_TRANSITION_MS = 800;
+/** Порог свайпа (px): сдвиг больше — переключить слайд */
+const MOBILE_CAROUSEL_SWIPE_THRESHOLD = 50;
+/** Высота свёрнутой карточки и прирост при раскрытии (для margin-top компенсации, px) */
+/** Высота свёрнутой карточки: py-2.5 (20) + иконка h-12 (48) + запас; окно карусели не должно обрезать верх */
+const MOBILE_CARD_COLLAPSED_H = 80;
+const MOBILE_CARD_EXPANDED_EXTRA_H = 72;
 
 export default function Home() {
     const [stageHeightFitScale, setStageHeightFitScale] = useState(1);
@@ -97,9 +103,15 @@ export default function Home() {
         return () => window.removeEventListener("resize", update);
     }, []);
     const mobileCarouselTrackRef = useRef<HTMLDivElement>(null);
+    const mobileCarouselTouchStartX = useRef<number | null>(null);
+    const mobileCarouselAutoIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const secondScreenRef = useRef<HTMLElement>(null);
     const [mobileCarouselActiveIndex, setMobileCarouselActiveIndex] = useState(0);
     const [carouselTransitionEnabled, setCarouselTransitionEnabled] = useState(true);
+    const [carouselSwipeOffset, setCarouselSwipeOffset] = useState(0);
+    /** Индекс раскрытой карточки карусели (null = все свёрнуты). По тапу раскрывается и показывается описание. */
+    const [expandedCarouselIndex, setExpandedCarouselIndex] = useState<number | null>(null);
+    const carouselLastSwipeDistanceRef = useRef(0);
 
     useEffect(() => {
         const t = setInterval(() => {
@@ -109,7 +121,11 @@ export default function Home() {
                 return next;
             });
         }, MOBILE_CAROUSEL_HOLD_MS);
-        return () => clearInterval(t);
+        mobileCarouselAutoIntervalRef.current = t;
+        return () => {
+            clearInterval(t);
+            mobileCarouselAutoIntervalRef.current = null;
+        };
     }, []);
 
     useEffect(() => {
@@ -170,13 +186,53 @@ export default function Home() {
 
     /** Смещение трека: слот = карточка + зазор, по центру окна с запасом под кольцо */
     const carouselOffset = MOBILE_CAROUSEL_RING_PAD - mobileCarouselActiveIndex * MOBILE_CAROUSEL_SLOT;
+    const carouselTotalCards = HERO_FEATURES_STRIP.length * 2;
+
+    const handleCarouselTouchStart = (e: React.TouchEvent) => {
+        carouselLastSwipeDistanceRef.current = 0;
+        if (mobileCarouselAutoIntervalRef.current !== null) {
+            clearInterval(mobileCarouselAutoIntervalRef.current);
+            mobileCarouselAutoIntervalRef.current = null;
+        }
+        mobileCarouselTouchStartX.current = e.touches[0].clientX;
+        setCarouselTransitionEnabled(false);
+    };
+    const handleCarouselTouchMove = (e: React.TouchEvent) => {
+        if (mobileCarouselTouchStartX.current === null) return;
+        const dx = e.touches[0].clientX - mobileCarouselTouchStartX.current;
+        const clamped = Math.max(-MOBILE_CAROUSEL_SLOT, Math.min(MOBILE_CAROUSEL_SLOT, dx));
+        setCarouselSwipeOffset(clamped);
+    };
+    const handleCarouselTouchEnd = () => {
+        const dx = carouselSwipeOffset;
+        carouselLastSwipeDistanceRef.current = Math.abs(dx);
+        mobileCarouselTouchStartX.current = null;
+        setCarouselSwipeOffset(0);
+        setCarouselTransitionEnabled(true);
+        if (dx > MOBILE_CAROUSEL_SWIPE_THRESHOLD) {
+            setMobileCarouselActiveIndex((prev) => Math.max(0, prev - 1));
+            setExpandedCarouselIndex(null);
+        } else if (dx < -MOBILE_CAROUSEL_SWIPE_THRESHOLD) {
+            setMobileCarouselActiveIndex((prev) => (prev + 1) % carouselTotalCards);
+            setExpandedCarouselIndex(null);
+        }
+    };
+
+    const handleCarouselCardTap = (index: number) => {
+        if (carouselLastSwipeDistanceRef.current > 15) return;
+        setExpandedCarouselIndex((prev) => (prev === index ? null : index));
+    };
 
     return (
-        <main className="figma-site-page relative overflow-x-hidden bg-[#e8e8e8] text-white">
-            <section className="relative min-h-[100svh] min-[1200px]:hidden snap-start snap-always">
+            <main
+                className="figma-site-page figma-site-page--hero-visible relative overflow-x-hidden bg-[#e8e8e8] text-white"
+                style={{ overflowY: "visible" }}
+            >
+            <section className="relative min-h-[100svh] min-[1200px]:hidden snap-start snap-always overflow-visible" style={{ overflow: "visible" }}>
                 <div
-                    className="relative overflow-hidden"
+                    className="relative overflow-visible"
                     style={{
+                        overflow: "visible",
                         minHeight: "clamp(720px, 100svh, 900px)",
                         paddingTop: "calc(5rem + env(safe-area-inset-top, 0px))",
                         paddingLeft: "max(clamp(16px, 4vw, 24px), env(safe-area-inset-left))",
@@ -252,56 +308,89 @@ export default function Home() {
                         </div>
                     )}
 */}
-                    {/* Карусель преимуществ: под ботинком, top в % от контейнера */}
+                    {/* Карусель: z-10 ниже меню. Окно фиксированной высоты — карточка раскрывается ВВЕРХ, предки overflow:visible чтобы не обрезало. */}
                     <div
-                        className="absolute left-0 right-0 z-20 w-full"
+                        className="absolute left-0 right-0 z-10 w-full overflow-visible"
                         style={{
                             top: `${MOBILE_CAROUSEL_TOP_PCT}%`,
+                            overflow: "visible",
                         }}
                     >
-                        {/* Окно карусели: одна карточка + запас под кольцо (по бокам и сверху/снизу), плавная смена */}
                         <div
-                            className="mx-auto overflow-hidden"
+                            className="mx-auto flex touch-pan-y flex-col justify-end overflow-x-hidden overflow-y-visible"
                             style={{
                                 width: MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_RING_PAD * 2,
+                                height: MOBILE_CARD_COLLAPSED_H + MOBILE_CAROUSEL_VERTICAL_PAD * 2,
                                 paddingTop: MOBILE_CAROUSEL_VERTICAL_PAD,
                                 paddingBottom: MOBILE_CAROUSEL_VERTICAL_PAD,
+                                overflow: "visible",
                             }}
+                            onTouchStart={handleCarouselTouchStart}
+                            onTouchMove={handleCarouselTouchMove}
+                            onTouchEnd={handleCarouselTouchEnd}
+                            onTouchCancel={handleCarouselTouchEnd}
                         >
                             <div
                                 ref={mobileCarouselTrackRef}
-                                className="flex pb-2"
+                                className="flex items-end pb-2"
                                 style={{
                                     width: MOBILE_CAROUSEL_TRACK_WIDTH,
                                     gap: MOBILE_CAROUSEL_GAP,
-                                    transform: `translateX(${carouselOffset}px)`,
+                                    transform: `translateX(${carouselOffset + carouselSwipeOffset}px)`,
                                     transition: carouselTransitionEnabled ? `transform ${MOBILE_CAROUSEL_TRANSITION_MS}ms cubic-bezier(0.25, 0.1, 0.25, 1)` : "none",
                                 }}
                             >
                             {[...HERO_FEATURES_STRIP, ...HERO_FEATURES_STRIP].map((item, index) => {
                                 const isActive = mobileCarouselActiveIndex === index;
+                                const isExpanded = expandedCarouselIndex === index;
                                 return (
                                     <div
                                         key={`${item.title}-${index}`}
                                         data-carousel-card={index}
-                                        className={`group flex shrink-0 items-center gap-3 rounded-xl py-2.5 pr-3 pl-2.5 transition-all duration-200 hover:scale-[1.02] hover:bg-white/20 hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:ring-2 hover:ring-[#e7813f]/70 ${
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={() => handleCarouselCardTap(index)}
+                                        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleCarouselCardTap(index)}
+                                        className={`group flex shrink-0 cursor-pointer flex-col gap-0 self-end rounded-xl py-2.5 pr-3 pl-2.5 transition-all duration-300 ease-out hover:scale-[1.02] hover:bg-white/20 hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:ring-2 hover:ring-[#e7813f]/70 ${
                                             isActive ? "!scale-[1.04] !bg-white/25 !shadow-[0_6px_24px_rgba(0,0,0,0.25)] !ring-2 !ring-[#e7813f]" : ""
-                                        }`}
+                                        } ${isExpanded ? "!scale-[1.02] !ring-2 !ring-[#e7813f]" : ""}`}
                                         style={{
                                             width: MOBILE_CARD_WIDTH,
                                             minWidth: MOBILE_CARD_WIDTH,
                                         }}
                                     >
-                                        <span
-                                            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-inner transition-all duration-200 hero-advantage-icon-glow ${
-                                                isActive ? "!bg-white/60 shadow-[0_0_16px_4px_rgba(231,129,63,0.5)]" : "bg-white/25 group-hover:bg-white/50"
-                                            }`}
+                                        <div className="flex items-center gap-3">
+                                            <span
+                                                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-inner transition-all duration-200 hero-advantage-icon-glow ${
+                                                    isActive ? "!bg-white/60 shadow-[0_0_16px_4px_rgba(231,129,63,0.5)]" : "bg-white/25 group-hover:bg-white/50"
+                                                }`}
+                                            >
+                                                <img src={item.icon} alt="" className="h-8 w-8 object-contain transition-transform duration-200 group-hover:scale-105" />
+                                            </span>
+                                            <span className="min-w-0 flex-1 text-white/90 font-medium" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 19, lineHeight: 1.35 }}>
+                                                {item.title}
+                                            </span>
+                                        </div>
+                                        <div
+                                            className="grid transition-all duration-300 ease-out"
+                                            style={{
+                                                gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                                            }}
                                         >
-                                            <img src={item.icon} alt="" className="h-8 w-8 object-contain transition-transform duration-200 group-hover:scale-105" />
-                                        </span>
-                                        <span className="min-w-0 flex-1 text-white/90 font-medium" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 19, lineHeight: 1.35 }}>
-                                            {item.title}
-                                        </span>
+                                            <div className="overflow-hidden">
+                                                <p
+                                                    className="mt-2 text-white/90"
+                                                    style={{
+                                                        fontFamily: "var(--font-roboto-flex), sans-serif",
+                                                        fontSize: 15,
+                                                        lineHeight: 1.45,
+                                                        fontWeight: 400,
+                                                    }}
+                                                >
+                                                    {item.desc}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 );
                             })}
