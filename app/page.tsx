@@ -6,7 +6,7 @@ import { AdvantagesContent } from "@/app/advantages/page";
 import SiteHeader from "@/components/layout/SiteHeader";
 
 const heroBackgroundDesktop = "/images/pages/2.2.png";
-const heroBackgroundMobile = "/images/pages/hero_back_for_mobile.png";
+const heroBackgroundMobile = "/images/pages/mobile_hero_back.PNG";
 const DESIGN_HEIGHT = 1000;
 
 /** Эффекты поверх фона hero (как в Figma): затемнение + градиенты. Подстрой под node 260-3. */
@@ -46,17 +46,17 @@ const HERO_ADVANTAGES = [
 /** Нижняя полоска преимуществ на десктопе (мокап): 3 колонки с иконкой */
 const HERO_FEATURES_STRIP = [
   {
-    title: "АНТИПРОКОЛЬНАЯ ЗАЩИТА",
+    title: "Антипрокольная защита",
     desc: "Гибридная подошва усилена вставкой из арамидной ткани K-29.",
     icon: "/images/models/ui/антипрокол.png",
   },
   {
-    title: "МЕМБРАНА VELTEX™",
+    title: "Мембрана VELTEX™",
     desc: "Герметичная чулочная конструкция отводит влагу и сохраняет микроклимат.",
     icon: "/images/models/ui/мембрана_VELTEX.png",
   },
   {
-    title: "УСИЛЕННАЯ КОНСТРУКЦИЯ",
+    title: "Усиленная конструкция",
     desc: "Тройная прошивка армированными лавсановыми нитями.",
     icon: "/images/models/ui/Гарантия_усил.констр..png",
   },
@@ -71,11 +71,11 @@ const HERO_RIGHT_BLOCK_TOP = "clamp(154px, calc(130px + 5vh), 178px)";
 /** Смещение скролла при переходе по якорю «Конструкция»: прокрутить ниже, чтобы плашка преимуществ не перекрывала контент (px) */
 const ADVANTAGES_SCROLL_OFFSET = 120;
 
-const MOBILE_CARD_WIDTH = 260;
+const MOBILE_CARD_WIDTH = 337;
 const MOBILE_CARD_GAP = 56;
 const MOBILE_SET_WIDTH = HERO_FEATURES_STRIP.length * MOBILE_CARD_WIDTH + (HERO_FEATURES_STRIP.length - 1) * MOBILE_CARD_GAP;
 /** Расстояние между карточками в карусели (px) */
-const MOBILE_CAROUSEL_GAP = 77;
+const MOBILE_CAROUSEL_GAP = 85;
 /** Запас по краям окна: только активная карточка в кадре, соседние почти не видны (px с каждой стороны) */
 const MOBILE_CAROUSEL_RING_PAD = 4;
 /** Запас сверху/снизу окна карусели (px), чтобы подсветка не обрезалась */
@@ -83,7 +83,7 @@ const MOBILE_CAROUSEL_VERTICAL_PAD = 18;
 const MOBILE_CAROUSEL_SLOT = MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_GAP;
 const MOBILE_CAROUSEL_TRACK_WIDTH = HERO_FEATURES_STRIP.length * 2 * MOBILE_CARD_WIDTH + (HERO_FEATURES_STRIP.length * 2 - 1) * MOBILE_CAROUSEL_GAP;
 /** Длительность показа одной карточки (мс), затем смена на следующую */
-const MOBILE_CAROUSEL_HOLD_MS = 2500;
+const MOBILE_CAROUSEL_HOLD_MS = 3800;
 /** Длительность анимации сдвига к следующей карточке (мс) */
 const MOBILE_CAROUSEL_TRANSITION_MS = 800;
 /** Порог свайпа (px): сдвиг больше — переключить слайд */
@@ -111,7 +111,45 @@ export default function Home() {
     const [carouselSwipeOffset, setCarouselSwipeOffset] = useState(0);
     /** Индекс раскрытой карточки карусели (null = все свёрнуты). По тапу раскрывается и показывается описание. */
     const [expandedCarouselIndex, setExpandedCarouselIndex] = useState<number | null>(null);
+    /** Чей пульс запустить один раз после остановки карусели */
+    const [pulseCardIndex, setPulseCardIndex] = useState<number | null>(null);
     const carouselLastSwipeDistanceRef = useRef(0);
+    const activeIndexRef = useRef(mobileCarouselActiveIndex);
+    activeIndexRef.current = mobileCarouselActiveIndex;
+
+    /** Пульс по transitionend трека (когда карусель закончила переход) */
+    const pulseClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    useEffect(() => {
+        const track = mobileCarouselTrackRef.current;
+        if (!track) return;
+
+        const onTransitionEnd = (e: TransitionEvent) => {
+            if (e.propertyName !== "transform") return;
+            if (pulseClearTimeoutRef.current) {
+                clearTimeout(pulseClearTimeoutRef.current);
+                pulseClearTimeoutRef.current = null;
+            }
+            setPulseCardIndex(activeIndexRef.current);
+            pulseClearTimeoutRef.current = setTimeout(() => setPulseCardIndex(null), 1700);
+        };
+        track.addEventListener("transitionend", onTransitionEnd);
+        return () => {
+            track.removeEventListener("transitionend", onTransitionEnd);
+            if (pulseClearTimeoutRef.current) clearTimeout(pulseClearTimeoutRef.current);
+        };
+    }, []);
+
+    /** Первая загрузка: пульс центральной карточки через 500ms (transitionend при первом рендере не срабатывает) */
+    const didInitialPulseRef = useRef(false);
+    useEffect(() => {
+        if (didInitialPulseRef.current) return;
+        didInitialPulseRef.current = true;
+        const t = setTimeout(() => {
+            setPulseCardIndex(0);
+            setTimeout(() => setPulseCardIndex(null), 1700);
+        }, 500);
+        return () => clearTimeout(t);
+    }, []);
 
     useEffect(() => {
         const t = setInterval(() => {
@@ -188,27 +226,71 @@ export default function Home() {
     const carouselOffset = MOBILE_CAROUSEL_RING_PAD - mobileCarouselActiveIndex * MOBILE_CAROUSEL_SLOT;
     const carouselTotalCards = HERO_FEATURES_STRIP.length * 2;
 
-    const handleCarouselTouchStart = (e: React.TouchEvent) => {
+    const mobileCarouselPointerIdRef = useRef<number | null>(null);
+    const mobileCarouselTouchStartY = useRef<number | null>(null);
+    const mobileCarouselDidLockHorizontalRef = useRef(false);
+
+    const resetCarouselPointerGesture = () => {
+        mobileCarouselPointerIdRef.current = null;
+        mobileCarouselDidLockHorizontalRef.current = false;
+        mobileCarouselTouchStartX.current = null;
+        mobileCarouselTouchStartY.current = null;
+        setCarouselSwipeOffset(0);
+        setCarouselTransitionEnabled(true);
+    };
+
+    const handleCarouselPointerDown = (e: React.PointerEvent) => {
+        if (e.pointerType !== "touch") return;
         carouselLastSwipeDistanceRef.current = 0;
         if (mobileCarouselAutoIntervalRef.current !== null) {
             clearInterval(mobileCarouselAutoIntervalRef.current);
             mobileCarouselAutoIntervalRef.current = null;
         }
-        mobileCarouselTouchStartX.current = e.touches[0].clientX;
+        mobileCarouselPointerIdRef.current = e.pointerId;
+        mobileCarouselDidLockHorizontalRef.current = false;
+        mobileCarouselTouchStartX.current = e.clientX;
+        mobileCarouselTouchStartY.current = e.clientY;
         setCarouselTransitionEnabled(false);
     };
-    const handleCarouselTouchMove = (e: React.TouchEvent) => {
-        if (mobileCarouselTouchStartX.current === null) return;
-        const dx = e.touches[0].clientX - mobileCarouselTouchStartX.current;
+    const handleCarouselPointerMove = (e: React.PointerEvent) => {
+        if (e.pointerType !== "touch") return;
+        if (mobileCarouselPointerIdRef.current !== e.pointerId) return;
+        if (mobileCarouselTouchStartX.current === null || mobileCarouselTouchStartY.current === null) return;
+
+        const dx = e.clientX - mobileCarouselTouchStartX.current;
+        const dy = e.clientY - mobileCarouselTouchStartY.current;
+
+        // Не блокируем вертикальный скролл: «захватываем» только явно горизонтальный жест.
+        if (!mobileCarouselDidLockHorizontalRef.current) {
+            if (Math.abs(dx) < 8) return;
+            if (Math.abs(dy) > Math.abs(dx)) {
+                // Вертикаль — отдаём жест странице.
+                resetCarouselPointerGesture();
+                return;
+            }
+            mobileCarouselDidLockHorizontalRef.current = true;
+            try {
+                (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+            } catch {
+                // ignore
+            }
+        }
+
+        e.preventDefault();
         const clamped = Math.max(-MOBILE_CAROUSEL_SLOT, Math.min(MOBILE_CAROUSEL_SLOT, dx));
         setCarouselSwipeOffset(clamped);
     };
-    const handleCarouselTouchEnd = () => {
+    const handleCarouselPointerUp = (e: React.PointerEvent) => {
+        if (e.pointerType !== "touch") return;
+        if (mobileCarouselPointerIdRef.current !== e.pointerId) return;
+        try {
+            (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+        } catch {
+            // ignore
+        }
         const dx = carouselSwipeOffset;
         carouselLastSwipeDistanceRef.current = Math.abs(dx);
-        mobileCarouselTouchStartX.current = null;
-        setCarouselSwipeOffset(0);
-        setCarouselTransitionEnabled(true);
+        resetCarouselPointerGesture();
         if (dx > MOBILE_CAROUSEL_SWIPE_THRESHOLD) {
             setMobileCarouselActiveIndex((prev) => Math.max(0, prev - 1));
             setExpandedCarouselIndex(null);
@@ -216,6 +298,10 @@ export default function Home() {
             setMobileCarouselActiveIndex((prev) => (prev + 1) % carouselTotalCards);
             setExpandedCarouselIndex(null);
         }
+    };
+    const handleCarouselLostPointerCapture = (e: React.PointerEvent) => {
+        if (e.pointerType !== "touch") return;
+        resetCarouselPointerGesture();
     };
 
     const handleCarouselCardTap = (index: number) => {
@@ -251,7 +337,7 @@ export default function Home() {
                             background: `url(${heroBackgroundMobile}) lightgray 50% 42% / auto 100% no-repeat`,
                         }}
                     />
-                        <div className="absolute inset-0 bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
+                        <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
                         <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.topGradient }} />
                         <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.bottomGradient }} />
                         {HERO_BG_EFFECTS.vignetteOn && (
@@ -259,65 +345,49 @@ export default function Home() {
                         )}
                     </div>
 
-                    {/* Верхний блок: Новая модель */}
-                    <div className="relative z-20 mt-1 mb-5" style={{ maxWidth: "calc(100vw - 2 * clamp(16px, 4vw, 24px))" }}>
+                    {/* Верхний блок: Новые модели */}
+                    <div className="relative z-20 mt-6 mb-5" style={{ maxWidth: "calc(100vw - 2 * clamp(16px, 4vw, 24px))" }}>
                         <h2
                             className="uppercase text-white text-left"
                             style={{
-                                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                                fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                                 fontSize: 29,
                                 fontWeight: 700,
                                 letterSpacing: "0.08em",
                                 lineHeight: 1.15,
                             }}
                         >
-                            НОВАЯ МОДЕЛЬ VELESBRON
+                            НОВЫЕ МОДЕЛИ VELESBRON
                         </h2>
                         <p
                             className="mt-1.5 text-white/90 text-left font-medium"
                             style={{
-                                fontFamily: "var(--font-roboto-flex), sans-serif",
+                                fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                                 fontSize: 19,
                                 lineHeight: 1.35,
                             }}
                         >
-                            Усиленная конструкция, гибридная подошва и современные материалы обеспечивают защиту, устойчивость и комфорт на дистанции.
+                            Гибридная подошва с антипрокольной защитой, мембрана VELTEX™ и продуманная конструкция моделей создают уверенность в каждом шаге.
                         </p>
                         <Link
                             href="/models"
                             className="mt-4 inline-flex h-14 min-w-[220px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 text-[17px] font-medium uppercase tracking-[0.08em] text-white"
-                            style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700 }}
+                            style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700 }}
                         >
                             Изучить модель
                         </Link>
                     </div>
-
-                    {/* Ботинок — позиция в % от контейнера, как и фон: не прыгает относительно подиума (временно отключено, фон содержит ботинок) */}
-                    {/*{false && (
-                        <div
-                            className="pointer-events-none absolute z-10 overflow-hidden"
-                            style={{
-                                left: `${HERO_BOOT_MOBILE.leftPct}%`,
-                                top: `${HERO_BOOT_MOBILE.topPct}%`,
-                                width: HERO_BOOT_MOBILE.widthCss,
-                                transform: `translateX(${HERO_BOOT_MOBILE.translateXPct}%)`,
-                                aspectRatio: "93 / 76",
-                            }}
-                        >
-                            <img src="/images/pages/main_left_model for_hero.png" alt="Тактическая обувь" className="h-full w-full object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.25)]" />
-                        </div>
-                    )}
-*/}
+                    x§
                     {/* Карусель: z-10 ниже меню. Окно фиксированной высоты — карточка раскрывается ВВЕРХ, предки overflow:visible чтобы не обрезало. */}
                     <div
-                        className="absolute left-0 right-0 z-10 w-full overflow-visible"
+                        className="pointer-events-none absolute left-0 right-0 z-10 w-full overflow-visible"
                         style={{
                             top: `${MOBILE_CAROUSEL_TOP_PCT}%`,
                             overflow: "visible",
                         }}
                     >
                         <div
-                            className="mx-auto flex touch-pan-y flex-col justify-end overflow-x-hidden overflow-y-visible"
+                            className="pointer-events-auto mx-auto flex touch-pan-y flex-col justify-end overflow-x-hidden overflow-y-visible"
                             style={{
                                 width: MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_RING_PAD * 2,
                                 height: MOBILE_CARD_COLLAPSED_H + MOBILE_CAROUSEL_VERTICAL_PAD * 2,
@@ -325,10 +395,11 @@ export default function Home() {
                                 paddingBottom: MOBILE_CAROUSEL_VERTICAL_PAD,
                                 overflow: "visible",
                             }}
-                            onTouchStart={handleCarouselTouchStart}
-                            onTouchMove={handleCarouselTouchMove}
-                            onTouchEnd={handleCarouselTouchEnd}
-                            onTouchCancel={handleCarouselTouchEnd}
+                            onPointerDown={handleCarouselPointerDown}
+                            onPointerMove={handleCarouselPointerMove}
+                            onPointerUp={handleCarouselPointerUp}
+                            onPointerCancel={handleCarouselPointerUp}
+                            onLostPointerCapture={handleCarouselLostPointerCapture}
                         >
                             <div
                                 ref={mobileCarouselTrackRef}
@@ -351,14 +422,24 @@ export default function Home() {
                                         tabIndex={0}
                                         onClick={() => handleCarouselCardTap(index)}
                                         onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && handleCarouselCardTap(index)}
-                                        className={`group flex shrink-0 cursor-pointer flex-col gap-0 self-end rounded-xl py-2.5 pr-3 pl-2.5 transition-all duration-300 ease-out hover:scale-[1.02] hover:bg-white/20 hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)] hover:ring-2 hover:ring-[#e7813f]/70 ${
-                                            isActive ? "!scale-[1.04] !bg-white/25 !shadow-[0_6px_24px_rgba(0,0,0,0.25)] !ring-2 !ring-[#e7813f]" : ""
-                                        } ${isExpanded ? "!scale-[1.02] !ring-2 !ring-[#e7813f]" : ""}`}
+                                        className={`group flex shrink-0 cursor-pointer flex-col gap-0 self-end overflow-visible transition-all duration-300 ease-out hover:scale-[1.02] ${
+                                            isActive ? "!scale-[1.04]" : ""
+                                        } ${isExpanded ? "!scale-[1.02]" : ""}`}
                                         style={{
                                             width: MOBILE_CARD_WIDTH,
                                             minWidth: MOBILE_CARD_WIDTH,
                                         }}
                                     >
+                                        <div
+                                            className={`flex flex-col gap-0 overflow-visible rounded-[22px] border bg-black/20 py-2.5 pr-3 pl-2.5 backdrop-blur-md ${
+                                                isActive && pulseCardIndex !== index ? "shadow-[0_6px_24px_rgba(0,0,0,0.25)]" : ""
+                                            } ${pulseCardIndex === index ? "hero-card-pulse" : ""} hover:shadow-[0_4px_20px_rgba(0,0,0,0.2)]`}
+                                            style={{
+                                                borderWidth: 1,
+                                                borderStyle: "solid",
+                                                borderColor: "#B58B71",
+                                            }}
+                                        >
                                         <div className="flex items-center gap-3">
                                             <span
                                                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-inner transition-all duration-200 hero-advantage-icon-glow ${
@@ -367,7 +448,7 @@ export default function Home() {
                                             >
                                                 <img src={item.icon} alt="" className="h-8 w-8 object-contain transition-transform duration-200 group-hover:scale-105" />
                                             </span>
-                                            <span className="min-w-0 flex-1 text-white/90 font-medium" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 19, lineHeight: 1.35 }}>
+                                            <span className="min-w-0 flex-1 text-white/90 font-semibold uppercase tracking-wide" style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontSize: 19, lineHeight: 1.35, fontWeight: 600 }}>
                                                 {item.title}
                                             </span>
                                         </div>
@@ -381,8 +462,8 @@ export default function Home() {
                                                 <p
                                                     className="mt-2 text-white/90"
                                                     style={{
-                                                        fontFamily: "var(--font-roboto-flex), sans-serif",
-                                                        fontSize: 15,
+                                                        fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
+                                                        fontSize: 17,
                                                         lineHeight: 1.45,
                                                         fontWeight: 400,
                                                     }}
@@ -390,6 +471,7 @@ export default function Home() {
                                                     {item.desc}
                                                 </p>
                                             </div>
+                                        </div>
                                         </div>
                                     </div>
                                 );
@@ -420,7 +502,7 @@ export default function Home() {
                             backgroundColor: "lightgray",
                         }}
                     />
-                    <div className="absolute inset-0 bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
+                    <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
                     <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.topGradient }} />
                     <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.bottomGradient }} />
                     {HERO_BG_EFFECTS.vignetteOn && (
@@ -638,7 +720,7 @@ export default function Home() {
                 ref={secondScreenRef}
                 className="relative z-0 min-h-[100dvh] w-full snap-start"
             >
-                <div className="bg-white pt-[70px]">
+                <div className="min-[1200px]:bg-white min-[1200px]:pt-[70px]">
                     <AdvantagesContent showHeader={false} />
                 </div>
             </section>

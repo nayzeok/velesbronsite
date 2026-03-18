@@ -63,6 +63,22 @@ const robotoFlex = localFont({
   display: "swap",
 });
 
+const montserratBold = localFont({
+  src: "../public/fonts/Montserrat-Bold.ttf",
+  variable: "--font-montserrat-bold",
+  weight: "700",
+  style: "normal",
+  display: "swap",
+});
+
+const montserratLight = localFont({
+  src: "../public/fonts/Montserrat-Light.ttf",
+  variable: "--font-montserrat-light",
+  weight: "300",
+  style: "normal",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "VelesBron - Тактическая обувь из натуральных материалов",
   description: "Универсальная тактическая обувь для службы, походов и города. Натуральные материалы, усиленный протектор, надёжная конструкция.",
@@ -83,7 +99,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${drukCyr.variable} ${pobeda.variable} ${gilroyLight.variable} ${russoOne.variable} ${robotoFlex.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${oswald.variable} ${drukCyr.variable} ${pobeda.variable} ${gilroyLight.variable} ${russoOne.variable} ${robotoFlex.variable} ${montserratBold.variable} ${montserratLight.variable} antialiased`}
       >
         <ClientErrorToServer />
         <MobileHeader />

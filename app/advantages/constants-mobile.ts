@@ -14,9 +14,9 @@ export const mobileCarouselCards = [
 
 /** Пьедестал под ботинком (позиция и размер в px) */
 export const MOBILE_PEDESTAL = {
-  left: -350,
+  left: -304,
   top: 590,
-  width: 1158,
+  width: 1065,
   height: 772,
   opacity: 0.95,
 } as const;

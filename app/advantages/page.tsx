@@ -1296,7 +1296,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
       )}
       {!isDesktop && mobileReady && (
       <section>
-        <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `${1024 * mobileScale}px` }}>
+        <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `min(${1024 * mobileScale}px, calc(100svh + 100px))` }}>
           <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left bg-[#f4f4f4]" style={{ transform: `scale(${mobileScale})` }}>
           {/* Облегчённые полосы: только градиент, без blur и картинки */}
           <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
@@ -1512,7 +1512,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               style={{
                 top: "37.5%",
                 height: "25%",
-                touchAction: "pan-x",
+                touchAction: "pan-y",
               }}
               aria-label="Свайп влево или вправо для смены ракурса"
               onTouchStart={handleMobileBootTouchStart}

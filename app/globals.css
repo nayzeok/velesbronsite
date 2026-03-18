@@ -398,3 +398,33 @@ body {
   animation: hero-icon-glow 1.4s ease-in-out infinite;
 }
 
+/** Один пульс карточки при фиксации в центре (масштаб) */
+@keyframes hero-card-pulse {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.035);
+  }
+  18% {
+    transform: scale(0.996);
+  }
+  28% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.hero-card-pulse {
+  animation: hero-card-pulse 1.6s cubic-bezier(0.2, 0.9, 0.15, 1) 1 forwards;
+  transition: none;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card-pulse {
+    animation: none;
+  }
+}
+
