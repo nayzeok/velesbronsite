@@ -132,6 +132,15 @@ type AdvantageView = {
   tempWidget?: TempWidget;
 };
 
+/**
+ * ДЕСКТОП: где двигать плашки возле ботинка.
+ * В каждом элементе views[] (ракурс 0..4) есть anchors:
+ *   calloutCard: { x, y } — плашка с текстом («Композитный подносок» и т.д.)
+ *   calloutDot: { x, y }  — оранжевая точка у callout
+ *   glueBubble: { x, y }  — плашка «Гидрофобное покрытие» / «Система Quick-Lock» и т.д.
+ *   glueDot: { x, y }     — оранжевая точка у glue
+ * Метрики (top/side) — в JSX: left-[852px] top-[252px] (top), left-[1073px] top-[593px] (side). Поиск по "left-[852px]" / "left-[1073px]".
+ */
 const views: AdvantageView[] = [
   {
     title: "ВНЕШНИЙ МАТЕРИАЛ",
@@ -200,6 +209,7 @@ const views: AdvantageView[] = [
       glueBubble: { x: 806, y: 340 },
       glueDot: { x: -20, y: 50 },
     },
+    // Мобильные плашки ракурса «Защита и фиксация стопы» (Композитный подносок). Двигать здесь: callout.left/top, gluePill.left/top.
     mobilePlates: {
       showTopMetric: false,
       showSideMetric: false,
@@ -208,7 +218,7 @@ const views: AdvantageView[] = [
       showSecondaryCallout: false,
       topMetric: { left: 62, top: 442, width: 182, height: 78 },
       topMetricDot: { x: 170, y: 63 },
-      callout: { left: 330, top: 756, width: 125, height: 72 },
+      callout: { left: 330, top: 706, width: 125, height: 72 },
       calloutDot: { x: -12, y: 10 },
       secondaryCallout: { left: 22, top: 60, width: 125, height: 72 },
       secondaryCalloutDot: { x: 66, y: -10 },
@@ -248,9 +258,9 @@ const views: AdvantageView[] = [
       showSecondaryCallout: true,
       topMetric: { left: 62, top: 442, width: 182, height: 78 },
       topMetricDot: { x: 170, y: 63 },
-      callout: { left: 304, top: 664, width: 125, height: 72 },
+      callout: { left: 304, top: 594, width: 125, height: 72 },
       calloutDot: { x: -12, y: 12 },
-      secondaryCallout: { left: 38, top: 774, width: 125, height: 72 },
+      secondaryCallout: { left: 38, top: 704, width: 125, height: 72 },
       secondaryCalloutDot: { x: 110, y: -12 },
       sideMetric: { left: 348, top: 724, width: 103, height: 188 },
       gluePill: { left: 38, top: 700, width: 125, height: 72 },
@@ -298,13 +308,13 @@ const views: AdvantageView[] = [
       showSecondaryCallout: false,
       topMetric: { left: 62, top: 442, width: 182, height: 78 },
       topMetricDot: { x: 170, y: 63 },
-      callout: { left: 300, top: 482, width: 125, height: 72 },
+      callout: { left: 280, top: 482, width: 125, height: 72 },
       calloutDot: { x: -12, y: 10 },
       secondaryCallout: { left: 22, top: 60, width: 125, height: 72 },
       secondaryCalloutDot: { x: 66, y: -10 },
       sideMetric: { left: 348, top: 724, width: 103, height: 188 },
-      gluePill: { left: 54, top: 706, width: 125, height: 72 },
-      glueDot: { x: 172, y: 3 },
+      gluePill: { left: 74, top: 706, width: 125, height: 72 },
+      glueDot: { x: 142, y: 3 },
     },
   },
   {
@@ -337,12 +347,12 @@ const views: AdvantageView[] = [
       showSecondaryCallout: false,
       topMetric: { left: 62, top: 442, width: 182, height: 78 },
       topMetricDot: { x: 170, y: 63 },
-      callout: { left: 38, top: 650, width: 125, height: 72 },
+      callout: { left: 18, top: 610, width: 125, height: 72 },
       calloutDot: { x: 142, y: 60 },
       secondaryCallout: { left: 22, top: 60, width: 125, height: 72 },
       secondaryCalloutDot: { x: 66, y: -10 },
       sideMetric: { left: 348, top: 724, width: 103, height: 188 },
-      gluePill: { left: 316, top: 740, width: 125, height: 72 },
+      gluePill: { left: 316, top: 685, width: 125, height: 72 },
       glueDot: { x: -8, y: -3 },
     },
   },
@@ -413,6 +423,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
   const currentMobileBoot = mobileBootByColor[activeIndex] ?? MOBILE_BOOT;
   const fallbackMobilePlates: MobilePlatesConfig = (MOBILE_PLATES_BY_VIEW[activeIndex] ?? MOBILE_PLATES_BY_VIEW[0]) as MobilePlatesConfig;
   const currentMobilePlates: MobilePlatesConfig = currentView.mobilePlates ?? fallbackMobilePlates;
+  /** Сдвиг всех мобильных плашек (обычно держим 0; двигай плашки по отдельности в constants-mobile.ts) */
+  const mobilePlatesShiftX = 0;
+  const mobilePlatesShiftY = 0;
   const currentMetricTop = currentView.metricTop ?? { value: "", title: "", line1: "", line2: "" };
   const currentMetricSide = currentView.metricSide ?? { value: "", line1: "", line2: "" };
   const currentTempWidget = currentView.tempWidget ?? null;
@@ -465,10 +478,10 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center" as const,
-    fontFamily: "var(--font-roboto-flex), sans-serif",
+    fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
     fontSize: 19,
     fontStyle: "normal" as const,
-    fontWeight: 700,
+    fontWeight: 400,
     lineHeight: "115%",
     letterSpacing: "-0.22px",
     background: "linear-gradient(90deg, #111 0%, #474747 195.22%)",
@@ -686,7 +699,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                     className="uppercase leading-tight"
                     style={{
                       color: "#111",
-                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                      fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                       fontSize: 34,
                       fontStyle: "normal",
                       fontWeight: 700,
@@ -701,9 +714,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   <p
                     className="max-w-[532px] tracking-normal text-[#111]"
                     style={{
-                      fontFamily: "var(--font-roboto-flex), sans-serif",
+                      fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                       fontSize: 24,
-                      fontWeight: 500,
+                      fontWeight: 400,
                       lineHeight: 1.35,
                     }}
                   >
@@ -714,7 +727,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <Link
                 href="/models"
                 className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[22px] font-medium text-white"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", letterSpacing: "0.08em" }}
+                style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.08em" }}
               >
                 ПОДРОБНЕЕ
               </Link>
@@ -775,7 +788,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 style={{
                   bottom: 130,
                   color: "#AEAEAE",
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                   fontSize: 600,
                   fontWeight: 500,
                   lineHeight: "108px",
@@ -794,9 +807,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             {currentView.showMetrics !== false && "metricTop" in currentView && "metricSide" in currentView && (
               <>
                 <div className="absolute left-[852px] top-[252px] z-20 h-[128px] w-[303px] rounded-[25px] bg-white p-6 shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
-                  <p className="text-[61px] font-bold leading-none tracking-[-0.04em] text-[#111]">{currentMetricTop.value}</p>
-                  <div className="absolute left-[142px] top-[18px] text-[20px] leading-[1.1] tracking-[-0.02em]">
-                    <p className="font-bold text-[#111]">{currentMetricTop.title}</p>
+                  <p className="text-[61px] font-normal leading-none tracking-[-0.04em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricTop.value}</p>
+                  <div className="absolute left-[142px] top-[18px] text-[20px] leading-[1.1] tracking-[-0.02em]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>
+                    <p className="font-normal text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricTop.title}</p>
                     <p className="text-[#111]/40">{currentMetricTop.line1}</p>
                     <p className="text-[#111]/40">{currentMetricTop.line2}</p>
                   </div>
@@ -809,9 +822,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   <span className="absolute -left-[13px] -top-[13px] flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                     <span className="size-[10px] rounded-full bg-white" />
                   </span>
-                  <p className="pt-8 text-center text-[61px] font-bold leading-none tracking-[-0.08em] text-[#111]">{currentMetricSide.value}</p>
-                  <p className="-mt-1 text-center text-[20px] leading-[1.1] text-[#111]/40">{currentMetricSide.line1}</p>
-                  <p className="text-center text-[20px] leading-[1.1] text-[#111]/40">{currentMetricSide.line2}</p>
+                  <p className="pt-8 text-center text-[61px] font-normal leading-none tracking-[-0.08em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricSide.value}</p>
+                  <p className="-mt-1 text-center text-[20px] leading-[1.1] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricSide.line1}</p>
+                  <p className="text-center text-[20px] leading-[1.1] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricSide.line2}</p>
                   <div className="absolute left-[10px] top-[210px] h-[94px] w-[152px] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                     <img
                       src={metricSideImage}
@@ -924,12 +937,12 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
-                  <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize * DESKTOP_PLAQUE_TEXT_SCALE }}>
-                    <span className="font-bold">{currentView.callout.title}</span>
+                  <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: currentView.calloutStyle.titleSize * DESKTOP_PLAQUE_TEXT_SCALE }}>
+                    <span>{currentView.callout.title}</span>
                   </p>
                   <p
                     className="leading-[1.08] tracking-[-0.02em]"
-                    style={{ fontSize: currentView.calloutStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+                    style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: currentView.calloutStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
                   >
                     {currentView.callout.text}
                   </p>
@@ -955,12 +968,12 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                     : {}),
                 }}
               >
-                <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontSize: currentView.calloutStyle.titleSize * DESKTOP_PLAQUE_TEXT_SCALE }}>
-                  <span className="font-bold">{currentView.callout.title}</span>
+                <p className="leading-[1.08] tracking-[-0.02em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: currentView.calloutStyle.titleSize * DESKTOP_PLAQUE_TEXT_SCALE }}>
+                  <span>{currentView.callout.title}</span>
                 </p>
                 <p
                   className="leading-[1.08] tracking-[-0.02em]"
-                  style={{ fontSize: currentView.calloutStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
+                  style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: currentView.calloutStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE, color: `rgba(17,17,17,${currentCalloutTextOpacity})` }}
                 >
                   {currentView.callout.text}
                 </p>
@@ -986,6 +999,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                     top: currentView.anchors.glueBubble.y,
                     width: glueCardWidth,
                     height: glueCardHeight,
+                    fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                     fontSize: currentGlueStyle.textSize * DESKTOP_PLAQUE_TEXT_SCALE,
                   }}
                 >
@@ -999,11 +1013,11 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                         const glueBodySize = Math.max(glueTitleSize - 7, 14);
                         return (
                           <>
-                            <p className="leading-[1.08] tracking-[-0.02em] font-bold text-[#111]" style={{ fontSize: glueTitleSize }}>
+                            <p className="leading-[1.08] tracking-[-0.02em] font-normal text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: glueTitleSize }}>
                               {glueTitle}
                             </p>
                             {glueItems.map((line) => (
-                              <p key={line} className="mt-1 leading-[1.08] tracking-[-0.02em] text-[#111]/75" style={{ fontSize: glueBodySize }}>
+                              <p key={line} className="mt-1 leading-[1.08] tracking-[-0.02em] text-[#111]/75" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: glueBodySize }}>
                                 {line}
                               </p>
                             ))}
@@ -1291,7 +1305,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
 
       {!isDesktop && !mobileReady && (
       <section className="flex min-h-[100dvh] items-center justify-center bg-[#d9d9d9]">
-        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 15 }}>Загрузка…</p>
+        <p className="text-[#333]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 15 }}>Загрузка…</p>
       </section>
       )}
       {!isDesktop && mobileReady && (
@@ -1340,21 +1354,15 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
           {/*</div>*/}
 
           <div
-            className="absolute left-[8px] top-[46px] z-20"
-            style={{ width: (currentView.title as string) === "Комфорт и внутренняя архитектура" ? 380 : 312 }}
+            className="absolute left-[5px] right-[5px] top-[46px] z-20"
           >
-            <div className="flex flex-col gap-3">
-              <div className="flex items-start gap-[10px]">
-                <div className="mt-3.5 flex h-2 w-[34px] shrink-0 items-center justify-between">
-                  <span className="size-2 rounded-full bg-[#111]/40" />
-                  <span className="size-2 rounded-full bg-[#111]/20" />
-                  <span className="size-2 rounded-full bg-[#111]/10" />
-                </div>
+            <div className="flex w-full min-w-0 flex-col gap-3">
+              <div className="flex w-full min-w-0 items-start gap-[10px]">
                 <h1
-                  className="uppercase leading-tight"
+                  className="min-w-0 flex-1 translate-x-[12px] pl-[5px] uppercase leading-tight"
                   style={{
                     color: "#111",
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                    fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                     fontSize: 26,
                     fontStyle: "normal",
                     fontWeight: 700,
@@ -1366,18 +1374,18 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </h1>
             </div>
             <div className="flex gap-[10px]">
-              <div className="w-[34px] shrink-0" aria-hidden="true" />
-              <p className="max-w-[280px] font-medium text-[#111]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 17, lineHeight: 1.35 }}>
+              <div className="w-0 shrink-0" aria-hidden="true" />
+              <p className="max-w-[280px] translate-x-[7px] font-medium text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 17, fontWeight: 400, lineHeight: 1.35 }}>
                   {currentView.description}
                 </p>
               </div>
             </div>
             <Link
               href="/where-to-buy"
-              className="ml-[44px] mt-5 flex h-[56px] w-[180px] items-center justify-center rounded-[14px] text-[17px] font-medium text-white no-underline"
+              className="ml-[5px] mt-5 flex h-[56px] w-[180px] translate-x-[7px] items-center justify-center rounded-[14px] text-[17px] font-medium text-white no-underline"
               style={{
                 background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                 fontWeight: 700,
                 letterSpacing: "0.08em",
               }}
@@ -1482,54 +1490,64 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             />
           </div>
 
+          {/* Ботинок и подиум: масштаб 80%, по центру по вертикали */}
           <div
-            className="pointer-events-none absolute z-10"
+            className="absolute left-1/2 top-1/2 z-10 origin-center"
             style={{
-              left: MOBILE_PEDESTAL.left,
-              top: MOBILE_PEDESTAL.top,
-              width: MOBILE_PEDESTAL.width,
-              height: MOBILE_PEDESTAL.height,
+              width: 460,
+              height: 1024,
+              transform: "translate(-50%, -50%) scale(0.8)",
             }}
           >
-            <img src={pedestalImage} alt="" className="h-full w-full object-cover object-top" style={{ opacity: MOBILE_PEDESTAL.opacity }} />
-          </div>
-
-          <div
-            className="absolute z-20"
-            style={{
-              left: currentMobileBoot.left,
-              top: currentMobileBoot.top,
-              width: currentMobileBoot.width,
-              height: currentMobileBoot.height,
-              transform: `translateX(${mobileBootShiftX}px) scale(${currentMobileBoot.scale ?? 1})`,
-              transformOrigin: "50% 50%",
-              transition: mobileBootShiftTransition ? `transform ${mobileBootShiftDurationMs}ms ease-out` : "none",
-            }}
-          >
-            {/* Узкая зона по центру: блокирует вертикальный скролл только здесь, чтобы боковой свайп не сдвигал страницу; сверху/снизу скролл свободен */}
             <div
-              className="absolute left-0 right-0 z-10"
+              className="pointer-events-none absolute"
               style={{
-                top: "37.5%",
-                height: "25%",
-                touchAction: "pan-y",
+                left: MOBILE_PEDESTAL.left,
+                top: MOBILE_PEDESTAL.top,
+                width: MOBILE_PEDESTAL.width,
+                height: MOBILE_PEDESTAL.height,
               }}
-              aria-label="Свайп влево или вправо для смены ракурса"
-              onTouchStart={handleMobileBootTouchStart}
-              onTouchEnd={handleMobileBootTouchEnd}
-            />
-            <img
-              key={`mobile-${transitionTick}-${colorVariant}`}
-              src={displayViewImage}
-              alt="Модель ботинка"
-              className="h-full w-full drop-shadow-[0_30px_70px_rgba(0,0,0,0.2)] pointer-events-none"
+            >
+              <img src={pedestalImage} alt="" className="h-full w-full object-cover object-top" style={{ opacity: MOBILE_PEDESTAL.opacity }} />
+            </div>
+
+            <div
+              className="absolute z-20"
               style={{
-                objectFit: "contain",
-                objectPosition: currentMobileBoot.objectPosition,
-                opacity: bootColorOpacity,
-                transition: "opacity 280ms ease",
+                left: currentMobileBoot.left,
+                top: currentMobileBoot.top,
+                width: currentMobileBoot.width,
+                height: currentMobileBoot.height,
+                transform: `translateX(${mobileBootShiftX}px) scale(${currentMobileBoot.scale ?? 1})`,
+                transformOrigin: "50% 50%",
+                transition: mobileBootShiftTransition ? `transform ${mobileBootShiftDurationMs}ms ease-out` : "none",
               }}
-            />
+            >
+              {/* Узкая зона по центру: блокирует вертикальный скролл только здесь, чтобы боковой свайп не сдвигал страницу; сверху/снизу скролл свободен */}
+              <div
+                className="absolute left-0 right-0 z-10"
+                style={{
+                  top: "37.5%",
+                  height: "25%",
+                  touchAction: "pan-y",
+                }}
+                aria-label="Свайп влево или вправо для смены ракурса"
+                onTouchStart={handleMobileBootTouchStart}
+                onTouchEnd={handleMobileBootTouchEnd}
+              />
+              <img
+                key={`mobile-${transitionTick}-${colorVariant}`}
+                src={displayViewImage}
+                alt="Модель ботинка"
+                className="h-full w-full drop-shadow-[0_30px_70px_rgba(0,0,0,0.2)] pointer-events-none"
+                style={{
+                  objectFit: "contain",
+                  objectPosition: currentMobileBoot.objectPosition,
+                  opacity: bootColorOpacity,
+                  transition: "opacity 280ms ease",
+                }}
+              />
+            </div>
           </div>
 
           {currentMobilePlates.showTopMetric && (
@@ -1537,15 +1555,15 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <div
                 className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.topMetric.left,
-                  top: currentMobilePlates.topMetric.top,
+                  left: currentMobilePlates.topMetric.left + mobilePlatesShiftX,
+                  top: currentMobilePlates.topMetric.top + mobilePlatesShiftY,
                   width: currentMobilePlates.topMetric.width,
                   height: currentMobilePlates.topMetric.height,
                 }}
               >
-                <p className="font-bold leading-none tracking-[-0.04em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricTop.value}</p>
-                <div className="mt-1 leading-[1.03]" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>
-                  <p className="font-bold text-[#111]">{currentMetricTop.title}</p>
+                <p className="font-normal leading-none tracking-[-0.04em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricTop.value}</p>
+                <div className="mt-1 leading-[1.03]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>
+                  <p className="font-normal text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricTop.title}</p>
                   <p className="text-[#111]/35">{currentMetricTop.line1}</p>
                   <p className="text-[#111]/35">{currentMetricTop.line2}</p>
                 </div>
@@ -1553,8 +1571,8 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <span
                 className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.topMetric.left + currentMobilePlates.topMetricDot.x,
-                  top: currentMobilePlates.topMetric.top + currentMobilePlates.topMetricDot.y,
+                  left: currentMobilePlates.topMetric.left + mobilePlatesShiftX + currentMobilePlates.topMetricDot.x,
+                  top: currentMobilePlates.topMetric.top + mobilePlatesShiftY + currentMobilePlates.topMetricDot.y,
                   width: MOBILE_PLAQUE_DOT.outer,
                   height: MOBILE_PLAQUE_DOT.outer,
                 }}
@@ -1569,8 +1587,8 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <div
                 className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.gluePill.left,
-                  top: currentMobilePlates.gluePill.top,
+                  left: currentMobilePlates.gluePill.left + mobilePlatesShiftX,
+                  top: currentMobilePlates.gluePill.top + mobilePlatesShiftY,
                   width: currentMobilePlates.gluePill.width,
                   height: currentMobilePlates.gluePill.height,
                 }}
@@ -1581,9 +1599,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   const glueItems = glueLines.slice(1);
                   return (
                     <>
-                      <p className="leading-[1.05] tracking-[-0.01em] font-bold text-[#111]" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{glueTitle}</p>
+                      <p className="leading-[1.05] tracking-[-0.01em] font-normal text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{glueTitle}</p>
                       {glueItems.map((line) => (
-                        <p key={line} className="mt-0.5 leading-[1.05] text-[#111]/75" style={{ fontSize: 11 * MOBILE_PLAQUE_TEXT_SCALE }}>
+                        <p key={line} className="mt-0.5 leading-[1.05] text-[#111]/75" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 11 * MOBILE_PLAQUE_TEXT_SCALE }}>
                           {line}
                         </p>
                       ))}
@@ -1594,8 +1612,8 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <span
                 className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.gluePill.left + currentMobilePlates.glueDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
-                  top: currentMobilePlates.gluePill.top + currentMobilePlates.glueDot.y,
+                  left: currentMobilePlates.gluePill.left + mobilePlatesShiftX + currentMobilePlates.glueDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
+                  top: currentMobilePlates.gluePill.top + mobilePlatesShiftY + currentMobilePlates.glueDot.y,
                   width: MOBILE_PLAQUE_DOT.outer,
                   height: MOBILE_PLAQUE_DOT.outer,
                 }}
@@ -1610,22 +1628,22 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <div
                 className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.callout.left,
-                  top: currentMobilePlates.callout.top,
+                  left: currentMobilePlates.callout.left + mobilePlatesShiftX,
+                  top: currentMobilePlates.callout.top + mobilePlatesShiftY,
                   width: currentMobilePlates.callout.width,
                   height: currentMobilePlates.callout.height,
                 }}
               >
-                <p className="leading-[1.05]" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>
-                  <span className="font-bold text-[#111]">{currentView.callout.title}</span>
+                <p className="leading-[1.05]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>
+                  <span className="text-[#111]">{currentView.callout.title}</span>
                 </p>
-                <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.callout.text}</p>
+                <p className="leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.callout.text}</p>
               </div>
               <span
                 className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.callout.left + currentMobilePlates.calloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
-                  top: currentMobilePlates.callout.top + currentMobilePlates.calloutDot.y,
+                  left: currentMobilePlates.callout.left + mobilePlatesShiftX + currentMobilePlates.calloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
+                  top: currentMobilePlates.callout.top + mobilePlatesShiftY + currentMobilePlates.calloutDot.y,
                   width: MOBILE_PLAQUE_DOT.outer,
                   height: MOBILE_PLAQUE_DOT.outer,
                 }}
@@ -1642,21 +1660,21 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <div
                 className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.secondaryCallout.left,
-                  top: currentMobilePlates.secondaryCallout.top,
+                  left: currentMobilePlates.secondaryCallout.left + mobilePlatesShiftX,
+                  top: currentMobilePlates.secondaryCallout.top + mobilePlatesShiftY,
                   width: currentMobilePlates.secondaryCallout.width,
                   height: currentMobilePlates.secondaryCallout.height,
                 }}
               >
-                <p className="leading-[1.05]" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>
-                  <span className="font-bold text-[#111]">{secondaryCalloutContent.title}</span>
+                <p className="leading-[1.05]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>
+                  <span className="text-[#111]">{secondaryCalloutContent.title}</span>
                 </p>
-                <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{secondaryCalloutContent.text}</p>
+                <p className="leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{secondaryCalloutContent.text}</p>
               </div>
               <span
                 className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
                 style={{
-                  left: currentMobilePlates.secondaryCallout.left + currentMobilePlates.secondaryCalloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
+                  left: currentMobilePlates.secondaryCallout.left + mobilePlatesShiftX + currentMobilePlates.secondaryCalloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
                   top: currentMobilePlates.secondaryCallout.top + currentMobilePlates.secondaryCalloutDot.y,
                   width: MOBILE_PLAQUE_DOT.outer,
                   height: MOBILE_PLAQUE_DOT.outer,
@@ -1672,7 +1690,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             <div
               className="absolute z-30 flex flex-col items-center justify-center rounded-[22px] bg-white p-5 text-center shadow-[0_60px_100px_rgba(0,0,0,0.12)] transition-all duration-500"
               style={{
-                left: currentMobilePlates.sideMetric.left,
+                left: currentMobilePlates.sideMetric.left + mobilePlatesShiftX,
                 top: currentMobilePlates.sideMetric.top,
                 width: currentMobilePlates.sideMetric.width,
                 height: currentMobilePlates.sideMetric.height,
@@ -1684,9 +1702,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               >
                 <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
               </span>
-              <p className="font-bold leading-none tracking-[-0.08em] text-[#111]" style={{ fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.value}</p>
-              <p className="pt-2 leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line1}</p>
-              <p className="leading-[1.05] text-[#111]/40" style={{ fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line2}</p>
+              <p className="font-normal leading-none tracking-[-0.08em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.value}</p>
+              <p className="pt-2 leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line1}</p>
+              <p className="leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line2}</p>
               <div className="relative mt-2 h-[56px] w-[91px] overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
                 <img src={metricSideImage} alt="" className="absolute max-w-none object-cover" style={{ width: 164, height: 118, left: -42, top: -64 }} />
               </div>

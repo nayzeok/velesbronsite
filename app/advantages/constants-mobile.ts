@@ -51,8 +51,8 @@ export const MOBILE_BOOT_BY_VIEW_BY_COLOR = {
 
 /** Масштаб ширины плашек по горизонтали (1 = 100%) */
 export const MOBILE_PLAQUE_WIDTH_SCALE = 0.8;
-/** Масштаб размера текста в плашках (1.2 = +20%) */
-export const MOBILE_PLAQUE_TEXT_SCALE = 1.02;
+/** Масштаб размера текста в плашках (1.17 ≈ +15% к прежнему 1.02) */
+export const MOBILE_PLAQUE_TEXT_SCALE = 1.10;
 
 /** Размер точки у плашек на мобиле (px): внешний оранжевый круг и внутренний белый кружок */
 export const MOBILE_PLAQUE_DOT = { outer: 16, inner: 6 } as const;
@@ -66,6 +66,31 @@ const MOBILE_GLUE_PILL_SIZE = {
   height: 72,
 } as const;
 
+/**
+ * МОБИЛЬНЫЕ ПЛАШКИ — где двигать каждую (left, top в px):
+ *
+ * 1) Callout (текст типа «Композитный подносок», «Натуральный нубук»)
+ *    → MOBILE_PLATES_BY_VIEW[ракурс].callout   (.left, .top)
+ *    Ракурсы: 0=бок, 1=фронт, 2=сверху, 3=наклон, 4=зад.
+ *
+ * 2) Glue pill (карточка «Гидрофобное покрытие», «Система Quick-Lock» и т.д.)
+ *    → MOBILE_PLATES_BY_VIEW[ракурс].gluePill  (.left, .top)
+ *
+ * 3) Secondary callout (вторая текстовая плашка, есть не на всех ракурсах)
+ *    → MOBILE_PLATES_BY_VIEW[ракурс].secondaryCallout  (.left, .top)
+ *
+ * 4) Top metric (большая метрика сверху, если показывается)
+ *    → MOBILE_PLATES.topMetric  (.left, .top)  или переопределение в MOBILE_PLATES_BY_VIEW[ракурс].topMetric
+ *
+ * 5) Side metric (боковая метрика «СЛОЁВ ЗАЩИТЫ» и т.д.)
+ *    → MOBILE_PLATES.sideMetric  (.left, .top)
+ *
+ * Точки (оранжевые кружки) рядом с плашками: calloutDot, glueDot, topMetricDot, secondaryCalloutDot —
+ * смещения от угла плашки в MOBILE_PLATES (.calloutDot.x/.y и т.д.), общие для всех ракурсов.
+ *
+ * Важно: если у ракурса в app/advantages/page.tsx в views[].mobilePlates заданы callout/gluePill и т.д.,
+ * используются они, а не этот массив. Плашка «Композитный подносок» — ракурс 1 (views[1]) в page.tsx, там и меняй.
+ */
 /** Базовые размеры и позиции плашек (callout, glue, topMetric, sideMetric). Точечные смещения — calloutDot, glueDot. */
 export const MOBILE_PLATES = {
   topMetric: { left: 62, top: 442, width: 182, height: 78 },
@@ -77,7 +102,7 @@ export const MOBILE_PLATES = {
   glueDot: { x: 172, y: 3 },
 } as const;
 
-/** По ракурсам (0..4): какие плашки показывать и их left/top. Смещения точек (calloutDot, glueDot и т.д.) задаются в views[].mobileAnchors в page.tsx — по аналогии с anchors для десктопа. */
+/** По ракурсам (0..4): какие плашки показывать и их left/top. Двигаешь плашку — меняешь .left и .top у нужного элемента (callout, gluePill, secondaryCallout и т.д.) для нужного индекса ракурса. */
 export const MOBILE_PLATES_BY_VIEW = [
   {
     showTopMetric: false,
@@ -121,7 +146,7 @@ export const MOBILE_PLATES_BY_VIEW = [
     topMetricDot: MOBILE_PLATES.topMetricDot,
     callout: { ...MOBILE_PLATES.callout, left: 304, top: 664 },
     calloutDot: MOBILE_PLATES.calloutDot,
-    secondaryCallout: { ...MOBILE_PLATES.callout, left: 38, top: 774 },
+    secondaryCallout: { ...MOBILE_PLATES.callout, left: 38, top: 674 },
     secondaryCalloutDot: MOBILE_PLATES.calloutDot,
     sideMetric: MOBILE_PLATES.sideMetric,
     gluePill: MOBILE_PLATES.gluePill,
