@@ -56,7 +56,7 @@ const colorViewImages = {
     "/images/models/advantages-views/2sk/oliva/6.png",
     "/images/models/advantages-views/2sk/oliva/3.png",
     "/images/models/advantages-views/2sk/oliva/4.png",
-    "/images/models/advantages-views/2sk/oliva/1_2.png",
+    "/images/models/advantages-views/2sk/oliva/1_22.png",
   ],
 } as const;
 
@@ -396,10 +396,16 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
   const mobileSwipeStartYRef = useRef<number | null>(null);
   const mobileBootPhaseTimerRef = useRef<number | null>(null);
   const mobileBootFinishTimerRef = useRef<number | null>(null);
+  const isMobileBootAnimatingRef = useRef(false);
   const [mobileScale, setMobileScale] = useState(1);
+  const [mobileCarouselActiveIndex, setMobileCarouselActiveIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const [mobileReady, setMobileReady] = useState(false);
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
+
+  useEffect(() => {
+    if (!isMobileBootAnimating) setMobileCarouselActiveIndex(activeIndex);
+  }, [isMobileBootAnimating, activeIndex]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("matchMedia" in window)) return;
@@ -470,7 +476,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
   const calloutDotInnerSize = isThermalCallout ? 16 : 14;
   const bootCenterOffsetX = 1536 / 2 - currentBootBox.w / 2 - currentBootBox.x;
   const desktopMarkerAngle = carouselMarkerAngles[activeIndex] + CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
-  const mobileMarkerAngle = mobileCarouselMarkerAngles[activeIndex] + MOBILE_CAROUSEL_MARKER_ANGLE_OFFSETS[activeIndex];
+  const mobileMarkerAngle = mobileCarouselMarkerAngles[mobileCarouselActiveIndex] + MOBILE_CAROUSEL_MARKER_ANGLE_OFFSETS[mobileCarouselActiveIndex];
   const tempLabelStyle = {
     width: 61,
     height: 32,
@@ -536,6 +542,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
       window.clearTimeout(mobileBootFinishTimerRef.current);
     }
     setIsMobileBootAnimating(true);
+    isMobileBootAnimatingRef.current = true;
 
     if (resolvedDirection) {
       // resolvedDirection: 1 => swipe left, -1 => swipe right
@@ -564,6 +571,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
 
       mobileBootFinishTimerRef.current = window.setTimeout(() => {
         setIsMobileBootAnimating(false);
+        isMobileBootAnimatingRef.current = false;
       }, MOBILE_EXIT_MS + MOBILE_ENTER_MS);
       return;
     }
@@ -571,6 +579,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
     setActiveIndex(index);
     setTransitionTick((prev) => prev + 1);
     setIsMobileBootAnimating(false);
+    isMobileBootAnimatingRef.current = false;
   };
   const handleMobileBootTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
     const touch = event.changedTouches[0];
@@ -606,6 +615,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
     if (!node) return;
 
     const updateScale = () => {
+      if (isMobileBootAnimatingRef.current) return;
       const width = node.clientWidth || 460;
       setMobileScale(width / 460);
     };
@@ -726,8 +736,12 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </div>
               <Link
                 href="/models"
-                className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[22px] font-medium text-white"
-                style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.08em" }}
+                className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[22px] font-medium text-white transition-opacity hover:opacity-90"
+                style={{
+                  fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
+                  fontWeight: 400,
+                  letterSpacing: "0.08em",
+                }}
               >
                 ПОДРОБНЕЕ
               </Link>
@@ -1382,11 +1396,10 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             </div>
             <Link
               href="/where-to-buy"
-              className="ml-[5px] mt-5 flex h-[56px] w-[180px] translate-x-[7px] items-center justify-center rounded-[14px] text-[17px] font-medium text-white no-underline"
+              className="ml-[5px] mt-5 flex h-[56px] w-[180px] translate-x-[7px] items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[17px] font-medium text-white no-underline transition-opacity active:opacity-90"
               style={{
-                background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
-                fontWeight: 700,
+                fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
+                fontWeight: 400,
                 letterSpacing: "0.08em",
               }}
             >
@@ -1394,7 +1407,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             </Link>
           </div>
 
-          <div className="absolute left-0 top-0 z-40">
+          <div className="absolute left-0 top-0 z-40" style={{ contain: "layout" }}>
             <div
               className="pointer-events-none absolute"
               style={{
@@ -1418,28 +1431,24 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 type="button"
                 onClick={() => handleChangeView(index)}
                 aria-label={`Показать ракурс ${index + 1}`}
-                className="absolute -translate-x-1/2 -translate-y-1/2"
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-[12px] transition-opacity duration-200"
                 style={{
                   left: mobileCarouselCards[index].x,
                   top: mobileCarouselCards[index].y,
                   width: 69 * MOBILE_CAROUSEL_CARD_SCALE,
                   height: 47 * MOBILE_CAROUSEL_CARD_SCALE,
-                  transform: `translate(-50%, -50%) rotate(${mobileCarouselCards[index].rotate}deg)`,
+                  transform: `translate(-50%, -50%) rotate(${mobileCarouselCards[index].rotate}deg) translateZ(0)`,
                   zIndex: carouselItems[index].z,
-                  opacity: index === activeIndex ? 1 : 0.9,
+                  opacity: index === mobileCarouselActiveIndex ? 0.98 : 0.88,
+                  boxShadow: index === mobileCarouselActiveIndex ? "0 0 0 1px rgba(0,0,0,0.08)" : "none",
+                  willChange: "transform",
                 }}
               >
                 <svg className="absolute inset-0 h-full w-full" viewBox="0 0 117 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <path
                     d="M0 13.0015C0 5.2534 6.73485 -0.774587 14.4356 0.0810526L105.436 10.1922C112.019 10.9237 117 16.4885 117 23.1127V56.9899C117 63.7616 111.802 69.3992 105.052 69.9472L14.0521 77.3361C6.48245 77.9507 0 71.9733 0 64.3788V13.0015Z"
-                    fill="url(#paint0_mobile)"
+                    fill="rgba(0,0,0,0.4)"
                   />
-                  <defs>
-                    <linearGradient id="paint0_mobile" x1="58.5" y1="-1.5229" x2="58.5" y2="78.4771" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#E7813F" />
-                      <stop offset="1" stopColor="#FC6407" />
-                    </linearGradient>
-                  </defs>
                 </svg>
                 <img
                   src={colorViewImages[colorVariant][index] ?? view.image}
@@ -1458,7 +1467,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                       MOBILE_CAROUSEL_IMAGE_BOOST *
                       MOBILE_CAROUSEL_IMAGE_TUNE[index].boost *
                       MOBILE_CAROUSEL_CARD_SCALE,
-                    left:
+                    left: Math.round(
                       (carouselItems[index].image.x * MOBILE_CAROUSEL_LAYOUT_SCALE -
                         (carouselItems[index].image.w *
                           MOBILE_CAROUSEL_LAYOUT_SCALE *
@@ -1466,7 +1475,8 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                           2 +
                         MOBILE_CAROUSEL_IMAGE_TUNE[index].x) *
                       MOBILE_CAROUSEL_CARD_SCALE,
-                    top:
+                    ),
+                    top: Math.round(
                       (carouselItems[index].image.y * MOBILE_CAROUSEL_LAYOUT_SCALE -
                         (carouselItems[index].image.h *
                           MOBILE_CAROUSEL_LAYOUT_SCALE *
@@ -1474,6 +1484,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                           2 +
                         MOBILE_CAROUSEL_IMAGE_TUNE[index].y) *
                       MOBILE_CAROUSEL_CARD_SCALE,
+                    ),
                     transform: `${carouselItems[index].image.flipY ? "scaleY(-1) rotate(180deg)" : ""} rotate(${carouselItems[index].image.rotate}deg) scale(${carouselItems[index].image.scale ?? 1})`,
                     transformOrigin: "50% 50%",
                   }}

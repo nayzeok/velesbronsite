@@ -124,7 +124,7 @@ export default function BrandPage() {
 
           <div
             className="relative mx-auto max-w-[1000px] px-4 pb-20 pt-[calc(5rem+env(safe-area-inset-top))] min-[1200px]:px-8 min-[1200px]:pt-[7rem]"
-            style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontWeight: 400 }}
+            style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
           >
 
         {/* О VELESBRON */}
@@ -134,7 +134,7 @@ export default function BrandPage() {
               <h1
                 className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -185,7 +185,7 @@ export default function BrandPage() {
               <h2
                 className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -228,7 +228,7 @@ export default function BrandPage() {
                   </span>
                   <h3
                     className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
-                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                    style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
                   >
                     {item.title}
                   </h3>
@@ -246,7 +246,7 @@ export default function BrandPage() {
               <h2
                 className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -266,7 +266,7 @@ export default function BrandPage() {
                 >
                   <h3
                     className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
-                    style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.25 }}
+                    style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.25 }}
                   >
                     {item.title}
                   </h3>
@@ -284,7 +284,7 @@ export default function BrandPage() {
               <h2
                 className="text-[26px] min-[1200px]:text-[30px] uppercase text-[#111]"
                 style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -309,7 +309,7 @@ export default function BrandPage() {
                   <div className="scroll-highlight-header px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
                     <h3
                       className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
-                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                      style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
                     >
                       {card.title}
                     </h3>
@@ -373,7 +373,7 @@ export default function BrandPage() {
               <h2
                 className="text-[29px] min-[1200px]:text-[34px] uppercase text-[#111]"
                 style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                   fontWeight: 700,
                   lineHeight: 1.15,
                   letterSpacing: "0.08em",
@@ -402,7 +402,7 @@ export default function BrandPage() {
                   <div className="scroll-highlight-header px-4 py-3 text-center transition-colors duration-300 group-hover:bg-[#f07426]/20">
                     <h3
                       className="text-[14px] min-[1200px]:text-[17px] uppercase text-[#111]"
-                      style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
+                      style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700, letterSpacing: "0.08em", lineHeight: 1.2 }}
                     >
                       {card.title}
                     </h3>

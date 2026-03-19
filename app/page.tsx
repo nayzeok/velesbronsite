@@ -102,9 +102,36 @@ export default function Home() {
         window.addEventListener("resize", update);
         return () => window.removeEventListener("resize", update);
     }, []);
+
+    useEffect(() => {
+        const el = mobileCarouselContainerRef.current;
+        if (!el) return;
+        const onTouchMove = (e: TouchEvent) => {
+            if (e.touches.length !== 1) return;
+            const t = e.touches[0];
+            if (mobileCarouselPointerIdRef.current !== t.identifier) return;
+            if (mobileCarouselTouchStartX.current === null || mobileCarouselTouchStartY.current === null) return;
+            const dx = t.clientX - mobileCarouselTouchStartX.current;
+            const dy = t.clientY - mobileCarouselTouchStartY.current;
+            if (!mobileCarouselDidLockHorizontalRef.current) {
+                if (Math.abs(dx) < 8) return;
+                if (Math.abs(dy) > Math.abs(dx)) return;
+                mobileCarouselDidLockHorizontalRef.current = true;
+            }
+            e.preventDefault();
+            const clamped = Math.max(-MOBILE_CAROUSEL_SLOT, Math.min(MOBILE_CAROUSEL_SLOT, dx));
+            carouselSwipeOffsetRef.current = clamped;
+            setCarouselSwipeOffset(clamped);
+        };
+        el.addEventListener("touchmove", onTouchMove, { passive: false });
+        return () => el.removeEventListener("touchmove", onTouchMove);
+    }, []);
+
     const mobileCarouselTrackRef = useRef<HTMLDivElement>(null);
+    const mobileCarouselContainerRef = useRef<HTMLDivElement>(null);
     const mobileCarouselTouchStartX = useRef<number | null>(null);
     const mobileCarouselAutoIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+    const carouselAutoResumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const secondScreenRef = useRef<HTMLElement>(null);
     const [mobileCarouselActiveIndex, setMobileCarouselActiveIndex] = useState(0);
     const [carouselTransitionEnabled, setCarouselTransitionEnabled] = useState(true);
@@ -114,8 +141,10 @@ export default function Home() {
     /** Чей пульс запустить один раз после остановки карусели */
     const [pulseCardIndex, setPulseCardIndex] = useState<number | null>(null);
     const carouselLastSwipeDistanceRef = useRef(0);
+    const carouselSwipeOffsetRef = useRef(0);
     const activeIndexRef = useRef(mobileCarouselActiveIndex);
     activeIndexRef.current = mobileCarouselActiveIndex;
+    carouselSwipeOffsetRef.current = carouselSwipeOffset;
 
     /** Пульс по transitionend трека (когда карусель закончила переход) */
     const pulseClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -151,7 +180,8 @@ export default function Home() {
         return () => clearTimeout(t);
     }, []);
 
-    useEffect(() => {
+    const startCarouselAuto = () => {
+        if (mobileCarouselAutoIntervalRef.current !== null) return;
         const t = setInterval(() => {
             setMobileCarouselActiveIndex((prev) => {
                 const next = (prev + 1) % (HERO_FEATURES_STRIP.length * 2);
@@ -160,10 +190,17 @@ export default function Home() {
             });
         }, MOBILE_CAROUSEL_HOLD_MS);
         mobileCarouselAutoIntervalRef.current = t;
-        return () => {
-            clearInterval(t);
-            mobileCarouselAutoIntervalRef.current = null;
-        };
+    };
+    const stopCarouselAuto = () => {
+        if (mobileCarouselAutoIntervalRef.current === null) return;
+        clearInterval(mobileCarouselAutoIntervalRef.current);
+        mobileCarouselAutoIntervalRef.current = null;
+    };
+
+    useEffect(() => {
+        startCarouselAuto();
+        return () => stopCarouselAuto();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -278,6 +315,7 @@ export default function Home() {
 
         e.preventDefault();
         const clamped = Math.max(-MOBILE_CAROUSEL_SLOT, Math.min(MOBILE_CAROUSEL_SLOT, dx));
+        carouselSwipeOffsetRef.current = clamped;
         setCarouselSwipeOffset(clamped);
     };
     const handleCarouselPointerUp = (e: React.PointerEvent) => {
@@ -288,7 +326,7 @@ export default function Home() {
         } catch {
             // ignore
         }
-        const dx = carouselSwipeOffset;
+        const dx = carouselSwipeOffsetRef.current;
         carouselLastSwipeDistanceRef.current = Math.abs(dx);
         resetCarouselPointerGesture();
         if (dx > MOBILE_CAROUSEL_SWIPE_THRESHOLD) {
@@ -304,9 +342,67 @@ export default function Home() {
         resetCarouselPointerGesture();
     };
 
+    const handleCarouselTouchStart = (e: React.TouchEvent) => {
+        if (e.changedTouches.length === 0) return;
+        const t = e.changedTouches[0];
+        carouselLastSwipeDistanceRef.current = 0;
+        mobileCarouselPointerIdRef.current = t.identifier;
+        mobileCarouselDidLockHorizontalRef.current = false;
+        mobileCarouselTouchStartX.current = t.clientX;
+        mobileCarouselTouchStartY.current = t.clientY;
+        setCarouselTransitionEnabled(false);
+    };
+    const handleCarouselTouchMove = (e: React.TouchEvent) => {
+        if (e.changedTouches.length === 0) return;
+        const t = e.changedTouches[0];
+        if (mobileCarouselPointerIdRef.current !== t.identifier) return;
+        if (mobileCarouselTouchStartX.current === null || mobileCarouselTouchStartY.current === null) return;
+        const dx = t.clientX - mobileCarouselTouchStartX.current;
+        const dy = t.clientY - mobileCarouselTouchStartY.current;
+        if (!mobileCarouselDidLockHorizontalRef.current) {
+            if (Math.abs(dx) < 8) return;
+            if (Math.abs(dy) > Math.abs(dx)) {
+                resetCarouselPointerGesture();
+                return;
+            }
+            mobileCarouselDidLockHorizontalRef.current = true;
+        }
+        e.preventDefault();
+        const clamped = Math.max(-MOBILE_CAROUSEL_SLOT, Math.min(MOBILE_CAROUSEL_SLOT, dx));
+        carouselSwipeOffsetRef.current = clamped;
+        setCarouselSwipeOffset(clamped);
+    };
+    const handleCarouselTouchEnd = (e: React.TouchEvent) => {
+        if (e.changedTouches.length === 0) return;
+        const t = e.changedTouches[0];
+        if (mobileCarouselPointerIdRef.current !== t.identifier) return;
+        const dx = carouselSwipeOffsetRef.current;
+        carouselLastSwipeDistanceRef.current = Math.abs(dx);
+        resetCarouselPointerGesture();
+        if (dx > MOBILE_CAROUSEL_SWIPE_THRESHOLD) {
+            setMobileCarouselActiveIndex((prev) => Math.max(0, prev - 1));
+            setExpandedCarouselIndex(null);
+            if (carouselAutoResumeTimeoutRef.current) clearTimeout(carouselAutoResumeTimeoutRef.current);
+            carouselAutoResumeTimeoutRef.current = setTimeout(startCarouselAuto, 2000);
+        } else if (dx < -MOBILE_CAROUSEL_SWIPE_THRESHOLD) {
+            setMobileCarouselActiveIndex((prev) => (prev + 1) % carouselTotalCards);
+            setExpandedCarouselIndex(null);
+            if (carouselAutoResumeTimeoutRef.current) clearTimeout(carouselAutoResumeTimeoutRef.current);
+            carouselAutoResumeTimeoutRef.current = setTimeout(startCarouselAuto, 2000);
+        }
+    };
+
     const handleCarouselCardTap = (index: number) => {
         if (carouselLastSwipeDistanceRef.current > 15) return;
-        setExpandedCarouselIndex((prev) => (prev === index ? null : index));
+        setExpandedCarouselIndex((prev) => {
+            const isClosing = prev === index;
+            if (isClosing) {
+                startCarouselAuto();
+            } else {
+                stopCarouselAuto();
+            }
+            return isClosing ? null : index;
+        });
     };
 
     return (
@@ -372,34 +468,33 @@ export default function Home() {
                         <Link
                             href="/models"
                             className="mt-4 inline-flex h-14 min-w-[220px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 text-[17px] font-medium uppercase tracking-[0.08em] text-white"
-                            style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontWeight: 700 }}
+                            style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
                         >
                             Изучить модель
                         </Link>
                     </div>
-                    x§
                     {/* Карусель: z-10 ниже меню. Окно фиксированной высоты — карточка раскрывается ВВЕРХ, предки overflow:visible чтобы не обрезало. */}
                     <div
-                        className="pointer-events-none absolute left-0 right-0 z-10 w-full overflow-visible"
+                        className="absolute left-0 right-0 z-10 flex w-full flex-col justify-end overflow-visible"
                         style={{
-                            top: `${MOBILE_CAROUSEL_TOP_PCT}%`,
+                            top: expandedCarouselIndex !== null ? `calc(${MOBILE_CAROUSEL_TOP_PCT}% - ${MOBILE_CARD_EXPANDED_EXTRA_H + 80}px)` : `${MOBILE_CAROUSEL_TOP_PCT}%`,
+                            minHeight: expandedCarouselIndex !== null ? MOBILE_CARD_COLLAPSED_H + MOBILE_CAROUSEL_VERTICAL_PAD * 2 + MOBILE_CARD_EXPANDED_EXTRA_H + 100 : undefined,
                             overflow: "visible",
                         }}
                     >
                         <div
-                            className="pointer-events-auto mx-auto flex touch-pan-y flex-col justify-end overflow-x-hidden overflow-y-visible"
+                            ref={mobileCarouselContainerRef}
+                            className="pointer-events-auto mx-auto flex flex-col justify-end overflow-x-hidden overflow-y-visible"
                             style={{
                                 width: MOBILE_CARD_WIDTH + MOBILE_CAROUSEL_RING_PAD * 2,
                                 height: MOBILE_CARD_COLLAPSED_H + MOBILE_CAROUSEL_VERTICAL_PAD * 2,
                                 paddingTop: MOBILE_CAROUSEL_VERTICAL_PAD,
                                 paddingBottom: MOBILE_CAROUSEL_VERTICAL_PAD,
                                 overflow: "visible",
+                                touchAction: "pan-y",
                             }}
-                            onPointerDown={handleCarouselPointerDown}
-                            onPointerMove={handleCarouselPointerMove}
-                            onPointerUp={handleCarouselPointerUp}
-                            onPointerCancel={handleCarouselPointerUp}
-                            onLostPointerCapture={handleCarouselLostPointerCapture}
+                            onTouchStart={handleCarouselTouchStart}
+                            onTouchEnd={handleCarouselTouchEnd}
                         >
                             <div
                                 ref={mobileCarouselTrackRef}
@@ -537,7 +632,7 @@ export default function Home() {
                                 <h1
                                     className="uppercase text-white"
                                     style={{
-                                        fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                                        fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                                         fontSize: "clamp(29px, 1.68vw, 30px)",
                                         fontWeight: 700,
                                         letterSpacing: "0.08em",
@@ -549,7 +644,7 @@ export default function Home() {
                                 <p
                                     className="mt-3 text-white/90"
                                     style={{
-                                        fontFamily: "var(--font-roboto-flex), sans-serif",
+                                        fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                                         fontSize: "clamp(25px, 0.94vw, 25px)",
                                         fontWeight: 400,
                                         lineHeight: 1.45,
@@ -570,7 +665,7 @@ export default function Home() {
                                     <h2
                                         className="whitespace-nowrap uppercase text-white"
                                         style={{
-                                            fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                                            fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                                             fontSize: "clamp(29px, 1.68vw, 30px)",
                                             fontWeight: 700,
                                             letterSpacing: "0.08em",
@@ -603,7 +698,7 @@ export default function Home() {
                                     <p
                                         className="mt-3 text-white/90"
                                         style={{
-                                            fontFamily: "var(--font-roboto-flex), sans-serif",
+                                            fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                                             fontSize: "clamp(25px, 0.94vw, 25px)",
                                             fontWeight: 400,
                                             lineHeight: 1.45,
@@ -615,7 +710,7 @@ export default function Home() {
                                     <Link
                                         href="/models"
                                         className="mt-4 inline-flex h-[75px] w-[260px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[19px] font-medium uppercase tracking-[0.08em] text-white"
-                                        style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontWeight: 700 }}
+                                        style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
                                     >
                                         Изучить модель
                                     </Link>
@@ -686,8 +781,8 @@ export default function Home() {
                             <span
                                 className="whitespace-nowrap text-[#222222] uppercase"
                                 style={{
-                                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                                    fontSize: "clamp(15px, 0.95vw, 18px)",
+                                    fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                                    fontSize: "clamp(13.5px, 0.86vw, 16px)",
                                     fontWeight: 700,
                                     letterSpacing: "0.04em",
                                     lineHeight: 1.2,
@@ -698,8 +793,8 @@ export default function Home() {
                             <span
                                 className="mt-4 text-[#6b6b6b]"
                                 style={{
-                                    fontFamily: "var(--font-roboto-flex), sans-serif",
-                                    fontSize: "clamp(14px, 0.9vw, 16px)",
+                                    fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
+                                    fontSize: "clamp(13.8px, 0.81vw, 16px)",
                                     fontWeight: 400,
                                     lineHeight: 1.5,
                                 }}

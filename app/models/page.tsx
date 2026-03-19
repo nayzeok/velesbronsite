@@ -443,11 +443,37 @@ export default function BuyPage() {
   };
 
   return (
-    <main className="figma-site-page overflow-x-hidden bg-[#d9d9d9] text-[#111] min-[1200px]:overflow-hidden">
+    <main className="figma-site-page relative overflow-x-hidden bg-white text-[#111] overscroll-none min-[1200px]:overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0 min-[1200px]:hidden" aria-hidden>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={`page-bg-strip-${i}`}
+            className="absolute inset-y-0"
+            style={{
+              left: `${(i * 100) / 6}%`,
+              width: `${100 / 6}%`,
+              backgroundImage:
+                "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
+            }}
+          />
+        ))}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${backgroundShape})`,
+            backgroundSize: "832px 832px",
+            backgroundPosition: "top left",
+            filter: "blur(90px)",
+            opacity: 0.03,
+          }}
+        />
+      </div>
+
+      <div className="relative z-10">
       {showLowComingSoon && (
         <div
           className="fixed left-1/2 top-[20%] z-[100] -translate-x-1/2 rounded-[12px] bg-[#111] px-6 py-3 text-center text-white shadow-lg"
-          style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 16 }}
+          style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 16 }}
         >
           Ожидается поступление
       </div>
@@ -498,7 +524,7 @@ export default function BuyPage() {
               <h1
                 className="uppercase w-full"
                   style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                   fontSize: 34,
                     fontWeight: 700,
                   lineHeight: 1.15,
@@ -515,7 +541,7 @@ export default function BuyPage() {
                   top: 115,
                   left: 0,
                   width: 408,
-                  fontFamily: "var(--font-roboto-flex), sans-serif",
+                  fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   fontSize: 24,
                   fontWeight: 500,
                   lineHeight: 1.35,
@@ -584,7 +610,7 @@ export default function BuyPage() {
                 <p
                   className="uppercase"
                   style={{
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                    fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                     fontSize: 36,
                     fontWeight: 700,
                     color: "#111",
@@ -625,9 +651,9 @@ export default function BuyPage() {
                   style={{
                           margin: 0,
                           padding: 0,
-                          fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                          fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                           fontSize: 17,
-                          fontWeight: 700,
+                          fontWeight: 400,
                           color: activeModelKey === model.key ? "#f07426" : "#111",
                           letterSpacing: "0.06em",
                         }}
@@ -653,7 +679,7 @@ export default function BuyPage() {
                 <p
                   className="uppercase"
                   style={{
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                    fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                     fontSize: 34,
                     fontWeight: 700,
                     color: "#111",
@@ -690,9 +716,9 @@ export default function BuyPage() {
                     style={{
                       margin: 0,
                       padding: 0,
-                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                      fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                       fontSize: 19,
-                      fontWeight: 700,
+                      fontWeight: 400,
                       color: colorVariant === "black" ? "#f07426" : "#111",
                       letterSpacing: "0.06em",
                     }}
@@ -727,9 +753,9 @@ export default function BuyPage() {
                     style={{
                       margin: 0,
                       padding: 0,
-                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                      fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                       fontSize: 17,
-                      fontWeight: 700,
+                      fontWeight: 400,
                       color: colorVariant === "oliva" ? "#f07426" : "#111",
                       letterSpacing: "0.06em",
                     }}
@@ -752,9 +778,9 @@ export default function BuyPage() {
                   height: 72,
                   background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
                   borderRadius: 16,
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   fontSize: 24,
-                  fontWeight: 700,
+                  fontWeight: 400,
                   color: "#fff",
                   letterSpacing: "0.08em",
                 }}
@@ -882,13 +908,13 @@ export default function BuyPage() {
 
       {/* ── MOBILE: рендерим только при width < 1200px; контент — после mount, чтобы не ронять Safari при первом кадре ── */}
       {!isDesktop && !mobileReady && (
-      <section className="flex min-h-[100dvh] items-center justify-center bg-[#d9d9d9]">
-        <p className="text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 15 }}>Загрузка…</p>
+      <section className="flex min-h-[100svh] items-center justify-center bg-white">
+        <p className="text-[#333]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 15 }}>Загрузка…</p>
       </section>
       )}
       {!isDesktop && mobileReady && (
       <section className="min-[1200px]:hidden">
-        <div className="relative min-h-[100dvh] overflow-hidden bg-white">
+        <div className="relative min-h-[100svh] overflow-hidden bg-white">
           <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
             {Array.from({ length: 6 }).map((_, i) => (
               <div
@@ -905,7 +931,7 @@ export default function BuyPage() {
           </div>
 
           <div
-            className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-[480px] flex-col px-4"
+            className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[480px] flex-col px-4"
             style={{
               paddingTop: "calc(78px + env(safe-area-inset-top, 0px))",
               paddingBottom: "max(20px, env(safe-area-inset-bottom, 0px))",
@@ -928,15 +954,15 @@ export default function BuyPage() {
                       }
                     }}
                     className="flex h-[35px] flex-1 items-center justify-center transition-all"
-                  style={{
+                    style={{
                       background: isActive ? "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)" : "#efefef",
                       borderRight: model.key === "high" ? "1px solid #d8d8d8" : "none",
                       color: isActive ? "#fff" : "#111",
                       cursor: isLow ? "default" : "pointer",
                       opacity: isLow ? 0.9 : 1,
-                      fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                      fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                       fontSize: 15,
-                      fontWeight: 700,
+                      fontWeight: 400,
                       letterSpacing: "0.04em",
                     }}
                   >
@@ -983,7 +1009,7 @@ export default function BuyPage() {
                           </span>
                           <span
                             style={{
-                              fontFamily: "var(--font-roboto-flex), sans-serif",
+                              fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                               fontSize: 12,
                               fontWeight: 500,
                               lineHeight: 1.1,
@@ -1155,7 +1181,7 @@ export default function BuyPage() {
                 <h1
                   className="uppercase text-[#111]"
                 style={{
-                    fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                    fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                     fontSize: 18,
                     fontWeight: 700,
                     lineHeight: 1.12,
@@ -1170,7 +1196,7 @@ export default function BuyPage() {
                   <p
                     className="text-[#111]"
                     style={{
-                      fontFamily: "var(--font-roboto-flex), sans-serif",
+                      fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                       fontSize: 17,
                       lineHeight: 1.22,
                       color: "#111",
@@ -1199,7 +1225,7 @@ export default function BuyPage() {
                     onClick={() => setIsMobileTextExpanded(true)}
                     className="mt-2 flex min-h-[36px] w-full items-end gap-2 text-left text-[#6d7339]"
           style={{
-                      fontFamily: "var(--font-roboto-flex), sans-serif",
+                      fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                       fontSize: 13,
                       fontWeight: 500,
                       textUnderlineOffset: "3px",
@@ -1227,9 +1253,9 @@ export default function BuyPage() {
                 className="-mt-2 mx-auto flex h-[40px] w-full max-w-[207px] items-center justify-center rounded-[12px] text-white no-underline"
                 style={{
                   background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   fontSize: 17,
-                  fontWeight: 700,
+                  fontWeight: 400,
                   letterSpacing: "0.08em",
                 }}
               >
@@ -1255,7 +1281,7 @@ export default function BuyPage() {
             <div className="relative flex items-center justify-center border-b border-[#ececec] px-5 py-4 min-[1200px]:px-7">
               <h3
                 className="whitespace-nowrap uppercase text-[#111]"
-                style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 24, fontWeight: 700, letterSpacing: "0.08em" }}
+                style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif", fontSize: 24, fontWeight: 700, letterSpacing: "0.08em" }}
               >
                 Размерная сетка
               </h3>
@@ -1302,6 +1328,7 @@ export default function BuyPage() {
           </div>
         </div>
       )}
+      </div>
     </main>
   );
 }
