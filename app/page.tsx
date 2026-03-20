@@ -699,7 +699,7 @@ export default function Home() {
                                         className="mt-3 text-white/90"
                                         style={{
                                             fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
-                                            fontSize: "clamp(25px, 0.94vw, 25px)",
+                                            fontSize: "clamp(21.25px, 0.94vw, 21.25px)",
                                             fontWeight: 400,
                                             lineHeight: 1.45,
                                         }}

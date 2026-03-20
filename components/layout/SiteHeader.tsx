@@ -98,7 +98,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
                 onClick={item.key === "advantages" ? handleAdvantagesClick : undefined}
                 className={linkClass(isActive)}
                 style={{
-                  fontFamily: "var(--font-roboto-flex), sans-serif",
+                  fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   ...(isActive && !isLightBg && { color: "#fff" }),
                 }}
                 aria-current={isActive ? "page" : undefined}
@@ -143,13 +143,33 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
               (item.key === "media" && pathname?.startsWith("/media")) ||
               (item.key === "contacts" && pathname?.startsWith("/contacts"));
             const isActive = item.key === activeItem || isActiveByPath;
+            if (item.key === "media") {
+              return (
+                <span
+                  key={item.key}
+                  className={linkClass(isActive)}
+                  style={{
+                    fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
+                    ...(isActive && !isLightBg && { color: "#fff" }),
+                  }}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  <span className="nav-link-fill__inner">
+                    <span className="nav-link-fill__base">{item.label}</span>
+                    <span className="nav-link-fill__hover" aria-hidden="true">
+                      {item.label}
+                    </span>
+                  </span>
+                </span>
+              );
+            }
             return (
               <Link
                 key={item.key}
                 href={item.href}
                 className={linkClass(isActive)}
                 style={{
-                  fontFamily: "var(--font-roboto-flex), sans-serif",
+                  fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   ...(isActive && !isLightBg && { color: "#fff" }),
                 }}
                 aria-current={isActive ? "page" : undefined}

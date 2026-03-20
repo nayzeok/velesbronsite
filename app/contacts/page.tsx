@@ -2,17 +2,33 @@ import SiteHeader from "@/components/layout/SiteHeader";
 
 export const metadata = {
   title: "Контакты — VelesBron",
-  description: "Юридическая информация, контакты сервисной службы, менеджера B2B и поддержки",
+  description: "Служба качества и юридическая информация VelesBron",
 };
 
 const backgroundShape = "/images/models/ui/background-shape.png";
 
+function TelegramIcon() {
+  return (
+    <img
+      src="/images/models/ui/tg-logo.jpg"
+      alt=""
+      aria-hidden="true"
+      className="inline-block h-[42px] w-[42px] shrink-0 overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.10)]"
+      style={{ borderRadius: 12, objectFit: "cover", display: "block" }}
+    />
+  );
+}
+
 export default function ContactsPage() {
   return (
-    <main className="figma-site-page min-h-screen overflow-x-hidden bg-[#d9d9d9] text-[#111]">
-      <section className="figma-site-stage relative mx-auto min-h-[100dvh] w-full overflow-hidden bg-white">
-        <div className="relative mx-auto h-full min-h-[100dvh] w-full max-w-[1670px] overflow-hidden">
-          <div className="pointer-events-none absolute inset-0">
+    <main
+      className="figma-site-page relative overflow-x-hidden bg-white text-[#111] min-h-screen"
+      style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
+    >
+      {/* Фон */}
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <div className="absolute left-1/2 top-0 w-[886px] -translate-x-1/2" style={{ marginTop: "-88px", height: "calc(100% + 88px)" }}>
+          <div className="absolute inset-0">
             {Array.from({ length: 14 }).map((_, i) => (
               <div key={i} className="absolute inset-y-0" style={{ left: `${(i * 100) / 14}%`, width: `${100 / 14}%` }}>
                 <div
@@ -35,98 +51,106 @@ export default function ContactsPage() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
 
-          <SiteHeader />
+      <div className="relative z-10 mx-auto w-full max-w-[1670px]">
+        <SiteHeader activeItem="contacts" />
 
-          <div className="relative mx-auto w-[min(1120px,92vw)] pb-20 min-[1200px]:pt-[168px]">
-            <h1
-              className="uppercase text-[#111]"
-              style={{
-                fontFamily: "var(--font-russo-one), Russo One, sans-serif",
-                fontSize: "clamp(39px,3.75vw,66px)",
-                lineHeight: 1,
-              }}
-            >
-              Контакты
-            </h1>
-            <p className="mt-5 max-w-[760px] text-[19px] leading-[1.35] text-[#111]/72">
-              Здесь размещены юридические реквизиты, контакты сервисной службы, менеджера B2B и каналы поддержки.
-            </p>
+        <div className="px-4 pt-[140px] pb-20 min-[1200px]:pt-[168px]">
+          <div className="mx-auto w-full max-w-[1100px]">
+            <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
 
-            <div className="mt-8 grid gap-5 min-[980px]:grid-cols-2">
-              <article className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)]">
-                <h2
-                  className="uppercase text-[#111]"
-                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 28, lineHeight: 1 }}
+              {/* Заголовок */}
+              <div className="text-center">
+                <h1
+                  className="uppercase text-[#111] text-[29px] min-[1200px]:text-[34px]"
+                  style={{
+                    fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                    fontWeight: 700,
+                    lineHeight: 1.15,
+                    letterSpacing: "0.08em",
+                  }}
                 >
-                  Юридическая информация
-                </h2>
-                <div className="mt-5 space-y-2 text-[16px] leading-[1.35] text-[#111]/78">
-                  <p>ООО "ВЕЛЕСБРОН"</p>
-                  <p>ИНН: уточняется</p>
-                  <p>ОГРН: уточняется</p>
-                  <p>Юр. адрес: уточняется</p>
-                  <p>Email: info@velesbron.ru</p>
-                </div>
-              </article>
+                  КОНТАКТЫ
+                </h1>
+              </div>
 
-              <article className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)]">
-                <h2
-                  className="uppercase text-[#111]"
-                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 28, lineHeight: 1 }}
-                >
-                  Сервисная служба
-                </h2>
-                <div className="mt-5 space-y-3 text-[16px] leading-[1.35] text-[#111]/78">
-                  <a href="tel:+79990000001" className="block underline decoration-[#111]/35 underline-offset-4">
-                    +7 (999) 000-00-01
-                  </a>
-                  <a href="mailto:service@velesbron.ru" className="block underline decoration-[#111]/35 underline-offset-4">
-                    service@velesbron.ru
-                  </a>
-                  <p>График: Пн-Пт, 10:00-19:00 (МСК)</p>
-                </div>
-              </article>
+              {/* Подблоки */}
+              <div className="mt-8 grid gap-4 md:grid-cols-2">
 
-              <article className="rounded-[24px] bg-[linear-gradient(180deg,#E7813F_0%,#FC6407_100%)] p-7 text-white shadow-[0_30px_70px_rgba(252,100,7,0.28)]">
-                <h2
-                  className="uppercase"
-                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 28, lineHeight: 1 }}
-                >
-                  Менеджер B2B
-                </h2>
-                <div className="mt-5 space-y-3 text-[16px] leading-[1.35] text-white/95">
-                  <p>Контакт: Алексей</p>
-                  <a href="tel:+79990000002" className="block underline decoration-white/70 underline-offset-4">
-                    +7 (999) 000-00-02
-                  </a>
-                  <a href="mailto:b2b@velesbron.ru" className="block underline decoration-white/70 underline-offset-4">
-                    b2b@velesbron.ru
-                  </a>
-                </div>
-              </article>
+                {/* Служба качества */}
+                <article className="rounded-xl border-2 border-[#e5e5e5] bg-white p-6">
+                  <h2
+                    className="uppercase text-[#111] text-[14px] min-[1200px]:text-[17px]"
+                    style={{
+                      fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    Служба качества
+                  </h2>
+                  <div className="mt-5 space-y-3" style={{ fontSize: 17, lineHeight: 1.5 }}>
+                    <a
+                      href="https://t.me/shop_MP_support"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-[#111] hover:text-[#f07426] transition-colors duration-200"
+                    >
+                      <TelegramIcon />
+                      <span>@shop_MP_support</span>
+                    </a>
+                    <div className="flex select-none items-center gap-2 text-[#111]/80">
+                      <span className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.08)]" style={{ borderRadius: 12, background: "#e8e8e8" }}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <rect x="2" y="4" width="20" height="16" rx="3" stroke="#555" strokeWidth="1.8"/>
+                          <path d="M2 8l10 7 10-7" stroke="#555" strokeWidth="1.8" strokeLinecap="round"/>
+                        </svg>
+                      </span>
+                      <span>sale-yamarket@yandex.ru</span>
+                    </div>
+                    <div className="flex select-none items-center gap-2 text-[#111]/80">
+                      <span className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.08)]" style={{ borderRadius: 12, background: "linear-gradient(135deg, #E7813F 0%, #FC6407 100%)" }}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                      <span>+7 (969) 103-00-33</span>
+                    </div>
+                  </div>
+                </article>
 
-              <article className="rounded-[24px] bg-white p-7 shadow-[0_30px_70px_rgba(0,0,0,0.11)]">
-                <h2
-                  className="uppercase text-[#111]"
-                  style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif", fontSize: 28, lineHeight: 1 }}
-                >
-                  Поддержка
-                </h2>
-                <div className="mt-5 space-y-3 text-[16px] leading-[1.35] text-[#111]/78">
-                  <a href="mailto:support@velesbron.ru" className="block underline decoration-[#111]/35 underline-offset-4">
-                    support@velesbron.ru
-                  </a>
-                  <a href="https://t.me/velesbron" className="block underline decoration-[#111]/35 underline-offset-4">
-                    t.me/velesbron
-                  </a>
-                  <p>По вопросам заказа, гарантии и эксплуатации.</p>
-                </div>
-              </article>
+                {/* Юридическая информация */}
+                <article className="rounded-xl border-2 border-[#e5e5e5] bg-white p-6">
+                  <h2
+                    className="uppercase text-[#111] text-[14px] min-[1200px]:text-[17px]"
+                    style={{
+                      fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    Юридическая информация
+                  </h2>
+                  <div className="mt-5 select-none space-y-2 text-[#111]/80" style={{ fontSize: 17, lineHeight: 1.5 }}>
+                    <p>ООО «РЕШЕНИЕ»</p>
+                    <p>ИНН 5406849838, КПП 540601001</p>
+                    <p>ОГРН 1255400025715</p>
+                    <p>630007, Новосибирская область, г. Новосибирск, ул. Октябрьская, зд. 42</p>
+                    <p>e-mail: mail@evbul.ru</p>
+                  </div>
+                </article>
+
+              </div>
+
+
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </main>
   );
 }
