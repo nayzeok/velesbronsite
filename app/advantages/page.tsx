@@ -1395,7 +1395,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </div>
             </div>
             <Link
-              href="/where-to-buy"
+              href="/models"
               className="ml-[5px] mt-5 flex h-[56px] w-[180px] translate-x-[7px] items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[17px] font-medium text-white no-underline transition-opacity active:opacity-90"
               style={{
                 fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",

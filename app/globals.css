@@ -54,7 +54,21 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-roboto-flex), system-ui, sans-serif;
+  font-family: var(--font-montserrat-light), Montserrat, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-montserrat-bold), Montserrat, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+p,
+li {
+  font-family: var(--font-montserrat-light), Montserrat, sans-serif;
+  font-weight: 400;
 }
 
 html {
@@ -186,6 +200,25 @@ body {
   }
 }
 
+/* Mobile CTA buttons: как у "ПОДРОБНЕЕ" (тонкий Montserrat) */
+@media (max-width: 1199px) {
+  /* Градиентные CTA-кнопки (в т.ч. span "Перейти") */
+  [class*="bg-gradient-to-b"][class*="text-white"],
+  [style*="linear-gradient(180deg, #E7813F 0%, #FC6407 100%)"],
+  [style*="linear-gradient(180deg, #e7813f 0%, #fc6407 100%)"] {
+    font-family: var(--font-montserrat-light), Montserrat, sans-serif !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.08em;
+    font-size: 17px !important;
+    line-height: 1.2 !important;
+    height: 56px !important;
+    border-radius: 14px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
 /** «Таблица размеров»: закрашивание и линия выезжают вместе слева направо (один текст, без дубля) */
 .size-table-link {
   position: relative;
@@ -194,7 +227,7 @@ body {
   border: none;
   padding: 0;
   padding-bottom: 10px;
-  font-family: var(--font-roboto-flex), system-ui, sans-serif;
+  font-family: var(--font-montserrat-light), Montserrat, sans-serif;
   font-weight: 500;
   letter-spacing: normal;
   color: #111;
@@ -233,8 +266,10 @@ body {
 /** Пункты меню хедера — как «Таблица размеров»: __inner без padding (ширина = текст), оранжевый слой width 0 → 100% */
 .nav-link-fill {
   display: inline-block;
+  font-family: var(--font-montserrat-light), Montserrat, sans-serif;
   font-size: 22px;
-  font-weight: 500;
+  font-weight: 400;
+  letter-spacing: 0.03em;
   white-space: nowrap;
   text-decoration: none;
   color: #333;

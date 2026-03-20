@@ -50,7 +50,8 @@ export default function MediaPage() {
               <h1
                 className="uppercase text-[#111]"
                 style={{
-                  fontFamily: "var(--font-russo-one), Russo One, sans-serif",
+                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                  fontWeight: 700,
                   fontSize: "clamp(32px,3.75vw,66px)",
                   lineHeight: 1,
                 }}
@@ -75,7 +76,13 @@ export default function MediaPage() {
                       ) : null}
                     </div>
                     <div className="p-5">
-                      <h2 className="text-[24px] leading-none text-[#111]" style={{ fontFamily: "var(--font-russo-one), Russo One, sans-serif" }}>
+                      <h2
+                        className="text-[24px] leading-none text-[#111]"
+                        style={{
+                          fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                          fontWeight: 700,
+                        }}
+                      >
                         {item.title}
                       </h2>
                       <p className="mt-3 text-[15px] leading-[1.35] text-[#111]/68">

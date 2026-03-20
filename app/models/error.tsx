@@ -26,7 +26,10 @@ export default function ModelsError({
 
   return (
     <main className="figma-site-page flex min-h-[60vh] flex-col items-center justify-center gap-4 bg-[#d9d9d9] px-4 py-12">
-      <p className="text-center text-[18px] text-[#333]" style={{ fontFamily: "var(--font-roboto-flex), sans-serif" }}>
+      <p
+        className="text-center text-[18px] text-[#333]"
+        style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
+      >
         Не удалось загрузить страницу «Модельный ряд».
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3">
@@ -34,14 +37,14 @@ export default function ModelsError({
           type="button"
           onClick={reset}
           className="rounded-xl bg-[#f07426] px-5 py-2.5 text-white transition-colors hover:bg-[#e56a1a]"
-          style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 16, fontWeight: 500 }}
+          style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 16, fontWeight: 400 }}
         >
           Попробовать снова
         </button>
         <Link
           href="/"
           className="rounded-xl border-2 border-[#e5e5e5] bg-white px-5 py-2.5 text-[#111] transition-colors hover:border-[#f07426]"
-          style={{ fontFamily: "var(--font-roboto-flex), sans-serif", fontSize: 16, fontWeight: 500 }}
+          style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 16, fontWeight: 400 }}
         >
           На главную
         </Link>

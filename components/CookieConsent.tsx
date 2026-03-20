@@ -45,7 +45,8 @@ export default function CookieConsent() {
       style={{
         bottom: "max(1rem, env(safe-area-inset-bottom))",
         left: "max(1rem, env(safe-area-inset-left))",
-        fontFamily: "var(--font-roboto-flex), sans-serif",
+        fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
+        fontWeight: 400,
         borderLeft: "4px solid #e7813f",
       }}
       role="dialog"
