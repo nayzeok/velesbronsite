@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
-import { AdvantagesContent } from "@/app/advantages/page";
+import { AdvantagesContent } from "@/app/advantages/AdvantagesContent";
 import SiteHeader from "@/components/layout/SiteHeader";
 
 const heroBackgroundDesktop = "/images/pages/2.2.png";
