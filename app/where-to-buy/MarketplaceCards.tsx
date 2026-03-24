@@ -29,7 +29,7 @@ function MarketplaceLogo({ type }: { type: MarketplaceType }) {
   if (type === "wildberries") {
     return (
       <img
-        src="/images/models/ui/wb-logo.jpg"
+        src="/images_alt/models/ui/wb-logo.webp"
         alt=""
         aria-hidden="true"
         className="relative -top-[6px] inline-flex h-[42px] w-[42px] items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
@@ -39,7 +39,7 @@ function MarketplaceLogo({ type }: { type: MarketplaceType }) {
   }
   return (
     <img
-      src="/images/models/ui/ozon_logo.jpg"
+      src="/images_alt/models/ui/ozon_logo.webp"
       alt=""
       aria-hidden="true"
       className="relative -top-[6px] inline-flex h-[42px] w-[42px] items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.08)]"

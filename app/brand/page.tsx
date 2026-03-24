@@ -7,13 +7,13 @@ export const metadata = {
   description: "О бренде VelesBron: миссия, ценности, архитектура продукта",
 };
 
-const backgroundShape = "/images/models/ui/background-shape.png";
+const backgroundShape = "/images_alt/models/ui/background-shape.webp";
 
 const PRINCIPLE_IMAGES: Record<"pragmatism" | "adaptation" | "technology" | "responsibility", string> = {
-  pragmatism: "/images/models/ui/15.png",
-  adaptation: "/images/models/ui/14.png",
-  technology: "/images/models/ui/12.png",
-  responsibility: "/images/models/ui/13.png",
+  pragmatism: "/images_alt/models/ui/15.webp",
+  adaptation: "/images_alt/models/ui/14.webp",
+  technology: "/images_alt/models/ui/12.webp",
+  responsibility: "/images_alt/models/ui/13.webp",
 };
 
 const MISSION_VALUES = [

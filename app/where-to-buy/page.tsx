@@ -6,7 +6,7 @@ export const metadata = {
 import SiteHeader from "@/components/layout/SiteHeader";
 import MarketplaceCards from "./MarketplaceCards";
 
-const backgroundShape = "/images/models/ui/background-shape.png";
+const backgroundShape = "/images_alt/models/ui/background-shape.webp";
 
 
 function LifetimeGuaranteeCard() {
@@ -15,7 +15,7 @@ function LifetimeGuaranteeCard() {
         <div className="mx-auto w-full max-w-[1100px]">
       <div className="rounded-xl border border-[#e5e5e5] bg-[#f5f5f5] p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] min-[640px]:p-6">
         <div className="flex flex-col items-center gap-6 min-[800px]:flex-row min-[800px]:items-start">
-          <img src="/images/models/ui/2ico.png" alt="" aria-hidden="true" className="h-[86px] w-[86px] object-contain shrink-0" />
+          <img src="/images_alt/models/ui/2ico.webp" alt="" aria-hidden="true" className="h-[86px] w-[86px] object-contain shrink-0" />
           <div className="flex-1">
             <h2
               className="uppercase text-[#111]"

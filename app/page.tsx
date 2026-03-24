@@ -5,8 +5,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { AdvantagesContent } from "@/app/advantages/AdvantagesContent";
 import SiteHeader from "@/components/layout/SiteHeader";
 
-const heroBackgroundDesktop = "/images/pages/2.2.png";
-const heroBackgroundMobile = "/images/pages/mobile_hero_back.PNG";
+const heroBackgroundDesktop = "/images_alt/pages/2.2.webp";
+const heroBackgroundMobile = "/images_alt/pages/mobile_hero_back.webp";
 const DESIGN_HEIGHT = 1000;
 
 /** Эффекты поверх фона hero (как в Figma): затемнение + градиенты. Подстрой под node 260-3. */
@@ -38,9 +38,9 @@ const MOBILE_CAROUSEL_TOP_PCT = 78;
 
 /** Иконки преимуществ на главной: картинки вместо векторной графики */
 const HERO_ADVANTAGES = [
-  { label: "Антипрокольная защита", icon: "/images/models/ui/13.png" },
-  { label: "Мембрана VELTEX™", icon: "/images/models/ui/14.png" },
-  { label: "Пожизненная гарантия", icon: "/images/models/ui/4ico.png" },
+  { label: "Антипрокольная защита", icon: "/images_alt/models/ui/13.webp" },
+  { label: "Мембрана VELTEX™", icon: "/images_alt/models/ui/14.webp" },
+  { label: "Пожизненная гарантия", icon: "/images_alt/models/ui/4ico.webp" },
 ];
 
 /** Нижняя полоска преимуществ на десктопе (мокап): 3 колонки с иконкой */
@@ -48,17 +48,17 @@ const HERO_FEATURES_STRIP = [
   {
     title: "Антипрокольная защита",
     desc: "Гибридная подошва усилена вставкой из арамидной ткани K-29.",
-    icon: "/images/models/ui/антипрокол.png",
+    icon: "/images_alt/models/ui/антипрокол.webp",
   },
   {
     title: "Мембрана VELTEX™",
     desc: "Герметичная чулочная конструкция отводит влагу и сохраняет микроклимат.",
-    icon: "/images/models/ui/мембрана_VELTEX.png",
+    icon: "/images_alt/models/ui/мембрана_VELTEX.webp",
   },
   {
     title: "Усиленная конструкция",
     desc: "Тройная прошивка армированными лавсановыми нитями.",
-    icon: "/images/models/ui/Гарантия_усил.констр..png",
+    icon: "/images_alt/models/ui/Гарантия_усил.констр..webp",
   },
 ];
 
@@ -453,7 +453,7 @@ export default function Home() {
                                 lineHeight: 1.15,
                             }}
                         >
-                            НОВЫЕ МОДЕЛИ VELESBRON
+                            ВЫБЕРИ СВОИ БОТИНКИ VELESBRON
                         </h2>
                         <p
                             className="mt-1.5 text-white/90 text-left font-medium"
@@ -463,7 +463,7 @@ export default function Home() {
                                 lineHeight: 1.35,
                             }}
                         >
-                            Гибридная подошва с антипрокольной защитой, мембрана VELTEX™ и продуманная конструкция моделей создают уверенность в каждом шаге.
+                            Гибридная подошва с антипрокольной защитой, мембрана VELTEX™ и продуманная конструкция ботинок создаёт уверенность в каждом шаге.
                         </p>
                         <Link
                             href="/models"
@@ -672,14 +672,14 @@ export default function Home() {
                                             lineHeight: 1.25,
                                         }}
                                     >
-                                        НОВЫЕ МОДЕЛИ VELESBRON
+                                        ВЫБЕРИ СВОИ БОТИНКИ VELESBRON
                                     </h2>
                                     <div className="mt-4 flex">
                                         {[
-                                            "/images/models/ui/IMG_2384 с лого 500_500.png",
-                                            "/images/models/ui/IMG_2396_500_500.png",
-                                            "/images/models/ui/IMG_8761_500_500.png",
-                                            "/images/models/ui/mpphoto_qadrat.png",
+                                            "/images_alt/models/ui/IMG_2384 с лого 500_500.webp",
+                                            "/images_alt/models/ui/IMG_2396_500_500.webp",
+                                            "/images_alt/models/ui/IMG_8761_500_500.webp",
+                                            "/images_alt/models/ui/mpphoto_qadrat.webp",
                                         ].map((src, idx) => (
                                             <div
                                                 key={src}
@@ -704,7 +704,7 @@ export default function Home() {
                                             lineHeight: 1.45,
                                         }}
                                     >
-                                        Гибридная подошва с антипрокольной защитой, мембрана VELTEX™ и продуманная конструкция моделей создают уверенность в каждом шаге.
+                                        Гибридная подошва с антипрокольной защитой, мембрана VELTEX™ и продуманная конструкция ботинок создаёт уверенность в каждом шаге.
                                     </p>
                                     </div>
                                     <Link
@@ -725,7 +725,7 @@ export default function Home() {
                                     }}
                                 >
                                     <img
-                                        src="/images/pages/main_left_model for_hero.png"
+                                        src="/images_alt/pages/main_left_model for_hero.png"
                                         alt="Треккинговые ботинки Velesbron"
                                         className="h-full w-full object-contain object-bottom drop-shadow-[0_30px_60px_rgba(0,0,0,0.35)]"
                                     />

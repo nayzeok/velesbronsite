@@ -5,12 +5,12 @@ export const metadata = {
   description: "Служба качества и юридическая информация VelesBron",
 };
 
-const backgroundShape = "/images/models/ui/background-shape.png";
+const backgroundShape = "/images_alt/models/ui/background-shape.webp";
 
 function TelegramIcon() {
   return (
     <img
-      src="/images/models/ui/tg-logo.jpg"
+      src="/images_alt/models/ui/tg-logo.webp"
       alt=""
       aria-hidden="true"
       className="inline-block h-[42px] w-[42px] shrink-0 overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.10)]"

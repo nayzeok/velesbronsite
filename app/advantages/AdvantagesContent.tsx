@@ -26,37 +26,37 @@ import {
 
 const DESIGN_HEIGHT = 1000;
 
-/** Ракурсы ботинка: папка public/images/models/advantages-views/2sk/ */
-const mainBootSide = "/images/models/advantages-views/2sk/black/1.png";
-const mainBootFront = "/images/models/advantages-views/2sk/black/2.png";
-const mainBootTop = "/images/models/advantages-views/2sk/black/3.png";
-const mainBootTilt = "/images/models/advantages-views/2sk/black/4.png";
-const mainBootBack = "/images/models/advantages-views/2sk/black/5.png";
-const pedestalImage = "/images/models/ui/pedestal-bg.png";
-const thumbA = "/images/models/ui/thumb-dark.png";
-const thumbB = "/images/models/ui/thumb-light.png";
-const carouselCardBoot53 = "/images/models/advantages-views/2sk/oliva/1_3.png";
-const carouselCardBoot30 = "/images/models/advantages-views/2sk/oliva/6.png";
-const carouselCardBoot0 = "/images/models/advantages-views/2sk/oliva/3.png";
-const carouselCardBootNeg36 = "/images/models/advantages-views/2sk/oliva/4.png";
-const carouselCardBootNeg54 = "/images/models/advantages-views/2sk/oliva/1_2.png";
-const backgroundShape = "/images/models/ui/background-shape.png";
+/** Ракурсы ботинка: папка public/images_alt/models/advantages-views/2sk/ */
+const mainBootSide = "/images_alt/models/advantages-views/2sk/black/1.webp";
+const mainBootFront = "/images_alt/models/advantages-views/2sk/black/2.webp";
+const mainBootTop = "/images_alt/models/advantages-views/2sk/black/3.webp";
+const mainBootTilt = "/images_alt/models/advantages-views/2sk/black/4.webp";
+const mainBootBack = "/images_alt/models/advantages-views/2sk/black/5.webp";
+const pedestalImage = "/images_alt/models/ui/pedestal-bg.webp";
+const thumbA = "/images_alt/models/ui/thumb-dark.webp";
+const thumbB = "/images_alt/models/ui/thumb-light.webp";
+const carouselCardBoot53 = "/images_alt/models/advantages-views/2sk/oliva/1_3.webp";
+const carouselCardBoot30 = "/images_alt/models/advantages-views/2sk/oliva/6.webp";
+const carouselCardBoot0 = "/images_alt/models/advantages-views/2sk/oliva/3.webp";
+const carouselCardBootNeg36 = "/images_alt/models/advantages-views/2sk/oliva/4.webp";
+const carouselCardBootNeg54 = "/images_alt/models/advantages-views/2sk/oliva/1_2.webp";
+const backgroundShape = "/images_alt/models/ui/background-shape.webp";
 const metricSideImage = "/images/models/ui/metric-side-image.png";
 
 const colorViewImages = {
   black: [
-    "/images/models/advantages-views/2sk/black/1.png",
-    "/images/models/advantages-views/2sk/black/2.png",
-    "/images/models/advantages-views/2sk/black/3.png",
-    "/images/models/advantages-views/2sk/black/4.png",
-    "/images/models/advantages-views/2sk/black/5.png",
+    "/images_alt/models/advantages-views/2sk/black/1.webp",
+    "/images_alt/models/advantages-views/2sk/black/2.webp",
+    "/images_alt/models/advantages-views/2sk/black/3.webp",
+    "/images_alt/models/advantages-views/2sk/black/4.webp",
+    "/images_alt/models/advantages-views/2sk/black/5.webp",
   ],
   oliva: [
-    "/images/models/advantages-views/2sk/oliva/1_3.png",
-    "/images/models/advantages-views/2sk/oliva/6.png",
-    "/images/models/advantages-views/2sk/oliva/3.png",
-    "/images/models/advantages-views/2sk/oliva/4.png",
-    "/images/models/advantages-views/2sk/oliva/1_22.png",
+    "/images_alt/models/advantages-views/2sk/oliva/1_3.webp",
+    "/images_alt/models/advantages-views/2sk/oliva/6.webp",
+    "/images_alt/models/advantages-views/2sk/oliva/3.webp",
+    "/images_alt/models/advantages-views/2sk/oliva/4.webp",
+    "/images_alt/models/advantages-views/2sk/oliva/1_22.webp",
   ],
 } as const;
 

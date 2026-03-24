@@ -14,7 +14,7 @@ const MOBILE_MENU_ITEMS = [
   { label: "Контакты", href: "/contacts" },
 ] as const;
 
-const LOGO_SRC = "/images/pages/velesbron_logo.png";
+const LOGO_SRC = "/images_alt/pages/velesbron_logo.webp";
 
 export default function MobileHeader() {
   const pathname = usePathname();
@@ -179,24 +179,37 @@ export default function MobileHeader() {
         <nav className="px-4 py-3">
           {MOBILE_MENU_ITEMS.map((item, index) => {
             const isActive = item.href === "/" ? pathname === "/" : (pathname?.startsWith(item.href) ?? false);
+            const isDisabled = item.label === "Медиа";
+            const commonClass = `mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 transition-all duration-300 ${
+              isOpen ? "translate-x-0 opacity-100" : "-translate-x-6 opacity-0"
+            } ${
+              isDisabled
+                ? "text-[#111]/35 cursor-default"
+                : isActive
+                ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]"
+                : "text-[#111] hover:bg-[#f5f5f5]"
+            }`;
+            const commonStyle = {
+              fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
+              fontWeight: 500,
+              fontSize: 16.94,
+              transitionDelay: isOpen ? `${100 + index * 55}ms` : "0ms",
+            };
+            if (isDisabled) {
+              return (
+                <span key={item.label} className={commonClass} style={commonStyle}>
+                  <span>{item.label}</span>
+                  <span className="text-[12px] text-[#111]/20">›</span>
+                </span>
+              );
+            }
             return (
               <Link
                 key={item.label}
                 href={item.href}
                 onClick={item.label === "Конструкция" ? handleAdvantagesClick : closeMenu}
-                className={`mb-1 flex items-center justify-between rounded-[12px] px-3 py-3.5 transition-all duration-300 ${
-                  isOpen ? "translate-x-0 opacity-100" : "-translate-x-6 opacity-0"
-                } ${
-                  isActive
-                    ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]"
-                    : "text-[#111] hover:bg-[#f5f5f5]"
-                }`}
-                style={{
-                  fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
-                  fontWeight: 500,
-                  fontSize: 16.94,
-                  transitionDelay: isOpen ? `${100 + index * 55}ms` : "0ms",
-                }}
+                className={commonClass}
+                style={commonStyle}
               >
                 <span>{item.label}</span>
                 <span className={`text-[12px] ${isActive ? "text-white/95" : "text-[#111]/45"}`}>›</span>

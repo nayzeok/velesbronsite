@@ -128,7 +128,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
             aria-hidden="true"
           />
           <img
-            src="/images/pages/velesbron_logo.png"
+            src="/images_alt/pages/velesbron_logo.webp"
             alt=""
             className="relative z-10 h-[86px] w-full max-w-[227px] object-contain"
           />

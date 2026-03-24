@@ -73,8 +73,8 @@ const BOOT_IMAGE_OFFSET_MOBILE: Record<"black" | "oliva", { x: number; y: number
   ],
 };
 
-const backgroundShape = "/images/models/ui/background-shape.png";
-/** Фото для страницы models лежат в public/images/models/cards/ (2sk/black|oliva, 2n/black). */
+const backgroundShape = "/images_alt/models/ui/background-shape.webp";
+/** Фото для страницы models лежат в public/images_alt/models/cards/ (2sk/black|oliva, 2n/black). */
 
 /** Ширина контейнера десктоп (px), для расчёта отступов в % */
 const DESKTOP_STAGE_WIDTH = 1670;
@@ -113,26 +113,26 @@ const MODEL_OPTIONS: { key: ModelKey; label: string; title: string; description:
 const MODEL_IMAGES: Record<ModelKey, { black: string[]; oliva?: string[] }> = {
   high: {
     black: [
-      "/images/models/views/models/2sk/black/1.png",
-      "/images/models/views/models/2sk/black/2.png",
-      "/images/models/views/models/2sk/black/3.png",
-      "/images/models/views/models/2sk/black/4.png",
-      "/images/models/views/models/2sk/black/5.png",
+      "/images_alt/models/views/models/2sk/black/1.webp",
+      "/images_alt/models/views/models/2sk/black/2.webp",
+      "/images_alt/models/views/models/2sk/black/3.webp",
+      "/images_alt/models/views/models/2sk/black/4.webp",
+      "/images_alt/models/views/models/2sk/black/5.webp",
     ],
     oliva: [
-      "/images/models/views/models/2sk/oliva/1.png",
-      "/images/models/views/models/2sk/oliva/2.png",
-      "/images/models/views/models/2sk/oliva/3.png",
-      "/images/models/views/models/2sk/oliva/4.png",
-      "/images/models/views/models/2sk/oliva/5.png",
+      "/images_alt/models/views/models/2sk/oliva/1.webp",
+      "/images_alt/models/views/models/2sk/oliva/2.webp",
+      "/images_alt/models/views/models/2sk/oliva/3.webp",
+      "/images_alt/models/views/models/2sk/oliva/4.webp",
+      "/images_alt/models/views/models/2sk/oliva/5.webp",
     ],
   },
   low: {
     black: [
-      "/images/models/views/models/2n/black/1.png",
-      "/images/models/views/models/2n/black/2.png",
-      "/images/models/views/models/2n/black/3.png",
-      "/images/models/views/models/2n/black/4.png",
+      "/images_alt/models/views/models/2n/black/1.webp",
+      "/images_alt/models/views/models/2n/black/2.webp",
+      "/images_alt/models/views/models/2n/black/3.webp",
+      "/images_alt/models/views/models/2n/black/4.webp",
     ],
   },
 };
@@ -150,8 +150,8 @@ type CarouselCard = {
 
 const CAROUSEL_CARDS: CarouselCard[] = [
   {
-    imageBlack: "/images/models/cards/1_card_black.png",
-    imageOliva: "/images/models/cards/1_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/1_card_black.webp",
+    imageOliva: "/images_alt/models/cards/1_card_oliva.webp",
     titleBlack: "КОНСТРУКЦИЯ МОДЕЛИ",
     textBlack:
       "Все элементы ботинка – от материалов до сборки – подбираются с расчётом на интенсивную эксплуатацию. Усиленные зоны, прочные соединения и продуманная архитектура позволяют конструкции сохранять ресурс при высокой нагрузке.",
@@ -160,8 +160,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Высокая конструкция ботинка обеспечивает дополнительную поддержку голеностопного сустава. Это повышает устойчивость на неровной поверхности и помогает сохранять контроль движения.",
   },
   {
-    imageBlack: "/images/models/cards/2_card_black.png",
-    imageOliva: "/images/models/cards/2_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/2_card_black.webp",
+    imageOliva: "/images_alt/models/cards/2_card_oliva.webp",
     titleBlack: "СЦЕПЛЕНИЕ НА РАЗНЫХ ПОКРЫТИЯХ",
     textBlack:
       "Специальный рисунок подмётки и состав резиновой смеси обеспечивают уверенное сцепление на асфальте, грунте, камнях и влажных поверхностях. Подошва стабильно работает как в городской среде, так и на пересечённой местности.",
@@ -170,8 +170,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Подошва выполнена по гибридной технологии: амортизирующая основа обеспечивает лёгкость и комфорт, а износостойкая подмётка отвечает за сцепление и устойчивость. Такая конструкция снижает нагрузку на стопу и сохраняет стабильность на разных типах поверхности.",
   },
   {
-    imageBlack: "/images/models/cards/3_card_black.png",
-    imageOliva: "/images/models/cards/3_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/3_card_black.webp",
+    imageOliva: "/images_alt/models/cards/3_card_oliva.webp",
     titleBlack: "ГИБРИДНАЯ ПОДОШВА ПОВЫШЕННОЙ ПРОЧНОСТИ",
     textBlack:
       "Подошва выполнена по гибридной технологии: амортизирующая основа обеспечивает лёгкость и комфорт, а износостойкая подмётка отвечает за сцепление и устойчивость. Такая конструкция снижает нагрузку на стопу и сохраняет стабильность на разных типах поверхности.",
@@ -180,9 +180,9 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Внутри подошвы расположена гибкая антипрокольная вставка из арамидного волокна. Материал сочетает малый вес и высокую прочность, защищая стопу от острых предметов и снижая риск травмы при движении по сложному рельефу.",
   },
   {
-    imageBlack: "/images/models/cards/4_card_black.png",
-    imageOliva: "/images/models/cards/4_card_oliva.png",
-    titleBlack: "КОМПОЗИТНАЯ ЗАЩИТА НОСКА",
+    imageBlack: "/images_alt/models/cards/4_card_black.webp",
+    imageOliva: "/images_alt/models/cards/4_card_oliva.webp",
+    titleBlack: "КОМПОЗИТНАЯ ЗАЩИТА \n НОСКА",
     textBlack:
       "Носочная часть усилена композитным элементом: защита пальцев от ударов и контактов с твёрдыми предметами. Материал прочный при меньшем весе, чем металл — обувь не утяжеляется и остаётся комфортной.",
     titleOliva: "УСИЛЕННАЯ УДАРНАЯ ЗОНА НОСКА",
@@ -190,8 +190,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Передняя часть ботинка рассчитана на повышенную нагрузку и защищает стопу при контакте с камнями, ступенями, инструментом или строительными элементами. Усиленная конструкция распределяет энергию удара по корпусу ботинка и снижает риск травм при активной эксплуатации.",
   },
   {
-    imageBlack: "/images/models/cards/5_card_black.png",
-    imageOliva: "/images/models/cards/5_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/5_card_black.webp",
+    imageOliva: "/images_alt/models/cards/5_card_oliva.webp",
     titleBlack: "ИЗНОСОСТОЙКИЕ \n МАТЕРИАЛЫ ВЕРХА",
     textBlack:
       "Верх ботинка выполнен из натурального нубука в сочетании с высокопрочной тканью Cordura. Такое сочетание обеспечивает баланс прочности, гибкости и износостойкости, позволяя обуви выдерживать интенсивную эксплуатацию.",
@@ -200,8 +200,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Мы используем натуральный нубук в сочетании с высокопрочным текстилем. Благодаря этому ботинки не теряют форму и защитные свойства даже после многих месяцев активного использования в самых жестких условиях.",
   },
   {
-    imageBlack: "/images/models/cards/6_card_black.png",
-    imageOliva: "/images/models/cards/6_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/6_card_black.webp",
+    imageOliva: "/images_alt/models/cards/6_card_oliva.webp",
     titleBlack: "ЗАЩИТА ОТ ВЛАГИ \n И ЗАГРЯЗНЕНИЙ",
     textBlack:
       "Каждый ботинок проходит обработку гидрофобным составом, который снижает впитывание влаги и защищает материал от загрязнений. Обувь дольше сохраняет внешний вид и рабочие свойства при использовании в разных условиях.",
@@ -210,8 +210,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Материалы верха обработаны гидрофобным составом, который снижает впитывание влаги и защищает поверхность от загрязнений. Капли воды не проникают в материал, а скатываются с поверхности. Такая обработка помогает сохранять внешний вид обуви и облегчает уход при эксплуатации в разных условиях.",
   },
   {
-    imageBlack: "/images/models/cards/7_card_black.png",
-    imageOliva: "/images/models/cards/7_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/7_card_black.webp",
+    imageOliva: "/images_alt/models/cards/7_card_oliva.webp",
     titleBlack: "МЕМБРАНА VELTEX™ ВНУТРИ БОТИНКА",
     textBlack:
       "Внутренняя мембрана выполнена в виде цельной чулочной конструкции: не пропускает влагу внутрь и отводит тепло от стопы. Благодаря этому сохраняется комфортный микроклимат, ботинки можно носить в диапазоне температур — от −15 до +20 °C.",
@@ -220,9 +220,9 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Внутри ботинка используется мембрана VELTEX™ в виде цельной чулочной конструкции. Она защищает от проникновения влаги, помогает отводить тепло, влагу от стопы. Такая система поддерживает комфортный микроклимат обуви позволяет использовать ботинки в диапазоне температур −15 до+20 °C.",
   },
   {
-    imageBlack: "/images/models/cards/8_card_black.png",
-    imageOliva: "/images/models/cards/8_card_oliva.png",
-    titleBlack: "СИСТЕМА БЫСТРОЙ ШНУРОВКИ",
+    imageBlack: "/images_alt/models/cards/8_card_black.webp",
+    imageOliva: "/images_alt/models/cards/8_card_oliva.webp",
+    titleBlack: "СИСТЕМА БЫСТРОЙ \n ШНУРОВКИ",
     textBlack:
       "Механизм Quick-Lock позволяет быстро и точно зафиксировать ботинок на ноге. Система обеспечивает стабильную посадку, равномерно распределяет нагрузку и облегчает регулировку шнуровки во время движения.",
     titleOliva: "QUICK-LOCK: БЫСТРАЯ ФИКСАЦИЯ",
@@ -230,8 +230,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Система шнуровки Quick-Lock позволяет быстро и точно зафиксировать ботинок на ноге. Механизм равномерно распределяет натяжение шнурков и помогает отрегулировать посадку без лишних усилий. Ботинок надёжно удерживает стопу, обеспечивая стабильность и комфорт при движении.",
   },
   {
-    imageBlack: "/images/models/cards/9_card_black.png",
-    imageOliva: "/images/models/cards/9_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/9_card_black.webp",
+    imageOliva: "/images_alt/models/cards/9_card_oliva.webp",
     titleBlack: "УСИЛЕННЫЕ ШВЫ \n КОНСТРУКЦИИ",
     textBlack:
       "Ключевые зоны ботинка прошиты прочными армированными нитями. Усиленная строчка повышает прочность соединений и помогает конструкции выдерживать многократные сгибы и повышенные нагрузки.",
@@ -240,8 +240,8 @@ const CAROUSEL_CARDS: CarouselCard[] = [
       "Ключевые зоны ботинка прошиты тройными швами армированными полиэфирными нитями. Такая технология усиливает соединения материалов и повышает устойчивость конструкции к нагрузкам и изгибам, сохраняя надёжность ботинка при эксплуатации.",
   },
   {
-    imageBlack: "/images/models/cards/10_card_black.png",
-    imageOliva: "/images/models/cards/10_card_oliva.png",
+    imageBlack: "/images_alt/models/cards/10_card_black.webp",
+    imageOliva: "/images_alt/models/cards/10_card_oliva.webp",
     titleBlack: "КОМФОРТ НА ДЛИННОЙ ДИСТАНЦИИ",
     textBlack:
       "Амортизирующие элементы подошвы и анатомическая стелька помогают снизить усталость при движении. Конструкция ботинка учитывает форму стопы и обеспечивает фиксацию пятки и средней части. Обувь остаётся комфортной не только при примерке, но и после многих часов эксплуатации.",
@@ -277,14 +277,9 @@ export default function BuyPage() {
   const sizeGridCloseTimerRef = useRef<number | null>(null);
   const mobileSwipeStartX = useRef<number | null>(null);
   const mobileDotsTouchIndexRef = useRef<number | null>(null);
-  const viewSlidePhaseTimerRef = useRef<number | null>(null);
   const viewSlideFinishTimerRef = useRef<number | null>(null);
   const [mobileScale, setMobileScale] = useState(0.5);
   const [mobileViewportHeight, setMobileViewportHeight] = useState(0);
-  const [viewSlideOffsetX, setViewSlideOffsetX] = useState(0);
-  const [viewSlideTransition, setViewSlideTransition] = useState(false);
-  const [viewSlideDurationMs, setViewSlideDurationMs] = useState(400);
-  const [viewTransitionTick, setViewTransitionTick] = useState(0);
   const [isViewSliding, setIsViewSliding] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [mobileReady, setMobileReady] = useState(false);
@@ -335,7 +330,6 @@ export default function BuyPage() {
     : (modelImagesByColor[colorVariant] && modelImagesByColor[colorVariant]!.length > 0)
       ? modelImagesByColor[colorVariant]!
       : modelImagesByColor.black;
-  const currentViewImage = activeViewImages[activeViewIndex] ?? activeViewImages[0];
   const activeCard = isHighModel ? CAROUSEL_CARDS[activeViewIndex] : null;
   const leftBlockTitle = activeCard
     ? (colorVariant === "black" ? activeCard.titleBlack : activeCard.titleOliva ?? "")
@@ -352,42 +346,18 @@ export default function BuyPage() {
     setIsMobileTextExpanded(false);
   }, [activeModelKey, activeViewIndex, colorVariant]);
 
-  const SLIDE_EXIT_DISTANCE = 420;
   const SLIDE_MS = 400;
 
-  const changeViewWithSlide = (nextIndex: number, direction: 1 | -1) => {
+  const changeViewWithSlide = (nextIndex: number, _direction: 1 | -1) => {
     if (nextIndex === activeViewIndex || isViewSliding) return;
     const maxIndex = Math.max(0, activeViewImages.length - 1);
     if (nextIndex < 0 || nextIndex > maxIndex) return;
-
-    if (viewSlidePhaseTimerRef.current != null) window.clearTimeout(viewSlidePhaseTimerRef.current);
     if (viewSlideFinishTimerRef.current != null) window.clearTimeout(viewSlideFinishTimerRef.current);
     setIsViewSliding(true);
-
-    const exitTarget = -direction * SLIDE_EXIT_DISTANCE;
-    const enterStart = direction * SLIDE_EXIT_DISTANCE;
-
-    setViewSlideDurationMs(SLIDE_MS);
-    setViewSlideTransition(true);
-    setViewSlideOffsetX(exitTarget);
-
-    viewSlidePhaseTimerRef.current = window.setTimeout(() => {
-      setActiveViewIndex(nextIndex);
-      setViewTransitionTick((t) => t + 1);
-      setViewSlideTransition(false);
-      setViewSlideOffsetX(enterStart);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setViewSlideDurationMs(SLIDE_MS);
-          setViewSlideTransition(true);
-          setViewSlideOffsetX(0);
-        });
-      });
-    }, SLIDE_MS);
-
+    setActiveViewIndex(nextIndex);
     viewSlideFinishTimerRef.current = window.setTimeout(() => {
       setIsViewSliding(false);
-    }, SLIDE_MS * 2);
+    }, SLIDE_MS);
   };
 
   useEffect(() => {
@@ -420,7 +390,6 @@ export default function BuyPage() {
     if (typeof window === "undefined") return;
     return () => {
       if (sizeGridCloseTimerRef.current) window.clearTimeout(sizeGridCloseTimerRef.current);
-      if (viewSlidePhaseTimerRef.current) window.clearTimeout(viewSlidePhaseTimerRef.current);
       if (viewSlideFinishTimerRef.current) window.clearTimeout(viewSlideFinishTimerRef.current);
     };
   }, []);
@@ -552,28 +521,51 @@ export default function BuyPage() {
               </p>
             </div>
 
-            {/* Center — boot image (масштаб и смещение отдельно для black/oliva), обёртка для анимации перелистывания */}
+            {/* Center — boot image (filmstrip — плавная лента) */}
             <div
-              className="pointer-events-none absolute left-1/2 top-1/2 origin-center"
+              className="pointer-events-none absolute left-1/2 top-1/2"
               style={{
                 width: 746,
                 height: 609,
-                transform: `translateX(${viewSlideOffsetX}px)`,
-                transition: viewSlideTransition ? `transform ${viewSlideDurationMs}ms ease-out` : "none",
+                transform: "translate(-50%, calc(-50% - 28px))",
+                clipPath: "inset(0)",
               }}
             >
               <div
-                className="h-full w-full origin-center"
-                  style={{
-                  transform: `translate(calc(-50% + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x}px), calc(-50% - 28px + ${(BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y}px)) scale(${BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
-                  }}
-                >
-                      <img
-                  key={`desktop-${viewTransitionTick}-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
-                        src={currentViewImage}
-                  alt="Тактическая обувь"
-                      className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
-                    />
+                style={{
+                  display: "flex",
+                  width: activeViewImages.length * 746,
+                  height: "100%",
+                  transform: `translateX(${-activeViewIndex * 746}px)`,
+                  transition: `transform ${SLIDE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
+                }}
+              >
+                {activeViewImages.map((src, i) => {
+                  const offset = BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][i] ?? { x: 0, y: 0 };
+                  const scale = BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[colorVariant][i] ?? 1;
+                  return (
+                    <div
+                      key={`${activeModelKey}-${colorVariant}-${i}`}
+                      className="relative flex-shrink-0"
+                      style={{ width: 746, height: 609 }}
+                    >
+                      <div
+                        className="absolute h-full w-full origin-center"
+                        style={{
+                          left: "50%",
+                          top: "50%",
+                          transform: `translate(calc(-50% + ${offset.x}px), calc(-50% + ${offset.y}px)) scale(${scale})`,
+                        }}
+                      >
+                        <img
+                          src={src}
+                          alt="Тактическая обувь"
+                          className="h-full w-full object-contain drop-shadow-[0_60px_100px_rgba(0,0,0,0.12)]"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -1047,25 +1039,40 @@ export default function BuyPage() {
                         }
                       }}
                     >
-                      <div
-                        className="absolute inset-0 flex items-center justify-center"
-                        style={{
-                          transform: `translateX(${viewSlideOffsetX}px)`,
-                          transition: viewSlideTransition ? `transform ${viewSlideDurationMs}ms ease-out` : "none",
-                        }}
-                      >
+                      <div className="absolute inset-0" style={{ clipPath: "inset(0)" }}>
                         <div
                           style={{
-                            transform: `translate(${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).x * 0.45}px, ${(BOOT_IMAGE_OFFSET_MOBILE[colorVariant][activeViewIndex] ?? { x: 0, y: 0 }).y * 0.45}px) scale(${BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][activeViewIndex] ?? 1})`,
+                            display: "flex",
+                            width: `${activeViewImages.length * 100}%`,
+                            height: "100%",
+                            transform: `translateX(${-activeViewIndex * (100 / activeViewImages.length)}%)`,
+                            transition: `transform ${SLIDE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
                           }}
                         >
-                          <img
-                            key={`mobile-${viewTransitionTick}-${activeModelKey}-${colorVariant}-${activeViewIndex}`}
-                            src={currentViewImage}
-                            alt="Тактическая обувь"
-                            className="h-auto max-h-[54vh] w-full max-w-[260px] object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.18)]"
-                          />
-                      </div>
+                          {activeViewImages.map((src, i) => {
+                            const offset = BOOT_IMAGE_OFFSET_MOBILE[colorVariant][i] ?? { x: 0, y: 0 };
+                            const scale = BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][i] ?? 1;
+                            return (
+                              <div
+                                key={`${activeModelKey}-${colorVariant}-${i}`}
+                                className="flex flex-shrink-0 items-center justify-center"
+                                style={{ width: `${100 / activeViewImages.length}%`, height: "100%" }}
+                              >
+                                <div
+                                  style={{
+                                    transform: `translate(${offset.x * 0.45}px, ${offset.y * 0.45}px) scale(${scale})`,
+                                  }}
+                                >
+                                  <img
+                                    src={src}
+                                    alt="Тактическая обувь"
+                                    className="h-auto max-h-[54vh] w-full max-w-[260px] object-contain drop-shadow-[0_24px_40px_rgba(0,0,0,0.18)]"
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
 
                       </div>

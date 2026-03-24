@@ -5,7 +5,7 @@ export const metadata = {
   description: "Фото и видео VelesBron: полевые испытания, производство, материалы и сервис",
 };
 
-const backgroundShape = "/images/models/ui/background-shape.png";
+const backgroundShape = "/images_alt/models/ui/background-shape.webp";
 
 const MEDIA_ITEMS = [
   { title: "Полевые испытания", type: "Фото" as const },
