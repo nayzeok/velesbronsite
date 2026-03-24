@@ -271,11 +271,13 @@ export default function BuyPage() {
   const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
   const [isSizeGridVisible, setIsSizeGridVisible] = useState(false);
   const [showLowComingSoon, setShowLowComingSoon] = useState(false);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
   const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
   const sizeGridCloseTimerRef = useRef<number | null>(null);
   const mobileSwipeStartX = useRef<number | null>(null);
+  const mobileSwipeStartY = useRef<number | null>(null);
   const mobileDotsTouchIndexRef = useRef<number | null>(null);
   const viewSlideFinishTimerRef = useRef<number | null>(null);
   const [mobileScale, setMobileScale] = useState(0.5);
@@ -364,7 +366,8 @@ export default function BuyPage() {
     if (typeof document === "undefined") return;
     const maxIndex = Math.max(0, activeViewImages.length - 1);
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (isSizeGridOpen) return;
+      if (e.key === "Escape") { setIsZoomOpen(false); return; }
+      if (isSizeGridOpen || isZoomOpen) return;
       if (e.key === "ArrowRight") {
         e.preventDefault();
         changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
@@ -375,7 +378,7 @@ export default function BuyPage() {
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isSizeGridOpen, activeViewImages.length, activeViewIndex]);
+  }, [isSizeGridOpen, isZoomOpen, activeViewImages.length, activeViewIndex]);
 
   useEffect(() => {
     if (typeof document === "undefined" || !isSizeGridOpen) return;
@@ -445,7 +448,86 @@ export default function BuyPage() {
           style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 16 }}
         >
           Ожидается поступление
-      </div>
+        </div>
+      )}
+
+      {/* ── ZOOM MODAL ── */}
+      {isZoomOpen && (
+        <div
+          className="fixed inset-0 z-[300] flex items-center justify-center"
+          style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(6px)" }}
+          onClick={() => setIsZoomOpen(false)}
+        >
+          {/* Close button */}
+          <button
+            type="button"
+            className="absolute right-4 top-4 z-10 flex size-10 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/40"
+            onClick={() => setIsZoomOpen(false)}
+            aria-label="Закрыть"
+            style={{ fontSize: 20 }}
+          >
+            ✕
+          </button>
+
+          {/* Desktop: prev/next navigation inside zoom */}
+          {activeViewImages.length > 1 && (
+            <>
+              <button
+                type="button"
+                className="absolute left-4 top-1/2 z-10 -translate-y-1/2 hidden min-[1200px]:flex size-12 items-center justify-center rounded-full bg-white/20 text-white text-3xl transition hover:bg-white/40"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const maxIndex = activeViewImages.length - 1;
+                  changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
+                }}
+                aria-label="Предыдущее фото"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className="absolute right-4 top-1/2 z-10 -translate-y-1/2 hidden min-[1200px]:flex size-12 items-center justify-center rounded-full bg-white/20 text-white text-3xl transition hover:bg-white/40"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const maxIndex = activeViewImages.length - 1;
+                  changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
+                }}
+                aria-label="Следующее фото"
+              >
+                ›
+              </button>
+            </>
+          )}
+
+          {/* Image */}
+          <img
+            src={activeViewImages[activeViewIndex]}
+            alt="Тактическая обувь"
+            className="max-h-[90vh] max-w-[90vw] object-contain select-none"
+            style={{ filter: "drop-shadow(0 30px 80px rgba(0,0,0,0.7))" }}
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {/* Dots */}
+          {activeViewImages.length > 1 && (
+            <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 gap-2">
+              {activeViewImages.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className="rounded-full transition-all"
+                  style={{
+                    width: activeViewIndex === i ? 20 : 8,
+                    height: 8,
+                    background: activeViewIndex === i ? "#f07426" : "rgba(255,255,255,0.45)",
+                  }}
+                  onClick={(e) => { e.stopPropagation(); changeViewWithSlide(i, i > activeViewIndex ? 1 : -1); }}
+                  aria-label={`Фото ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {/* ── DESKTOP: рендерим только при width >= 1200px, чтобы на телефоне не грузить тяжёлую сцену ── */}
@@ -504,14 +586,29 @@ export default function BuyPage() {
 
             {/* Center — boot image (filmstrip — плавная лента) */}
             <div
-              className="pointer-events-none absolute left-1/2 top-1/2"
+              className="group absolute left-1/2 top-1/2"
               style={{
                 width: 878,
                 height: 717,
                 transform: "translate(-50%, calc(-50% - 28px))",
                 clipPath: "inset(0)",
+                cursor: "zoom-in",
+                zIndex: 5,
               }}
+              onClick={() => setIsZoomOpen(true)}
             >
+              {/* Zoom hint icon */}
+              <div
+                className="pointer-events-none absolute bottom-4 right-4 z-10 flex size-9 items-center justify-center rounded-full bg-black/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                aria-hidden
+              >
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle cx="7.5" cy="7.5" r="5.5" stroke="white" strokeWidth="1.8"/>
+                  <line x1="11.5" y1="11.5" x2="16" y2="16" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+                  <line x1="7.5" y1="5" x2="7.5" y2="10" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                  <line x1="5" y1="7.5" x2="10" y2="7.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </div>
               <div
                 style={{
                   display: "flex",
@@ -1001,21 +1098,31 @@ export default function BuyPage() {
                     <div
                       className="relative aspect-[0.88] w-full"
                       style={{ touchAction: "pan-y" }}
-                      aria-label="Свайп влево или вправо для смены фото"
+                      aria-label="Тап для увеличения, свайп влево или вправо для смены фото"
                       onTouchStart={(e) => {
                         mobileSwipeStartX.current = e.targetTouches[0]?.clientX ?? null;
+                        mobileSwipeStartY.current = e.targetTouches[0]?.clientY ?? null;
                       }}
                       onTouchEnd={(e) => {
-                        const start = mobileSwipeStartX.current;
-                        if (start == null) return;
-                        const end = e.changedTouches[0]?.clientX;
-                        if (end == null) return;
+                        const startX = mobileSwipeStartX.current;
+                        const startY = mobileSwipeStartY.current;
+                        if (startX == null) return;
+                        const endX = e.changedTouches[0]?.clientX;
+                        const endY = e.changedTouches[0]?.clientY;
+                        if (endX == null) return;
                         mobileSwipeStartX.current = null;
-                        const delta = start - end;
+                        mobileSwipeStartY.current = null;
+                        const deltaX = startX - endX;
+                        const deltaY = startY != null && endY != null ? Math.abs(startY - endY) : 99;
+                        // Тап: минимальное движение — открыть зум
+                        if (Math.abs(deltaX) < 12 && deltaY < 12) {
+                          setIsZoomOpen(true);
+                          return;
+                        }
                         const maxIndex = Math.max(0, activeViewImages.length - 1);
-                        if (delta > 50) {
+                        if (deltaX > 50) {
                           changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
-                        } else if (delta < -50) {
+                        } else if (deltaX < -50) {
                           changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
                         }
                       }}
