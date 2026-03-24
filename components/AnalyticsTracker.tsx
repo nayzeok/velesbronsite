@@ -23,6 +23,8 @@ export function AnalyticsTracker() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const path = window.location.pathname;
+    if (path.startsWith("/admin") || path.startsWith("/keystatic")) return;
     startRef.current = Date.now();
 
     const onLeave = () => {
