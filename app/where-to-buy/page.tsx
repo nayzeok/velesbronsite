@@ -50,27 +50,8 @@ export default function WhereToBuyPage() {
       <div className="pointer-events-none absolute inset-0 z-0">
         <div className="absolute left-1/2 top-0 w-[886px] -translate-x-1/2" style={{ marginTop: "-88px", height: "calc(100% + 88px)" }}>
           <div className="absolute inset-0">
-            {Array.from({ length: 14 }).map((_, i) => (
-              <div key={i} className="absolute inset-y-0" style={{ left: `${(i * 100) / 14}%`, width: `${100 / 14}%` }}>
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
-                  }}
-                />
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage: `url(${backgroundShape})`,
-                    backgroundSize: "832px 832px",
-                    backgroundPosition: "top left",
-                    filter: "blur(90px)",
-                    opacity: 0.03,
-                  }}
-                />
-              </div>
-            ))}
+            <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
+            <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
           </div>
         </div>
       </div>

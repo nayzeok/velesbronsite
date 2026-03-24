@@ -737,21 +737,7 @@ export default function Home() {
                                 style={{ top: "calc(100dvh - 35px)" }}
                             >
                                 <div className="pointer-events-none absolute inset-0">
-                                    {Array.from({ length: 14 }).map((_, index) => (
-                                        <div
-                                            key={index}
-                                            className="absolute inset-y-0"
-                                            style={{ left: `${(index * 100) / 14}%`, width: `${100 / 14}%` }}
-                                        >
-                                            <div
-                                                className="absolute inset-0"
-                                                style={{
-                                                    backgroundImage:
-                                                        "linear-gradient(-90deg, rgba(255,255,255,0.01) 20%, rgba(40,40,40,0.12) 75.758%, rgba(255,255,255,0.01) 123.64%)",
-                                                }}
-                                            />
-                                        </div>
-                                    ))}
+                                    <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.01) 0%, rgba(40,40,40,0.09) 5.4%, rgba(255,255,255,0.01) 7.143%)" }} />
                                 </div>
                             </div>
                         </div>
