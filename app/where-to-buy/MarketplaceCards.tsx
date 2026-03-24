@@ -1,5 +1,7 @@
 "use client";
 
+import { MarketplaceLink } from "@/components/MarketplaceLink";
+
 type MarketplaceType = "wildberries" | "ozon";
 
 const SALES_CHANNELS: {
@@ -83,12 +85,15 @@ export default function MarketplaceCards() {
   return (
     <div className="mt-8 grid gap-4 md:grid-cols-2">
       {SALES_CHANNELS.map((channel) => (
-        <a
+        <MarketplaceLink
           key={channel.title}
           href={channel.href}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={(e) => handleClick(e, channel.href)}
+          marketplaceId={channel.type}
+          marketplaceName={channel.title}
+          platform={channel.type === "wildberries" ? "wb" : "ozon"}
+          onClick={(e) => handleClick(e as React.MouseEvent<HTMLAnchorElement>, channel.href)}
           className="group relative flex flex-col rounded-xl border-2 border-[#e5e5e5] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 active:scale-[0.99] hover:-translate-y-[4px] hover:border-[#f07426] hover:shadow-[0_6px_24px_rgba(0,0,0,0.04),0_12px_28px_rgba(240,116,38,0.20)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f07426] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         >
           <div className="flex items-baseline gap-3">
@@ -130,7 +135,7 @@ export default function MarketplaceCards() {
           >
             Перейти <span className="ml-2" aria-hidden="true">→</span>
           </span>
-        </a>
+        </MarketplaceLink>
       ))}
     </div>
   );
