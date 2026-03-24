@@ -725,7 +725,7 @@ export default function Home() {
                                     }}
                                 >
                                     <img
-                                        src="/images_alt/pages/main_left_model for_hero.png"
+                                        src="/images_alt/pages/main_left_model for_hero.webp"
                                         alt="Треккинговые ботинки Velesbron"
                                         className="h-full w-full object-contain object-bottom drop-shadow-[0_30px_60px_rgba(0,0,0,0.35)]"
                                     />
