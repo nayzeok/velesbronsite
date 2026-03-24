@@ -21,6 +21,8 @@ type PageView = {
   visits: number;
   avgSeconds: number;
 };
+type DeviceStat = { device: string; count: number };
+type CountryStat = { country: string; count: number };
 
 const BAR_COLORS = [
   "hsl(158, 42%, 42%)",
@@ -72,6 +74,8 @@ export function AnalyticsDashboard() {
   const [data, setData] = useState<{
     marketplaceClicks: MarketplaceClick[];
     pageViews: PageView[];
+    devices: DeviceStat[];
+    countries: CountryStat[];
   } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -106,9 +110,16 @@ export function AnalyticsDashboard() {
 
   const marketplaceClicks = data?.marketplaceClicks ?? [];
   const pageViews = data?.pageViews ?? [];
+  const devices = data?.devices ?? [];
+  const countries = data?.countries ?? [];
   const hasClicks = marketplaceClicks.length > 0;
   const hasPages = pageViews.length > 0;
-  const nothingToShow = !hasClicks && !hasPages;
+  const hasDevices = devices.length > 0;
+  const hasCountries = countries.length > 0;
+  const nothingToShow = !hasClicks && !hasPages && !hasDevices && !hasCountries;
+
+  const deviceLabel: Record<string, string> = { mobile: "Мобильный", tablet: "Планшет", desktop: "Десктоп" };
+  const deviceTotal = devices.reduce((s, d) => s + d.count, 0);
 
   if (!loading && !error && nothingToShow) {
     return emptyState;
@@ -308,6 +319,47 @@ export function AnalyticsDashboard() {
             </ResponsiveContainer>
           </div>
         </section>
+      )}
+
+      {/* Устройства + Страны */}
+      {hasDevices && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <section className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/50 bg-white dark:bg-zinc-900/30 p-6 shadow-sm">
+            <h2 className="text-base font-semibold text-zinc-800 dark:text-zinc-200 mb-1">Устройства</h2>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-5">С чего заходят</p>
+            <div className="space-y-3">
+              {devices.map((d) => {
+                const pct = deviceTotal > 0 ? Math.round((d.count / deviceTotal) * 100) : 0;
+                return (
+                  <div key={d.device}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-zinc-700 dark:text-zinc-300">{deviceLabel[d.device] ?? d.device}</span>
+                      <span className="text-zinc-500 dark:text-zinc-400">{d.count} <span className="text-zinc-400">({pct}%)</span></span>
+                    </div>
+                    <div className="h-2 rounded-full bg-zinc-100 dark:bg-zinc-800">
+                      <div className="h-2 rounded-full bg-emerald-500" style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {hasCountries && (
+            <section className="rounded-2xl border border-zinc-200/80 dark:border-zinc-700/50 bg-white dark:bg-zinc-900/30 p-6 shadow-sm">
+              <h2 className="text-base font-semibold text-zinc-800 dark:text-zinc-200 mb-1">География</h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-5">Топ стран</p>
+              <div className="space-y-2.5">
+                {countries.map((c) => (
+                  <div key={c.country} className="flex items-center justify-between text-sm">
+                    <span className="text-zinc-700 dark:text-zinc-300">{c.country}</span>
+                    <span className="font-medium text-zinc-800 dark:text-zinc-200">{c.count}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       )}
     </div>
   );

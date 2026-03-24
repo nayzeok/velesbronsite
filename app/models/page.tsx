@@ -39,8 +39,8 @@ const MOBILE_COLOR_DOTS_TOP = 280;
  * Отдельно для чёрных и для оливы — подгоняйте под ракурс.
  */
 const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW: Record<"black" | "oliva", number[]> = {
-  black: [1.5, 1.5, 1, 1.2, 1.5, 1.5, 1.4, 1.4, 1.4, 1.4],
-  oliva: [1.5, 1.5, 1, 1.2, 1.5, 1.5, 1.4, 1.3, 1.4, 1.4],
+  black: [1.27, 1.27, 0.85, 1.02, 1.27, 1.27, 1.19, 1.19, 1.19, 1.19],
+  oliva: [1.27, 1.27, 0.85, 1.02, 1.27, 1.27, 1.19, 1.10, 1.19, 1.19],
 };
 /** Масштаб фото ботинка на мобиле (0.85 = уменьшенный размер). */
 const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW: Record<"black" | "oliva", number[]> = {
@@ -525,8 +525,8 @@ export default function BuyPage() {
             <div
               className="pointer-events-none absolute left-1/2 top-1/2"
               style={{
-                width: 746,
-                height: 609,
+                width: 878,
+                height: 717,
                 transform: "translate(-50%, calc(-50% - 28px))",
                 clipPath: "inset(0)",
               }}
@@ -534,9 +534,9 @@ export default function BuyPage() {
               <div
                 style={{
                   display: "flex",
-                  width: activeViewImages.length * 746,
+                  width: activeViewImages.length * 878,
                   height: "100%",
-                  transform: `translateX(${-activeViewIndex * 746}px)`,
+                  transform: `translateX(${-activeViewIndex * 878}px)`,
                   transition: `transform ${SLIDE_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
                 }}
               >
@@ -547,7 +547,7 @@ export default function BuyPage() {
                     <div
                       key={`${activeModelKey}-${colorVariant}-${i}`}
                       className="relative flex-shrink-0"
-                      style={{ width: 746, height: 609 }}
+                      style={{ width: 878, height: 717 }}
                     >
                       <div
                         className="absolute h-full w-full origin-center"

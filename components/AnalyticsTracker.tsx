@@ -6,17 +6,25 @@ export function AnalyticsTracker() {
   const startRef = useRef<number>(Date.now());
   const sentRef = useRef(false);
 
+  const getDevice = () => {
+    const ua = navigator.userAgent;
+    if (/tablet|ipad|playbook|silk/i.test(ua)) return "tablet";
+    if (/mobile|iphone|ipod|android|blackberry|mini|windows\sce|palm/i.test(ua)) return "mobile";
+    return "desktop";
+  };
+
   const sendPageView = (durationSeconds: number) => {
     if (sentRef.current) return;
     sentRef.current = true;
     const path = typeof window !== "undefined" ? window.location.pathname : "";
     const title = typeof document !== "undefined" ? document.title : "";
+    const device = getDevice();
     fetch("/api/analytics/event", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         type: "page_view",
-        payload: { path, title, durationSeconds },
+        payload: { path, title, durationSeconds, device },
       }),
     }).catch(() => {});
   };
@@ -71,6 +79,7 @@ export function AnalyticsTracker() {
             productId,
             productName,
             page,
+            device: getDevice(),
           },
         }),
       }).catch(() => {});
