@@ -26,7 +26,7 @@ import {
 
 const DESIGN_HEIGHT = 1000;
 
-/** Ракурсы ботинка: папка public/images_alt/models/advantages-views/2sk/ */
+/** Ракурсы ботинка */
 const mainBootSide = "/images_alt/models/advantages-views/2sk/black/1.webp";
 const mainBootFront = "/images_alt/models/advantages-views/2sk/black/2.webp";
 const mainBootTop = "/images_alt/models/advantages-views/2sk/black/3.webp";
