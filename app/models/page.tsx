@@ -649,9 +649,9 @@ export default function BuyPage() {
                   left: 0,
                   width: 408,
                   fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
-                  fontSize: 24,
+                  fontSize: "clamp(21.25px, 0.94vw, 21.25px)",
                   fontWeight: 500,
-                  lineHeight: 1.35,
+                  lineHeight: 1.45,
                   color: "#111",
                 }}
               >

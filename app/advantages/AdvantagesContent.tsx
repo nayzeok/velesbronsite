@@ -698,9 +698,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                     className="max-w-[532px] tracking-normal text-[#111]"
                     style={{
                       fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
-                      fontSize: 24,
+                      fontSize: "clamp(21.25px, 0.94vw, 21.25px)",
                       fontWeight: 400,
-                      lineHeight: 1.35,
+                      lineHeight: 1.45,
                     }}
                   >
                     {currentView.description}
