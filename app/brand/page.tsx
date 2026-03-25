@@ -29,27 +29,19 @@ export default function BrandPage() {
       <ScrollHighlightScrollMain className="figma-site-page min-h-screen overflow-x-hidden bg-[#d9d9d9] text-[#111]">
         <section className="figma-site-stage relative mx-auto min-h-[100dvh] w-full overflow-hidden bg-white">
           <div className="relative mx-auto h-full min-h-[100dvh] w-full max-w-[1670px] overflow-hidden">
-            {/* Декоративный фон: 2 слоя вместо 14×2 — в 14 раз меньше GPU-работы */}
-            <div className="pointer-events-none absolute inset-0">
-              {/* Вертикальные полосы — один repeating-gradient вместо 14 div */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)",
-                }}
-              />
-              {/* Один blur-слой на весь контейнер вместо 14 отдельных */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  backgroundImage: `url(${backgroundShape})`,
-                  backgroundSize: "832px 832px",
-                  backgroundPosition: "top left",
-                  filter: "blur(90px)",
-                  opacity: 0.03,
-                }}
-              />
+            {/* Фон desktop: full width */}
+            <div className="pointer-events-none absolute inset-0 z-0 max-[1199px]:hidden">
+              <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
+              <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
+            </div>
+            {/* Фон mobile: centered 886px */}
+            <div className="pointer-events-none absolute inset-0 z-0 min-[1200px]:hidden">
+              <div className="absolute left-1/2 top-0 w-[886px] -translate-x-1/2" style={{ marginTop: "-88px", height: "calc(100% + 88px)" }}>
+                <div className="absolute inset-0">
+                  <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
+                  <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
+                </div>
+              </div>
             </div>
 
             <SiteHeader activeItem="brand" />

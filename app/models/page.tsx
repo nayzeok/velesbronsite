@@ -90,6 +90,11 @@ const CAROUSEL_DESKTOP_GAP = 10;
 const CAROUSEL_DESKTOP_WIDTH = CAROUSEL_DESKTOP_CARD_WIDTH * 4 + CAROUSEL_DESKTOP_GAP * 3;
 const CAROUSEL_DESKTOP_SCROLL = CAROUSEL_DESKTOP_CARD_WIDTH + CAROUSEL_DESKTOP_GAP;
 
+const LENS_D = 320;       // диаметр линзы, px (логические)
+const LENS_ZOOM = 3;    // кратность увеличения
+const BOOT_W = 878;
+const BOOT_H = 717;
+
 type ColorVariant = "black" | "oliva";
 type ModelKey = "high" | "low";
 
@@ -286,6 +291,13 @@ export default function BuyPage() {
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
   const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
+  // lensPos — смещение курсора в экранных пикселях от края boot-контейнера
+  const [lensPos, setLensPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  // Экранные размеры boot-контейнера (после CSS scale)
+  const [lensBootRect, setLensBootRect] = useState<{ w: number; h: number }>({ w: BOOT_W, h: BOOT_H });
+  const [lensClientPos, setLensClientPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [lensVisible, setLensVisible] = useState(false);
+  const zoomSwipeStartX = useRef<number | null>(null);
   const [railAtStart, setRailAtStart] = useState(true);
   const [railAtEnd, setRailAtEnd] = useState(false);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
@@ -454,30 +466,6 @@ export default function BuyPage() {
 
   return (
     <main className="figma-site-page relative overflow-x-hidden bg-white text-[#111] overscroll-none min-[1200px]:overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 z-0 min-[1200px]:hidden" aria-hidden>
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={`page-bg-strip-${i}`}
-            className="absolute inset-y-0"
-            style={{
-              left: `${(i * 100) / 6}%`,
-              width: `${100 / 6}%`,
-              backgroundImage:
-                "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
-            }}
-          />
-        ))}
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${backgroundShape})`,
-            backgroundSize: "832px 832px",
-            backgroundPosition: "top left",
-            filter: "blur(90px)",
-            opacity: 0.03,
-          }}
-        />
-      </div>
 
       <div className="relative z-10">
       {showLowComingSoon && (
@@ -495,16 +483,32 @@ export default function BuyPage() {
           className="fixed inset-0 z-[300] flex items-center justify-center"
           style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(6px)" }}
           onClick={() => setIsZoomOpen(false)}
+          onTouchStart={(e) => { zoomSwipeStartX.current = e.targetTouches[0]?.clientX ?? null; }}
+          onTouchEnd={(e) => {
+            const isOnImage = (e.target as HTMLElement).tagName === "IMG";
+            const startX = zoomSwipeStartX.current;
+            if (startX == null) { if (!isOnImage) setIsZoomOpen(false); return; }
+            const endX = e.changedTouches[0]?.clientX;
+            if (endX == null) { if (!isOnImage) setIsZoomOpen(false); return; }
+            zoomSwipeStartX.current = null;
+            const delta = startX - endX;
+            if (Math.abs(delta) < 40) { if (!isOnImage) setIsZoomOpen(false); return; }
+            e.stopPropagation();
+            const maxIndex = activeViewImages.length - 1;
+            if (delta > 0) changeViewWithSlide(activeViewIndex >= maxIndex ? 0 : activeViewIndex + 1, 1);
+            else changeViewWithSlide(activeViewIndex <= 0 ? maxIndex : activeViewIndex - 1, -1);
+          }}
         >
-          {/* Close button */}
+          {/* Close button — снизу по центру */}
           <button
             type="button"
-            className="absolute right-4 top-4 z-10 flex size-10 items-center justify-center rounded-full bg-white/20 text-white transition hover:bg-white/40"
-            onClick={() => setIsZoomOpen(false)}
+            className="absolute bottom-8 left-1/2 z-10 flex h-12 min-w-[120px] -translate-x-1/2 items-center justify-center gap-2 rounded-full bg-white/20 px-6 text-white transition hover:bg-white/40 active:bg-white/40"
+            onClick={(e) => { e.stopPropagation(); setIsZoomOpen(false); }}
+            onTouchEnd={(e) => { e.stopPropagation(); setIsZoomOpen(false); }}
             aria-label="Закрыть"
-            style={{ fontSize: 20 }}
+            style={{ fontSize: 16 }}
           >
-            ✕
+            ✕ <span style={{ fontSize: 14, opacity: 0.85 }}>Закрыть</span>
           </button>
 
           {/* Desktop: prev/next navigation inside zoom */}
@@ -541,7 +545,7 @@ export default function BuyPage() {
           <img
             src={activeViewImages[activeViewIndex]}
             alt="Тактическая обувь"
-            className="max-h-[90vh] max-w-[90vw] object-contain select-none"
+            className="max-h-[72vh] max-w-[86vw] object-contain select-none"
             style={{ filter: "drop-shadow(0 30px 80px rgba(0,0,0,0.7))" }}
             onClick={(e) => e.stopPropagation()}
           />
@@ -568,6 +572,40 @@ export default function BuyPage() {
         </div>
       )}
 
+      {/* ── LENS (fixed, вне scale-контейнера, без растяжения) ── */}
+      {isDesktop && lensVisible && !isZoomOpen && (
+        <div
+          className="pointer-events-none fixed z-[200]"
+          style={{
+            left: lensClientPos.x - LENS_D / 2,
+            top: lensClientPos.y - LENS_D / 2,
+            width: LENS_D,
+            height: LENS_D,
+            borderRadius: "24px",
+            overflow: "hidden",
+            border: "2.5px solid rgba(255,255,255,0.85)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+            backgroundColor: "#fff",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              width: lensBootRect.w * LENS_ZOOM,
+              height: lensBootRect.h * LENS_ZOOM,
+              left: LENS_D / 2 - lensPos.x * LENS_ZOOM,
+              top: LENS_D / 2 - lensPos.y * LENS_ZOOM,
+            }}
+          >
+            <img
+              src={activeViewImages[activeViewIndex]}
+              alt=""
+              style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+            />
+          </div>
+        </div>
+      )}
+
       {/* ── DESKTOP: рендерим только при width >= 1200px, чтобы на телефоне не грузить тяжёлую сцену ── */}
       {isDesktop && (
       <section
@@ -575,17 +613,16 @@ export default function BuyPage() {
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          {/* Glass strips — вне scale-дива, чтобы совпадать с media/brand/contacts */}
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
+            <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
+          </div>
           <SiteHeader activeItem="models" className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />
           <div
             className="absolute inset-x-0 top-0 h-[1000px] origin-top"
             style={{ transform: `scale(${stageHeightFitScale})` }}
           >
-
-            {/* Glass strips */}
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
-              <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
-            </div>
 
             <div className="h-[96px] shrink-0" aria-hidden="true" />
 
@@ -624,29 +661,24 @@ export default function BuyPage() {
 
             {/* Center — boot image (filmstrip — плавная лента) */}
             <div
-              className="group absolute left-1/2 top-1/2"
+              className="absolute left-1/2 top-1/2"
               style={{
-                width: 878,
-                height: 717,
+                width: BOOT_W,
+                height: BOOT_H,
                 transform: "translate(-50%, calc(-50% - 28px))",
                 clipPath: "inset(0)",
-                cursor: "zoom-in",
+                cursor: "none",
                 zIndex: 5,
               }}
-              onClick={() => setIsZoomOpen(true)}
+              onMouseEnter={() => setLensVisible(true)}
+              onMouseLeave={() => setLensVisible(false)}
+              onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                setLensPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+                setLensBootRect({ w: rect.width, h: rect.height });
+                setLensClientPos({ x: e.clientX, y: e.clientY });
+              }}
             >
-              {/* Zoom hint icon */}
-              <div
-                className="pointer-events-none absolute bottom-4 right-4 z-10 flex size-9 items-center justify-center rounded-full bg-black/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                aria-hidden
-              >
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <circle cx="7.5" cy="7.5" r="5.5" stroke="white" strokeWidth="1.8"/>
-                  <line x1="11.5" y1="11.5" x2="16" y2="16" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
-                  <line x1="7.5" y1="5" x2="7.5" y2="10" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="5" y1="7.5" x2="10" y2="7.5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </div>
               <div
                 style={{
                   display: "flex",
@@ -882,12 +914,12 @@ export default function BuyPage() {
                   left: `${DESKTOP_RIGHT_CENTER_PCT}%`,
                   top: 794,
                   transform: "translateX(-50%)",
-                  width: 224,
-                  height: 72,
+                  width: 260,
+                  height: 75,
                   background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
-                  borderRadius: 16,
+                  borderRadius: 22,
                   fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
-                  fontSize: 24,
+                  fontSize: 19,
                   fontWeight: 400,
                   color: "#fff",
                   letterSpacing: "0.08em",
@@ -1026,22 +1058,17 @@ export default function BuyPage() {
       </section>
       )}
       {!isDesktop && mobileReady && (
-      <section className="min-[1200px]:hidden">
-        <div className="relative min-h-[100svh] overflow-hidden bg-white">
-          <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute inset-y-0"
-                style={{
-                  left: `${(i * 100) / 6}%`,
-                  width: `${100 / 6}%`,
-                  backgroundImage:
-                    "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
-                }}
-              />
-            ))}
+      <section className="relative min-[1200px]:hidden bg-white">
+        {/* Фон mobile: centered 886px — вне overflow-hidden, как на contacts */}
+        <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+          <div className="absolute left-1/2 top-0 w-[886px] -translate-x-1/2" style={{ marginTop: "-88px", height: "calc(100% + 88px)" }}>
+            <div className="absolute inset-0">
+              <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
+              <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
+            </div>
           </div>
+        </div>
+        <div className="relative min-h-[100svh] overflow-hidden">
 
           <div
             className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[480px] flex-col px-4"

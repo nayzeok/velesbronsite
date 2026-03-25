@@ -640,6 +640,11 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
         style={{ ["--figma-stage-height" as string]: "100dvh" }}
       >
         <div className="relative mx-auto h-[100dvh] w-full max-w-[1670px] overflow-hidden">
+          {/* Glass strips — вне scale-дива, как на models */}
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
+            <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
+          </div>
           {showHeader && <SiteHeader className="absolute left-0 right-0 top-0 z-20 h-[96px] w-full" />}
           <div
             className="absolute inset-x-0 top-0 h-[1000px] origin-top"
@@ -647,15 +652,6 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               transform: `scale(${stageHeightFitScale})`,
             }}
           >
-            <div
-              className="pointer-events-none absolute left-1/2 z-10 w-[886px] -translate-x-1/2"
-              style={{ top: -40, height: "calc(100% + 40px)" }}
-            >
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
-                <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
-              </div>
-            </div>
 
             <div className="h-[96px] shrink-0" aria-hidden="true" />
 
@@ -713,7 +709,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </div>
               <Link
                 href="/models"
-                className="absolute left-[50px] top-[368px] flex h-20 w-[248px] items-center justify-center rounded-[20px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[22px] font-medium text-white transition-opacity hover:opacity-90"
+                className="absolute left-[50px] top-[368px] flex h-[75px] w-[260px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[19px] font-medium text-white transition-opacity hover:opacity-90"
                 style={{
                   fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   fontWeight: 400,
@@ -1284,23 +1280,18 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
       </section>
       )}
       {!isDesktop && mobileReady && (
-      <section>
+      <section className="bg-[#f4f4f4]">
         <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `min(${1024 * mobileScale}px, calc(100svh + 100px))` }}>
-          <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left bg-[#f4f4f4]" style={{ transform: `scale(${mobileScale})` }}>
-          {/* Облегчённые полосы: только градиент, без blur и картинки */}
+          {/* Фон mobile: centered 886px — вне scale, как на contacts */}
           <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute inset-y-0 w-full"
-                style={{
-                  left: `${(i * 100) / 6}%`,
-                  width: `${100 / 6}%`,
-                  backgroundImage: "linear-gradient(-90deg, rgba(255,255,255,0.008) 20%, rgba(40,40,40,0.093) 75.758%, rgba(255,255,255,0.008) 123.64%)",
-                }}
-              />
-            ))}
+            <div className="absolute left-1/2 top-0 w-[886px] -translate-x-1/2" style={{ marginTop: "-88px", height: "calc(100% + 88px)" }}>
+              <div className="absolute inset-0">
+                <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
+                <div className="absolute inset-0" style={{ backgroundImage: `url(${backgroundShape})`, backgroundSize: "832px 832px", backgroundPosition: "top left", filter: "blur(90px)", opacity: 0.03 }} />
+              </div>
+            </div>
           </div>
+          <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left" style={{ transform: `scale(${mobileScale})` }}>
 
           {/*<div className="absolute right-[10px] top-[30px] z-20 flex gap-2">*/}
           {/*   Временно отключили переключение на черный. Блок оставлен для быстрого возврата. */}

@@ -130,7 +130,7 @@ export default function MarketplaceCards() {
           </ul>
 
           <span
-            className={`${channel.type === "wildberries" ? "mt-6 md:mt-auto" : "mt-6"} self-center inline-flex items-center justify-center rounded-[16px] bg-gradient-to-b from-[#E7813F] to-[#FC6407] px-8 py-[18px] text-[24px] text-white`}
+            className={`${channel.type === "wildberries" ? "mt-6 md:mt-auto" : "mt-6"} self-center flex h-[61px] w-[210px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#E7813F] to-[#FC6407] text-[19px] text-white`}
             style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400, letterSpacing: "0.08em" }}
           >
             Перейти <span className="ml-2" aria-hidden="true">→</span>
