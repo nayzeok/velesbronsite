@@ -72,7 +72,7 @@ export default function BrandPage() {
                         letterSpacing: "0.08em",
                       }}
                     >
-                      О VELESBRON - надёжность в деталях
+                      VELESBRON - надёжность в деталях
                     </h1>
                   </div>
                   <div className="mt-6 max-w-[900px] space-y-4 text-[17px] min-[1200px]:text-[20px] font-medium leading-[1.35] tracking-normal text-[#333]">

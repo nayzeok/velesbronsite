@@ -573,6 +573,26 @@ export default function Home() {
                             })}
                         </div>
                         </div>
+
+                        {/* Dots indicator */}
+                        <div className="flex justify-center gap-[6px] mt-2 pointer-events-none select-none">
+                            {HERO_FEATURES_STRIP.map((_, i) => {
+                                const isActive = (mobileCarouselActiveIndex % HERO_FEATURES_STRIP.length) === i;
+                                return (
+                                    <span
+                                        key={i}
+                                        style={{
+                                            width: isActive ? 18 : 6,
+                                            height: 6,
+                                            borderRadius: 3,
+                                            background: isActive ? "#fff" : "rgba(255,255,255,0.35)",
+                                            transition: "width 250ms ease, background 250ms ease",
+                                            display: "inline-block",
+                                        }}
+                                    />
+                                );
+                            })}
+                        </div>
                     </div>
 
                     </div>

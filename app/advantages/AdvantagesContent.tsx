@@ -774,22 +774,6 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 </div>
               </div>
 
-              <p
-                className="pointer-events-none absolute inset-x-0 z-0 select-none text-right"
-                style={{
-                  bottom: 130,
-                  color: "#AEAEAE",
-                  fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
-                  fontSize: 600,
-                  fontWeight: 500,
-                  lineHeight: "108px",
-                  opacity: 0.06,
-                  transform: "scaleY(0.67)",
-                  transformOrigin: "bottom right",
-                }}
-              >
-                VELESBRON
-              </p>
 
               <div className="absolute left-0 top-[555px] z-0 w-[1536px] overflow-hidden" style={{ height: DESIGN_HEIGHT }}>
                 <img src={pedestalImage} alt="" className="h-full w-full object-cover object-center" />

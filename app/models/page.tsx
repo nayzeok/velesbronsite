@@ -93,6 +93,18 @@ const CAROUSEL_DESKTOP_SCROLL = CAROUSEL_DESKTOP_CARD_WIDTH + CAROUSEL_DESKTOP_G
 type ColorVariant = "black" | "oliva";
 type ModelKey = "high" | "low";
 
+/** Миниатюры выбора модели (правый блок) — переключаются по цвету */
+const MODEL_SELECTOR_THUMBS: Record<ModelKey, Record<ColorVariant, string>> = {
+  high: {
+    black: "/images_alt/models/views/2sk_black.png",
+    oliva: "/images_alt/models/views/2sk_oliva.png",
+  },
+  low: {
+    black: "/images_alt/models/views/2n_black.png",
+    oliva: "/images_alt/models/views/2n_oliva.png",
+  },
+};
+
 const MODEL_OPTIONS: { key: ModelKey; label: string; title: string; description: string }[] = [
   {
     key: "high",
@@ -274,7 +286,16 @@ export default function BuyPage() {
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
   const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
+  const [railAtStart, setRailAtStart] = useState(true);
+  const [railAtEnd, setRailAtEnd] = useState(false);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
+
+  const updateRailEdges = () => {
+    const el = desktopRailRef.current;
+    if (!el) return;
+    setRailAtStart(el.scrollLeft <= 2);
+    setRailAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
+  };
   const sizeGridCloseTimerRef = useRef<number | null>(null);
   const mobileSwipeStartX = useRef<number | null>(null);
   const mobileSwipeStartY = useRef<number | null>(null);
@@ -342,6 +363,9 @@ export default function BuyPage() {
 
   useEffect(() => {
     setActiveViewIndex(0);
+    if (desktopRailRef.current) desktopRailRef.current.scrollLeft = 0;
+    setRailAtStart(true);
+    setRailAtEnd(false);
   }, [activeModelKey]);
 
   useEffect(() => {
@@ -396,6 +420,20 @@ export default function BuyPage() {
       if (viewSlideFinishTimerRef.current) window.clearTimeout(viewSlideFinishTimerRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    // Проверяем при маунте и при смене контента — нужна ли стрелка вправо
+    const el = desktopRailRef.current;
+    if (!el) return;
+    const check = () => {
+      setRailAtStart(el.scrollLeft <= 2);
+      setRailAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [isDesktop, activeModelKey, colorVariant]);
 
   const openSizeGrid = () => {
     if (sizeGridCloseTimerRef.current) {
@@ -705,7 +743,7 @@ export default function BuyPage() {
                             setActiveModelKey(model.key);
                           }
                         }}
-                        className="shrink-0 overflow-hidden rounded-[8px] bg-white p-[4px] transition-all"
+                        className="shrink-0 overflow-hidden rounded-[8px] bg-white transition-all"
                   style={{
                           width: colW,
                           height: 75,
@@ -714,7 +752,7 @@ export default function BuyPage() {
                           opacity: isLow ? 0.85 : 1,
                         }}
                       >
-                        <img src={MODEL_IMAGES[model.key].black[0]} alt={model.label} className="h-full w-full object-contain" />
+                        <img src={MODEL_SELECTOR_THUMBS[model.key][colorVariant]} alt={model.label} className="h-full w-full object-contain" style={{ transform: "scale(1.44)", transformOrigin: "center" }} />
                       </button>
                       <p
                         className="flex min-w-0 w-full justify-center uppercase"
@@ -910,6 +948,7 @@ export default function BuyPage() {
                 ref={desktopRailRef}
                 className="scrollbar-hide flex overflow-x-auto pb-2 pr-2"
                 style={{ gap: CAROUSEL_DESKTOP_GAP, scrollBehavior: "smooth" }}
+                onScroll={updateRailEdges}
               >
                 {isHighModel
                   ? CAROUSEL_CARDS.map((card, i) => (
@@ -951,24 +990,28 @@ export default function BuyPage() {
                       </button>
                     ))}
               </div>
-              <button
-                type="button"
-                aria-label="Прокрутить фото влево"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: -CAROUSEL_DESKTOP_SCROLL, behavior: "smooth" })}
-                className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
-                style={{ cursor: "w-resize" }}
-              >
-                <span className="text-[24px] leading-none">‹</span>
-              </button>
-              <button
-                type="button"
-                aria-label="Прокрутить фото вправо"
-                onClick={() => desktopRailRef.current?.scrollBy({ left: CAROUSEL_DESKTOP_SCROLL, behavior: "smooth" })}
-                className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
-                style={{ cursor: "e-resize" }}
-              >
-                <span className="text-[24px] leading-none">›</span>
-              </button>
+              {!railAtStart && (
+                <button
+                  type="button"
+                  aria-label="Прокрутить фото влево"
+                  onClick={() => desktopRailRef.current?.scrollBy({ left: -CAROUSEL_DESKTOP_SCROLL, behavior: "smooth" })}
+                  className="absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-r-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
+                  style={{ cursor: "w-resize" }}
+                >
+                  <span className="text-[24px] leading-none">‹</span>
+                </button>
+              )}
+              {!railAtEnd && (
+                <button
+                  type="button"
+                  aria-label="Прокрутить фото вправо"
+                  onClick={() => desktopRailRef.current?.scrollBy({ left: CAROUSEL_DESKTOP_SCROLL, behavior: "smooth" })}
+                  className="absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-l-[12px] bg-white/80 px-3 py-6 text-[#111] shadow-[0_6px_20px_rgba(0,0,0,0.12)] transition hover:bg-white"
+                  style={{ cursor: "e-resize" }}
+                >
+                  <span className="text-[24px] leading-none">›</span>
+                </button>
+              )}
             </div>
 
           </div>
