@@ -217,16 +217,6 @@ export default function MobileHeader() {
             );
           })}
         </nav>
-        <div
-          className="absolute bottom-6 left-4 right-4 rounded-[12px] border border-[#e5e5e5] bg-[#f5f5f5] px-4 py-3 leading-[1.35] text-[#666]"
-          style={{
-            paddingBottom: "max(0.75rem, env(safe-area-inset-bottom, 0px))",
-            fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
-            fontSize: 9.24,
-          }}
-        >
-          Тактическая обувь из натуральных материалов
-        </div>
       </aside>
     </>
   );

@@ -1102,7 +1102,7 @@ export default function BuyPage() {
       </section>
       )}
       {!isDesktop && mobileReady && (
-      <section className="relative min-[1200px]:hidden bg-white">
+      <section className="relative min-[1200px]:hidden bg-white min-h-[100lvh]">
         {/* Фон mobile: centered 886px — вне overflow-hidden, как на contacts */}
         <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
           <div className="absolute left-1/2 top-0 w-[886px] -translate-x-1/2" style={{ marginTop: "-88px", height: "calc(100% + 88px)" }}>

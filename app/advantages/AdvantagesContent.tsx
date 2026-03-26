@@ -468,7 +468,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
       : null;
   /** Плашки: сузить по горизонтали на 20%, текст +20%. Точка привязана к плашке (позиция от плашки + смещение). */
   const DESKTOP_PLAQUE_WIDTH_SCALE = 0.8;
-  const DESKTOP_PLAQUE_TEXT_SCALE = 1.02;
+  const DESKTOP_PLAQUE_TEXT_SCALE = 0.966; // 22 * 0.966 ≈ 21.25px — как подзаголовки страницы
   const currentCalloutTextOpacity = "textOpacity" in currentView.calloutStyle ? currentView.calloutStyle.textOpacity : 0.7;
   const currentCalloutNotch = "notch" in currentView.calloutStyle ? currentView.calloutStyle.notch : null;
   const isCalloutSingleLine = !String(currentView.callout.text ?? "").trim();
@@ -1297,10 +1297,9 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
       </section>
       )}
       {!isDesktop && mobileReady && (
-      <section className="bg-[#f4f4f4]">
-        <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `min(${1024 * mobileScale}px, calc(100svh + 100px))` }}>
-          {/* Фон mobile: centered 886px — вне scale, как на contacts */}
-          <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
+      <section className="relative bg-[#f4f4f4] min-h-[100lvh]">
+          {/* Фон mobile: centered 886px — вне scene-контейнера, покрывает весь экран включая зону под browser UI */}
+          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
             <div className="absolute left-1/2 top-0 w-[886px] -translate-x-1/2" style={{ marginTop: "-88px", height: "calc(100% + 88px)" }}>
               <div className="absolute inset-0">
                 <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />
@@ -1308,6 +1307,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </div>
             </div>
           </div>
+        <div ref={mobileSceneRef} className="relative mx-auto w-full max-w-[460px] overflow-hidden" style={{ height: `min(${1024 * mobileScale}px, calc(100svh + 100px))` }}>
           <div className="absolute left-0 top-0 h-[1024px] w-[460px] origin-top-left" style={{ transform: `scale(${mobileScale})` }}>
 
           {/*<div className="absolute right-[10px] top-[30px] z-20 flex gap-2">*/}
