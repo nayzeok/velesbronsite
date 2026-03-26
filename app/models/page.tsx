@@ -146,10 +146,28 @@ const MODEL_IMAGES: Record<ModelKey, { black: string[]; oliva?: string[] }> = {
   },
   low: {
     black: [
-      "/images_alt/models/views/models/2n/black/1.webp",
-      "/images_alt/models/views/models/2n/black/2.webp",
-      "/images_alt/models/views/models/2n/black/3.webp",
-      "/images_alt/models/views/models/2n/black/4.webp",
+      "/images_alt/models/cards/2n_black/1_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/2_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/3_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/4_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/5_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/6_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/7_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/8_2n_card_black.webp",
+      "/images_alt/models/cards/2n_black/9_2n_card_black.png",
+      "/images_alt/models/cards/2n_black/10_2n_card_black.webp",
+    ],
+    oliva: [
+      "/images_alt/models/cards/2n_oliva/1_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/2_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/3_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/4_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/5_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/6_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/7_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/8_2n_card_oliva.webp",
+      "/images_alt/models/cards/2n_oliva/9_2n_card_oliva.png",
+      "/images_alt/models/cards/2n_oliva/10_2n_card_oliva.webp",
     ],
   },
 };
@@ -287,7 +305,7 @@ export default function BuyPage() {
   const [isMobileTextExpanded, setIsMobileTextExpanded] = useState(false);
   const [isSizeGridOpen, setIsSizeGridOpen] = useState(false);
   const [isSizeGridVisible, setIsSizeGridVisible] = useState(false);
-  const [showLowComingSoon, setShowLowComingSoon] = useState(false);
+
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [desktopRailCursor, setDesktopRailCursor] = useState<"left" | "right" | "grab">("grab");
   const [isDesktopRailHover, setIsDesktopRailHover] = useState(false);
@@ -301,6 +319,7 @@ export default function BuyPage() {
   const [railAtStart, setRailAtStart] = useState(true);
   const [railAtEnd, setRailAtEnd] = useState(false);
   const desktopRailRef = useRef<HTMLDivElement | null>(null);
+  const bootContainerRef = useRef<HTMLDivElement | null>(null);
 
   const updateRailEdges = () => {
     const el = desktopRailRef.current;
@@ -468,14 +487,6 @@ export default function BuyPage() {
     <main className="figma-site-page relative overflow-x-hidden bg-white text-[#111] overscroll-none min-[1200px]:overflow-hidden">
 
       <div className="relative z-10">
-      {showLowComingSoon && (
-        <div
-          className="fixed left-1/2 top-[20%] z-[100] -translate-x-1/2 rounded-[12px] bg-[#111] px-6 py-3 text-center text-white shadow-lg"
-          style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 16 }}
-        >
-          Ожидается поступление
-        </div>
-      )}
 
       {/* ── ZOOM MODAL ── */}
       {isZoomOpen && (
@@ -661,24 +672,30 @@ export default function BuyPage() {
 
             {/* Center — boot image (filmstrip — плавная лента) */}
             <div
+              ref={bootContainerRef}
               className="absolute left-1/2 top-1/2"
               style={{
                 width: BOOT_W,
                 height: BOOT_H,
                 transform: "translate(-50%, calc(-50% - 28px))",
-                clipPath: "inset(0)",
-                cursor: "none",
+                clipPath: "inset(0 0 52px 0)",
                 zIndex: 5,
               }}
-              onMouseEnter={() => setLensVisible(true)}
-              onMouseLeave={() => setLensVisible(false)}
-              onMouseMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                setLensPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-                setLensBootRect({ w: rect.width, h: rect.height });
-                setLensClientPos({ x: e.clientX, y: e.clientY });
-              }}
             >
+              {/* Зона срабатывания лупы — 80% от центра (10% отступ с каждой стороны) */}
+              <div
+                className="absolute z-10"
+                style={{ inset: "10%", cursor: "none" }}
+                onMouseEnter={() => setLensVisible(true)}
+                onMouseLeave={() => setLensVisible(false)}
+                onMouseMove={(e) => {
+                  const outer = bootContainerRef.current?.getBoundingClientRect();
+                  if (!outer) return;
+                  setLensPos({ x: e.clientX - outer.left, y: e.clientY - outer.top });
+                  setLensBootRect({ w: outer.width, h: outer.height });
+                  setLensClientPos({ x: e.clientX, y: e.clientY });
+                }}
+              />
               <div
                 style={{
                   display: "flex",
@@ -767,21 +784,14 @@ export default function BuyPage() {
                     <div key={`desktop-model-col-${model.key}`} className="flex flex-col items-center gap-4" style={{ width: colW, minWidth: colW }}>
                       <button
                         type="button"
-                        onClick={() => {
-                          if (isLow) {
-                            setShowLowComingSoon(true);
-                            window.setTimeout(() => setShowLowComingSoon(false), 2500);
-                          } else {
-                            setActiveModelKey(model.key);
-                          }
-                        }}
+                        onClick={() => setActiveModelKey(model.key)}
                         className="shrink-0 overflow-hidden rounded-[8px] bg-white transition-all"
                   style={{
                           width: colW,
                           height: 75,
                           border: activeModelKey === model.key ? "2px solid #f07426" : "2px solid #e0e0e0",
-                          cursor: isLow ? "default" : "pointer",
-                          opacity: isLow ? 0.85 : 1,
+                          cursor: "pointer",
+                          opacity: 1,
                         }}
                       >
                         <img src={MODEL_SELECTOR_THUMBS[model.key][colorVariant]} alt={model.label} className="h-full w-full object-contain" style={{ transform: "scale(1.44)", transformOrigin: "center" }} />
@@ -1085,21 +1095,14 @@ export default function BuyPage() {
                 <button
                     key={`mobile-model-col-${model.key}`}
                   type="button"
-                    onClick={() => {
-                      if (isLow) {
-                        setShowLowComingSoon(true);
-                        window.setTimeout(() => setShowLowComingSoon(false), 2500);
-                      } else {
-                        setActiveModelKey(model.key);
-                      }
-                    }}
+                    onClick={() => setActiveModelKey(model.key)}
                     className="flex h-[35px] flex-1 items-center justify-center transition-all"
                     style={{
                       background: isActive ? "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)" : "#efefef",
                       borderRight: model.key === "high" ? "1px solid #d8d8d8" : "none",
                       color: isActive ? "#fff" : "#111",
-                      cursor: isLow ? "default" : "pointer",
-                      opacity: isLow ? 0.9 : 1,
+                      cursor: "pointer",
+                      opacity: 1,
                       fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                       fontSize: 15,
                       fontWeight: 400,
