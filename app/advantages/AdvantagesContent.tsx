@@ -404,8 +404,8 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
   const stageHeightFitScale = `min(1, calc(100dvh / ${DESIGN_HEIGHT}px))`;
 
   useEffect(() => {
-    if (!isMobileBootAnimating) setMobileCarouselActiveIndex(activeIndex);
-  }, [isMobileBootAnimating, activeIndex]);
+    setMobileCarouselActiveIndex(activeIndex);
+  }, [activeIndex]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("matchMedia" in window)) return;
@@ -1461,11 +1461,12 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </button>
             ))}
             <div
-              className="pointer-events-none absolute flex items-center justify-center rounded-full bg-[#F17823] transition-all duration-500"
+              className="pointer-events-none absolute flex items-center justify-center rounded-full bg-[#F17823]"
               style={{
                 width: MOBILE_CAROUSEL_MARKER.size,
                 height: MOBILE_CAROUSEL_MARKER.size,
                 transform: `translate(${MOBILE_CAROUSEL_MARKER.centerX}px, ${MOBILE_CAROUSEL_MARKER.centerY}px) translate(-50%, -50%) rotate(${mobileMarkerAngle}deg) translateX(${MOBILE_CAROUSEL_MARKER.radius}px)`,
+                transition: `transform 420ms ease-out`,
               }}
             />
           </div>
