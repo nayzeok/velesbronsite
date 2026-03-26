@@ -181,6 +181,10 @@ type CarouselCard = {
   /** Заголовок для оливы (опционально) */
   titleOliva?: string;
   textOliva: string;
+  /** Переопределение заголовка для низкой чёрной (low+black → titleOliva по схеме) */
+  titleOlivaLow?: string;
+  /** Переопределение заголовка для низкой оливы (low+oliva → titleBlack по схеме) */
+  titleBlackLow?: string;
 };
 
 const CAROUSEL_CARDS: CarouselCard[] = [
@@ -270,9 +274,10 @@ const CAROUSEL_CARDS: CarouselCard[] = [
     titleBlack: "УСИЛЕННЫЕ ШВЫ \n КОНСТРУКЦИИ",
     textBlack:
       "Ключевые зоны ботинка прошиты прочными армированными нитями. Усиленная строчка повышает прочность соединений и помогает конструкции выдерживать многократные сгибы и повышенные нагрузки.",
-    titleOliva: "ТРОЙНЫЕ ШВЫ, АРМИРОВАННЫЕ НИТИ",
+    titleOliva: "ТРОЙНЫЕ ШВЫ, \n АРМИРОВАННЫЕ НИТИ",
+    titleOlivaLow: "АРМИРОВАННЫЕ НИТИ",
     textOliva:
-      "Ключевые зоны ботинка прошиты тройными швами армированными полиэфирными нитями. Такая технология усиливает соединения материалов и повышает устойчивость конструкции к нагрузкам и изгибам, сохраняя надёжность ботинка при эксплуатации.",
+      "Ключевые зоны ботинка прошиты армированными полиэфирными нитями. Технология усиливает соединения материалов и повышает устойчивость конструкции к нагрузкам и изгибам, сохраняя надёжность ботинка при эксплуатации.",
   },
   {
     imageBlack: "/images_alt/models/cards/10_card_black.webp",
@@ -384,12 +389,20 @@ export default function BuyPage() {
     : (modelImagesByColor[colorVariant] && modelImagesByColor[colorVariant]!.length > 0)
       ? modelImagesByColor[colorVariant]!
       : modelImagesByColor.black;
-  const activeCard = isHighModel ? CAROUSEL_CARDS[activeViewIndex] : null;
+  const activeCard = CAROUSEL_CARDS[activeViewIndex] ?? null;
+  // high: black→titleBlack, oliva→titleOliva
+  // low:  black→titleOliva, oliva→titleBlack (инвертированы)
   const leftBlockTitle = activeCard
-    ? (colorVariant === "black" ? activeCard.titleBlack : activeCard.titleOliva ?? "")
+    ? (isHighModel
+        ? (colorVariant === "black" ? activeCard.titleBlack : activeCard.titleOliva ?? "")
+        : (colorVariant === "black"
+            ? (activeCard.titleOlivaLow ?? activeCard.titleOliva ?? "")
+            : (activeCard.titleBlackLow ?? activeCard.titleBlack)))
     : "";
   const leftBlockText = activeCard
-    ? (colorVariant === "black" ? activeCard.textBlack : activeCard.textOliva)
+    ? (isHighModel
+        ? (colorVariant === "black" ? activeCard.textBlack : activeCard.textOliva)
+        : (colorVariant === "black" ? activeCard.textOliva : activeCard.textBlack))
     : selectedModel.description;
 
   useEffect(() => {
