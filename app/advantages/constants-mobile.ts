@@ -196,7 +196,7 @@ export const MOBILE_CAROUSEL_IMAGE_TUNE = [
   { boost: 1, x: 0, y: 0 },
   { boost: 1, x: 0, y: 0 },
   { boost: 1, x: 10, y: 0 },
-  { boost: 1, x: 25, y: 0 },
+  { boost: 1, x: 45, y: -10 },
 ] as const;
 
 /** Эллипс карусели (позиция и размер) */

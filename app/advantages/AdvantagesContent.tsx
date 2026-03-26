@@ -422,6 +422,28 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
     return () => clearTimeout(t);
   }, [isDesktop]);
 
+  // Принудительная предзагрузка всех изображений через new Image() —
+  // браузер гарантированно кешируeт их до смены слайда
+  useEffect(() => {
+    const allSrcs = [
+      ...Object.values(colorViewImages).flat(),
+      carouselCardBoot53,
+      carouselCardBoot30,
+      carouselCardBoot0,
+      carouselCardBootNeg36,
+      carouselCardBootNeg54,
+      mainBootSide,
+      mainBootFront,
+      mainBootTop,
+      mainBootTilt,
+      mainBootBack,
+    ];
+    allSrcs.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const currentView = views[activeIndex];
   const currentViewImage = colorViewImages[colorVariant][activeIndex] ?? currentView.image;
   const displayViewImage = colorViewImages[displayColorVariant][activeIndex] ?? currentView.image;
@@ -629,11 +651,6 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
 
   return (
     <>
-      <div className="sr-only" aria-hidden="true">
-        {Object.values(colorViewImages).flat().map((src) => (
-          <img key={src} src={src} alt="" />
-        ))}
-      </div>
       {isDesktop && (
       <section
         className="figma-site-stage relative mx-auto h-[100dvh] w-full overflow-hidden bg-white"
@@ -1383,7 +1400,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 type="button"
                 onClick={() => handleChangeView(index)}
                 aria-label={`Показать ракурс ${index + 1}`}
-                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-[12px] transition-opacity duration-200"
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-[12px] transition-opacity duration-200 outline-none focus:outline-none focus-visible:outline-none"
                 style={{
                   left: mobileCarouselCards[index].x,
                   top: mobileCarouselCards[index].y,
@@ -1392,8 +1409,8 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   transform: `translate(-50%, -50%) rotate(${mobileCarouselCards[index].rotate}deg) translateZ(0)`,
                   zIndex: carouselItems[index].z,
                   opacity: index === mobileCarouselActiveIndex ? 0.98 : 0.88,
-                  boxShadow: index === mobileCarouselActiveIndex ? "0 0 0 1px rgba(0,0,0,0.08)" : "none",
                   willChange: "transform",
+                  WebkitTapHighlightColor: "transparent",
                 }}
               >
                 <svg className="absolute inset-0 h-full w-full" viewBox="0 0 117 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

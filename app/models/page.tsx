@@ -481,7 +481,7 @@ export default function BuyPage() {
       {isZoomOpen && (
         <div
           className="fixed inset-0 z-[300] flex items-center justify-center"
-          style={{ background: "rgba(0,0,0,0.88)", backdropFilter: "blur(6px)" }}
+          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(6px)" }}
           onClick={() => setIsZoomOpen(false)}
           onTouchStart={(e) => { zoomSwipeStartX.current = e.targetTouches[0]?.clientX ?? null; }}
           onTouchEnd={(e) => {
@@ -502,13 +502,13 @@ export default function BuyPage() {
           {/* Close button — снизу по центру */}
           <button
             type="button"
-            className="absolute bottom-8 left-1/2 z-10 flex h-12 min-w-[120px] -translate-x-1/2 items-center justify-center gap-2 rounded-full bg-white/20 px-6 text-white transition hover:bg-white/40 active:bg-white/40"
+            className="absolute left-1/2 z-10 flex -translate-x-1/2 items-center justify-center gap-2 text-gray-700 transition opacity-80 hover:opacity-100 active:opacity-100"
+            style={{ bottom: 42, fontSize: 19, padding: "16px 20px 12px 20px" }}
             onClick={(e) => { e.stopPropagation(); setIsZoomOpen(false); }}
             onTouchEnd={(e) => { e.stopPropagation(); setIsZoomOpen(false); }}
             aria-label="Закрыть"
-            style={{ fontSize: 16 }}
           >
-            ✕ <span style={{ fontSize: 14, opacity: 0.85 }}>Закрыть</span>
+            ✕ <span style={{ fontSize: 17 }}>Закрыть</span>
           </button>
 
           {/* Desktop: prev/next navigation inside zoom */}
@@ -516,7 +516,7 @@ export default function BuyPage() {
             <>
               <button
                 type="button"
-                className="absolute left-4 top-1/2 z-10 -translate-y-1/2 hidden min-[1200px]:flex size-12 items-center justify-center rounded-full bg-white/20 text-white text-3xl transition hover:bg-white/40"
+                className="absolute left-4 top-1/2 z-10 -translate-y-1/2 hidden min-[1200px]:flex size-12 items-center justify-center rounded-full bg-black/10 text-gray-800 text-3xl transition hover:bg-black/20"
                 onClick={(e) => {
                   e.stopPropagation();
                   const maxIndex = activeViewImages.length - 1;
@@ -528,7 +528,7 @@ export default function BuyPage() {
               </button>
               <button
                 type="button"
-                className="absolute right-4 top-1/2 z-10 -translate-y-1/2 hidden min-[1200px]:flex size-12 items-center justify-center rounded-full bg-white/20 text-white text-3xl transition hover:bg-white/40"
+                className="absolute right-4 top-1/2 z-10 -translate-y-1/2 hidden min-[1200px]:flex size-12 items-center justify-center rounded-full bg-black/10 text-gray-800 text-3xl transition hover:bg-black/20"
                 onClick={(e) => {
                   e.stopPropagation();
                   const maxIndex = activeViewImages.length - 1;
@@ -561,7 +561,7 @@ export default function BuyPage() {
                   style={{
                     width: activeViewIndex === i ? 20 : 8,
                     height: 8,
-                    background: activeViewIndex === i ? "#f07426" : "rgba(255,255,255,0.45)",
+                    background: activeViewIndex === i ? "#f07426" : "rgba(0,0,0,0.25)",
                   }}
                   onClick={(e) => { e.stopPropagation(); changeViewWithSlide(i, i > activeViewIndex ? 1 : -1); }}
                   aria-label={`Фото ${i + 1}`}
@@ -1068,7 +1068,7 @@ export default function BuyPage() {
             </div>
           </div>
         </div>
-        <div className="relative min-h-[100svh] overflow-hidden">
+        <div className="relative min-h-[100svh]">
 
           <div
             className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[480px] flex-col px-4"
