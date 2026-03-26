@@ -154,7 +154,7 @@ const MODEL_IMAGES: Record<ModelKey, { black: string[]; oliva?: string[] }> = {
       "/images_alt/models/cards/2n_black/6_2n_card_black.webp",
       "/images_alt/models/cards/2n_black/7_2n_card_black.webp",
       "/images_alt/models/cards/2n_black/8_2n_card_black.webp",
-      "/images_alt/models/cards/2n_black/9_2n_card_black.png",
+      "/images_alt/models/cards/2n_black/9_2n_card_black.webp",
       "/images_alt/models/cards/2n_black/10_2n_card_black.webp",
     ],
     oliva: [
