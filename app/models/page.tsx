@@ -36,23 +36,27 @@ const MOBILE_COLOR_DOTS_TOP = 280;
 
 /**
  * Масштаб большого фото карточки (центральная картинка), по индексу карточки 0..9.
- * Отдельно для чёрных и для оливы — подгоняйте под ракурс.
+ * Отдельно для чёрных и оливы высокой модели (high), и для низкой (low_black / low_oliva).
  */
-const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW: Record<"black" | "oliva", number[]> = {
-  black: [1.27, 1.27, 0.85, 1.02, 1.27, 1.27, 1.19, 1.19, 1.19, 1.19],
-  oliva: [1.27, 1.27, 0.85, 1.02, 1.27, 1.27, 1.19, 1.10, 1.19, 1.19],
+const BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW: Record<string, number[]> = {
+  black:     [1.27, 1.27, 0.75, 1.02, 1.27, 1.27, 1.19, 1.19, 1.19, 1.19],
+  oliva:     [1.27, 1.27, 0.75, 1.02, 1.27, 1.27, 1.19, 1.10, 1.19, 1.19],
+  low_black: [1.00, 1.00, 0.75, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00],
+  low_oliva: [1.00, 1.00, 0.75, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00],
 };
-/** Масштаб фото ботинка на мобиле (0.85 = уменьшенный размер). */
-const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW: Record<"black" | "oliva", number[]> = {
-  black: [0.85, 0.85, 0.85, 0.65, 0.85, 0.85, 0.85, 0.85, 0.85, 0.80],
-  oliva: [0.85, 0.85, 0.85, 0.65, 0.85, 0.85, 0.85, 0.85, 0.85, 0.80],
+/** Масштаб фото ботинка на мобиле. */
+const BOOT_IMAGE_SCALE_MOBILE_BY_VIEW: Record<string, number[]> = {
+  black:     [0.85, 0.85, 0.75, 0.65, 0.85, 0.85, 0.85, 0.85, 0.85, 0.80],
+  oliva:     [0.85, 0.85, 0.75, 0.65, 0.85, 0.85, 0.85, 0.85, 0.85, 0.80],
+  low_black: [0.85, 0.85, 0.75, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85],
+  low_oliva: [0.85, 0.85, 0.75, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85],
 };
 
 /**
  * Смещение центрального фото в пикселях (x, y) для каждой карточки 0..9.
- * Отдельно для чёрных и оливы. Положительный x — вправо, y — вниз.
+ * Отдельно для высокой (black/oliva) и низкой (low_black/low_oliva) моделей.
  */
-const BOOT_IMAGE_OFFSET_DESKTOP: Record<"black" | "oliva", { x: number; y: number }[]> = {
+const BOOT_IMAGE_OFFSET_DESKTOP: Record<string, { x: number; y: number }[]> = {
   black: [
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
@@ -61,8 +65,16 @@ const BOOT_IMAGE_OFFSET_DESKTOP: Record<"black" | "oliva", { x: number; y: numbe
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 50 }, { x: 0, y: 0 },
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
   ],
+  low_black: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+  ],
+  low_oliva: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+  ],
 };
-const BOOT_IMAGE_OFFSET_MOBILE: Record<"black" | "oliva", { x: number; y: number }[]> = {
+const BOOT_IMAGE_OFFSET_MOBILE: Record<string, { x: number; y: number }[]> = {
   black: [
     { x: 0, y: 10 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 25 },
@@ -70,6 +82,14 @@ const BOOT_IMAGE_OFFSET_MOBILE: Record<"black" | "oliva", { x: number; y: number
   oliva: [
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
     { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 25 },
+  ],
+  low_black: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+  ],
+  low_oliva: [
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
+    { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 },
   ],
 };
 
@@ -719,8 +739,9 @@ export default function BuyPage() {
                 }}
               >
                 {activeViewImages.map((src, i) => {
-                  const offset = BOOT_IMAGE_OFFSET_DESKTOP[colorVariant][i] ?? { x: 0, y: 0 };
-                  const scale = BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[colorVariant][i] ?? 1;
+                  const scaleKey = isHighModel ? colorVariant : `low_${colorVariant}`;
+                  const offset = BOOT_IMAGE_OFFSET_DESKTOP[scaleKey][i] ?? { x: 0, y: 0 };
+                  const scale = BOOT_IMAGE_SCALE_DESKTOP_BY_VIEW[scaleKey][i] ?? 1;
                   return (
                     <div
                       key={`${activeModelKey}-${colorVariant}-${i}`}
@@ -1224,8 +1245,9 @@ export default function BuyPage() {
                           }}
                         >
                           {activeViewImages.map((src, i) => {
-                            const offset = BOOT_IMAGE_OFFSET_MOBILE[colorVariant][i] ?? { x: 0, y: 0 };
-                            const scale = BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[colorVariant][i] ?? 1;
+                            const scaleKey = isHighModel ? colorVariant : `low_${colorVariant}`;
+                            const offset = BOOT_IMAGE_OFFSET_MOBILE[scaleKey][i] ?? { x: 0, y: 0 };
+                            const scale = BOOT_IMAGE_SCALE_MOBILE_BY_VIEW[scaleKey][i] ?? 1;
                             return (
                               <div
                                 key={`${activeModelKey}-${colorVariant}-${i}`}
