@@ -79,9 +79,28 @@ const montserratLight = localFont({
   display: "swap",
 });
 
+const BASE_URL = "https://velesbron.ru";
+
 export const metadata: Metadata = {
-  title: "VelesBron - Тактическая обувь из натуральных материалов",
-  description: "Универсальная тактическая обувь для службы, походов и города. Натуральные материалы, усиленный протектор, надёжная конструкция.",
+  title: {
+    default: "Тактические ботинки VELESBRON — мембрана VELTEX™ и антипрокол",
+    template: "%s — VELESBRON",
+  },
+  description:
+    "VELESBRON — тактические ботинки из натуральных материалов: мембрана VELTEX™, антипрокольная защита K‑29, усиленная прошивка. Выберите модель и канал покупки.",
+  metadataBase: new URL(BASE_URL),
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "VELESBRON",
+    locale: "ru_RU",
+    url: BASE_URL,
+    title: "Тактические ботинки VELESBRON — мембрана VELTEX™ и антипрокол",
+    description:
+      "VELESBRON — тактические ботинки из натуральных материалов: мембрана VELTEX™, антипрокольная защита K‑29, усиленная прошивка. Выберите модель и канал покупки.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "VELESBRON — тактические ботинки" }],
+  },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {

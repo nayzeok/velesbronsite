@@ -1,8 +1,17 @@
 import SiteHeader from "@/components/layout/SiteHeader";
 
 export const metadata = {
-  title: "Контакты — VelesBron",
-  description: "Служба качества и юридическая информация VelesBron",
+  title: "Контакты VELESBRON — служба качества, реквизиты, поддержка",
+  description:
+    "Контакты VELESBRON: служба качества (телефон/почта/Telegram), юридические реквизиты и адрес в Новосибирске. Напишите по вопросам покупки и гарантийных случаев.",
+  alternates: { canonical: "/contacts" },
+  openGraph: {
+    type: "website",
+    url: "https://velesbron.ru/contacts",
+    title: "Контакты VELESBRON — служба качества, реквизиты, поддержка",
+    description:
+      "Контакты VELESBRON: служба качества (телефон/почта/Telegram), юридические реквизиты и адрес в Новосибирске. Напишите по вопросам покупки и гарантийных случаев.",
+  },
 };
 
 const backgroundShape = "/images_alt/models/ui/background-shape.webp";
@@ -19,12 +28,37 @@ function TelegramIcon() {
   );
 }
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "VELESBRON",
+  url: "https://velesbron.ru",
+  logo: "https://velesbron.ru/images_alt/logo.webp",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+7-913-481-22-01",
+    contactType: "customer service",
+    availableLanguage: "Russian",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Новосибирск",
+    addressRegion: "Новосибирская область",
+    addressCountry: "RU",
+  },
+  legalName: 'ООО "РЕШЕНИЕ"',
+};
+
 export default function ContactsPage() {
   return (
     <main
       className="figma-site-page relative overflow-x-hidden bg-white text-[#111] min-h-screen"
       style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Фон desktop: full width */}
       <div className="pointer-events-none absolute inset-0 z-0 max-[1199px]:hidden">
         <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0%, rgba(40,40,40,0.07) 5.4%, rgba(255,255,255,0.008) 7.143%)" }} />

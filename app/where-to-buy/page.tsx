@@ -1,6 +1,15 @@
 export const metadata = {
-  title: "Где купить — VelesBron",
-  description: "Каналы продаж VelesBron: Wildberries, Ozon и B2B",
+  title: "Где купить VELESBRON — официальный магазин на Wildberries и Ozon",
+  description:
+    "Официальные площадки VELESBRON: Wildberries и Ozon. Актуальные остатки, доставка и бонусы. Покупайте у официального продавца и сохраняйте гарантию.",
+  alternates: { canonical: "/where-to-buy" },
+  openGraph: {
+    type: "website",
+    url: "https://velesbron.ru/where-to-buy",
+    title: "Где купить VELESBRON — официальный магазин на Wildberries и Ozon",
+    description:
+      "Официальные площадки VELESBRON: Wildberries и Ozon. Актуальные остатки, доставка и бонусы. Покупайте у официального продавца и сохраняйте гарантию.",
+  },
 };
 
 import SiteHeader from "@/components/layout/SiteHeader";

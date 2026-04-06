@@ -3,8 +3,17 @@ import { ScrollHighlightProvider, ScrollHighlightScrollMain } from "@/components
 import SiteHeader from "@/components/layout/SiteHeader";
 
 export const metadata = {
-  title: "О бренде — VelesBron",
-  description: "О бренде VelesBron: миссия, ценности, архитектура продукта",
+  title: "О бренде VELESBRON — тактическая обувь, адаптированная для России",
+  description:
+    "История и ценности VELESBRON: надёжная обувь, разработанная в России под климат, реагенты и нагрузку. Миссия бренда, подход к качеству и честная гарантия.",
+  alternates: { canonical: "/brand" },
+  openGraph: {
+    type: "article",
+    url: "https://velesbron.ru/brand",
+    title: "О бренде VELESBRON — тактическая обувь, адаптированная для России",
+    description:
+      "История и ценности VELESBRON: надёжная обувь, разработанная в России под климат, реагенты и нагрузку. Миссия бренда, подход к качеству и честная гарантия.",
+  },
 };
 
 const backgroundShape = "/images_alt/models/ui/background-shape.webp";
