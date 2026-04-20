@@ -427,11 +427,14 @@ export default function Home() {
                         className="absolute left-0 right-0 bottom-0 z-0"
                         style={{ top: "calc(-4rem - env(safe-area-inset-top, 0px))" }}
                     >
-                    <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                            background: `url(${heroBackgroundMobile}) lightgray 50% 42% / auto 100% no-repeat`,
-                        }}
+                    <video
+                        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                        src="/video/hero_video_mobile.MOV"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
                     />
                         <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
                         <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.topGradient }} />
