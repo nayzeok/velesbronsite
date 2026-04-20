@@ -610,15 +610,15 @@ export default function Home() {
                 }}
             >
                 <div className="absolute inset-0">
-                    <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                            backgroundImage: `url(${heroBackgroundDesktop})`,
-                            backgroundRepeat: "no-repeat",
-                            backgroundSize: "cover",
-                            backgroundPosition: "0% 70%",
-                            backgroundColor: "lightgray",
-                        }}
+                    <video
+                        className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                        style={{ objectPosition: "0% 70%" }}
+                        src="/video/hero_video_dekstop.MOV"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
                     />
                     <div className="absolute inset-0 pointer-events-none bg-black" style={{ opacity: HERO_BG_EFFECTS.overlayOpacity }} />
                     <div className="absolute inset-0 pointer-events-none" style={{ background: HERO_BG_EFFECTS.topGradient }} />
