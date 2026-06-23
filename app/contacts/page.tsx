@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SiteHeader from "@/components/layout/SiteHeader";
 
 export const metadata = {
@@ -166,6 +167,34 @@ export default function ContactsPage() {
 
               </div>
 
+              {/* Гарантия */}
+              <div className="mt-4">
+                <article className="rounded-xl border-2 border-[#e5e5e5] bg-white p-6 flex flex-col min-[640px]:flex-row items-start min-[640px]:items-center justify-between gap-5">
+                  <div>
+                    <h2
+                      className="uppercase text-[#111] text-[14px] min-[1200px]:text-[17px]"
+                      style={{
+                        fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      Гарантия
+                    </h2>
+                    <p className="mt-2 text-[#111]/60" style={{ fontSize: 15, lineHeight: 1.5 }}>
+                      Активируйте гарантийный код с талона, который шёл в комплекте с изделием.
+                    </p>
+                  </div>
+                  <Link
+                    href="/warranty/activate"
+                    className="shrink-0 rounded-xl bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 py-3 text-sm font-semibold text-white shadow-md hover:opacity-90 transition-opacity"
+                    style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif" }}
+                  >
+                    Активировать гарантию
+                  </Link>
+                </article>
+              </div>
 
             </div>
           </div>

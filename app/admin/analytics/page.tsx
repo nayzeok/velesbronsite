@@ -63,19 +63,30 @@ export default function AdminAnalyticsPage() {
             <p className="text-xs font-medium uppercase tracking-widest text-zinc-400 mb-1">VELESBRON</p>
             <h1 className="text-2xl font-bold text-zinc-900">Дашборд</h1>
           </div>
-          <button
-            type="button"
-            onClick={async () => {
-              await fetch("/api/admin/logout", { method: "POST" });
-              window.location.href = "/admin/login";
-            }}
-            className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-red-500 transition-colors"
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
-            Выйти
-          </button>
+          <div className="flex items-center gap-4">
+            <a
+              href="/admin/warranty"
+              className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900 transition-colors"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+              </svg>
+              Гарантия
+            </a>
+            <button
+              type="button"
+              onClick={async () => {
+                await fetch("/api/admin/logout", { method: "POST" });
+                window.location.href = "/admin/login";
+              }}
+              className="flex items-center gap-1.5 text-sm text-zinc-400 hover:text-red-500 transition-colors"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+              </svg>
+              Выйти
+            </button>
+          </div>
         </div>
 
         {/* Карточки метрик */}
