@@ -1,43 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readCodes } from "@/lib/warranty";
+import { readRegistrations, createManagerRegistration } from "@/lib/warranty";
+
+function getManagerName(request: NextRequest): string {
+  const cookie = request.cookies.get("admin_session")?.value ?? "";
+  const secret = process.env.ADMIN_SECRET ?? "velesbron-super-secret-key";
+  if (cookie.startsWith(secret + ":")) {
+    return cookie.split(":")[1] ?? "unknown";
+  }
+  return "admin";
+}
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get("status"); // "unused" | "activated" | null
-    const batch = searchParams.get("batch");
     const search = searchParams.get("search")?.toLowerCase();
     const page = Math.max(1, parseInt(searchParams.get("page") ?? "1"));
     const limit = 50;
 
-    let codes = await readCodes();
+    let list = await readRegistrations();
 
-    if (status === "unused" || status === "activated") {
-      codes = codes.filter((c) => c.status === status);
-    }
-    if (batch) {
-      codes = codes.filter((c) => c.batch === batch);
-    }
     if (search) {
-      codes = codes.filter(
-        (c) =>
-          c.code.toLowerCase().includes(search) ||
-          c.model.toLowerCase().includes(search) ||
-          (c.activatedBy?.email ?? "").toLowerCase().includes(search)
+      list = list.filter(
+        (r) =>
+          r.code.toLowerCase().includes(search) ||
+          (r.phone ?? "").includes(search) ||
+          (r.firstName ?? "").toLowerCase().includes(search) ||
+          (r.lastName ?? "").toLowerCase().includes(search) ||
+          (r.shop ?? "").toLowerCase().includes(search) ||
+          (r.marketplace ?? "").toLowerCase().includes(search)
       );
     }
 
-    const total = codes.length;
-    const slice = codes
-      .slice()
-      .reverse()
-      .slice((page - 1) * limit, page * limit);
+    const total = list.length;
+    const items = list.slice().reverse().slice((page - 1) * limit, page * limit);
 
-    const batches = [...new Set((await readCodes()).map((c) => c.batch).filter(Boolean))];
-
-    return NextResponse.json({ codes: slice, total, page, limit, batches });
+    return NextResponse.json({ items, total, page, limit });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Ошибка" }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const result = await createManagerRegistration({
+      code: body.code ?? "",
+      shop: body.shop ?? "",
+      marketplace: body.marketplace ?? "",
+      purchaseDate: body.purchaseDate ?? "",
+      firstName: body.firstName ?? "",
+      rating: body.rating ? Number(body.rating) : undefined,
+      note: body.note ?? "",
+      addedBy: getManagerName(request),
+    });
+    if (!result.ok) return NextResponse.json({ errors: result.errors }, { status: 400 });
+    return NextResponse.json({ ok: true, registration: result.registration });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Ошибка сервера" }, { status: 500 });
   }
 }

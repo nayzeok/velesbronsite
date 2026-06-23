@@ -24,10 +24,33 @@ export function middleware(request: NextRequest) {
   if (isProtected) {
     const cookie = request.cookies.get(ADMIN_COOKIE)?.value ?? "";
     const secret = process.env.ADMIN_SECRET ?? "velesbron-super-secret-key";
-    if (cookie !== secret) {
+
+    // Новый формат: secret:username:role
+    // Старый формат (обратная совместимость): просто secret
+    let role: "admin" | "manager" | null = null;
+    if (cookie === secret) {
+      role = "admin"; // старая кука — считаем админом
+    } else if (cookie.startsWith(secret + ":")) {
+      const parts = cookie.split(":");
+      if (parts[2] === "admin" || parts[2] === "manager") {
+        role = parts[2] as "admin" | "manager";
+      }
+    }
+
+    if (!role) {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = "/admin/login";
       return NextResponse.redirect(loginUrl);
+    }
+
+    // Менеджер может только /admin/warranty и /api/admin/warranty
+    const managerAllowed =
+      pathname.startsWith("/admin/warranty") ||
+      pathname.startsWith("/api/admin/warranty");
+    if (role === "manager" && !managerAllowed) {
+      const warrantyUrl = request.nextUrl.clone();
+      warrantyUrl.pathname = "/admin/warranty";
+      return NextResponse.redirect(warrantyUrl);
     }
   }
 
