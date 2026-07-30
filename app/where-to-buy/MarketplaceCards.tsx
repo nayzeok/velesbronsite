@@ -2,7 +2,7 @@
 
 import { MarketplaceLink } from "@/components/MarketplaceLink";
 
-type MarketplaceType = "wildberries" | "ozon";
+type MarketplaceType = "wildberries" | "ozon" | "yandexmarket";
 
 const SALES_CHANNELS: {
   title: string;
@@ -12,18 +12,25 @@ const SALES_CHANNELS: {
   bullets: string[];
 }[] = [
   {
-    title: "WILDBERRIES",
-    subtitle: "Официальный магазин VELESBRON",
-    href: "https://www.wildberries.ru/seller/250045449",
-    type: "wildberries",
-    bullets: ["Полный ассортимент", "Актуальные остатки", "Быстрая доставка", "Бонусы за отзывы"],
-  },
-  {
     title: "OZON",
     subtitle: "Официальный магазин VELESBRON",
     href: "https://www.ozon.ru/seller/velesbron/",
     type: "ozon",
     bullets: ["Полный ассортимент", "Актуальные остатки", "Удобный выбор", "Дополнительные скидки"],
+  },
+  {
+    title: "ЯНДЕКС МАРКЕТ",
+    subtitle: "Официальный магазин VELESBRON",
+    href: "https://market.yandex.ru/business--VELESBRON/216936992?generalContext=t%3DshopInShop%3Bi%3D1%3Bbi%3D216936992%3B&rs=eJwzEn7ByPiJkZeDUWDhIVYJBo1Xdx4pAAA-4wa5&searchContext=sins_ctx",
+    type: "yandexmarket",
+    bullets: ["Полный ассортимент", "Актуальные остатки", "Быстрая доставка", "Кэшбэк Яндекс Плюс"],
+  },
+  {
+    title: "WILDBERRIES",
+    subtitle: "Официальный магазин VELESBRON",
+    href: "https://www.wildberries.ru/seller/250045449",
+    type: "wildberries",
+    bullets: ["Полный ассортимент", "Актуальные остатки", "Быстрая доставка", "Бонусы за отзывы"],
   },
 ];
 
@@ -39,9 +46,20 @@ function MarketplaceLogo({ type }: { type: MarketplaceType }) {
       />
     );
   }
+  if (type === "ozon") {
+    return (
+      <img
+        src="/images_alt/models/ui/ozon_logo.webp"
+        alt=""
+        aria-hidden="true"
+        className="relative -top-[6px] inline-flex h-[42px] w-[42px] items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
+        style={{ borderRadius: 12, objectFit: "cover" }}
+      />
+    );
+  }
   return (
     <img
-      src="/images_alt/models/ui/ozon_logo.webp"
+      src="/images_alt/models/ui/ym-logo.jpg"
       alt=""
       aria-hidden="true"
       className="relative -top-[6px] inline-flex h-[42px] w-[42px] items-center justify-center shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
@@ -83,7 +101,7 @@ export default function MarketplaceCards() {
   }
 
   return (
-    <div className="mt-8 grid gap-4 md:grid-cols-2">
+    <div className="mt-8 grid gap-4 min-[700px]:grid-cols-2 min-[1200px]:grid-cols-3">
       {SALES_CHANNELS.map((channel) => (
         <MarketplaceLink
           key={channel.title}
@@ -92,13 +110,13 @@ export default function MarketplaceCards() {
           rel="noopener noreferrer"
           marketplaceId={channel.type}
           marketplaceName={channel.title}
-          platform={channel.type === "wildberries" ? "wb" : "ozon"}
+          platform={channel.type === "wildberries" ? "wb" : channel.type === "ozon" ? "ozon" : "yandexmarket"}
           onClick={(e) => handleClick(e as React.MouseEvent<HTMLAnchorElement>, channel.href)}
           className="group relative flex flex-col rounded-xl border-2 border-[#e5e5e5] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 active:scale-[0.99] hover:-translate-y-[4px] hover:border-[#f07426] hover:shadow-[0_6px_24px_rgba(0,0,0,0.04),0_12px_28px_rgba(240,116,38,0.20)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f07426] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         >
           <div className="flex items-baseline gap-3">
             <p
-              className="uppercase text-[20px] min-[1200px]:text-[24px] text-[#111]"
+              className="uppercase text-[20px] min-[1200px]:text-[21px] text-[#111]"
               style={{
                 fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
                 fontWeight: 700,
@@ -130,7 +148,7 @@ export default function MarketplaceCards() {
           </ul>
 
           <span
-            className={`${channel.type === "wildberries" ? "mt-6 md:mt-auto" : "mt-6"} self-center flex h-[61px] w-[210px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#E7813F] to-[#FC6407] text-[19px] text-white`}
+            className="mt-9 self-center flex h-[61px] w-[210px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#E7813F] to-[#FC6407] text-[19px] text-white"
             style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400, letterSpacing: "0.08em" }}
           >
             Перейти <span className="ml-2" aria-hidden="true">→</span>
