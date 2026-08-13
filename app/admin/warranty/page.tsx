@@ -7,7 +7,7 @@ type ListResponse = { items: WarrantyRegistration[]; total: number; page: number
 type FieldErrors = Record<string, string>;
 
 const SHOPS = ["ДИНАМИКА", "РИТЕЙЛ"];
-const MARKETPLACES = ["WB", "OZON"];
+const MARKETPLACES = ["WB", "OZON", "YM"];
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -130,7 +130,7 @@ export default function WarrantyAdminPage() {
 
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+      <div className="max-w-[1600px] mx-auto px-4 py-8">
 
         {/* Шапка */}
         <div className="flex items-center justify-between mb-8">
@@ -201,13 +201,13 @@ export default function WarrantyAdminPage() {
         </div>
 
         {/* Таблица */}
-        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-2xl border border-zinc-200 bg-white shadow-sm overflow-x-auto">
           {loading ? (
             <div className="p-12 text-center text-sm text-zinc-400">Загрузка…</div>
           ) : !data || data.items.length === 0 ? (
             <div className="p-12 text-center text-sm text-zinc-400">Записей нет</div>
           ) : (
-            <table className="w-full text-sm">
+            <table className="w-full text-sm whitespace-nowrap">
               <thead>
                 <tr className="border-b border-zinc-100 text-xs text-zinc-400 uppercase tracking-wide">
                   <th className="px-4 py-3 text-left font-medium">Талон</th>
@@ -215,6 +215,7 @@ export default function WarrantyAdminPage() {
                   <th className="px-4 py-3 text-left font-medium">Площадка</th>
                   <th className="px-4 py-3 text-left font-medium">Дата покупки</th>
                   <th className="px-4 py-3 text-left font-medium">Имя</th>
+                  <th className="px-4 py-3 text-left font-medium">Телефон</th>
                   <th className="px-4 py-3 text-left font-medium">Оценка</th>
                   <th className="px-4 py-3 text-left font-medium">Источник</th>
                   <th className="px-4 py-3 text-left font-medium">Менеджер</th>
@@ -229,6 +230,7 @@ export default function WarrantyAdminPage() {
                     <td className="px-4 py-3 text-zinc-600 text-xs">{r.marketplace ?? "—"}</td>
                     <td className="px-4 py-3 text-zinc-400 text-xs">{r.purchaseDate ? formatDate(r.purchaseDate) : "—"}</td>
                     <td className="px-4 py-3 text-zinc-700">{r.firstName} {r.lastName ?? ""}</td>
+                    <td className="px-4 py-3 text-zinc-600 text-xs">{r.phone ?? "—"}</td>
                     <td className="px-4 py-3 text-sm"><Stars value={r.rating} /></td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${r.source === "site" ? "bg-blue-50 text-blue-600" : "bg-zinc-100 text-zinc-500"}`}>
