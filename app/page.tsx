@@ -48,17 +48,17 @@ const HERO_FEATURES_STRIP = [
   {
     title: "Антипрокольная защита",
     desc: "Гибридная подошва усилена вставкой из арамидной ткани K-29.",
-    icon: "/images_alt/models/ui/антипрокол.webp",
+    icon: "/images_alt/models/ui/anti-prokol.webp",
   },
   {
     title: "Мембрана VELTEX™",
     desc: "Герметичная чулочная конструкция отводит влагу и сохраняет микроклимат.",
-    icon: "/images_alt/models/ui/мембрана_VELTEX.webp",
+    icon: "/images_alt/models/ui/membrana-veltex.webp",
   },
   {
     title: "Усиленная конструкция",
     desc: "Тройная прошивка армированными лавсановыми нитями.",
-    icon: "/images_alt/models/ui/Гарантия_усил.констр..webp",
+    icon: "/images_alt/models/ui/usilennaya-konstrukciya.webp",
   },
 ];
 
@@ -429,7 +429,8 @@ export default function Home() {
                     >
                     <video
                         className="absolute inset-0 h-full w-full object-cover pointer-events-none"
-                        src="/video/hero_video_mobile.MOV"
+                        src="/video/hero_video_mobile.mp4"
+                        poster={heroBackgroundMobile}
                         autoPlay
                         muted
                         loop
@@ -613,7 +614,8 @@ export default function Home() {
                     <video
                         className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                         style={{ objectPosition: "0% 70%" }}
-                        src="/video/hero_video_dekstop.MOV"
+                        src="/video/hero_video_dekstop.mp4"
+                        poster={heroBackgroundDesktop}
                         autoPlay
                         muted
                         loop
@@ -699,7 +701,7 @@ export default function Home() {
                                     </h2>
                                     <div className="mt-4 flex">
                                         {[
-                                            "/images_alt/models/ui/IMG_2384 с лого 500_500.webp",
+                                            "/images_alt/models/ui/IMG_2384_s_logo_500_500.webp",
                                             "/images_alt/models/ui/IMG_2396_500_500.webp",
                                             "/images_alt/models/ui/IMG_8761_500_500.webp",
                                             "/images_alt/models/ui/mpphoto_qadrat.webp",
@@ -748,7 +750,7 @@ export default function Home() {
                                     }}
                                 >
                                     <img
-                                        src="/images_alt/pages/main_left_model for_hero.webp"
+                                        src="/images_alt/pages/main_left_model_for_hero.webp"
                                         alt="Треккинговые ботинки Velesbron"
                                         className="h-full w-full object-contain object-bottom drop-shadow-[0_30px_60px_rgba(0,0,0,0.35)]"
                                     />
