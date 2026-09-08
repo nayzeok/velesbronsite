@@ -18,6 +18,13 @@ export function middleware(request: NextRequest) {
   const search = request.nextUrl.search;
   const url = `${pathname}${search}`;
 
+  // В проекте нет Server Actions ("use server") — любой запрос с этим
+  // заголовком гарантированно мусор от сканеров, отсекаем его сразу,
+  // не давая Next.js тратить время на поиск несуществующего action.
+  if (request.headers.has("next-action")) {
+    return new NextResponse(null, { status: 400 });
+  }
+
   // Защита /admin/* — кроме страницы логина
   const isProtected =
     pathname.startsWith("/admin") && !pathname.startsWith("/admin/login");
