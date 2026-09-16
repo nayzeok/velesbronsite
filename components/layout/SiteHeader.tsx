@@ -128,7 +128,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
             aria-hidden="true"
           />
           <img
-            src="/images_alt/pages/velesbron_logo.webp"
+            src="/images_alt/models/ui/velesbron_new_header_logo.png"
             alt=""
             className="relative z-10 h-[86px] w-full max-w-[227px] object-contain"
           />
@@ -200,7 +200,7 @@ export default function SiteHeader({ activeItem, tone = "dark", className, style
             <circle cx="17" cy="19" r="1.5" />
           </svg>
         </button>
-        <button className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-white">
+        <button className="flex size-[42px] items-center justify-center rounded-[10px] bg-gradient-to-b from-[#e7813f] to-[#EA6A20] text-white">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
             <circle cx="12" cy="8.2" r="3.2" />
             <path d="M5.5 19a6.5 6.5 0 0 1 13 0" />

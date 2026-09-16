@@ -167,7 +167,7 @@ export default function MarketplaceCards() {
               </span>
             ) : (
               <span
-                className="mt-9 self-center flex h-[61px] w-[210px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#E7813F] to-[#FC6407] text-[19px] text-white"
+                className="mt-9 self-center flex h-[61px] w-[210px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#E7813F] to-[#EA6A20] text-[19px] text-white"
                 style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400, letterSpacing: "0.08em" }}
               >
                 Перейти <span className="ml-2" aria-hidden="true">→</span>

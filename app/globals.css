@@ -204,8 +204,8 @@ body {
 @media (max-width: 1199px) {
   /* Градиентные CTA-кнопки (в т.ч. span "Перейти") */
   [class*="bg-gradient-to-b"][class*="text-white"],
-  [style*="linear-gradient(180deg, #E7813F 0%, #FC6407 100%)"],
-  [style*="linear-gradient(180deg, #e7813f 0%, #fc6407 100%)"] {
+  [style*="linear-gradient(180deg, #E7813F 0%, #EA6A20 100%)"],
+  [style*="linear-gradient(180deg, #e7813f 0%, #EA6A20 100%)"] {
     font-family: var(--font-montserrat-light), Montserrat, sans-serif !important;
     font-weight: 400 !important;
     letter-spacing: 0.08em;

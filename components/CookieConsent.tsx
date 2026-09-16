@@ -81,7 +81,7 @@ export default function CookieConsent() {
             onClick={accept}
             className="rounded-lg px-4 py-2.5 text-[14px] font-medium text-white transition-all hover:opacity-95 hover:shadow-md"
             style={{
-              background: "linear-gradient(180deg, #e7813f 0%, #fc6407 100%)",
+              background: "linear-gradient(180deg, #e7813f 0%, #EA6A20 100%)",
               boxShadow: "0 2px 10px rgba(231, 129, 63, 0.35)",
             }}
           >

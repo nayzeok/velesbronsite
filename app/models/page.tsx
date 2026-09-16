@@ -960,7 +960,7 @@ export default function BuyPage() {
                   transform: "translateX(-50%)",
                   width: 260,
                   height: 75,
-                  background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
+                  background: "linear-gradient(180deg, #E7813F 0%, #EA6A20 100%)",
                   borderRadius: 22,
                   fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   fontSize: 19,
@@ -1132,7 +1132,7 @@ export default function BuyPage() {
                     onClick={() => setActiveModelKey(model.key)}
                     className="flex h-[35px] flex-1 items-center justify-center transition-all"
                     style={{
-                      background: isActive ? "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)" : "#efefef",
+                      background: isActive ? "linear-gradient(180deg, #E7813F 0%, #EA6A20 100%)" : "#efefef",
                       borderRight: model.key === "high" ? "1px solid #d8d8d8" : "none",
                       color: isActive ? "#fff" : "#111",
                       cursor: "pointer",
@@ -1455,7 +1455,7 @@ export default function BuyPage() {
                 href="/where-to-buy"
                 className="-mt-2 mx-auto flex h-[56px] w-full max-w-[180px] items-center justify-center rounded-[14px] text-[17px] font-medium text-white no-underline"
                 style={{
-                  background: "linear-gradient(180deg, #E7813F 0%, #FC6407 100%)",
+                  background: "linear-gradient(180deg, #E7813F 0%, #EA6A20 100%)",
                   fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   fontSize: 17,
                   fontWeight: 400,

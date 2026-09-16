@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SiteHeader from "@/components/layout/SiteHeader";
+import ContactForm from "./ContactForm";
 
 export const metadata = {
   title: "Контакты VELESBRON — служба качества, реквизиты, поддержка",
@@ -133,7 +134,7 @@ export default function ContactsPage() {
                       <span>sale-yamarket@yandex.ru</span>
                     </div>
                     <div className="flex select-none items-center gap-2 text-[#111]/80">
-                      <span className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.08)]" style={{ borderRadius: 12, background: "linear-gradient(135deg, #E7813F 0%, #FC6407 100%)" }}>
+                      <span className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.08)]" style={{ borderRadius: 12, background: "linear-gradient(135deg, #E7813F 0%, #EA6A20 100%)" }}>
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                           <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
@@ -188,12 +189,17 @@ export default function ContactsPage() {
                   </div>
                   <Link
                     href="/warranty/activate"
-                    className="shrink-0 rounded-xl bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 py-3 text-sm font-semibold text-white shadow-md hover:opacity-90 transition-opacity"
+                    className="shrink-0 rounded-xl bg-gradient-to-b from-[#e7813f] to-[#EA6A20] px-6 py-3 text-sm font-semibold text-white shadow-md hover:opacity-90 transition-opacity"
                     style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif" }}
                   >
                     Активировать гарантию
                   </Link>
                 </article>
+              </div>
+
+              {/* Обратная связь */}
+              <div className="mt-4">
+                <ContactForm />
               </div>
 
             </div>

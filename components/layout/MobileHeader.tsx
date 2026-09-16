@@ -14,7 +14,7 @@ const MOBILE_MENU_ITEMS = [
   { label: "Контакты", href: "/contacts" },
 ] as const;
 
-const LOGO_SRC = "/images_alt/pages/velesbron_logo.webp";
+const LOGO_SRC = "/images_alt/models/ui/velesbron_new_header_logo.png";
 
 export default function MobileHeader() {
   const pathname = usePathname();
@@ -186,7 +186,7 @@ export default function MobileHeader() {
               isDisabled
                 ? "text-[#111]/35 cursor-default"
                 : isActive
-                ? "bg-gradient-to-r from-[#e7813f] to-[#fc6407] text-white shadow-[0_10px_20px_rgba(252,100,7,0.22)]"
+                ? "bg-gradient-to-r from-[#e7813f] to-[#EA6A20] text-white shadow-[0_10px_20px_rgba(234,106,32,0.22)]"
                 : "text-[#111] hover:bg-[#f5f5f5]"
             }`;
             const commonStyle = {

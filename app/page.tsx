@@ -471,7 +471,7 @@ export default function Home() {
                         </p>
                         <Link
                             href="/models"
-                            className="mt-4 inline-flex h-14 min-w-[220px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-6 text-[17px] font-medium uppercase tracking-[0.08em] text-white"
+                            className="mt-4 inline-flex h-14 min-w-[220px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#EA6A20] px-6 text-[17px] font-medium uppercase tracking-[0.08em] text-white"
                             style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
                         >
                             Изучить модель
@@ -734,7 +734,7 @@ export default function Home() {
                                     </div>
                                     <Link
                                         href="/models"
-                                        className="mt-4 inline-flex h-[75px] w-[260px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[19px] font-medium uppercase tracking-[0.08em] text-white"
+                                        className="mt-4 inline-flex h-[75px] w-[260px] shrink-0 items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#EA6A20] text-[19px] font-medium uppercase tracking-[0.08em] text-white"
                                         style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontWeight: 400 }}
                                     >
                                         Изучить модель

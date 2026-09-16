@@ -726,7 +726,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </div>
               <Link
                 href="/models"
-                className="absolute left-[50px] top-[368px] flex h-[75px] w-[260px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[19px] font-medium text-white transition-opacity hover:opacity-90"
+                className="absolute left-[50px] top-[368px] flex h-[75px] w-[260px] items-center justify-center rounded-[22px] bg-gradient-to-b from-[#e7813f] to-[#EA6A20] text-[19px] font-medium text-white transition-opacity hover:opacity-90"
                 style={{
                   fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                   fontWeight: 400,
@@ -801,19 +801,19 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                     <p className="text-[#111]/40">{currentMetricTop.line1}</p>
                     <p className="text-[#111]/40">{currentMetricTop.line2}</p>
                   </div>
-                  <span className="absolute -bottom-5 left-0 flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+                  <span className="absolute -bottom-5 left-0 flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20]">
                     <span className="size-[10px] rounded-full bg-white" />
                   </span>
                 </div>
 
                 <div className="absolute left-[1073px] top-[593px] z-20 h-[314px] w-[172px] rounded-[25px] bg-white shadow-[0_60px_100px_rgba(0,0,0,0.12)]">
-                  <span className="absolute -left-[13px] -top-[13px] flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+                  <span className="absolute -left-[13px] -top-[13px] flex size-[27px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20]">
                     <span className="size-[10px] rounded-full bg-white" />
                   </span>
                   <p className="pt-8 text-center text-[61px] font-normal leading-none tracking-[-0.08em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricSide.value}</p>
                   <p className="-mt-1 text-center text-[20px] leading-[1.1] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricSide.line1}</p>
                   <p className="text-center text-[20px] leading-[1.1] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif" }}>{currentMetricSide.line2}</p>
-                  <div className="absolute left-[10px] top-[210px] h-[94px] w-[152px] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+                  <div className="absolute left-[10px] top-[210px] h-[94px] w-[152px] overflow-hidden rounded-[18px] bg-gradient-to-b from-[#e7813f] to-[#EA6A20]">
                     <img
                       src={metricSideImage}
                       alt=""
@@ -821,7 +821,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                       style={{ width: 274, height: 344, left: -108, top: -248 }}
                     />
                   </div>
-                  <div className="absolute bottom-[10px] left-1/2 size-[9px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]" />
+                  <div className="absolute bottom-[10px] left-1/2 size-[9px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20]" />
                 </div>
               </>
             )}
@@ -876,7 +876,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                     <defs>
                       <linearGradient id="paint0_linear_146_395_local" x1="63.9175" y1="0" x2="63.9175" y2="226.907" gradientUnits="userSpaceOnUse">
                         <stop stopColor="#E7813F" />
-                        <stop offset="1" stopColor="#FC6407" />
+                        <stop offset="1" stopColor="#EA6A20" />
                       </linearGradient>
                     </defs>
                   </svg>
@@ -893,7 +893,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   {currentTempWidget!.bottomLabel}
                 </p>
                 <span
-                  className="absolute z-20 flex size-[30px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]"
+                  className="absolute z-20 flex size-[30px] items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20]"
                   style={{ left: currentTempWidget!.dot.x, top: currentTempWidget!.dot.y }}
                 >
                   <span className="size-[12px] rounded-full bg-white" />
@@ -968,7 +968,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               </div>
             )}
             <span
-              className="absolute z-20 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+              className="absolute z-20 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20] transition-all duration-500"
               style={{ ...calloutDotPosition, left: calloutDotPosition.left + bootCenterOffsetX, width: calloutDotOuterSize, height: calloutDotOuterSize }}
             >
               <span className="rounded-full bg-white" style={{ width: calloutDotInnerSize, height: calloutDotInnerSize }} />
@@ -1026,7 +1026,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                   }}
                 >
                   <span className="absolute inset-0 rounded-full bg-white opacity-90 shadow-[0_20px_40px_rgba(0,0,0,0.12)]" />
-                  <span className="absolute left-[3px] top-[3px] size-[34px] rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] opacity-95" />
+                  <span className="absolute left-[3px] top-[3px] size-[34px] rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20] opacity-95" />
                   <span className="absolute left-[12px] top-[12px] size-4 rounded-full bg-white" />
                 </span>
               </>
@@ -1112,7 +1112,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                               gradientUnits="userSpaceOnUse"
                             >
                               <stop stopColor="#E7813F" />
-                              <stop offset="1" stopColor="#FC6407" />
+                              <stop offset="1" stopColor="#EA6A20" />
                             </linearGradient>
                           </defs>
                         </svg>
@@ -1145,7 +1145,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                               gradientUnits="userSpaceOnUse"
                             >
                               <stop stopColor="#E7813F" />
-                              <stop offset="1" stopColor="#FC6407" />
+                              <stop offset="1" stopColor="#EA6A20" />
                             </linearGradient>
                           </defs>
                         </svg>
@@ -1171,7 +1171,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                           <defs>
                             <linearGradient id="paint0_linear_0_4_exact0" x1="58.5" y1="-1.5229" x2="58.5" y2="78.4771" gradientUnits="userSpaceOnUse">
                               <stop stopColor="#E7813F" />
-                              <stop offset="1" stopColor="#FC6407" />
+                              <stop offset="1" stopColor="#EA6A20" />
                             </linearGradient>
                           </defs>
                         </svg>
@@ -1197,7 +1197,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                           <defs>
                             <linearGradient id="paint0_linear_0_4_exactNeg36" x1="58.5" y1="-1.5229" x2="58.5" y2="78.4771" gradientUnits="userSpaceOnUse">
                               <stop stopColor="#E7813F" />
-                              <stop offset="1" stopColor="#FC6407" />
+                              <stop offset="1" stopColor="#EA6A20" />
                             </linearGradient>
                           </defs>
                         </svg>
@@ -1223,7 +1223,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                           <defs>
                             <linearGradient id="paint0_linear_0_4_exactNeg54" x1="58.5" y1="-1.5229" x2="58.5" y2="78.4771" gradientUnits="userSpaceOnUse">
                               <stop stopColor="#E7813F" />
-                              <stop offset="1" stopColor="#FC6407" />
+                              <stop offset="1" stopColor="#EA6A20" />
                             </linearGradient>
                           </defs>
                         </svg>
@@ -1255,7 +1255,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                             gradientUnits="userSpaceOnUse"
                           >
                             <stop stopColor="#E7813F" />
-                            <stop offset="1" stopColor="#FC6407" />
+                            <stop offset="1" stopColor="#EA6A20" />
                           </linearGradient>
                         </defs>
                       </svg>
@@ -1365,7 +1365,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
             </div>
             <Link
               href="/models"
-              className="ml-[5px] mt-5 flex h-[56px] w-[180px] translate-x-[7px] items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#fc6407] text-[17px] font-medium text-white no-underline transition-opacity active:opacity-90"
+              className="ml-[5px] mt-5 flex h-[56px] w-[180px] translate-x-[7px] items-center justify-center rounded-[14px] bg-gradient-to-b from-[#e7813f] to-[#EA6A20] text-[17px] font-medium text-white no-underline transition-opacity active:opacity-90"
               style={{
                 fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif",
                 fontWeight: 400,
@@ -1550,7 +1550,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 </div>
               </div>
               <span
-                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.topMetric.left + mobilePlatesShiftX + currentMobilePlates.topMetricDot.x,
                   top: currentMobilePlates.topMetric.top + mobilePlatesShiftY + currentMobilePlates.topMetricDot.y,
@@ -1591,7 +1591,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 })()}
               </div>
               <span
-                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.gluePill.left + mobilePlatesShiftX + currentMobilePlates.glueDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
                   top: currentMobilePlates.gluePill.top + mobilePlatesShiftY + currentMobilePlates.glueDot.y,
@@ -1621,7 +1621,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 <p className="leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentView.callout.text}</p>
               </div>
               <span
-                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.callout.left + mobilePlatesShiftX + currentMobilePlates.calloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
                   top: currentMobilePlates.callout.top + mobilePlatesShiftY + currentMobilePlates.calloutDot.y,
@@ -1653,7 +1653,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
                 <p className="leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 13 * MOBILE_PLAQUE_TEXT_SCALE }}>{secondaryCalloutContent.text}</p>
               </div>
               <span
-                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407] transition-all duration-500"
+                className="absolute z-30 flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20] transition-all duration-500"
                 style={{
                   left: currentMobilePlates.secondaryCallout.left + mobilePlatesShiftX + currentMobilePlates.secondaryCalloutDot.x * MOBILE_PLAQUE_WIDTH_SCALE,
                   top: currentMobilePlates.secondaryCallout.top + currentMobilePlates.secondaryCalloutDot.y,
@@ -1678,7 +1678,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               }}
             >
               <span
-                className="absolute -left-[8px] top-[18px] flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#fc6407]"
+                className="absolute -left-[8px] top-[18px] flex items-center justify-center rounded-full bg-gradient-to-b from-[#e7813f] to-[#EA6A20]"
                 style={{ width: MOBILE_PLAQUE_DOT.outer, height: MOBILE_PLAQUE_DOT.outer }}
               >
                 <span className="rounded-full bg-white" style={{ width: MOBILE_PLAQUE_DOT.inner, height: MOBILE_PLAQUE_DOT.inner }} />
@@ -1686,7 +1686,7 @@ export function AdvantagesContent({ showHeader = true }: { showHeader?: boolean 
               <p className="font-normal leading-none tracking-[-0.08em] text-[#111]" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 43 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.value}</p>
               <p className="pt-2 leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line1}</p>
               <p className="leading-[1.05] text-[#111]/40" style={{ fontFamily: "var(--font-montserrat-light), Montserrat, sans-serif", fontSize: 14 * MOBILE_PLAQUE_TEXT_SCALE }}>{currentMetricSide.line2}</p>
-              <div className="relative mt-2 h-[56px] w-[91px] overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#fc6407]">
+              <div className="relative mt-2 h-[56px] w-[91px] overflow-hidden rounded-[11px] bg-gradient-to-b from-[#e7813f] to-[#EA6A20]">
                 <img src={metricSideImage} alt="" className="absolute max-w-none object-cover" style={{ width: 164, height: 118, left: -42, top: -64 }} />
               </div>
             </div>

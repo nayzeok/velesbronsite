@@ -35,7 +35,7 @@ export default function AdminLoginPage() {
     <main className="min-h-screen flex items-center justify-center bg-zinc-50 px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-b from-[#e7813f] to-[#fc6407] shadow-lg mb-4">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-b from-[#e7813f] to-[#EA6A20] shadow-lg mb-4">
             <svg className="h-7 w-7 text-white" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
               <rect x="3" y="11" width="18" height="11" rx="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-gradient-to-b from-[#e7813f] to-[#fc6407] px-4 py-3 text-sm font-medium text-white shadow-md transition hover:opacity-90 disabled:opacity-60"
+            className="w-full rounded-xl bg-gradient-to-b from-[#e7813f] to-[#EA6A20] px-4 py-3 text-sm font-medium text-white shadow-md transition hover:opacity-90 disabled:opacity-60"
           >
             {loading ? "Входим…" : "Войти"}
           </button>
