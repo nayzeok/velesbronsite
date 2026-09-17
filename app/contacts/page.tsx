@@ -1,6 +1,5 @@
 import Link from "next/link";
 import SiteHeader from "@/components/layout/SiteHeader";
-import ContactForm from "./ContactForm";
 
 export const metadata = {
   title: "Контакты VELESBRON — служба качества, реквизиты, поддержка",
@@ -131,7 +130,7 @@ export default function ContactsPage() {
                           <path d="M2 8l10 7 10-7" stroke="#555" strokeWidth="1.8" strokeLinecap="round"/>
                         </svg>
                       </span>
-                      <span>sale-yamarket@yandex.ru</span>
+                      <span>mail@velesbron.ru</span>
                     </div>
                     <div className="flex select-none items-center gap-2 text-[#111]/80">
                       <span className="inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.08)]" style={{ borderRadius: 12, background: "linear-gradient(135deg, #E7813F 0%, #EA6A20 100%)" }}>
@@ -199,7 +198,33 @@ export default function ContactsPage() {
 
               {/* Обратная связь */}
               <div className="mt-4">
-                <ContactForm />
+                <article className="rounded-xl border-2 border-[#e5e5e5] bg-white p-6 flex flex-col min-[640px]:flex-row items-start min-[640px]:items-center justify-between gap-5">
+                  <div>
+                    <h2
+                      className="uppercase text-[#111] text-[14px] min-[1200px]:text-[17px]"
+                      style={{
+                        fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif",
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      Обратная связь
+                    </h2>
+                    <p className="mt-2 text-[#111]/60" style={{ fontSize: 15, lineHeight: 1.5 }}>
+                      Заполните форму — ответим на почту или по телефону.
+                    </p>
+                  </div>
+                  <Link
+                    href="/contacts/feedback"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 rounded-xl bg-gradient-to-b from-[#e7813f] to-[#EA6A20] px-6 py-3 text-sm font-semibold text-white shadow-md hover:opacity-90 transition-opacity"
+                    style={{ fontFamily: "var(--font-montserrat-bold), Montserrat, sans-serif" }}
+                  >
+                    Написать нам
+                  </Link>
+                </article>
               </div>
 
             </div>
