@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deployment to Beget
+
+Production: `159.194.222.126`, directory `/var/www/velesbron`, PM2 process `velesbron`.
+Run `./deploy.sh` with an authorized SSH key and a verified server entry in `~/.ssh/known_hosts`. Password authentication is not used. The script uploads sources, installs dependencies, builds on Linux, restarts PM2, and checks the local HTTP response. Server data and `.env*` files are excluded. Files missing locally are not deleted remotely.
+
+GitHub Actions uses the same script on pushes to `main` or manual dispatch. Configure repository Actions secrets:
+- `VPS_SSH_KEY`: private key whose public key is authorized on the new server.
+- `VPS_KNOWN_HOSTS`: verified known_hosts entry for `159.194.222.126`.
+
+The old `VPS_HOST` secret is no longer used; the destination is specified in the workflow. The new server does not need a Git checkout. Never copy production data or credentials into Git.
+
+Deployment builds in the live application directory and is not atomic; a build failure may affect assets served by the running process. Schedule deployment accordingly. Certificate renewal uses the server's Certbot timer.
