@@ -42,3 +42,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Локальные конфиги AI-инструментов (могут содержать токены)
+.codex/

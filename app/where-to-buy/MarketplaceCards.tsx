@@ -36,10 +36,9 @@ const SALES_CHANNELS: {
   {
     title: "VELESBRON",
     subtitle: "Собственный интернет-магазин",
-    href: "",
+    href: "https://shop.velesbron.ru",
     type: "velesbron",
     bullets: ["Полный ассортимент", "Прямые поставки от производителя", "Актуальные остатки"],
-    comingSoon: true,
   },
 ];
 
@@ -197,7 +196,7 @@ export default function MarketplaceCards() {
             marketplaceName={channel.title}
             platform={channel.type === "wildberries" ? "wb" : channel.type}
             onClick={(e) => handleClick(e as React.MouseEvent<HTMLAnchorElement>, channel.href)}
-            className="group relative flex flex-col rounded-xl border-2 border-[#e5e5e5] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 active:scale-[0.99] hover:-translate-y-[4px] hover:border-[#f07426] hover:shadow-[0_6px_24px_rgba(0,0,0,0.04),0_12px_28px_rgba(240,116,38,0.20)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f07426] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            className={`group relative flex flex-col rounded-xl border-2 border-[#e5e5e5] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 active:scale-[0.99] hover:-translate-y-[4px] hover:border-[#f07426] hover:shadow-[0_6px_24px_rgba(0,0,0,0.04),0_12px_28px_rgba(240,116,38,0.20)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f07426] focus-visible:ring-offset-2 focus-visible:ring-offset-white${channel.type === "velesbron" ? " min-[1200px]:col-start-2" : ""}`}
           >
             {cardContent}
           </MarketplaceLink>
