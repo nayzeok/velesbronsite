@@ -35,7 +35,7 @@ const SALES_CHANNELS: {
   },
   {
     title: "VELESBRON",
-    subtitle: "Собственный интернет-магазин",
+    subtitle: "Официальный магазин бренда",
     href: "https://shop.velesbron.ru",
     type: "velesbron",
     bullets: ["Полный ассортимент", "Прямые поставки от производителя", "Актуальные остатки"],
